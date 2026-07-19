@@ -1,0 +1,82 @@
+[
+  {
+    "id": "token",
+    "order": 1,
+    "name": "Token",
+    "botPart": "Voice box",
+    "definition": "A token is a small chunk of text — often part of a word — that's the unit an AI actually reads and writes in. \"Pepperoni\" alone breaks into four of them.",
+    "whyYouCare": "Every reply you get from Claude or ChatGPT costs tokens — that's why long chats get slower and pricier."
+  },
+  {
+    "id": "context-window",
+    "order": 2,
+    "name": "Context window",
+    "botPart": "Short-term memory chip",
+    "definition": "The context window is how much of the conversation an AI can still \"see\" at once — once it fills up, the oldest parts quietly fall out.",
+    "whyYouCare": "It's why a long chat sometimes forgets something you said 20 messages ago — it's not being careless, it ran out of window."
+  },
+  {
+    "id": "hallucination",
+    "order": 3,
+    "name": "Hallucination",
+    "botPart": "Reality-check filter",
+    "definition": "A hallucination is when an AI states something false with full confidence, the same tone it uses for things that are true.",
+    "whyYouCare": "It's why you double-check anything an AI tells you that you can't verify elsewhere — confidence isn't the same as correctness."
+  },
+  {
+    "id": "prompt",
+    "order": 4,
+    "name": "Prompt",
+    "botPart": "Instruction dial",
+    "definition": "A prompt is the instruction you give an AI — vague instructions reliably produce vague, weird results.",
+    "whyYouCare": "Better prompts, not better luck, are how you get useful answers out of Claude or ChatGPT."
+  },
+  {
+    "id": "agent",
+    "order": 5,
+    "name": "Agent",
+    "botPart": "Legs (it can act on its own)",
+    "definition": "A chatbot talks about doing something; an agent actually does it — places the order, charges the card, notifies the kitchen, no human in between.",
+    "whyYouCare": "It's the line between \"AI that chats\" and \"AI that takes real actions for you\" — and why agents need more trust and more guardrails."
+  },
+  {
+    "id": "tool-use",
+    "order": 6,
+    "name": "Tool use",
+    "botPart": "Arms",
+    "definition": "Tool use is when an AI calls a real system — a real menu, a real delivery tracker — instead of guessing from memory.",
+    "whyYouCare": "It's why an assistant that can actually check your calendar or a real order is more reliable than one that's just talking."
+  },
+  {
+    "id": "skill",
+    "order": 7,
+    "name": "Skill",
+    "botPart": "Training certificate",
+    "definition": "A skill is a written playbook you hand an AI for one recurring situation, so it handles it the same, right way every time.",
+    "whyYouCare": "It's the difference between an AI that improvises a response to a complaint and one that follows a process you actually trust."
+  },
+  {
+    "id": "memory",
+    "order": 8,
+    "name": "Memory",
+    "botPart": "Hard drive (chest)",
+    "definition": "Working memory lasts one conversation; persistent memory carries facts — like your usual order — across visits.",
+    "whyYouCare": "It's why some AI tools remember your preferences next time, and others start from zero every single chat."
+  },
+  {
+    "id": "mcp",
+    "order": 9,
+    "name": "MCP",
+    "botPart": "Universal port",
+    "definition": "MCP is a standard plug that lets an AI connect to outside systems — the ordering system, the POS, delivery — without custom wiring for each one.",
+    "whyYouCare": "It's why an AI assistant can plug into your calendar, docs, or database at all — MCP is the universal port that makes it possible."
+  },
+  {
+    "id": "guardrails",
+    "order": 10,
+    "name": "Guardrails",
+    "botPart": "Safety casing",
+    "definition": "Guardrails are the hard limits an AI must never cross — no unlimited discounts, no promises it can't keep, no topics outside its job.",
+    "whyYouCare": "They're what keeps an AI assistant safe and on-brand instead of agreeing to anything a clever prompt asks for."
+  }
+]

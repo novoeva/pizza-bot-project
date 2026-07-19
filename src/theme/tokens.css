@@ -1,0 +1,56 @@
+/*
+ * Design tokens — the one file that governs Pizza Bot's look.
+ * Swap values here to reskin the whole app; components must never
+ * reference raw hex codes, only these variables (via Tailwind classes).
+ */
+
+:root {
+  /* ---- Color: surfaces ---- */
+  --color-bg: #1a1625;
+  --color-bg-raised: #241f33;
+  --color-surface: #2e2740;
+  --color-surface-hover: #382f4d;
+  --color-border: #453a5c;
+
+  /* ---- Color: text ---- */
+  --color-text: #f5f1fa;
+  --color-text-muted: #b3a8c7;
+  --color-text-dim: #8578a1;
+
+  /* ---- Color: brand / pizza ---- */
+  --color-tomato: #ff5a3c;
+  --color-tomato-dim: #b8402a;
+  --color-cheese: #ffc94a;
+  --color-cheese-dim: #d9a934;
+  --color-crust: #e8a765;
+  --color-basil: #4caf6d;
+
+  /* ---- Color: feedback ---- */
+  --color-success: #4caf6d;
+  --color-success-bg: #1f3a2b;
+  --color-danger: #ff5a5a;
+  --color-danger-bg: #3a1f24;
+  --color-info: #5ac8ff;
+
+  /* ---- Color: robot / meta-game ---- */
+  --color-metal: #7a8494;
+  --color-metal-dim: #4a5261;
+  --color-slot-empty: #3a3350;
+
+  /* ---- Typography ---- */
+  --font-display: 'Baloo 2', 'Nunito', system-ui, sans-serif;
+  --font-body: 'Nunito', system-ui, -apple-system, sans-serif;
+
+  /* ---- Radii ---- */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.5rem;
+  --radius-full: 999px;
+
+  /* ---- Spacing (extra steps beyond Tailwind defaults) ---- */
+  --space-safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* ---- Shadows ---- */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.35);
+  --shadow-pop: 0 8px 32px rgba(255, 90, 60, 0.25);
+}

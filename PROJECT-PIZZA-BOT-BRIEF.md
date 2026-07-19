@@ -112,6 +112,8 @@ Finishing all 10 → **the bot powers on.** Eyes light up, it takes its first re
 
 Each term ships with: a game (default or custom), a one-sentence plain-language definition, and one "why you care" line tied to everyday Claude/ChatGPT use.
 
+**Per-term game design:** the agreed definition, learning approach, and game concept for every term live in **`GAME-DESIGN.md`** — the alignment document games are reviewed against. No game gets built before its entry there is approved.
+
 **How each term appears in the pizza bot scenario:**
 
 | Term | In the pizza bot world |

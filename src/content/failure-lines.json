@@ -1,0 +1,52 @@
+{
+  "perTerm": {
+    "token": [
+      "Your bot's replies cost more than the pizza. Learn about tokens.",
+      "The bot just spent 40 tokens saying 'yes'. It's technically fluent. It is not efficient."
+    ],
+    "context-window": [
+      "The customer said 'no olives' 12 messages ago. Your bot just added extra olives.",
+      "Somewhere around message 30, your bot forgot it was a pizza bot."
+    ],
+    "hallucination": [
+      "Your bot is confidently describing the 'Hawaiian Deluxe with truffle'. It does not exist. Nothing on that menu exists.",
+      "A customer asked about gluten-free crust. Your bot invented one. With total confidence."
+    ],
+    "prompt": [
+      "You told the bot to 'be helpful'. It is now recommending the competitor's pizzeria.",
+      "Nobody told the bot what 'large' means. It just made one up. It was wrong."
+    ],
+    "agent": [
+      "Your bot had a lovely 20-minute chat about pizza. Nobody ordered anything.",
+      "Your bot can describe a pizza beautifully. It cannot make one appear at your door."
+    ],
+    "tool-use": [
+      "Your bot is guessing the delivery time. Out loud. To customers.",
+      "Your bot doesn't know if you're open. It's guessing. Confidently."
+    ],
+    "skill": [
+      "A customer complained. Your bot improvised. There is now a lawsuit.",
+      "Every complaint gets handled differently, because your bot is making it up as it goes."
+    ],
+    "memory": [
+      "Your best customer ordered for the 50th time. Your bot greeted them with 'Welcome, stranger!'",
+      "Your bot re-asks for the delivery address. Every single time. Forever."
+    ],
+    "mcp": [
+      "Your bot takes perfect orders. The kitchen never hears about them.",
+      "Your bot and the POS system have never met. They are not on speaking terms."
+    ],
+    "guardrails": [
+      "Your bot can order pizza. It can also probably take down the internet. Maybe learn about guardrails.",
+      "A customer just negotiated a free pizza for life. Your bot said yes. Guardrails would help."
+    ]
+  },
+  "combo": [
+    "Technically it's a robot. Practically it's a very expensive fridge magnet.",
+    "It has some parts. It has no idea what it's doing. Neither do you, but you're learning."
+  ],
+  "almostDone": [
+    "One part missing. So close. Your bot can taste the pizza. Which it also shouldn't be able to do.",
+    "9 out of 10. The bot is basically alive. Suspiciously alive."
+  ]
+}

@@ -1,4 +1,21 @@
 node_modules/
 dist/
+dist-ssr/
 .vercel
 .DS_Store
+.claude/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Env
+.env
+.env.local
+.env.*.local

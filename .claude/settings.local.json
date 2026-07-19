@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(npm create *)",
-      "Bash(cat \"/Users/admin/Documents/Claude/Projects/Agentic AI/genai-academy/package.json\" 2>/dev/null)"
-    ]
-  }
-}
