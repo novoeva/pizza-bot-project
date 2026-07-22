@@ -21,6 +21,12 @@ export default {
         crust: 'var(--color-crust)',
         basil: 'var(--color-basil)',
 
+        primary: 'var(--color-primary)',
+        tertiary: 'var(--color-tertiary)',
+        accent: 'var(--color-accent)',
+        neutral: 'var(--color-neutral)',
+        muted: 'var(--color-muted)',
+
         success: 'var(--color-success)',
         'success-bg': 'var(--color-success-bg)',
         danger: 'var(--color-danger)',
@@ -30,10 +36,15 @@ export default {
         metal: 'var(--color-metal)',
         'metal-dim': 'var(--color-metal-dim)',
         'slot-empty': 'var(--color-slot-empty)',
+        'slot-fill': 'var(--color-slot-fill)',
+        glow: 'var(--color-glow)',
+        ground: 'var(--color-ground)',
+        'accent-soft': 'var(--color-accent-soft)',
       },
       fontFamily: {
         display: 'var(--font-display)',
         body: 'var(--font-body)',
+        label: 'var(--font-label)',
       },
       borderRadius: {
         sm: 'var(--radius-sm)',

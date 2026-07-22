@@ -62,11 +62,15 @@ Format note: the brief calls for a hybrid — a reusable structure plus custom m
 
 **Learning goal:** After playing, the player can explain why long chats get slow and expensive.
 
-**Academy sim:** *Temperature Lab* (next-token prediction) — drag a slider, watch token probabilities shift. Principle: manipulate a variable, observe the mechanism (A). Verdict: solid mechanic but it teaches temperature, not token cost — different learning goal. Steal the "watch text exist as tokens" visual, not the sim.
+**Academy sim:** *Temperature Lab* (next-token prediction) — drag a slider, watch token probabilities shift. Principle: manipulate a variable, observe the mechanism (A).
 
-**Approach:** A (feel the mechanism) + D (consequence feedback — a cost meter). The player must *see* text become chunks and *see* each chunk cost money. Format: custom.
+**v1 verdict (superseded):** solid mechanic but teaches temperature, not token cost — different learning goal. Steal the "watch text exist as tokens" visual, not the sim. Built as "The token budget" (a cost-meter game) instead.
 
-**Game — "The token budget":** Three customers ask questions. For each, the player picks one of 2–3 possible replies. The chosen reply visibly chops into token chunks ("pep · pe · ro · ni") while a cost meter ticks up per chunk. The budget covers all three customers only if the player picks concise replies — the long flowery reply blows half the budget on customer one. End: definition + "every Claude reply you get is paid for in these chunks."
+**Decided July 2026, replacing "The token budget":** Evi preferred the Temperature Lab mechanic itself over the budget game — reused directly (per the brief, mechanics are fair game, content is rebuilt fresh for pizza). Reframed as the token lesson: a token is chosen the same way every time — rank the possible next tokens by probability, then pick one — and temperature is the dial for how bold that pick gets. This still teaches what a token is (the unit being picked, one at a time) and adds *why the pick varies*, which the budget version didn't cover.
+
+**Approach:** A (feel the mechanism — drag the dial, watch the probabilities and the reply shift) + B/D (apply it — pick the right temperature for a real bot message, see the consequence). Format: custom.
+
+**Game — "Dial it in":** Round 1: a customer asks if the Diavola is spicy. Five temperature settings (0.0 → 1.0+) each show the bot's next-token probabilities for the same word position and the resulting reply — low temperature always grabs the top token (same answer every time), high temperature flattens the odds (different answer every time, occasionally off-topic). Round 2: the player sets the temperature for two real bot messages — an order confirmation (needs low: exact and consistent) and a specials Instagram caption (needs high: fresh and different each time) — and sees the specific consequence of getting it wrong (a robotic caption, or a confirmation text that drifts). End: definition + "every token you get from Claude or ChatGPT is chosen this way — temperature is the knob."
 
 ---
 

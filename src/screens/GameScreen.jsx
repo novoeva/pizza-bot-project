@@ -18,8 +18,8 @@ export default function GameScreen() {
   if (!GameComponent || !term) {
     return (
       <main className="mx-auto max-w-game px-4 py-8 text-center">
-        <p className="text-text-muted mb-4">This game doesn't exist yet.</p>
-        <Link to="/" className="text-cheese underline">
+        <p className="mb-4 text-text-muted">This game doesn't exist yet.</p>
+        <Link to="/" className="font-label text-primary underline">
           Back to the workshop
         </Link>
       </main>
@@ -27,11 +27,8 @@ export default function GameScreen() {
   }
 
   return (
-    <main className="mx-auto max-w-game min-h-screen px-4 py-6">
-      <Link to="/" className="inline-block text-text-muted text-sm mb-4">
-        ← Workshop
-      </Link>
-      <Suspense fallback={<p className="text-text-muted text-center mt-12">Loading…</p>}>
+    <main className="mx-auto max-w-game px-4 pb-[calc(6rem+var(--space-safe-bottom))] pt-5">
+      <Suspense fallback={<p className="mt-12 text-center text-text-muted">Loading…</p>}>
         <GameComponent termId={term.id} onComplete={handleComplete} />
       </Suspense>
     </main>

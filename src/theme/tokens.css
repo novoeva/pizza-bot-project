@@ -2,55 +2,76 @@
  * Design tokens — the one file that governs Pizza Bot's look.
  * Swap values here to reskin the whole app; components must never
  * reference raw hex codes, only these variables (via Tailwind classes).
+ *
+ * Direction: v0 + Loveable mixed prototype — light, bold, "chunky"
+ * (3px borders + hard offset shadows), navy text on off-white, red
+ * primary with blue accents. See design-mix/index.html.
  */
 
 :root {
   /* ---- Color: surfaces ---- */
-  --color-bg: #1a1625;
-  --color-bg-raised: #241f33;
-  --color-surface: #2e2740;
-  --color-surface-hover: #382f4d;
-  --color-border: #453a5c;
+  --color-bg: #f9f9ff;
+  --color-bg-raised: #eef2ef;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f1f4f2;
+  --color-border: #586158;
 
   /* ---- Color: text ---- */
-  --color-text: #f5f1fa;
-  --color-text-muted: #b3a8c7;
-  --color-text-dim: #8578a1;
+  --color-text: #001b3c;
+  --color-text-muted: #586158;
+  --color-text-dim: #8a938a;
 
   /* ---- Color: brand / pizza ---- */
-  --color-tomato: #ff5a3c;
-  --color-tomato-dim: #b8402a;
-  --color-cheese: #ffc94a;
-  --color-cheese-dim: #d9a934;
-  --color-crust: #e8a765;
-  --color-basil: #4caf6d;
+  --color-tomato: #b7102a;
+  --color-tomato-dim: #8f0c20;
+  --color-cheese: #d9992b;
+  --color-cheese-dim: #b37d1f;
+  --color-crust: #001b3c;
+  --color-basil: #2a9d8f;
+
+  /* ---- Color: new-world accents ---- */
+  --color-primary: #b7102a;
+  --color-tertiary: #286182;
+  --color-accent: #98cdf2;
+  --color-neutral: #586158;
+  --color-muted: #dce5d9;
 
   /* ---- Color: feedback ---- */
-  --color-success: #4caf6d;
-  --color-success-bg: #1f3a2b;
-  --color-danger: #ff5a5a;
-  --color-danger-bg: #3a1f24;
-  --color-info: #5ac8ff;
+  --color-success: #2a9d8f;
+  --color-success-bg: #e7f4f1;
+  --color-danger: #b7102a;
+  --color-danger-bg: #fbe7ea;
+  --color-info: #286182;
 
   /* ---- Color: robot / meta-game ---- */
-  --color-metal: #7a8494;
-  --color-metal-dim: #4a5261;
-  --color-slot-empty: #3a3350;
+  --color-metal: #586158;
+  --color-metal-dim: #dce5d9;
+  --color-slot-empty: #a8b1a7;
+  --color-slot-fill: #e7ece5;
+  --color-glow: #bfe6df;
+  --color-ground: #e4e4ec;
+
+  /* Solid "soft" tints (Tailwind /opacity can't apply alpha to var() colors) */
+  --color-accent-soft: #d9edfb;
+
+  /* Decorative dot patterns (referenced via var() in gradients, not hardcoded) */
+  --color-pegboard-dot: rgba(88, 97, 88, 0.35);
 
   /* ---- Typography ---- */
-  --font-display: 'Baloo 2', 'Nunito', system-ui, sans-serif;
-  --font-body: 'Nunito', system-ui, -apple-system, sans-serif;
+  --font-display: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-label: 'Space Grotesk', ui-monospace, monospace;
 
   /* ---- Radii ---- */
-  --radius-sm: 0.5rem;
-  --radius-md: 0.875rem;
-  --radius-lg: 1.5rem;
+  --radius-sm: 0.6rem;
+  --radius-md: 0.9rem;
+  --radius-lg: 1.25rem;
   --radius-full: 999px;
 
   /* ---- Spacing (extra steps beyond Tailwind defaults) ---- */
   --space-safe-bottom: env(safe-area-inset-bottom, 0px);
 
-  /* ---- Shadows ---- */
-  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.35);
-  --shadow-pop: 0 8px 32px rgba(255, 90, 60, 0.25);
+  /* ---- Shadows — hard offset (chunky), not soft blur ---- */
+  --shadow-card: 6px 6px 0 0 var(--color-neutral);
+  --shadow-pop: 4px 4px 0 0 var(--color-neutral);
 }

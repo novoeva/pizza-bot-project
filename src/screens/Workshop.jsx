@@ -1,43 +1,49 @@
 import { useMemo } from 'react'
 import BotCanvas from '../components/BotCanvas.jsx'
 import TermChecklist from '../components/TermChecklist.jsx'
-import FailureLine from '../components/FailureLine.jsx'
+import StatusReadout from '../components/StatusReadout.jsx'
 import { useProgress } from '../lib/useProgress.js'
 import { getFailureLine } from '../lib/failureLine.js'
 import terms from '../content/terms.json'
 
+const PEGBOARD = {
+  backgroundImage: 'radial-gradient(var(--color-pegboard-dot) 1.3px, transparent 1.3px)',
+  backgroundSize: '20px 20px',
+}
+
 export default function Workshop() {
   const completedTerms = useProgress()
   const total = terms.length
+  const done = completedTerms.length
+  const powered = done === total
 
-  // Recomputed each time the completed set changes, so a fresh line
-  // appears whenever the player returns having finished another game.
   const failureLine = useMemo(() => getFailureLine(completedTerms), [completedTerms])
+  const firstMissing = useMemo(() => {
+    const set = new Set(completedTerms)
+    return [...terms].sort((a, b) => a.order - b.order).find((t) => !set.has(t.id))
+  }, [completedTerms])
+
+  const line = powered ? "Your bot's online. It makes pizza now — and only pizza. Exactly as planned." : failureLine
 
   return (
-    <main className="mx-auto max-w-game px-4 pb-[calc(2rem+var(--space-safe-bottom))] pt-8">
-      <header className="text-center mb-6">
-        <h1 className="font-display text-2xl font-bold text-cheese">Pizza Bot</h1>
-        <p className="text-text-muted text-sm mt-1">Build the AI assistant, one term at a time.</p>
-      </header>
+    <main className="mx-auto max-w-game px-4 pb-[calc(6rem+var(--space-safe-bottom))] pt-5">
+      <p className="text-center font-label text-xs text-text-muted">What is this app?</p>
+      <h1 className="mt-1 text-center text-2xl leading-tight">Learn AI terms and build a pizza bot</h1>
 
-      <BotCanvas completedTerms={completedTerms} />
-
-      <p className="text-center text-text-muted text-sm mt-3 mb-5">
-        {completedTerms.length} / {total} parts installed
-      </p>
-
-      {completedTerms.length === total ? (
-        <p className="rounded-md bg-success-bg border border-success px-4 py-3 text-sm text-center text-success font-medium mb-6">
-          It's alive. Your bot just made its first pizza.
-        </p>
-      ) : (
-        <div className="mb-6">
-          <FailureLine line={failureLine} />
+      <div className="relative mt-4 rounded-lg border-[3px] border-neutral bg-muted p-4 pb-6 shadow-card" style={PEGBOARD}>
+        <BotCanvas completedTerms={completedTerms} />
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full border-[3px] border-neutral bg-surface px-4 py-1.5 font-label text-xs">
+          {done} / {total} parts built
         </div>
-      )}
+      </div>
 
-      <h2 className="font-display text-lg font-semibold mb-3">Learn the terms</h2>
+      <div className="mt-5">
+        <StatusReadout line={line} powered={powered} firstMissingId={firstMissing?.id} />
+      </div>
+
+      <h2 className="mb-3 mt-7 font-label text-sm text-text-muted">
+        {powered ? 'Replay any game' : 'System components'}
+      </h2>
       <TermChecklist completedTerms={completedTerms} />
     </main>
   )

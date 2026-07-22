@@ -5,7 +5,7 @@
     "name": "Token",
     "botPart": "Voice box",
     "definition": "A token is a small chunk of text — often part of a word — that's the unit an AI actually reads and writes in. \"Pepperoni\" alone breaks into four of them.",
-    "whyYouCare": "Every reply you get from Claude or ChatGPT costs tokens — that's why long chats get slower and pricier."
+    "whyYouCare": "It's why the same question to Claude or ChatGPT can sound different each time — and why a 'more consistent' setting exists for the moments it needs to say the exact same thing."
   },
   {
     "id": "context-window",

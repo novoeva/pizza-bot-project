@@ -1,69 +1,79 @@
-import { useMemo, useState } from 'react'
-import { turns } from './turns.js'
-import { tokenize } from './tokenize.js'
+import { useState } from 'react'
+import { customerMessage, tempSteps, scenarios } from './content.js'
 import terms from '../../content/terms.json'
+
+const TIER_CLASSES = {
+  cold: { bar: 'bg-success', box: 'bg-success-bg border-success text-success', pill: 'bg-success/20 text-success' },
+  warm: { bar: 'bg-cheese', box: 'bg-cheese/10 border-cheese text-cheese', pill: 'bg-cheese/20 text-cheese' },
+  hot: { bar: 'bg-danger', box: 'bg-danger-bg border-danger text-danger', pill: 'bg-danger/20 text-danger' },
+}
+
+const VERDICT_CLASSES = {
+  good: 'bg-success-bg border-success text-success',
+  warn: 'bg-cheese/10 border-cheese text-cheese',
+  bad: 'bg-danger-bg border-danger text-danger',
+}
+
+const VERDICT_LABEL = {
+  good: '✅ Right call',
+  warn: '⚠️ Close, but not quite',
+  bad: '❌ Wrong call',
+}
+
+const BUCKETS = [
+  { id: 'low', label: 'Low' },
+  { id: 'medium', label: 'Medium' },
+  { id: 'high', label: 'High' },
+]
 
 /**
  * Token game — { termId, onComplete } interface.
- * "The token budget": every reply the player picks visibly chops into token
- * chunks and a shared budget ticks down per chunk. Concise replies fit;
- * one flowery reply alone can eat more than half the budget.
+ * "Dial it in": the bot always picks its next token from a ranked list of
+ * probabilities — temperature controls how bold that pick is. Round 1 lets
+ * the player feel the mechanism (drag the dial, watch the probabilities and
+ * the reply shift). Round 2 turns it into a decision: pick the right
+ * temperature for two real bot messages and see the consequence.
  */
 export default function TokenGame({ termId, onComplete }) {
-  const [turnIndex, setTurnIndex] = useState(0)
-  const [pick, setPick] = useState(null) // null | 'concise' | 'flowery'
-  const [picks, setPicks] = useState([])
-  const [phase, setPhase] = useState('playing') // 'playing' | 'consequences' | 'reveal'
+  const [phase, setPhase] = useState('explore') // 'explore' | 'apply' | 'summary' | 'reveal'
+  const [stepIndex, setStepIndex] = useState(2)
+  const [scenarioIndex, setScenarioIndex] = useState(0)
+  const [scenarioPick, setScenarioPick] = useState(null)
+  const [results, setResults] = useState([])
 
   const term = terms.find((t) => t.id === termId)
-  const current = turns[turnIndex]
-  const isLastTurn = turnIndex === turns.length - 1
+  const step = tempSteps[stepIndex]
+  const tierClasses = TIER_CLASSES[step.tier]
 
-  // Budget: comfortably covers the concise path, but not much more —
-  // one flowery pick is designed to blow it.
-  const budget = useMemo(() => {
-    const conciseTotal = turns.reduce((sum, t) => sum + tokenize(t.concise).cost, 0)
-    return conciseTotal + 15
-  }, [])
-
-  const tokenized = pick ? tokenize(current[pick]) : null
-  const spentSoFar = picks.reduce((sum, p) => sum + p.cost, 0)
-  const runningTotal = spentSoFar + (tokenized ? tokenized.cost : 0)
-  const overBudget = runningTotal > budget
-
-  function handlePick(kind) {
-    if (pick) return
-    setPick(kind)
-    setPicks((p) => [...p, { kind, cost: tokenize(current[kind]).cost }])
+  function handleScenarioPick(bucketId) {
+    if (scenarioPick) return
+    setScenarioPick(bucketId)
   }
 
-  function handleNext() {
-    if (isLastTurn) {
-      setPhase('consequences')
+  function handleScenarioNext() {
+    const scenario = scenarios[scenarioIndex]
+    const nextResults = [
+      ...results,
+      { id: scenario.id, pick: scenarioPick, correct: scenarioPick === scenario.correct },
+    ]
+    setResults(nextResults)
+
+    if (scenarioIndex === scenarios.length - 1) {
+      setPhase('summary')
       return
     }
-    setTurnIndex((i) => i + 1)
-    setPick(null)
-  }
-
-  const totalSpent = picks.reduce((sum, p) => sum + p.cost, 0)
-  const budgetHeld = totalSpent <= budget
-  // First turn where cumulative spend blew the budget, if any.
-  let overflowIndex = -1
-  let running = 0
-  for (let i = 0; i < picks.length; i++) {
-    running += picks[i].cost
-    if (running > budget && overflowIndex === -1) overflowIndex = i
+    setScenarioIndex((i) => i + 1)
+    setScenarioPick(null)
   }
 
   if (phase === 'reveal') {
     return (
       <div className="flex flex-col gap-4">
         <p className="rounded-md bg-bg-raised border border-border px-4 py-4 text-sm italic text-text-muted">
-          Every reply you get from an AI is paid for in chunks like these — not words, not
-          characters, but tokens. A flowery reply doesn't just read longer, it costs more, every
-          single time. That's why long chats get slower and pricier, and why concise beats
-          verbose when you're the one paying for it.
+          Every token the bot writes — yours too, every time you chat with Claude or ChatGPT — gets
+          picked the same way: rank the possible next tokens, then choose one. Temperature is the
+          knob for how bold that choice gets. Low is a promise to say the same right thing every
+          time. High trades that promise for personality.
         </p>
 
         <div className="rounded-md bg-surface px-4 py-4">
@@ -89,49 +99,29 @@ export default function TokenGame({ termId, onComplete }) {
     )
   }
 
-  if (phase === 'consequences') {
+  if (phase === 'summary') {
+    const correctCount = results.filter((r) => r.correct).length
     return (
       <div className="flex flex-col gap-4">
         <p className="text-center text-text-muted text-sm">
-          {totalSpent} / {budget} tokens spent
+          {correctCount} / {scenarios.length} dialed in correctly
         </p>
 
         <div className="flex flex-col gap-3">
-          {turns.map((turn, i) => (
-            <div
-              key={i}
-              className={
-                'rounded-md border px-4 py-3 ' +
-                (i === overflowIndex
-                  ? 'bg-danger-bg border-danger'
-                  : 'bg-surface border-border')
-              }
-            >
-              <p className="text-text-muted text-xs mb-1">"{turn.question}"</p>
-              <p className={'text-sm font-semibold ' + (i === overflowIndex ? 'text-danger' : 'text-text')}>
-                {picks[i].kind === 'flowery' ? 'Flowery reply' : 'Concise reply'} — {picks[i].cost} tokens
-              </p>
-              {i === overflowIndex && (
-                <p className="text-danger text-sm mt-1">
-                  Budget ran out here. The rest of this reply gets cut off mid-sent—
-                </p>
-              )}
-            </div>
-          ))}
+          {scenarios.map((scenario, i) => {
+            const result = results[i]
+            const outcome = scenario.outcomes[result.pick]
+            return (
+              <div
+                key={scenario.id}
+                className={'rounded-md border px-4 py-3 ' + VERDICT_CLASSES[outcome.verdict]}
+              >
+                <p className="text-xs mb-1 opacity-80">{scenario.title}</p>
+                <p className="text-sm font-semibold">{VERDICT_LABEL[outcome.verdict]}</p>
+              </div>
+            )
+          })}
         </div>
-
-        <p
-          className={
-            'rounded-md border px-4 py-3 text-sm text-center font-medium ' +
-            (budgetHeld
-              ? 'bg-success-bg border-success text-success'
-              : 'bg-danger-bg border-danger text-danger')
-          }
-        >
-          {budgetHeld
-            ? 'Budget covered — every customer got a full answer, with room to spare.'
-            : "Budget blown — one flowery reply ate more than half of it."}
-        </p>
 
         <button
           type="button"
@@ -144,90 +134,130 @@ export default function TokenGame({ termId, onComplete }) {
     )
   }
 
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between text-xs text-text-dim">
-        <span>
-          Customer {turnIndex + 1} / {turns.length}
-        </span>
-        <span>{spentSoFar} tokens spent so far</span>
-      </div>
+  if (phase === 'apply') {
+    const scenario = scenarios[scenarioIndex]
+    const outcome = scenarioPick ? scenario.outcomes[scenarioPick] : null
 
-      <div>
-        <div className="flex items-center justify-between text-xs text-text-muted mb-1">
-          <span>Token budget</span>
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between text-xs text-text-dim">
           <span>
-            {Math.min(runningTotal, budget)} / {budget}
-            {overBudget ? ' (over!)' : ''}
+            Message {scenarioIndex + 1} / {scenarios.length}
           </span>
         </div>
-        <div className="h-2 rounded-full bg-slot-empty overflow-hidden">
-          <div
-            className={
-              'h-full transition-all duration-500 ' + (overBudget ? 'bg-danger' : 'bg-cheese')
-            }
-            style={{ width: `${Math.min(100, (runningTotal / budget) * 100)}%` }}
-          />
-        </div>
-      </div>
 
-      <div className="rounded-md bg-surface px-4 py-6 text-center">
-        <p className="text-lg font-medium">A customer asks: "{current.question}"</p>
-      </div>
-
-      {!pick ? (
-        <div className="flex flex-col gap-3">
-          <button
-            type="button"
-            onClick={() => handlePick('concise')}
-            className="rounded-md bg-surface border-2 border-border text-text font-medium py-4 px-3 text-left active:scale-[0.98] transition-transform"
-          >
-            "{current.concise}"
-          </button>
-          <button
-            type="button"
-            onClick={() => handlePick('flowery')}
-            className="rounded-md bg-cheese/20 border-2 border-cheese text-cheese font-semibold py-4 px-3 text-left active:scale-[0.98] transition-transform"
-          >
-            "{current.flowery}"
-          </button>
+        <div className="rounded-md bg-surface px-4 py-4">
+          <p className="text-xs text-text-dim mb-1">{scenario.title}</p>
+          <p className="text-text text-sm">{scenario.prompt}</p>
         </div>
-      ) : (
-        <div className="flex flex-col gap-3">
-          <div className="rounded-md bg-bg-raised border border-border px-4 py-3">
-            <p className="text-xs text-text-dim mb-2">Reply chunked into tokens:</p>
-            <p className="text-sm leading-relaxed font-mono text-text-muted break-words">
-              {tokenized.words.map((w, wi) => (
-                <span key={wi} className="mr-2 inline-block">
-                  {w.chunks.map((chunk, ci) => (
-                    <span
-                      key={ci}
-                      className={
-                        'inline-block px-0.5 rounded ' +
-                        (ci % 2 === 0 ? 'bg-cheese/25 text-cheese' : 'bg-tomato/25 text-tomato')
-                      }
-                    >
-                      {chunk}
-                      {ci < w.chunks.length - 1 ? '·' : ''}
-                    </span>
-                  ))}
-                </span>
-              ))}
-            </p>
-            <p className="text-right text-sm font-semibold mt-2 text-cheese">
-              +{tokenized.cost} tokens
-            </p>
+
+        {!scenarioPick ? (
+          <div className="flex flex-col gap-3">
+            <p className="text-xs text-text-muted text-center">Set the temperature for this one:</p>
+            {BUCKETS.map((b) => (
+              <button
+                key={b.id}
+                type="button"
+                onClick={() => handleScenarioPick(b.id)}
+                className="rounded-md bg-surface border-2 border-border text-text font-medium py-4 px-3 active:scale-[0.98] transition-transform"
+              >
+                {b.label}
+              </button>
+            ))}
           </div>
+        ) : (
+          <div className="flex flex-col gap-3">
+            <div className={'rounded-md border px-4 py-3 ' + VERDICT_CLASSES[outcome.verdict]}>
+              <p className="text-sm font-semibold mb-1">{VERDICT_LABEL[outcome.verdict]}</p>
+              <p className="text-sm opacity-90">{outcome.text}</p>
+            </div>
+            <button
+              type="button"
+              onClick={handleScenarioNext}
+              className="rounded-md bg-tomato text-text font-semibold py-3 active:scale-[0.98] transition-transform"
+            >
+              {scenarioIndex === scenarios.length - 1 ? 'See how you did →' : 'Next message →'}
+            </button>
+          </div>
+        )}
+      </div>
+    )
+  }
 
-          <button
-            type="button"
-            onClick={handleNext}
-            className="rounded-md bg-tomato text-text font-semibold py-3 active:scale-[0.98] transition-transform"
-          >
-            {isLastTurn ? 'See the bill →' : 'Next customer →'}
-          </button>
+  return (
+    <div className="flex flex-col gap-4">
+      <p className="text-xs text-text-muted text-center">
+        Try all five settings — watch how sure the bot is about its next word, and how much the
+        reply changes.
+      </p>
+
+      <div className="rounded-md bg-bg-raised border border-border px-4 py-3 text-sm">
+        <span className="text-text-dim">Customer asks: </span>
+        <span className="text-text font-medium">"{customerMessage}"</span>
+      </div>
+
+      <div className="rounded-md bg-surface px-4 py-4">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs text-text-muted uppercase tracking-wide">Temperature</span>
+          <span className="text-lg font-display font-bold text-cheese">{step.value}</span>
         </div>
-      )}
+
+        <div className="grid grid-cols-5 gap-1.5 mb-3">
+          {tempSteps.map((s, i) => (
+            <button
+              key={s.value}
+              type="button"
+              onClick={() => setStepIndex(i)}
+              className={
+                'rounded-md py-2 text-[11px] font-semibold border-2 transition-colors ' +
+                (i === stepIndex
+                  ? TIER_CLASSES[s.tier].pill + ' border-transparent'
+                  : 'bg-bg-raised border-border text-text-dim')
+              }
+            >
+              {s.value}
+            </button>
+          ))}
+        </div>
+
+        <p className={'rounded-md border px-3 py-2 text-xs ' + tierClasses.box}>{step.desc}</p>
+      </div>
+
+      <div className="rounded-md bg-surface px-4 py-4">
+        <p className="text-xs text-text-muted mb-3">{step.subtitle}</p>
+        <div className="flex flex-col gap-2">
+          {step.tokens.map((t, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <div className="w-24 shrink-0 font-mono text-xs bg-bg-raised rounded px-1.5 py-1 text-center text-text-muted">
+                {t.word}
+              </div>
+              <div className="flex-1 h-4 rounded-full bg-slot-empty overflow-hidden">
+                <div
+                  className={'h-full transition-all duration-300 ' + tierClasses.bar}
+                  style={{ width: `${t.pct}%` }}
+                />
+              </div>
+              <div className="w-9 shrink-0 text-right text-xs text-text-dim">{t.pct}%</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="rounded-md bg-bg-raised border border-border px-4 py-3">
+        <p className="text-xs text-text-dim mb-1">Bot's reply</p>
+        <p className="text-sm text-text leading-relaxed">{step.reply}</p>
+        <p className={'inline-block mt-2 rounded-full px-2.5 py-0.5 text-[11px] font-semibold ' + tierClasses.pill}>
+          {step.tag}
+        </p>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setPhase('apply')}
+        className="rounded-md bg-tomato text-text font-semibold py-3 active:scale-[0.98] transition-transform"
+      >
+        Try it on a real message →
+      </button>
     </div>
   )
 }

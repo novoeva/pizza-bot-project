@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>Pizza Bot — Mixed Design (v0 + Loveable)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0,0" rel="stylesheet" />
+<style>
+:root{
+  --background:#f9f9ff; --foreground:#001b3c;
+  --primary:#b7102a; --primary-foreground:#ffffff;
+  --tertiary:#286182; --tertiary-foreground:#ffffff;
+  --secondary:#dce5d9; --muted:#dce5d9; --muted-foreground:#586158;
+  --neutral:#586158; --card:#ffffff;
+  --accent:#98cdf2; --success:#2A9D8F; --locked:#a8b1a7;
+  --font-display:"Plus Jakarta Sans",ui-sans-serif,system-ui,sans-serif;
+  --font-label:"Space Grotesk",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--background);color:var(--foreground);font-family:var(--font-display);-webkit-font-smoothing:antialiased}
+body{max-width:600px;margin:0 auto;min-height:100vh;padding-bottom:96px}
+body.in-game{padding-bottom:0;overflow:hidden}
+.material-symbols-rounded{font-family:"Material Symbols Rounded";font-weight:normal;font-style:normal;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;direction:ltr}
+.fill1{font-variation-settings:'FILL' 1}
+h1,h2,h3{font-family:var(--font-display);font-weight:800;letter-spacing:-.02em}
+.label{font-family:var(--font-label);text-transform:uppercase;letter-spacing:.08em}
+
+.chunk{background:var(--card);border:3px solid var(--neutral);border-radius:1.25rem;box-shadow:6px 6px 0 0 var(--neutral)}
+.btn-chunk{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;padding:1rem 1.25rem;border:3px solid var(--neutral);border-radius:.9rem;background:var(--primary);color:var(--primary-foreground);font-family:var(--font-label);font-weight:700;letter-spacing:.08em;text-transform:uppercase;box-shadow:4px 4px 0 0 var(--neutral);cursor:pointer;transition:transform .1s,box-shadow .1s;width:100%;font-size:1rem}
+.btn-chunk:active{transform:translate(3px,3px);box-shadow:1px 1px 0 0 var(--neutral)}
+
+header.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:.5rem .75rem;border-bottom:3px solid var(--neutral);background:var(--background)}
+header.top .brand{font-family:var(--font-display);font-weight:800;font-size:1.5rem;letter-spacing:-.02em;color:var(--primary)}
+header.top .ico{color:var(--primary);padding:.5rem;background:none;border:none;cursor:pointer;font-size:24px}
+header.top .ico.mut{color:var(--muted-foreground)}
+nav.bottom{position:fixed;bottom:0;left:0;right:0;max-width:600px;margin:0 auto;display:flex;align-items:center;justify-content:space-around;padding:.5rem .75rem 1rem;border-top:3px solid var(--neutral);background:var(--background);z-index:50}
+nav.bottom button{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:.5rem;color:var(--muted-foreground);font-family:var(--font-label)}
+nav.bottom button .label{font-size:10px}
+nav.bottom button.active{border:3px solid var(--neutral);border-radius:.9rem;background:var(--primary);color:var(--primary-foreground);padding:.25rem 1rem;box-shadow:4px 4px 0 0 var(--neutral)}
+
+main{padding:1.25rem 1.25rem 0}
+.screen{display:none}
+.screen.active{display:block}
+
+.harness{display:flex;gap:.4rem;align-items:center;justify-content:center;padding:.5rem;margin:.75rem 1.25rem 0;border:2px dashed var(--locked);border-radius:.75rem;font-family:var(--font-label);font-size:10px;color:var(--muted-foreground);text-transform:uppercase;letter-spacing:.08em}
+.harness button{font-family:var(--font-label);font-size:10px;text-transform:uppercase;letter-spacing:.06em;border:2px solid var(--neutral);background:var(--card);color:var(--foreground);border-radius:.5rem;padding:.3rem .55rem;cursor:pointer}
+.harness button.on{background:var(--foreground);color:#fff;border-color:var(--foreground)}
+
+.eyebrow{text-align:center;font-family:var(--font-label);font-size:.7rem;letter-spacing:.12em;color:var(--muted-foreground)}
+.h-title{text-align:center;font-size:1.6rem;line-height:1.15;margin-top:.25rem}
+.bot-card{position:relative;margin-top:1rem;padding:1rem 1rem 1.25rem;background:var(--secondary);border:3px solid var(--neutral);border-radius:1.25rem;box-shadow:6px 6px 0 0 var(--neutral);background-image:radial-gradient(rgba(88,97,88,.35) 1.3px,transparent 1.3px);background-size:20px 20px}
+.bot-card svg{display:block;width:100%;max-width:280px;height:auto;margin:0 auto}
+.parts-badge{position:absolute;left:50%;bottom:.75rem;transform:translateX(-50%);background:var(--card);border:3px solid var(--neutral);border-radius:999px;padding:.35rem 1rem;font-family:var(--font-label);font-size:.75rem;letter-spacing:.06em;white-space:nowrap}
+
+.status{margin-top:1.25rem;display:flex;gap:.75rem;align-items:flex-start;text-align:left;padding:1rem;border:3px solid var(--neutral);border-radius:1.25rem;background:var(--card);box-shadow:6px 6px 0 0 var(--neutral);width:100%;cursor:pointer;font:inherit;color:inherit}
+.status .avatar{flex:0 0 auto;width:46px;height:46px;border-radius:.85rem;display:flex;align-items:center;justify-content:center;background:var(--primary);border:3px solid var(--neutral)}
+.status.online .avatar{background:var(--success)}
+.status .rd{font-family:var(--font-label);font-size:11px;letter-spacing:.1em;color:var(--muted-foreground)}
+.status .dot{display:inline-block;width:9px;height:9px;border-radius:999px;background:var(--primary);margin-left:.4rem;vertical-align:middle}
+.status.online .dot{background:var(--success)}
+.status .line{display:block;margin-top:.25rem;font-weight:800;font-size:15px;line-height:1.3}
+.status .fix{margin-top:.5rem;display:inline-flex;align-items:center;gap:.25rem;font-family:var(--font-label);font-size:11px;color:var(--primary)}
+.status.online .fix{display:none}
+
+.list-title{margin:1.5rem 0 .75rem;font-family:var(--font-label);font-size:.8rem;letter-spacing:.06em;color:var(--muted-foreground);padding:0 .5rem}
+
+/* Loveable-style component rows */
+.row{display:flex;align-items:center;gap:.75rem;width:100%;text-align:left;padding:1rem;margin-bottom:.75rem;border:3px solid var(--neutral);border-radius:1rem;cursor:pointer;font:inherit;color:inherit;transition:transform .1s,box-shadow .1s}
+.row.todo{background:var(--card);box-shadow:4px 4px 0 0 var(--neutral)}
+.row.todo:active{transform:translate(2px,2px);box-shadow:1px 1px 0 0 var(--neutral)}
+.row.done{background:var(--muted);opacity:.72}
+.row.done:active{opacity:1}
+.row .badge{flex:0 0 auto;width:40px;height:40px;border-radius:999px;border:2px solid var(--neutral);display:flex;align-items:center;justify-content:center}
+.row.done .badge{background:var(--primary)}
+.row.done .badge .material-symbols-rounded{color:#fff}
+.row.todo .badge{background:rgba(152,205,242,.4)}
+.row.todo .badge .material-symbols-rounded{color:var(--tertiary)}
+.row .txt{flex:1;min-width:0}
+.row .nm{display:block;font-family:var(--font-label);text-transform:uppercase;letter-spacing:.04em;font-size:.9rem;font-weight:600}
+.row.done .nm{color:var(--muted-foreground)}
+.row.todo .nm{color:var(--foreground)}
+.row .sub{font-size:.8rem;font-weight:500;color:var(--muted-foreground);margin-top:2px}
+.row .end{color:var(--muted-foreground)}
+
+/* progress / diploma */
+.prog-eyebrow{text-align:center;font-family:var(--font-label);font-size:.7rem;letter-spacing:.14em;color:var(--muted-foreground)}
+.prog-count{text-align:center;font-size:1.9rem;font-weight:800;margin-top:.25rem}
+.prog-bar{height:16px;border:3px solid var(--neutral);border-radius:999px;background:var(--muted);padding:2px;margin-top:.75rem}
+.prog-bar > div{height:100%;border-radius:999px;background:var(--primary);transition:width .3s}
+.mascot{position:relative;margin:1.5rem auto 0;width:230px;max-width:70%}
+.mascot svg{width:100%;height:auto;display:block}
+.mascot .badge{position:absolute;right:-6px;top:-6px;transform:rotate(12deg);border:3px solid var(--neutral);border-radius:.6rem;padding:.25rem .7rem;font-family:var(--font-label);font-size:.8rem;background:var(--success);color:#fff;box-shadow:4px 4px 0 0 var(--neutral)}
+.locked-note{margin-top:1.5rem;text-align:center;padding:1.5rem;border:3px solid var(--neutral);border-radius:1.25rem;background:var(--muted);box-shadow:4px 4px 0 0 var(--neutral)}
+.locked-note .material-symbols-rounded{font-size:2rem;color:var(--muted-foreground)}
+.locked-note h3{margin:.5rem 0;font-size:1.3rem}
+.locked-note p{font-family:var(--font-label);font-size:.8rem;color:var(--muted-foreground);text-transform:none;letter-spacing:0}
+
+.diploma{position:relative;margin-top:1.5rem;overflow:hidden;border:6px solid var(--neutral);border-radius:.25rem;background:var(--card);text-align:center;background-image:radial-gradient(#db313f 1px,transparent 1px);background-size:16px 16px}
+.diploma .dhead{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid var(--neutral);background:var(--muted);padding:.75rem 1rem}
+.diploma .dhead .material-symbols-rounded{color:var(--muted-foreground)}
+.diploma .dhead .lbl{font-family:var(--font-label);font-size:.7rem;letter-spacing:.14em;color:var(--muted-foreground)}
+.diploma .body{position:relative;z-index:1;padding:1.5rem 1.25rem}
+.diploma h2{font-size:1.8rem;line-height:1.1}
+.diploma .rule{width:64px;height:4px;background:var(--primary);margin:1rem auto}
+.diploma .awarded{font-family:var(--font-label);font-size:.7rem;letter-spacing:.2em;color:var(--muted-foreground)}
+.diploma input{width:100%;border:none;border-bottom:3px dotted var(--neutral);background:transparent;text-align:center;font-family:var(--font-display);font-weight:800;font-size:1.4rem;text-transform:uppercase;color:var(--foreground);padding:.4rem 0;margin-top:.4rem;outline:none}
+.diploma input::placeholder{color:var(--locked)}
+.diploma .foot{display:flex;align-items:flex-end;justify-content:space-between;margin-top:1.5rem}
+.diploma .foot .di{font-family:var(--font-label);font-size:.6rem;color:var(--muted-foreground);text-align:left}
+.diploma .foot .di b{display:block;font-size:.85rem;color:var(--foreground);font-weight:500;margin-top:2px}
+.seal{width:88px;height:88px;transform:rotate(-12deg);border:4px double var(--primary);border-radius:999px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--primary)}
+.seal .st{font-family:var(--font-label);font-size:.6rem;line-height:1.1;text-align:center}
+.share-note{margin-top:.75rem;text-align:center;font-family:var(--font-label);font-size:.7rem;color:var(--muted-foreground);text-transform:none;letter-spacing:0}
+
+/* ===== GAME SCREEN (fits viewport, no scroll) ===== */
+#game-mount.fit{height:calc(100dvh - 141px);overflow:hidden;padding:.7rem 1rem 0}
+.game-fit{display:flex;flex-direction:column;gap:.5rem;min-height:0}
+.hal-body{display:flex;flex-direction:column;gap:.5rem;min-height:0}
+
+.game-instr{flex:0 0 auto;border:3px solid var(--neutral);border-radius:1rem;background:var(--card);padding:.6rem .85rem;box-shadow:3px 3px 0 0 var(--neutral)}
+.game-instr .g-eye{font-family:var(--font-label);font-size:.6rem;letter-spacing:.12em;color:var(--primary)}
+.game-instr h1{font-size:1.35rem;margin:.1rem 0 .2rem}
+.game-instr p{color:var(--muted-foreground);font-size:.8rem;line-height:1.3}
+
+.menu-card{flex:0 0 auto;border:3px solid var(--neutral);border-radius:.9rem;background:var(--muted);overflow:hidden}
+.menu-card .mh{display:flex;align-items:center;gap:.4rem;padding:.35rem .8rem;border-bottom:3px solid var(--neutral);background:var(--secondary);font-family:var(--font-label);font-size:.6rem;letter-spacing:.08em;color:var(--muted-foreground)}
+.menu-card ul{list-style:none;padding:.4rem .8rem;display:grid;grid-template-columns:1fr 1fr;gap:.15rem .8rem}
+.menu-card li{display:flex;justify-content:space-between;gap:.5rem;font-size:.72rem;border-bottom:1px dotted var(--locked);padding-bottom:.15rem}
+.menu-card li b{color:var(--foreground);font-weight:700}
+.menu-card li span{color:var(--muted-foreground)}
+
+.round-dots{flex:0 0 auto;display:flex;justify-content:center;gap:.45rem}
+.round-dots .d{width:10px;height:10px;border-radius:999px;border:2px solid var(--neutral);background:transparent}
+.round-dots .d.correct{background:var(--success)}
+.round-dots .d.wrong{background:var(--primary)}
+.round-dots .d.current{box-shadow:0 0 0 3px rgba(0,27,60,.12)}
+
+.claim{flex:0 0 auto;height:150px;display:flex;flex-direction:column;border:3px solid var(--neutral);border-radius:1rem;background:var(--card);box-shadow:5px 5px 0 0 var(--neutral);overflow:hidden}
+.claim .cbar{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;padding:.35rem .8rem;background:var(--foreground);color:#fff;font-family:var(--font-label);font-size:.56rem;letter-spacing:.08em}
+.claim .conf{display:flex;align-items:center;gap:.45rem}
+.claim .conf .track{width:56px;height:7px;border-radius:999px;background:rgba(255,255,255,.25);overflow:hidden}
+.claim .conf .track > i{display:block;height:100%;width:100%;background:var(--success)}
+.claim .body{flex:1;display:flex;gap:.65rem;padding:.85rem;align-items:center}
+.claim .avatar{flex:0 0 auto;width:42px;height:42px;border-radius:.7rem;background:var(--primary);border:3px solid var(--neutral);display:flex;align-items:center;justify-content:center}
+.claim .avatar svg{width:24px;height:24px}
+.claim .say{font-size:1.05rem;font-weight:800;line-height:1.25;color:var(--foreground)}
+
+.choices{flex:0 0 auto;display:flex;gap:.55rem}
+.choice{flex:1;display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.75rem;border:3px solid var(--neutral);border-radius:.9rem;font-family:var(--font-label);font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:.82rem;cursor:pointer;box-shadow:4px 4px 0 0 var(--neutral);transition:transform .1s,box-shadow .1s}
+.choice:active{transform:translate(2px,2px);box-shadow:1px 1px 0 0 var(--neutral)}
+.choice.trust{background:var(--tertiary);color:#fff}
+.choice.fake{background:var(--primary);color:#fff}
+.choices.locked .choice{opacity:.5;pointer-events:none;box-shadow:none}
+
+.feedback{flex:0 0 auto;border:3px solid var(--neutral);border-radius:.9rem;padding:.6rem .8rem;box-shadow:4px 4px 0 0 var(--neutral)}
+.feedback.good{background:#e7f4f1}
+.feedback.bad{background:#fbe7ea}
+.feedback .verdict{display:flex;align-items:center;gap:.4rem;font-family:var(--font-label);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:.78rem}
+.feedback.good .verdict{color:var(--success)}
+.feedback.bad .verdict{color:var(--primary)}
+.feedback .why{margin-top:.25rem;font-size:.8rem;color:var(--foreground);line-height:1.3}
+#hal-next{flex:0 0 auto;padding:.75rem}
+
+/* payoff (own scroll if needed, but sized to fit) */
+.payoff{text-align:center;padding:.5rem 0 1.5rem}
+.payoff .tick{width:72px;height:72px;margin:.5rem auto .25rem;border-radius:999px;background:var(--success);border:3px solid var(--neutral);display:flex;align-items:center;justify-content:center;box-shadow:4px 4px 0 0 var(--neutral)}
+.payoff .tick .material-symbols-rounded{font-size:44px;color:#fff}
+.payoff .snap{font-family:var(--font-label);font-size:.66rem;letter-spacing:.1em;color:var(--primary);margin-top:.75rem}
+.payoff h2{font-size:1.45rem;margin-top:.2rem}
+.payoff .score{font-family:var(--font-label);font-size:.78rem;color:var(--muted-foreground);margin-top:.35rem}
+.payoff .defn{margin-top:.9rem;border:3px solid var(--neutral);border-radius:1rem;background:var(--card);box-shadow:4px 4px 0 0 var(--neutral);padding:1rem;text-align:left}
+.payoff .defn .pt{font-family:var(--font-label);font-size:.6rem;letter-spacing:.1em;color:var(--muted-foreground);text-transform:uppercase}
+.payoff .defn p{margin-top:.3rem;font-size:.9rem;line-height:1.4}
+.payoff .defn .care{margin-top:.6rem;color:var(--muted-foreground)}
+
+/* robot part visibility toggling */
+.part .on{display:none}
+.part.done .on{display:block}
+.part.done .off{display:none}
+.glow{display:none}
+svg.powered .glow{display:block}
+.pizza{display:none}
+svg.powered .pizza{display:block}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <button class="ico fill1 material-symbols-rounded" id="hdr-left">local_pizza</button>
+  <span class="brand">Pizza Bot</span>
+  <span class="material-symbols-rounded ico mut">checklist</span>
+</header>
+
+<!-- PREVIEW HARNESS (design tool only — not part of the product) -->
+<div class="harness" id="harness">
+  <span>Preview&nbsp;state:</span>
+  <button data-state="empty">Empty · 0/10</button>
+  <button data-state="partial" class="on">Building · 6/10</button>
+  <button data-state="complete">Powered · 10/10</button>
+</div>
+
+<!-- ============ WORKSHOP SCREEN ============ -->
+<section class="screen active" id="screen-workshop">
+<main>
+  <p class="eyebrow">What is this app?</p>
+  <h1 class="h-title">Learn AI terms and<br/>build a pizza bot</h1>
+
+  <div class="bot-card">
+    <svg id="bot" viewBox="0 0 260 372" role="img" aria-label="Pizza bot">
+      <ellipse cx="130" cy="352" rx="78" ry="12" fill="rgba(0,27,60,.06)"/>
+      <g class="part" id="p-skill">
+        <g class="off"><circle cx="130" cy="18" r="9" fill="rgba(220,229,217,.5)" stroke="var(--locked)" stroke-width="2.5" stroke-dasharray="5 5" stroke-linecap="round"/></g>
+        <g class="on">
+          <line x1="130" y1="46" x2="130" y2="20" stroke="var(--neutral)" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="130" cy="15" r="8" fill="var(--tertiary)" stroke="var(--foreground)" stroke-width="2"/>
+        </g>
+      </g>
+      <rect x="76" y="42" width="108" height="80" rx="24" fill="var(--card)" stroke="var(--foreground)" stroke-width="5"/>
+      <g class="part" id="p-context-window">
+        <g class="off"><rect x="94" y="52" width="72" height="15" rx="7" fill="rgba(220,229,217,.5)" stroke="var(--locked)" stroke-width="2.5" stroke-dasharray="5 5"/></g>
+        <g class="on"><rect x="94" y="52" width="72" height="15" rx="7" fill="var(--accent)" stroke="var(--foreground)" stroke-width="2"/></g>
+      </g>
+      <g class="part" id="p-hallucination">
+        <g class="off">
+          <circle cx="108" cy="90" r="10" fill="rgba(220,229,217,.5)" stroke="var(--locked)" stroke-width="2.5" stroke-dasharray="5 5"/>
+          <circle cx="152" cy="90" r="10" fill="rgba(220,229,217,.5)" stroke="var(--locked)" stroke-width="2.5" stroke-dasharray="5 5"/>
+        </g>
+        <g class="on">
+          <circle class="glow" cx="108" cy="90" r="16" fill="rgba(42,157,143,.25)"/>
+          <circle class="glow" cx="152" cy="90" r="16" fill="rgba(42,157,143,.25)"/>
+          <circle cx="108" cy="90" r="10" fill="var(--foreground)"/>
+          <circle cx="152" cy="90" r="10" fill="var(--foreground)"/>
+          <circle class="glow" cx="108" cy="90" r="6" fill="var(--success)"/>
+          <circle class="glow" cx="152" cy="90" r="6" fill="var(--success)"/>
+        </g>
+      </g>
+      <g class="part" id="p-token">
+        <g class="off"><rect x="102" y="104" width="56" height="12" rx="6" fill="rgba(220,229,217,.5)" stroke="var(--locked)" stroke-width="2.5" stroke-dasharray="5 5"/></g>
+        <g class="on">
+          <rect x="102" y="104" width="56" height="12" rx="6" fill="var(--foreground)"/>
+          <line x1="114" y1="106" x2="114" y2="114" stroke="var(--card)" stroke-width="2"/>
+          <line x1="124" y1="106" x2="124" y2="114" stroke="var(--card)" stroke-width="2"/>
+          <line x1="134" y1="106" x2="134" y2="114" stroke="var(--card)" stroke-width="2"/>
+          <line x1="144" y1="106" x2="144" y2="114" stroke="var(--card)" stroke-width="2"/>
+        </g>
+      </g>
+      <rect x="118" y="120" width="24" height="16" rx="4" fill="var(--neutral)"/>
+      <g class="part" id="p-guardrails">
+        <g class="off">
+          <rect x="52" y="140" width="30" height="26" rx="12" fill="rgba(220,229,217,.5)" stroke="var(--locked)" stroke-width="2.5" stroke-dasharray="5 5"/>
+          <rect x="178" y="140" width="30" height="26" rx="12" fill="rgba(220,229,217,.5)" stroke="var(--locked)" stroke-width="2.5" stroke-dasharray="5 5"/>
+        </g>
+        <g class="on">
+          <rect x="52" y="140" width="30" height="26" rx="12" fill="var(--primary)" stroke="var(--foreground)" stroke-width="2"/>
+          <rect x="178" y="140" width="30" height="26" rx="12" fill="var(--primary)" stroke="var(--foreground)" stroke-width="2"/>
+        </g>
+      </g>
+      <rect x="62" y="134" width="136" height="120" rx="30" fill="var(--card)" stroke="var(--foreground)" stroke-width="5"/>
+      <g class="part" id="p-mcp">
+        <g class="off"><rect x="192" y="158" width="26" height="56" rx="10" fill="rgba(220,229,217,.5)" stroke="var(--locked)" stroke-width="2.5" stroke-dasharray="5 5"/></g>
+        <g class="on">
+          <rect x="192" y="158" width="26" height="56" rx="10" fill="var(--neutral)" stroke="var(--foreground)" stroke-width="2"/>
+          <rect x="198" y="168" width="14" height="6" rx="3" fill="var(--accent)"/>
+          <rect x="198" y="180" width="14" height="6" rx="3" fill="var(--accent)"/>
+          <rect x="198" y="192" width="14" height="6" rx="3" fill="var(--accent)"/>
+        </g>
+      </g>
+      <g class="part" id="p-tool-use">
+        <g class="off">
+          <circle cx="34" cy="183" r="12" fill="rgba(220,229,217,.5)" stroke="var(--locked)" stroke-width="2.5" stroke-dasharray="5 5"/>
+          <circle cx="226" cy="183" r="12" fill="rgba(220,229,217,.5)" stroke="var(--locked)" stroke-width="2.5" stroke-dasharray="5 5"/>
+        </g>
+        <g class="on">
+          <rect x="34" y="176" width="30" height="14" rx="7" fill="var(--neutral)"/>
+          <circle cx="34" cy="183" r="12" fill="var(--neutral)" stroke="var(--foreground)" stroke-width="2"/>
+          <circle cx="34" cy="183" r="5" fill="var(--accent)"/>
+          <rect x="196" y="176" width="30" height="14" rx="7" fill="var(--neutral)"/>
+          <circle cx="226" cy="183" r="12" fill="var(--neutral)" stroke="var(--foreground)" stroke-width="2"/>
+          <circle cx="226" cy="183" r="5" fill="var(--accent)"/>
+        </g>
+      </g>
+      <g class="part" id="p-memory">
+        <g class="off"><circle cx="130" cy="176" r="20" fill="rgba(220,229,217,.5)" stroke="var(--locked)" stroke-width="2.5" stroke-dasharray="5 5"/></g>
+        <g class="on">
+          <circle class="glow" cx="130" cy="176" r="26" fill="rgba(42,157,143,.22)"/>
+          <circle cx="130" cy="176" r="20" fill="var(--primary)" stroke="var(--foreground)" stroke-width="2"/>
+          <circle cx="130" cy="176" r="9" fill="var(--accent)"/>
+        </g>
+      </g>
+      <g class="part" id="p-prompt">
+        <g class="off"><circle cx="96" cy="220" r="13" fill="rgba(220,229,217,.5)" stroke="var(--locked)" stroke-width="2.5" stroke-dasharray="5 5"/></g>
+        <g class="on">
+          <circle cx="96" cy="220" r="13" fill="var(--accent)" stroke="var(--foreground)" stroke-width="2"/>
+          <line x1="96" y1="220" x2="103" y2="213" stroke="var(--foreground)" stroke-width="3" stroke-linecap="round"/>
+        </g>
+      </g>
+      <circle cx="164" cy="220" r="5" fill="rgba(88,97,88,.4)"/>
+      <g class="part" id="p-agent">
+        <g class="off">
+          <rect x="82" y="254" width="96" height="22" rx="11" fill="rgba(220,229,217,.5)" stroke="var(--locked)" stroke-width="2.5" stroke-dasharray="5 5"/>
+          <circle cx="100" cy="286" r="14" fill="rgba(220,229,217,.5)" stroke="var(--locked)" stroke-width="2.5" stroke-dasharray="5 5"/>
+          <circle cx="160" cy="286" r="14" fill="rgba(220,229,217,.5)" stroke="var(--locked)" stroke-width="2.5" stroke-dasharray="5 5"/>
+        </g>
+        <g class="on">
+          <rect x="82" y="254" width="96" height="22" rx="11" fill="var(--neutral)"/>
+          <circle cx="100" cy="286" r="16" fill="var(--neutral)" stroke="var(--foreground)" stroke-width="2"/>
+          <circle cx="100" cy="286" r="6" fill="var(--accent)"/>
+          <circle cx="160" cy="286" r="16" fill="var(--neutral)" stroke="var(--foreground)" stroke-width="2"/>
+          <circle cx="160" cy="286" r="6" fill="var(--accent)"/>
+        </g>
+      </g>
+      <g class="pizza">
+        <circle cx="226" cy="176" r="22" fill="var(--accent)" stroke="var(--primary)" stroke-width="3"/>
+        <circle cx="220" cy="170" r="3" fill="var(--primary)"/>
+        <circle cx="232" cy="172" r="3" fill="var(--primary)"/>
+        <circle cx="223" cy="183" r="3" fill="var(--primary)"/>
+        <circle cx="233" cy="182" r="2.5" fill="var(--primary)"/>
+      </g>
+    </svg>
+    <div class="parts-badge" id="parts-badge">6 / 10 PARTS BUILT</div>
+  </div>
+
+  <button class="status" id="status">
+    <span class="avatar">
+      <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true">
+        <rect x="5" y="7" width="22" height="18" rx="6" fill="#fff"/>
+        <circle id="sa-eye1" cx="12.5" cy="16" r="2.6" fill="var(--primary)"/>
+        <circle id="sa-eye2" cx="19.5" cy="16" r="2.6" fill="var(--primary)"/>
+        <line x1="16" y1="7" x2="16" y2="3" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="16" cy="2.5" r="2" fill="#fff"/>
+      </svg>
+    </span>
+    <span style="flex:1">
+      <span class="rd" id="status-label">Status readout<span class="dot"></span></span>
+      <span class="line" id="status-line"></span>
+      <span class="fix">Fix it now <span class="material-symbols-rounded" style="font-size:15px">chevron_right</span></span>
+    </span>
+  </button>
+
+  <p class="list-title" id="list-title">System components</p>
+  <div id="rows"></div>
+</main>
+</section>
+
+<!-- ============ GAME SCREEN ============ -->
+<section class="screen" id="screen-game">
+  <main id="game-mount"></main>
+</section>
+
+<!-- ============ PROGRESS / DIPLOMA SCREEN ============ -->
+<section class="screen" id="screen-progress">
+<main>
+  <p class="prog-eyebrow">Your progress</p>
+  <p class="prog-count" id="prog-count">6 out of 10 completed</p>
+  <div class="prog-bar"><div id="prog-fill" style="width:60%"></div></div>
+  <div class="mascot">
+    <div class="badge" id="mascot-badge">BUILDING…</div>
+    <svg id="bot-mascot" viewBox="0 0 260 372" aria-hidden="true"></svg>
+  </div>
+  <div class="locked-note" id="locked-note">
+    <span class="material-symbols-rounded fill1">hourglass_top</span>
+    <h3>Not finished yet</h3>
+    <p>Build all 10 parts to switch your bot on and unlock the diploma. No shortcuts, but no locks either — play them in any order.</p>
+  </div>
+  <div id="diploma-wrap" style="display:none">
+    <div class="diploma">
+      <div class="dhead">
+        <span class="material-symbols-rounded fill1">workspace_premium</span>
+        <span class="lbl">Official Certification</span>
+        <span class="material-symbols-rounded fill1">verified_user</span>
+      </div>
+      <div class="body">
+        <h2>YOU JUST BUILT AN<br/>AI AGENT</h2>
+        <div class="rule"></div>
+        <p class="awarded">Awarded to</p>
+        <input placeholder="THE PLAYER'S NAME" spellcheck="false"/>
+        <div class="foot">
+          <span class="di">DATE ISSUED<b id="date-issued"></b></span>
+          <span class="seal"><span class="st">PIZZA BOT<br/>CERTIFIED</span><span class="material-symbols-rounded fill1" style="font-size:20px;margin-top:3px">restaurant</span></span>
+        </div>
+      </div>
+    </div>
+    <button class="btn-chunk" style="margin-top:1.25rem"><span class="material-symbols-rounded">share</span> Share to LinkedIn</button>
+    <p class="share-note">Let the world know your pizza agent is ready</p>
+  </div>
+</main>
+</section>
+
+<nav class="bottom">
+  <button data-screen="workshop" class="active"><span class="material-symbols-rounded">restaurant</span><span class="label">Workshop</span></button>
+  <button data-screen="progress"><span class="material-symbols-rounded">smart_toy</span><span class="label">Progress</span></button>
+</nav>
+
+<script>
+const TERMS = [
+  {id:'token', order:1, name:'Token', part:'Voice box', icon:'graphic_eq'},
+  {id:'context-window', order:2, name:'Context window', part:'Short-term memory chip', icon:'history'},
+  {id:'hallucination', order:3, name:'Hallucination', part:'Reality-check filter', icon:'blur_on'},
+  {id:'prompt', order:4, name:'Prompt', part:'Instruction dial', icon:'edit_note'},
+  {id:'agent', order:5, name:'Agent', part:'Legs', icon:'directions_run'},
+  {id:'tool-use', order:6, name:'Tool use', part:'Arms', icon:'build'},
+  {id:'skill', order:7, name:'Skill', part:'Training certificate', icon:'school'},
+  {id:'memory', order:8, name:'Memory', part:'Hard drive (chest)', icon:'database'},
+  {id:'mcp', order:9, name:'MCP', part:'Universal port', icon:'cable'},
+  {id:'guardrails', order:10, name:'Guardrails', part:'Safety casing', icon:'shield'},
+];
+const STATUS_LINES = {
+  empty:   "Right now your bot is a box with a logo. It can't hear you, can't remember you, can't do a thing.",
+  partial: "Your bot can take an order and act on it — but it forgets you the second you leave and has no safety casing. Bold. Bad for business.",
+  complete:"Your bot can order pizza. It can also probably take down the internet. (It won't. Probably.)",
+};
+const DONE = {
+  empty: [],
+  partial: ['token','context-window','hallucination','prompt','agent','tool-use'],
+  complete: TERMS.map(t=>t.id),
+};
+
+let state = 'partial';
+const bot = document.getElementById('bot');
+
+function applyRobot(svg, doneIds, powered){
+  TERMS.forEach(t=>{ const g=svg.querySelector('#p-'+t.id); if(g) g.classList.toggle('done', doneIds.includes(t.id)); });
+  svg.classList.toggle('powered', powered);
+}
+
+function render(){
+  const doneIds = DONE[state];
+  const n = doneIds.length, powered = n>=10;
+  applyRobot(bot, doneIds, powered);
+  const mascot = document.getElementById('bot-mascot');
+  applyRobot(mascot, doneIds, powered);
+  document.getElementById('parts-badge').textContent = n+' / 10 PARTS BUILT';
+
+  const st = document.getElementById('status');
+  st.classList.toggle('online', powered);
+  document.getElementById('status-label').childNodes[0].textContent = powered ? 'System online' : 'Status readout';
+  document.getElementById('status-line').textContent = STATUS_LINES[state];
+  const eyeColor = powered ? 'var(--success)' : 'var(--primary)';
+  document.getElementById('sa-eye1').setAttribute('fill', eyeColor);
+  document.getElementById('sa-eye2').setAttribute('fill', eyeColor);
+
+  document.getElementById('list-title').textContent = powered ? 'Replay any game' : 'System components';
+  const rows = document.getElementById('rows');
+  rows.innerHTML = '';
+  TERMS.forEach(t=>{
+    const done = doneIds.includes(t.id);
+    const row = document.createElement('button');
+    row.className = 'row '+(done?'done':'todo');
+    row.innerHTML =
+      '<span class="badge"><span class="material-symbols-rounded'+(done?' fill1':'')+'">'+(done?'check_circle':t.icon)+'</span></span>'+
+      '<span class="txt"><span class="nm">'+t.name+'</span><span class="sub">'+t.part+'</span></span>'+
+      '<span class="material-symbols-rounded end">'+(done?'chevron_right':'play_arrow')+'</span>';
+    row.addEventListener('click',()=>openGame(t.id));
+    rows.appendChild(row);
+  });
+
+  document.getElementById('prog-count').textContent = n+' out of 10 completed';
+  document.getElementById('prog-fill').style.width = (n*10)+'%';
+  document.getElementById('mascot-badge').textContent = powered ? 'COMPLETE!' : (n+'/10');
+  document.getElementById('mascot-badge').style.background = powered ? 'var(--success)' : 'var(--muted)';
+  document.getElementById('mascot-badge').style.color = powered ? '#fff' : 'var(--muted-foreground)';
+  mascot.style.filter = powered ? 'none' : 'grayscale(1)';
+  mascot.style.opacity = powered ? '1' : '.6';
+  document.getElementById('locked-note').style.display = powered ? 'none' : 'block';
+  document.getElementById('diploma-wrap').style.display = powered ? 'block' : 'none';
+}
+
+/* ---------- navigation ---------- */
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  const inGame = name==='game';
+  const hdr = document.getElementById('hdr-left');
+  hdr.textContent = inGame ? 'arrow_back' : 'local_pizza';
+  document.getElementById('harness').style.display = inGame ? 'none' : 'flex';
+  if(!inGame) document.body.classList.remove('in-game');
+  window.scrollTo(0,0);
+}
+document.getElementById('hdr-left').addEventListener('click',()=>{
+  if(document.getElementById('hdr-left').textContent==='arrow_back'){ showScreen('workshop'); setNav('workshop'); }
+});
+function setNav(s){ document.querySelectorAll('nav.bottom button').forEach(x=>x.classList.toggle('active',x.dataset.screen===s)); }
+document.querySelectorAll('nav.bottom button').forEach(b=>{
+  b.addEventListener('click',()=>{ setNav(b.dataset.screen); showScreen(b.dataset.screen); });
+});
+
+/* ---------- games ---------- */
+function openGame(termId){
+  showScreen('game');
+  const mount = document.getElementById('game-mount');
+  if(termId==='hallucination'){ mount.classList.add('fit'); document.body.classList.add('in-game'); mount.innerHTML=''; mount.appendChild(buildHallucinationGame()); }
+  else {
+    mount.classList.remove('fit'); document.body.classList.remove('in-game');
+    const t = TERMS.find(x=>x.id===termId);
+    mount.innerHTML =
+      '<div class="game-instr" style="margin-top:.5rem"><p class="g-eye">GAME</p><h1>'+t.name+'</h1>'+
+      '<p>This game isn\'t designed yet — <b>Hallucination</b> is the first one built. Tap the back arrow, then open <b>Hallucination</b> to see the game flow in this style.</p></div>';
+  }
+}
+
+/* ===== HALLUCINATION GAME ===== */
+const HAL_TERM = TERMS.find(t=>t.id==='hallucination');
+const HAL_MENU = [
+  ['Margherita','$9'],['Pepperoni','$11'],['Biggest size','14&Prime;'],
+  ['Kitchen closes','11 pm'],['Delivery radius','5 miles'],['Gluten-free crust','+$3'],
+];
+const HAL_ROUNDS = [
+  {say:'Our Margherita is $9.', real:true,
+   whyRight:'Correct — that price is right there on the menu.',
+   whyWrong:'That one was actually true — $9 is the real Margherita price.'},
+  {say:'Sure, we do a 20-inch party size for $30!', real:false,
+   whyRight:'Nice catch. The biggest we make is 14 inches — the 20-inch is invented.',
+   whyWrong:'Made up. The menu tops out at 14 inches; there is no 20-inch.'},
+  {say:'Absolutely — we deliver anywhere in the city, no distance limit.', real:false,
+   whyRight:'Right. Delivery stops at 5 miles — the bot over-promised.',
+   whyWrong:'Hallucinated. Delivery is capped at 5 miles, not unlimited.'},
+  {say:'Gluten-free crust is an extra $3.', real:true,
+   whyRight:'Correct — that matches the menu exactly.',
+   whyWrong:'That was true — gluten-free really is +$3.'},
+  {say:'Of course, the kitchen is open 24 hours on weekends.', real:false,
+   whyRight:'Exactly. The kitchen closes at 11 pm — the confident tone fooled no one.',
+   whyWrong:'Made up. The kitchen closes at 11 pm; it is never open 24 hours.'},
+];
+
+function buildHallucinationGame(){
+  const wrap = document.createElement('div');
+  wrap.className = 'game-fit';
+  let i = 0; const results = [];
+
+  const menuLis = HAL_MENU.map(m=>'<li><b>'+m[0]+'</b><span>'+m[1]+'</span></li>').join('');
+
+  wrap.innerHTML =
+    '<div class="game-instr"><p class="g-eye">GAME · REALITY-CHECK FILTER</p>'+
+    '<h1>Hallucination</h1>'+
+    '<p>The bot sounds equally sure whether it knows the answer or invented it. Check each claim against the real menu and catch the fakes.</p></div>'+
+    '<div class="menu-card"><div class="mh"><span class="material-symbols-rounded" style="font-size:15px">menu_book</span> Today\'s real menu</div><ul>'+menuLis+'</ul></div>'+
+    '<div class="round-dots" id="hal-dots"></div>'+
+    '<div class="hal-body" id="hal-body"></div>';
+
+  const dots = wrap.querySelector('#hal-dots');
+  const body = wrap.querySelector('#hal-body');
+
+  function renderDots(){
+    dots.innerHTML='';
+    HAL_ROUNDS.forEach((_,idx)=>{
+      const d=document.createElement('span'); d.className='d';
+      if(results[idx]==='correct') d.classList.add('correct');
+      else if(results[idx]==='wrong') d.classList.add('wrong');
+      else if(idx===i) d.classList.add('current');
+      dots.appendChild(d);
+    });
+  }
+
+  function renderRound(){
+    const r = HAL_ROUNDS[i];
+    body.innerHTML =
+      '<div class="claim"><div class="cbar"><span>BOT SAYS</span>'+
+      '<span class="conf">BOT CONFIDENCE 100%<span class="track"><i></i></span></span></div>'+
+      '<div class="body"><span class="avatar"><svg viewBox="0 0 32 32"><rect x="5" y="7" width="22" height="18" rx="6" fill="#fff"/><circle cx="12.5" cy="16" r="2.6" fill="var(--primary)"/><circle cx="19.5" cy="16" r="2.6" fill="var(--primary)"/><line x1="16" y1="7" x2="16" y2="3" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="2.5" r="2" fill="#fff"/></svg></span>'+
+      '<span class="say">"'+r.say+'"</span></div></div>'+
+      '<div class="choices" id="hal-choices">'+
+      '<button class="choice trust" data-pick="trust"><span class="material-symbols-rounded">check</span> Trust it</button>'+
+      '<button class="choice fake" data-pick="fake"><span class="material-symbols-rounded">flag</span> Made up</button></div>'+
+      '<div id="hal-fb"></div>';
+    renderDots();
+    body.querySelectorAll('.choice').forEach(c=>c.addEventListener('click',()=>pick(c.dataset.pick)));
+  }
+
+  function pick(choice){
+    const r = HAL_ROUNDS[i];
+    const said = choice==='trust';           // trust = claims it's real
+    const correct = said === r.real;
+    results[i] = correct ? 'correct' : 'wrong';
+    body.querySelector('#hal-choices').classList.add('locked');
+    const fb = body.querySelector('#hal-fb');
+    const last = i === HAL_ROUNDS.length-1;
+    fb.innerHTML =
+      '<div class="feedback '+(correct?'good':'bad')+'">'+
+      '<div class="verdict"><span class="material-symbols-rounded">'+(correct?'check_circle':'cancel')+'</span>'+
+      (correct?'Caught it':'Fooled you')+'</div>'+
+      '<p class="why">'+(correct?r.whyRight:r.whyWrong)+'</p></div>'+
+      '<button class="btn-chunk" style="margin-top:1rem" id="hal-next">'+(last?'See result':'Next question')+'</button>';
+    renderDots();
+    fb.querySelector('#hal-next').addEventListener('click',()=>{
+      if(last) renderPayoff(); else { i++; renderRound(); window.scrollTo(0,0); }
+    });
+  }
+
+  function renderPayoff(){
+    const score = results.filter(r=>r==='correct').length;
+    document.getElementById('game-mount').classList.remove('fit');
+    document.body.classList.remove('in-game');
+    wrap.className = '';
+    wrap.innerHTML =
+      '<div class="payoff">'+
+      '<div class="tick"><span class="material-symbols-rounded fill1">check</span></div>'+
+      '<p class="snap">SNAPPED ONTO YOUR BOT · '+HAL_TERM.part.toUpperCase()+'</p>'+
+      '<h2>You just learned Hallucination</h2>'+
+      '<p class="score">You caught '+score+' of '+HAL_ROUNDS.length+' made-up answers.</p>'+
+      '<div class="defn"><span class="pt">What it means</span><p>'+HAL_DEF+'</p>'+
+      '<p class="care"><b>Why you care:</b> '+HAL_CARE+'</p></div>'+
+      '<button class="btn-chunk" style="margin-top:1.25rem" id="hal-back"><span class="material-symbols-rounded">arrow_back</span> Back to your bot</button>'+
+      '</div>';
+    wrap.querySelector('#hal-back').addEventListener('click',()=>{ showScreen('workshop'); setNav('workshop'); });
+    window.scrollTo(0,0);
+  }
+
+  renderRound();
+  return wrap;
+}
+const HAL_DEF = "A hallucination is when an AI states something false with full confidence — the same tone it uses for things that are true.";
+const HAL_CARE = "It's why you double-check anything an AI tells you that you can't verify elsewhere — confidence isn't the same as correctness.";
+
+/* ---------- init ---------- */
+document.getElementById('bot-mascot').innerHTML = bot.innerHTML;
+document.getElementById('date-issued').textContent =
+  new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'}).toUpperCase();
+document.querySelectorAll('.harness button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    state=b.dataset.state;
+    document.querySelectorAll('.harness button').forEach(x=>x.classList.toggle('on',x===b));
+    render();
+  });
+});
+render();
+</script>
+</body>
+</html>
