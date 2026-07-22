@@ -31,7 +31,7 @@ export const predictionRounds = [
       { word: 'penguin', pct: 3 },
       { word: 'pasta', pct: 8 },
     ],
-    why: '"pizza" fits both the sentence and the menu — the model\'s runaway top pick.',
+    why: '"pizza" fits both the sentence and the menu, so it\'s the model\'s runaway top pick.',
   },
   {
     context: 'Thanks so much for your',
@@ -41,6 +41,6 @@ export const predictionRounds = [
       { word: 'elephant', pct: 4 },
       { word: 'pizza', pct: 10 },
     ],
-    why: '"order" is the natural next word — the model has seen millions of sentences like this.',
+    why: '"order" is the natural next word. The model has seen millions of sentences like this one.',
   },
 ]

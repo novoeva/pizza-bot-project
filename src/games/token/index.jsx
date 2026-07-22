@@ -35,7 +35,7 @@ export default function TokenGame({ termId, onComplete }) {
           <p className="font-label text-[11px] text-primary">Game · Chop it up</p>
           <h1 className="text-2xl leading-tight">Token</h1>
           <p className="mt-1 text-[13px] leading-snug text-text-muted">
-            An AI doesn't read whole words — it reads little chunks called tokens. Let's meet them.
+            An AI doesn't read whole words. It reads little chunks called tokens.
           </p>
         </div>
 
@@ -74,7 +74,7 @@ export default function TokenGame({ termId, onComplete }) {
               </div>
               <p className="mt-3 text-center text-[13px] leading-snug text-text">
                 <span className="font-bold">{hookTokens.length} tokens.</span>{' '}
-                {correct ? 'Nailed it.' : 'Surprising, right?'} One word to you — four chunks to the
+                {correct ? 'Nailed it.' : 'Surprising, right?'} One word to you, four chunks to the
                 model.
               </p>
             </>
@@ -156,8 +156,8 @@ export default function TokenGame({ termId, onComplete }) {
           </div>
           <h1 className="text-2xl leading-tight">Token</h1>
           <p className="mt-1 text-[13px] leading-snug text-text-muted">
-            The bot writes one token at a time — each one a guess at what comes next. Beat it to the
-            punch.
+            An LLM never writes a whole reply at once. It predicts just the next token, statistically,
+            from everything it's seen so far. Then it does it again, and again.
           </p>
         </div>
 
@@ -170,7 +170,7 @@ export default function TokenGame({ termId, onComplete }) {
         {!answered ? (
           <div className="flex flex-col gap-2">
             <p className="text-center font-label text-[11px] text-text-muted">
-              Which token comes next?
+              You're the model. Which token is most likely to come next?
             </p>
             {round.options.map((o) => (
               <button
@@ -265,9 +265,9 @@ export default function TokenGame({ termId, onComplete }) {
 
       <div className="rounded-lg border-[3px] border-neutral bg-muted p-3 text-left shadow-pop">
         <p className="text-[13px] leading-snug text-text">
-          Tokens are the chunks an AI reads and writes in — and it builds every reply one token at a
-          time, always predicting the next one from a ranked list of options. That loop, repeated, is
-          the whole engine under Claude or ChatGPT.
+          Tokens are the chunks an AI reads and writes in. It builds every reply one token at a time,
+          always predicting the next one from a ranked list of options. That same loop runs under
+          Claude and ChatGPT.
         </p>
       </div>
 
