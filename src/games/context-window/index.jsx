@@ -51,21 +51,28 @@ export default function ContextWindowGame({ termId, onComplete }) {
 
   if (phase === 'reveal') {
     return (
-      <div className="flex flex-col gap-4">
-        <p className="rounded-md bg-bg-raised border border-border px-4 py-4 text-sm italic text-text-muted">
-          The bot never "forgot" on purpose — the window just filled up and the oldest chip fell
-          out to make room. Re-pinning is the fix, and it's the same move that works on you: in a
-          long chat with Claude or ChatGPT, if something matters, say it again near the end.
+      <div className="flex flex-col gap-3 text-center">
+        <div className="mx-auto mt-2 flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-neutral bg-success shadow-pop">
+          <span className="material-symbols-rounded fill text-5xl text-white">check</span>
+        </div>
+        <p className="font-label text-[11px] text-primary">
+          Snapped onto your bot · {term.botPart}
         </p>
+        <h2 className="text-2xl">You just learned Context window</h2>
 
-        <div className="rounded-md bg-surface px-4 py-4">
-          <h2 className="font-display font-semibold text-cheese mb-1">Context window</h2>
-          <p className="text-text">{term.definition}</p>
+        <div className="rounded-lg border-[3px] border-neutral bg-muted p-3 text-left shadow-pop">
+          <p className="text-[13px] leading-snug text-text">
+            The bot never "forgot" on purpose — the window just filled up and the oldest chip fell
+            out to make room. Re-pinning is the fix, and it's the same move that works on you: in a
+            long chat with Claude or ChatGPT, if something matters, say it again near the end.
+          </p>
         </div>
 
-        <div className="rounded-md bg-bg-raised border border-border px-4 py-4">
-          <p className="text-text-muted text-sm">
-            <span className="font-semibold text-info">Why you care: </span>
+        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
+          <p className="font-label text-[11px] text-text-muted">What it means</p>
+          <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
+          <p className="mt-3 text-[15px] leading-snug text-text-muted">
+            <span className="font-semibold text-tertiary">Why you care: </span>
             {term.whyYouCare}
           </p>
         </div>
@@ -73,9 +80,10 @@ export default function ContextWindowGame({ termId, onComplete }) {
         <button
           type="button"
           onClick={onComplete}
-          className="mt-2 rounded-md bg-tomato text-text font-semibold py-3 shadow-pop active:scale-[0.98] transition-transform"
+          className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label font-bold text-white shadow-pop"
         >
-          Snap it onto your bot →
+          <span className="material-symbols-rounded">arrow_forward</span>
+          Snap it onto your bot
         </button>
       </div>
     )
@@ -83,54 +91,74 @@ export default function ContextWindowGame({ termId, onComplete }) {
 
   if (phase === 'result') {
     return (
-      <div className="flex flex-col gap-4">
-        <div className="rounded-md bg-surface px-4 py-6 text-center">
-          <p className="text-text-muted text-sm mb-2">The bot assembles the order from whatever's still in the window:</p>
-          <p className="text-lg font-medium">
-            {savedTheDetail ? 'A large, extra cheese, mushroom pizza. No olives.' : 'A large, extra cheese, mushroom pizza. Loaded with olives.'}
+      <div className="flex flex-col gap-3">
+        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-center shadow-card">
+          <p className="mb-2 font-label text-[11px] text-text-muted">
+            The bot assembles the order from whatever's still in the window
+          </p>
+          <p className="text-lg font-extrabold leading-snug">
+            {savedTheDetail
+              ? 'A large, extra cheese, mushroom pizza. No olives.'
+              : 'A large, extra cheese, mushroom pizza. Loaded with olives.'}
           </p>
         </div>
 
-        <p
+        <div
           className={
-            'rounded-md border px-4 py-3 text-sm text-center font-medium ' +
+            'rounded-md border-[3px] px-4 py-3 shadow-pop ' +
             (savedTheDetail
               ? 'bg-success-bg border-success text-success'
               : 'bg-danger-bg border-danger text-danger')
           }
         >
-          {savedTheDetail
-            ? 'Correct pizza — you kept "no olives!!" in the window until the end.'
-            : '"No olives!!" fell out of the window messages ago. The bot cheerfully explains it never saw that message.'}
-        </p>
+          <p className="flex items-center gap-1.5 font-label text-sm font-bold">
+            <span className="material-symbols-rounded text-[18px]">
+              {savedTheDetail ? 'check_circle' : 'cancel'}
+            </span>
+            {savedTheDetail ? 'Correct pizza' : 'Wrong pizza'}
+          </p>
+          <p className="mt-1 text-[13px] leading-snug text-text">
+            {savedTheDetail
+              ? 'You kept "no olives!!" in the window until the end.'
+              : '"No olives!!" fell out of the window messages ago. The bot cheerfully explains it never saw that message.'}
+          </p>
+        </div>
 
         <button
           type="button"
           onClick={() => setPhase('reveal')}
-          className="rounded-md bg-surface hover:bg-surface-hover text-text font-medium py-3 active:scale-[0.98] transition-transform"
+          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
         >
-          See what this means →
+          <span className="material-symbols-rounded">arrow_forward</span>
+          See what this means
         </button>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between text-xs text-text-dim">
+    <div className="flex flex-col gap-3">
+      {/* Instruction */}
+      <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
+        <p className="font-label text-[11px] text-primary">Game · The long order</p>
+        <h1 className="text-2xl leading-tight">Context window</h1>
+        <p className="mt-1 text-[13px] leading-snug text-text-muted">
+          Tap a chip to re-pin it before the next message pushes one out — one re-pin per turn.
+        </p>
+      </div>
+
+      <div className="flex items-center justify-between font-label text-[11px] text-text-muted">
         <span>
           Message {turnIndex + 1} / {messages.length}
         </span>
         <span>Window holds {WINDOW_SIZE}</span>
       </div>
 
-      <p className="text-xs text-text-muted text-center">
-        Tap a chip to re-pin it before the next message pushes one out — one re-pin per turn.
-      </p>
-
-      <div className="rounded-md bg-bg-raised border border-border px-3 py-3 min-h-[8rem]">
+      <div className="min-h-[8rem] rounded-md border-[3px] border-neutral bg-muted px-3 py-3 shadow-pop">
         {window_.length === 0 ? (
-          <p className="text-text-dim text-sm text-center py-6">Window is empty — the order hasn't started.</p>
+          <p className="py-6 text-center text-sm text-text-muted">
+            Window is empty — the order hasn't started.
+          </p>
         ) : (
           <div className="flex flex-col gap-2">
             {window_.map((m) => {
@@ -142,15 +170,19 @@ export default function ContextWindowGame({ termId, onComplete }) {
                   onClick={() => rePin(m.id)}
                   disabled={pinnedThisTurn}
                   className={
-                    'text-left rounded-md px-3 py-2 text-sm border transition-all duration-300 ' +
+                    'rounded-md border-[3px] px-3 py-2 text-left text-sm transition-all duration-300 ' +
                     (m.critical
-                      ? 'bg-basil/20 border-basil text-basil font-semibold '
-                      : 'bg-surface border-border text-text-muted ') +
-                    (atRisk ? 'ring-2 ring-danger animate-pulse ' : '') +
-                    (pinnedThisTurn ? 'opacity-60' : 'active:scale-[0.98]')
+                      ? 'border-success bg-success-bg font-bold text-success '
+                      : 'border-neutral bg-surface text-text-muted ') +
+                    (atRisk ? 'animate-pulse ring-2 ring-danger ' : '') +
+                    (pinnedThisTurn ? 'opacity-60' : 'press')
                   }
                 >
-                  {atRisk && <span className="text-danger text-xs font-semibold mr-1">⚠ about to fall out —</span>}
+                  {atRisk && (
+                    <span className="mr-1 font-label text-[11px] font-bold text-danger">
+                      ⚠ about to fall out —
+                    </span>
+                  )}
                   "{m.text}"
                 </button>
               )
@@ -160,22 +192,25 @@ export default function ContextWindowGame({ termId, onComplete }) {
       </div>
 
       {lastFallen && (
-        <p className="text-danger text-xs text-center italic">"{lastFallen.text}" slid out of the window.</p>
+        <p className="text-center font-label text-[11px] text-danger">
+          "{lastFallen.text}" slid out of the window.
+        </p>
       )}
 
       {incoming && (
-        <div className="rounded-md bg-surface px-4 py-4 text-center">
-          <p className="text-text-dim text-xs mb-1">Next message incoming:</p>
-          <p className="text-text font-medium">"{incoming.text}"</p>
+        <div className="rounded-md border-[3px] border-neutral bg-surface px-4 py-3 text-center shadow-pop">
+          <p className="mb-1 font-label text-[11px] text-text-muted">Next message incoming</p>
+          <p className="font-bold text-text">"{incoming.text}"</p>
         </div>
       )}
 
       <button
         type="button"
         onClick={letItArrive}
-        className="rounded-md bg-tomato text-text font-semibold py-3 active:scale-[0.98] transition-transform"
+        className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
       >
-        Let it arrive →
+        <span className="material-symbols-rounded">arrow_forward</span>
+        Let it arrive
       </button>
     </div>
   )

@@ -40,6 +40,7 @@ export default {
         glow: 'var(--color-glow)',
         ground: 'var(--color-ground)',
         'accent-soft': 'var(--color-accent-soft)',
+        'cheese-bg': 'var(--color-cheese-bg)',
       },
       fontFamily: {
         display: 'var(--font-display)',

@@ -53,6 +53,7 @@
 
   /* Solid "soft" tints (Tailwind /opacity can't apply alpha to var() colors) */
   --color-accent-soft: #d9edfb;
+  --color-cheese-bg: #f9efd7;
 
   /* Decorative dot patterns (referenced via var() in gradients, not hardcoded) */
   --color-pegboard-dot: rgba(88, 97, 88, 0.35);

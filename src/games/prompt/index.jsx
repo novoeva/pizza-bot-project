@@ -5,7 +5,7 @@ import terms from '../../content/terms.json'
 function CategoryPicker({ category, value, onPick }) {
   return (
     <div>
-      <p className="text-xs text-text-dim mb-1">{category.name}</p>
+      <p className="mb-1 font-label text-[11px] text-text-muted">{category.name}</p>
       <div className="flex flex-wrap gap-2">
         {category.options.map((opt) => (
           <button
@@ -13,10 +13,10 @@ function CategoryPicker({ category, value, onPick }) {
             type="button"
             onClick={() => onPick(category.name, opt)}
             className={
-              'rounded-md border px-3 py-2 text-sm transition-colors ' +
+              'press rounded-md border-[3px] px-3 py-2 text-sm font-bold ' +
               (value === opt
-                ? 'bg-cheese/20 border-cheese text-cheese font-semibold'
-                : 'bg-surface border-border text-text-muted hover:bg-surface-hover')
+                ? 'border-neutral bg-accent-soft text-tertiary shadow-pop'
+                : 'border-neutral bg-surface text-text-muted shadow-pop')
             }
           >
             {opt}
@@ -70,21 +70,28 @@ export default function PromptGame({ termId, onComplete }) {
 
   if (phase === 'reveal') {
     return (
-      <div className="flex flex-col gap-4">
-        <p className="rounded-md bg-bg-raised border border-border px-4 py-4 text-sm italic text-text-muted">
-          Same bot, same customer, same order — the only thing that changed was how specific the
-          instruction got. That's the whole trick to better AI answers: refine the prompt, don't
-          just retry your luck.
+      <div className="flex flex-col gap-3 text-center">
+        <div className="mx-auto mt-2 flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-neutral bg-success shadow-pop">
+          <span className="material-symbols-rounded fill text-5xl text-white">check</span>
+        </div>
+        <p className="font-label text-[11px] text-primary">
+          Snapped onto your bot · {term.botPart}
         </p>
+        <h2 className="text-2xl">You just learned Prompt</h2>
 
-        <div className="rounded-md bg-surface px-4 py-4">
-          <h2 className="font-display font-semibold text-cheese mb-1">Prompt</h2>
-          <p className="text-text">{term.definition}</p>
+        <div className="rounded-lg border-[3px] border-neutral bg-muted p-3 text-left shadow-pop">
+          <p className="text-[13px] leading-snug text-text">
+            Same bot, same customer, same order — the only thing that changed was how specific the
+            instruction got. That's the whole trick to better AI answers: refine the prompt, don't
+            just retry your luck.
+          </p>
         </div>
 
-        <div className="rounded-md bg-bg-raised border border-border px-4 py-4">
-          <p className="text-text-muted text-sm">
-            <span className="font-semibold text-info">Why you care: </span>
+        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
+          <p className="font-label text-[11px] text-text-muted">What it means</p>
+          <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
+          <p className="mt-3 text-[15px] leading-snug text-text-muted">
+            <span className="font-semibold text-tertiary">Why you care: </span>
             {term.whyYouCare}
           </p>
         </div>
@@ -92,28 +99,41 @@ export default function PromptGame({ termId, onComplete }) {
         <button
           type="button"
           onClick={onComplete}
-          className="mt-2 rounded-md bg-tomato text-text font-semibold py-3 shadow-pop active:scale-[0.98] transition-transform"
+          className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label font-bold text-white shadow-pop"
         >
-          Snap it onto your bot →
+          <span className="material-symbols-rounded">arrow_forward</span>
+          Snap it onto your bot
         </button>
       </div>
     )
   }
 
   const customerBanner = (
-    <div className="rounded-md bg-bg-raised border border-border px-4 py-3 text-sm">
-      <span className="text-text-dim">Customer wants: </span>
-      <span className="text-text font-medium">{customerRequest}</span>
+    <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-3 text-sm shadow-pop">
+      <span className="font-label text-[11px] text-text-muted">Customer wants </span>
+      <span className="font-bold text-text">{customerRequest}</span>
+    </div>
+  )
+
+  const instruction = (round, sub) => (
+    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
+      <p className="font-label text-[11px] text-primary">Game · Say what you mean</p>
+      <h1 className="text-2xl leading-tight">Prompt</h1>
+      <p className="mt-1 font-label text-[11px] text-text-muted">
+        Round {round} / 3 — {sub}
+      </p>
     </div>
   )
 
   if (phase === 'round3-result') {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
         {customerBanner}
-        <div className="rounded-md bg-success-bg border border-success px-4 py-6 text-center">
-          <p className="text-success font-semibold mb-2">Round 3 — fully specific prompt</p>
-          <p className="text-text">
+        <div className="rounded-lg border-[3px] border-neutral bg-success-bg p-4 text-center shadow-card">
+          <p className="mb-2 font-label text-[11px] font-bold text-success">
+            Round 3 — fully specific prompt
+          </p>
+          <p className="text-[15px] leading-snug text-text">
             A medium pepperoni pizza, thin crust, no onions. Exactly right. The customer is
             delighted.
           </p>
@@ -121,9 +141,10 @@ export default function PromptGame({ termId, onComplete }) {
         <button
           type="button"
           onClick={() => setPhase('reveal')}
-          className="rounded-md bg-surface hover:bg-surface-hover text-text font-medium py-3 active:scale-[0.98] transition-transform"
+          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
         >
-          See what this means →
+          <span className="material-symbols-rounded">arrow_forward</span>
+          See what this means
         </button>
       </div>
     )
@@ -131,16 +152,16 @@ export default function PromptGame({ termId, onComplete }) {
 
   if (phase === 'round3') {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
+        {instruction(3, 'every fragment is now specific.')}
         {customerBanner}
-        <p className="text-xs text-text-muted text-center">Round 3 / 3 — every fragment is now specific.</p>
         <div className="flex flex-col gap-4">
           {round3Categories.map((c) => (
             <CategoryPicker key={c.name} category={c} value={round3Picks[c.name]} onPick={pickRound3} />
           ))}
         </div>
         {round3Mismatch && (
-          <p className="text-danger text-sm text-center">
+          <p className="rounded-md border-[3px] border-danger bg-danger-bg px-3 py-2 text-center text-sm font-bold text-danger">
             Not quite what the customer asked for — check the order above and adjust.
           </p>
         )}
@@ -148,9 +169,10 @@ export default function PromptGame({ termId, onComplete }) {
           type="button"
           disabled={!round3Complete}
           onClick={submitRound3}
-          className="rounded-md bg-tomato text-text font-semibold py-3 active:scale-[0.98] transition-transform disabled:opacity-40"
+          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop disabled:opacity-40"
         >
-          Send to kitchen →
+          <span className="material-symbols-rounded">send</span>
+          Send to kitchen
         </button>
       </div>
     )
@@ -158,11 +180,11 @@ export default function PromptGame({ termId, onComplete }) {
 
   if (phase === 'round2-result') {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
         {customerBanner}
-        <div className="rounded-md bg-bg-raised border border-border px-4 py-6 text-center">
-          <p className="text-text-dim text-xs mb-2">Round 2 result</p>
-          <p className="text-text">
+        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-center shadow-card">
+          <p className="mb-2 font-label text-[11px] text-text-muted">Round 2 result</p>
+          <p className="text-[15px] leading-snug text-text">
             {round2Matched
               ? `A ${round2Picks.Size.toLowerCase()} ${round2Picks.Toppings.toLowerCase()} pizza arrives — right size, right topping!`
               : `A ${round2Picks.Size.toLowerCase()} ${round2Picks.Toppings.toLowerCase()} pizza arrives — not quite what was ordered.`}
@@ -170,15 +192,16 @@ export default function PromptGame({ termId, onComplete }) {
             high with onions.
           </p>
         </div>
-        <p className="text-text-muted text-sm text-center">
+        <p className="text-center font-label text-[11px] text-text-muted">
           Closer — but anything left vague still gets guessed for you.
         </p>
         <button
           type="button"
           onClick={() => setPhase('round3')}
-          className="rounded-md bg-tomato text-text font-semibold py-3 active:scale-[0.98] transition-transform"
+          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
         >
-          Unlock more specific fragments →
+          <span className="material-symbols-rounded">arrow_forward</span>
+          Unlock more specific fragments
         </button>
       </div>
     )
@@ -186,9 +209,9 @@ export default function PromptGame({ termId, onComplete }) {
 
   if (phase === 'round2') {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
+        {instruction(2, 'size and toppings are now specific.')}
         {customerBanner}
-        <p className="text-xs text-text-muted text-center">Round 2 / 3 — size and toppings are now specific.</p>
         <div className="flex flex-col gap-4">
           {round2Categories.map((c) => (
             <CategoryPicker key={c.name} category={c} value={round2Picks[c.name]} onPick={pickRound2} />
@@ -198,9 +221,10 @@ export default function PromptGame({ termId, onComplete }) {
           type="button"
           disabled={!round2Complete}
           onClick={() => setPhase('round2-result')}
-          className="rounded-md bg-tomato text-text font-semibold py-3 active:scale-[0.98] transition-transform disabled:opacity-40"
+          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop disabled:opacity-40"
         >
-          Send to kitchen →
+          <span className="material-symbols-rounded">send</span>
+          Send to kitchen
         </button>
       </div>
     )
@@ -208,35 +232,40 @@ export default function PromptGame({ termId, onComplete }) {
 
   if (round1Result) {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
         {customerBanner}
-        <div className="rounded-md bg-danger-bg border border-danger px-4 py-6 text-center">
-          <p className="text-danger text-xs mb-2">You said: {round1Result.label}</p>
-          <p className="text-text">{round1Result.result}</p>
+        <div className="rounded-lg border-[3px] border-neutral bg-danger-bg p-4 text-center shadow-card">
+          <p className="mb-2 font-label text-[11px] font-bold text-danger">
+            You said: {round1Result.label}
+          </p>
+          <p className="text-[15px] leading-snug text-text">{round1Result.result}</p>
         </div>
-        <p className="text-text-muted text-sm text-center">The bot did exactly what it was told. That was the problem.</p>
+        <p className="text-center font-label text-[11px] text-text-muted">
+          The bot did exactly what it was told. That was the problem.
+        </p>
         <button
           type="button"
           onClick={() => setPhase('round2')}
-          className="rounded-md bg-tomato text-text font-semibold py-3 active:scale-[0.98] transition-transform"
+          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
         >
-          Try a more specific prompt →
+          <span className="material-symbols-rounded">arrow_forward</span>
+          Try a more specific prompt
         </button>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3">
+      {instruction(1, 'only vague instructions available.')}
       {customerBanner}
-      <p className="text-xs text-text-muted text-center">Round 1 / 3 — only vague instructions available.</p>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2">
         {round1Options.map((opt) => (
           <button
             key={opt.label}
             type="button"
             onClick={() => pickRound1(opt)}
-            className="rounded-md bg-surface border-2 border-border text-text font-medium py-4 px-3 text-left active:scale-[0.98] transition-transform"
+            className="press rounded-md border-[3px] border-neutral bg-surface px-3 py-4 text-left font-bold text-text shadow-pop"
           >
             {opt.label}
           </button>
