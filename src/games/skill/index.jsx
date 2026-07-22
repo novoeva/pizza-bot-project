@@ -30,23 +30,38 @@ export default function SkillGame({ termId, onComplete }) {
     }
   }
 
+  const instruction = (sub) => (
+    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
+      <p className="font-label text-[11px] text-primary">Game · The complaint department</p>
+      <h1 className="text-2xl leading-tight">Skill</h1>
+      <p className="mt-1 font-label text-[11px] text-text-muted">{sub}</p>
+    </div>
+  )
+
   if (phase === 'reveal') {
     return (
-      <div className="flex flex-col gap-4">
-        <p className="rounded-md bg-bg-raised border border-border px-4 py-4 text-sm italic text-text-muted">
-          Same complaint, same bot — the only thing that changed was whether it had a playbook to
-          follow. Improvising means every answer depends on the model's mood that moment. A
-          skill is what makes it handle the same situation the same, right way, every time.
+      <div className="flex flex-col gap-3 text-center">
+        <div className="mx-auto mt-2 flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-neutral bg-success shadow-pop">
+          <span className="material-symbols-rounded fill text-5xl text-white">check</span>
+        </div>
+        <p className="font-label text-[11px] text-primary">
+          Snapped onto your bot · {term.botPart}
         </p>
+        <h2 className="text-2xl">You just learned Skill</h2>
 
-        <div className="rounded-md bg-surface px-4 py-4">
-          <h2 className="font-display font-semibold text-cheese mb-1">Skill</h2>
-          <p className="text-text">{term.definition}</p>
+        <div className="rounded-lg border-[3px] border-neutral bg-muted p-3 text-left shadow-pop">
+          <p className="text-[13px] leading-snug text-text">
+            Same complaint, same bot — the only thing that changed was whether it had a playbook to
+            follow. Improvising means every answer depends on the model's mood that moment. A
+            skill is what makes it handle the same situation the same, right way, every time.
+          </p>
         </div>
 
-        <div className="rounded-md bg-bg-raised border border-border px-4 py-4">
-          <p className="text-text-muted text-sm">
-            <span className="font-semibold text-info">Why you care: </span>
+        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
+          <p className="font-label text-[11px] text-text-muted">What it means</p>
+          <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
+          <p className="mt-3 text-[15px] leading-snug text-text-muted">
+            <span className="font-semibold text-tertiary">Why you care: </span>
             {term.whyYouCare}
           </p>
         </div>
@@ -54,9 +69,10 @@ export default function SkillGame({ termId, onComplete }) {
         <button
           type="button"
           onClick={onComplete}
-          className="mt-2 rounded-md bg-tomato text-text font-semibold py-3 shadow-pop active:scale-[0.98] transition-transform"
+          className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label font-bold text-white shadow-pop"
         >
-          Snap it onto your bot →
+          <span className="material-symbols-rounded">arrow_forward</span>
+          Snap it onto your bot
         </button>
       </div>
     )
@@ -64,13 +80,11 @@ export default function SkillGame({ termId, onComplete }) {
 
   if (phase === 'round2') {
     return (
-      <div className="flex flex-col gap-4">
-        <p className="text-xs text-text-muted text-center">
-          Same complaint, three times — now handled by the playbook.
-        </p>
-        <div className="rounded-md bg-bg-raised border border-border px-4 py-3">
-          <p className="text-text-dim text-xs mb-2">Your playbook:</p>
-          <ol className="text-sm text-text-muted list-decimal list-inside flex flex-col gap-0.5">
+      <div className="flex flex-col gap-3">
+        {instruction('Same complaint, three times — now handled by the playbook.')}
+        <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop">
+          <p className="mb-2 font-label text-[11px] text-text-muted">Your playbook</p>
+          <ol className="flex list-inside list-decimal flex-col gap-0.5 text-sm text-text-muted">
             {playbookSteps.map((s) => (
               <li key={s.id}>{s.label}</li>
             ))}
@@ -78,20 +92,25 @@ export default function SkillGame({ termId, onComplete }) {
         </div>
         <div className="flex flex-col gap-2">
           {[0, 1, 2].map((i) => (
-            <div key={i} className="rounded-md bg-success-bg border border-success px-4 py-3">
-              <p className="text-success text-xs mb-1">😌 Customer {i + 1} — same complaint</p>
-              <p className="text-text text-sm">
-                {playbookSteps.map((s) => s.scripted).join(' ')}
+            <div
+              key={i}
+              className="rounded-md border-[3px] border-success bg-success-bg px-4 py-3 shadow-pop"
+            >
+              <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-success">
+                <span className="material-symbols-rounded text-[15px]">sentiment_satisfied</span>
+                Customer {i + 1} — same complaint
               </p>
+              <p className="text-sm text-text">{playbookSteps.map((s) => s.scripted).join(' ')}</p>
             </div>
           ))}
         </div>
         <button
           type="button"
           onClick={() => setPhase('reveal')}
-          className="rounded-md bg-tomato text-text font-semibold py-3 active:scale-[0.98] transition-transform"
+          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
         >
-          See what this means →
+          <span className="material-symbols-rounded">arrow_forward</span>
+          See what this means
         </button>
       </div>
     )
@@ -99,15 +118,13 @@ export default function SkillGame({ termId, onComplete }) {
 
   if (phase === 'build') {
     return (
-      <div className="flex flex-col gap-4">
-        <p className="text-xs text-text-muted text-center">
-          Build the playbook — tap the steps in the order they should happen.
-        </p>
-        <div className="rounded-md bg-bg-raised border border-border px-4 py-3 min-h-[4rem]">
+      <div className="flex flex-col gap-3">
+        {instruction('Build the playbook — tap the steps in the order they should happen.')}
+        <div className="min-h-[4rem] rounded-md border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop">
           {builtSteps.length === 0 ? (
-            <p className="text-text-dim text-sm text-center">Playbook is empty.</p>
+            <p className="text-center text-sm text-text-muted">Playbook is empty.</p>
           ) : (
-            <ol className="text-sm text-text list-decimal list-inside flex flex-col gap-0.5">
+            <ol className="flex list-inside list-decimal flex-col gap-0.5 text-sm text-text">
               {builtSteps.map((id) => (
                 <li key={id}>{playbookSteps.find((s) => s.id === id).label}</li>
               ))}
@@ -124,10 +141,10 @@ export default function SkillGame({ termId, onComplete }) {
                 disabled={done}
                 onClick={() => tapStep(step.id)}
                 className={
-                  'rounded-md border-2 px-4 py-3 text-left font-medium transition-all ' +
+                  'rounded-md border-[3px] px-4 py-3 text-left font-bold shadow-pop transition-all ' +
                   (done
-                    ? 'bg-success-bg border-success text-success opacity-50'
-                    : 'bg-surface border-border text-text active:scale-[0.98]')
+                    ? 'border-success bg-success-bg text-success opacity-50'
+                    : 'press border-neutral bg-surface text-text')
                 }
               >
                 {done ? '✓ ' : ''}
@@ -141,16 +158,21 @@ export default function SkillGame({ termId, onComplete }) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <p className="text-xs text-text-muted text-center">Round 1 — no playbook, the bot improvises.</p>
-      <div className="rounded-md bg-surface px-4 py-6 text-center">
-        <p className="text-lg font-medium">Complaint: "{complaint}"</p>
+    <div className="flex flex-col gap-3">
+      {instruction('Round 1 — no playbook, the bot improvises.')}
+      <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-5 text-center shadow-pop">
+        <p className="text-lg font-extrabold leading-snug">Complaint: "{complaint}"</p>
       </div>
       <div className="flex flex-col gap-2">
         {improvisedReplies.slice(0, replyIndex + 1).map((reply, i) => (
-          <div key={i} className="rounded-md bg-danger-bg border border-danger px-4 py-3">
-            <p className="text-danger text-xs mb-1">Customer {i + 1} — same complaint</p>
-            <p className="text-text text-sm">{reply}</p>
+          <div
+            key={i}
+            className="rounded-md border-[3px] border-danger bg-danger-bg px-4 py-3 shadow-pop"
+          >
+            <p className="mb-1 font-label text-[11px] font-bold text-danger">
+              Customer {i + 1} — same complaint
+            </p>
+            <p className="text-sm text-text">{reply}</p>
           </div>
         ))}
       </div>
@@ -158,17 +180,19 @@ export default function SkillGame({ termId, onComplete }) {
         <button
           type="button"
           onClick={() => setReplyIndex((i) => i + 1)}
-          className="rounded-md bg-surface hover:bg-surface-hover text-text font-medium py-3 active:scale-[0.98] transition-transform"
+          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-tertiary py-3 font-label font-bold text-white shadow-pop"
         >
-          Next customer →
+          <span className="material-symbols-rounded">arrow_forward</span>
+          Next customer
         </button>
       ) : (
         <button
           type="button"
           onClick={() => setPhase('build')}
-          className="rounded-md bg-tomato text-text font-semibold py-3 active:scale-[0.98] transition-transform"
+          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
         >
-          Build a playbook →
+          <span className="material-symbols-rounded">arrow_forward</span>
+          Build a playbook
         </button>
       )}
     </div>
