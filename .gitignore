@@ -19,3 +19,6 @@ pnpm-debug.log*
 .env
 .env.local
 .env.*.local
+
+# Design-tool export kept locally as a reference (regenerable, ~671 MB)
+pizza-bot-design-v0/
