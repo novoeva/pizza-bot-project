@@ -28,6 +28,7 @@ export default function TokenGame({ termId, onComplete }) {
   if (phase === 'chop') {
     const answered = chopGuess !== null
     const correct = chopGuess === hookTokens.length
+    const wordCount = samplePhrase.text.trim().split(/\s+/).length
     return (
       <div className="flex flex-col gap-3">
         <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
@@ -83,7 +84,12 @@ export default function TokenGame({ termId, onComplete }) {
         {answered && (
           <>
             <div className="rounded-md border-[3px] border-neutral bg-muted p-3 shadow-pop">
-              <p className="mb-2 font-label text-[11px] text-text-muted">A whole order, chunked</p>
+              <div className="mb-2 flex items-center justify-between gap-2">
+                <p className="font-label text-[11px] text-text-muted">A whole order, chunked</p>
+                <span className="shrink-0 rounded-full border-2 border-neutral bg-accent-soft px-2 py-0.5 font-label text-[11px] font-bold text-tertiary">
+                  {samplePhrase.tokens.length} tokens
+                </span>
+              </div>
               <div className="flex flex-wrap gap-1.5">
                 {samplePhrase.tokens.map((t, i) => (
                   <span
@@ -95,6 +101,7 @@ export default function TokenGame({ termId, onComplete }) {
                 ))}
               </div>
               <p className="mt-2 text-[12px] leading-snug text-text-muted">
+                <span className="font-bold text-text">{wordCount} words, {samplePhrase.tokens.length} tokens.</span>{' '}
                 Short, common words are usually one token. Long or unusual ones get split. Even
                 punctuation counts.
               </p>
