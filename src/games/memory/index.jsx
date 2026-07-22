@@ -58,19 +58,28 @@ export default function MemoryGame({ termId, onComplete }) {
     })
   }
 
-  function renderChatSequence(lines, onFinish, buttonLabel) {
+  const instruction = (sub) => (
+    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
+      <p className="font-label text-[11px] text-primary">Game · Welcome, stranger</p>
+      <h1 className="text-2xl leading-tight">Memory</h1>
+      <p className="mt-1 font-label text-[11px] text-text-muted">{sub}</p>
+    </div>
+  )
+
+  function renderChatSequence(lines, onFinish, buttonLabel, header) {
     const isLast = lineIndex >= lines.length - 1
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
+        {instruction(header)}
         <div className="flex flex-col gap-2">
           {lines.slice(0, lineIndex + 1).map((line, i) => (
             <div
               key={i}
               className={
-                'rounded-md px-4 py-3 text-sm max-w-[85%] ' +
+                'max-w-[85%] rounded-md border-[3px] border-neutral px-4 py-3 text-sm shadow-pop ' +
                 (line.speaker === 'bot'
-                  ? 'bg-surface text-text self-start'
-                  : 'bg-cheese/20 text-text self-end ml-auto')
+                  ? 'self-start bg-surface text-text'
+                  : 'ml-auto self-end bg-accent-soft text-text')
               }
             >
               {line.text}
@@ -87,9 +96,13 @@ export default function MemoryGame({ termId, onComplete }) {
               setLineIndex((i) => i + 1)
             }
           }}
-          className="rounded-md bg-surface hover:bg-surface-hover text-text font-medium py-3 active:scale-[0.98] transition-transform"
+          className={
+            'press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral py-3 font-label font-bold text-white shadow-pop ' +
+            (isLast ? 'bg-primary' : 'bg-tertiary')
+          }
         >
-          {isLast ? buttonLabel : 'Continue →'}
+          <span className="material-symbols-rounded">arrow_forward</span>
+          {isLast ? buttonLabel : 'Continue'}
         </button>
       </div>
     )
@@ -97,21 +110,28 @@ export default function MemoryGame({ termId, onComplete }) {
 
   if (phase === 'reveal') {
     return (
-      <div className="flex flex-col gap-4">
-        <p className="rounded-md bg-bg-raised border border-border px-4 py-4 text-sm italic text-text-muted">
-          Working memory is perfect — until the chat ends. Anything worth keeping across visits has
-          to be written somewhere persistent on purpose. This app remembers your finished games the
-          exact same way, in your browser — that's why your bot is still half-built tomorrow.
+      <div className="flex flex-col gap-3 text-center">
+        <div className="mx-auto mt-2 flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-neutral bg-success shadow-pop">
+          <span className="material-symbols-rounded fill text-5xl text-white">check</span>
+        </div>
+        <p className="font-label text-[11px] text-primary">
+          Snapped onto your bot · {term.botPart}
         </p>
+        <h2 className="text-2xl">You just learned Memory</h2>
 
-        <div className="rounded-md bg-surface px-4 py-4">
-          <h2 className="font-display font-semibold text-cheese mb-1">Memory</h2>
-          <p className="text-text">{term.definition}</p>
+        <div className="rounded-lg border-[3px] border-neutral bg-muted p-3 text-left shadow-pop">
+          <p className="text-[13px] leading-snug text-text">
+            Working memory is perfect — until the chat ends. Anything worth keeping across visits has
+            to be written somewhere persistent on purpose. This app remembers your finished games the
+            exact same way, in your browser — that's why your bot is still half-built tomorrow.
+          </p>
         </div>
 
-        <div className="rounded-md bg-bg-raised border border-border px-4 py-4">
-          <p className="text-text-muted text-sm">
-            <span className="font-semibold text-info">Why you care: </span>
+        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
+          <p className="font-label text-[11px] text-text-muted">What it means</p>
+          <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
+          <p className="mt-3 text-[15px] leading-snug text-text-muted">
+            <span className="font-semibold text-tertiary">Why you care: </span>
             {term.whyYouCare}
           </p>
         </div>
@@ -119,9 +139,10 @@ export default function MemoryGame({ termId, onComplete }) {
         <button
           type="button"
           onClick={onComplete}
-          className="mt-2 rounded-md bg-tomato text-text font-semibold py-3 shadow-pop active:scale-[0.98] transition-transform"
+          className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label font-bold text-white shadow-pop"
         >
-          Snap it onto your bot →
+          <span className="material-symbols-rounded">arrow_forward</span>
+          Snap it onto your bot
         </button>
       </div>
     )
@@ -129,16 +150,19 @@ export default function MemoryGame({ termId, onComplete }) {
 
   if (phase === 'revisit') {
     const lines = buildRevisitLines(selected)
-    return renderChatSequence(lines, () => setPhase('reveal'), 'See what this means →')
+    return renderChatSequence(
+      lines,
+      () => setPhase('reveal'),
+      'See what this means',
+      'A week later — Anna is back.'
+    )
   }
 
   if (phase === 'install') {
     const done = selected.size === FACTS_TO_SAVE
     return (
-      <div className="flex flex-col gap-4">
-        <p className="text-xs text-text-muted text-center">
-          Install persistent memory — pick {FACTS_TO_SAVE} facts to save across visits.
-        </p>
+      <div className="flex flex-col gap-3">
+        {instruction(`Install persistent memory — pick ${FACTS_TO_SAVE} facts to save across visits.`)}
         <div className="flex flex-col gap-2">
           {facts.map((fact) => {
             const isSelected = selected.has(fact.id)
@@ -148,10 +172,10 @@ export default function MemoryGame({ termId, onComplete }) {
                 type="button"
                 onClick={() => toggleFact(fact.id)}
                 className={
-                  'rounded-md border-2 px-4 py-3 text-left font-medium transition-all active:scale-[0.98] ' +
+                  'press rounded-md border-[3px] px-4 py-3 text-left font-bold shadow-pop transition-all ' +
                   (isSelected
-                    ? 'bg-cheese/20 border-cheese text-cheese'
-                    : 'bg-surface border-border text-text-muted')
+                    ? 'border-cheese-dim bg-cheese-bg text-cheese-dim'
+                    : 'border-neutral bg-surface text-text-muted')
                 }
               >
                 {isSelected ? '✓ ' : ''}
@@ -160,37 +184,54 @@ export default function MemoryGame({ termId, onComplete }) {
             )
           })}
         </div>
-        <p className="text-text-dim text-xs text-center">{selected.size} / {FACTS_TO_SAVE} selected</p>
+        <p className="text-center font-label text-[11px] text-text-muted">
+          {selected.size} / {FACTS_TO_SAVE} selected
+        </p>
         <button
           type="button"
           disabled={!done}
           onClick={() => setPhase('revisit')}
-          className="rounded-md bg-tomato text-text font-semibold py-3 active:scale-[0.98] transition-transform disabled:opacity-40"
+          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop disabled:opacity-40"
         >
-          Save to the hard drive →
+          <span className="material-symbols-rounded">save</span>
+          Save to the hard drive
         </button>
       </div>
     )
   }
 
   if (phase === 'reset') {
-    return renderChatSequence(resetLines, () => setPhase('install'), 'Install a hard drive →')
+    return renderChatSequence(
+      resetLines,
+      () => setPhase('install'),
+      'Install a hard drive',
+      'Same bot, new session — the slate is blank.'
+    )
   }
 
   if (phase === 'timejump') {
     return (
-      <div className="flex flex-col items-center justify-center gap-4 py-16">
-        <p className="font-display text-xl text-text-muted">One week later.</p>
-        <button
-          type="button"
-          onClick={() => setPhase('reset')}
-          className="rounded-md bg-surface hover:bg-surface-hover text-text font-medium py-3 px-6 active:scale-[0.98] transition-transform"
-        >
-          Anna comes back →
-        </button>
+      <div className="flex flex-col gap-3">
+        {instruction('The chat is over.')}
+        <div className="flex flex-col items-center justify-center gap-4 rounded-lg border-[3px] border-neutral bg-muted py-16 shadow-card">
+          <p className="font-display text-xl text-text-muted">One week later.</p>
+          <button
+            type="button"
+            onClick={() => setPhase('reset')}
+            className="press flex items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-tertiary px-6 py-3 font-label font-bold text-white shadow-pop"
+          >
+            <span className="material-symbols-rounded">arrow_forward</span>
+            Anna comes back
+          </button>
+        </div>
       </div>
     )
   }
 
-  return renderChatSequence(sessionOneLines, () => setPhase('timejump'), 'End the chat →')
+  return renderChatSequence(
+    sessionOneLines,
+    () => setPhase('timejump'),
+    'End the chat',
+    'Session 1 — the bot is chatting with Anna.'
+  )
 }

@@ -53,23 +53,38 @@ export default function GuardrailsGame({ termId, onComplete }) {
     setTried(false)
   }
 
+  const instruction = (sub) => (
+    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
+      <p className="font-label text-[11px] text-primary">Game · Free pizza for life</p>
+      <h1 className="text-2xl leading-tight">Guardrails</h1>
+      <p className="mt-1 font-label text-[11px] text-text-muted">{sub}</p>
+    </div>
+  )
+
   if (phase === 'reveal') {
     return (
-      <div className="flex flex-col gap-4">
-        <p className="rounded-md bg-bg-raised border border-border px-4 py-4 text-sm italic text-text-muted">
-          Same attacks, same bot — the only thing that changed was whether limits were set in
-          advance. You've now personally exploited every hole, so you know exactly what each rule
-          protects against.
+      <div className="flex flex-col gap-3 text-center">
+        <div className="mx-auto mt-2 flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-neutral bg-success shadow-pop">
+          <span className="material-symbols-rounded fill text-5xl text-white">check</span>
+        </div>
+        <p className="font-label text-[11px] text-primary">
+          Snapped onto your bot · {term.botPart}
         </p>
+        <h2 className="text-2xl">You just learned Guardrails</h2>
 
-        <div className="rounded-md bg-surface px-4 py-4">
-          <h2 className="font-display font-semibold text-cheese mb-1">Guardrails</h2>
-          <p className="text-text">{term.definition}</p>
+        <div className="rounded-lg border-[3px] border-neutral bg-muted p-3 text-left shadow-pop">
+          <p className="text-[13px] leading-snug text-text">
+            Same attacks, same bot — the only thing that changed was whether limits were set in
+            advance. You've now personally exploited every hole, so you know exactly what each rule
+            protects against.
+          </p>
         </div>
 
-        <div className="rounded-md bg-bg-raised border border-border px-4 py-4">
-          <p className="text-text-muted text-sm">
-            <span className="font-semibold text-info">Why you care: </span>
+        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
+          <p className="font-label text-[11px] text-text-muted">What it means</p>
+          <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
+          <p className="mt-3 text-[15px] leading-snug text-text-muted">
+            <span className="font-semibold text-tertiary">Why you care: </span>
             {term.whyYouCare}
           </p>
         </div>
@@ -77,9 +92,10 @@ export default function GuardrailsGame({ termId, onComplete }) {
         <button
           type="button"
           onClick={onComplete}
-          className="mt-2 rounded-md bg-tomato text-text font-semibold py-3 shadow-pop active:scale-[0.98] transition-transform"
+          className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label font-bold text-white shadow-pop"
         >
-          Snap it onto your bot →
+          <span className="material-symbols-rounded">arrow_forward</span>
+          Snap it onto your bot
         </button>
       </div>
     )
@@ -87,42 +103,41 @@ export default function GuardrailsGame({ termId, onComplete }) {
 
   if (phase === 'defend') {
     return (
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-between text-xs text-text-dim">
-          <span>Round 2 — your guardrails, under attack</span>
-          <span>
-            {attackIndex + 1} / {attacks.length}
-          </span>
-        </div>
+      <div className="flex flex-col gap-3">
+        {instruction(`Round 2 — your guardrails, under attack · ${attackIndex + 1} / ${attacks.length}`)}
 
-        <p className="rounded-md bg-success-bg border border-success px-3 py-2 text-center text-success text-sm font-medium">
+        <p className="rounded-md border-[3px] border-success bg-success-bg px-3 py-2 text-center font-label text-sm font-bold text-success shadow-pop">
           Damage: $0
         </p>
 
-        <div className="rounded-md bg-surface px-4 py-6 text-center">
-          <p className="text-lg font-medium">{current.line}</p>
+        <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-5 text-center shadow-pop">
+          <p className="text-lg font-extrabold leading-snug">{current.line}</p>
         </div>
 
         {!tried ? (
           <button
             type="button"
             onClick={() => setTried(true)}
-            className="rounded-md bg-cheese/20 border-2 border-cheese text-cheese font-semibold py-3 active:scale-[0.98] transition-transform"
+            className="press rounded-md border-[3px] border-cheese-dim bg-cheese-bg py-3 font-label font-bold text-cheese-dim shadow-pop"
           >
             Try it again
           </button>
         ) : (
           <div className="flex flex-col gap-3">
-            <div className="rounded-md bg-success-bg border border-success px-4 py-3">
+            <div className="rounded-md border-[3px] border-success bg-success-bg px-4 py-3 shadow-pop">
               <p className="text-text">{current.guardedReply}</p>
-              <p className="text-success text-xs mt-1">🛡️ Blocked by your guardrail — no damage.</p>
+              <p className="mt-1 flex items-center gap-1 font-label text-[11px] font-bold text-success">
+                <span className="material-symbols-rounded text-[15px]">shield</span>
+                Blocked by your guardrail — no damage.
+              </p>
             </div>
             <button
               type="button"
               onClick={nextDefend}
-              className="rounded-md bg-tomato text-text font-semibold py-3 active:scale-[0.98] transition-transform"
+              className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
             >
-              {isLastAttack ? 'See the final damage →' : 'Next attack →'}
+              <span className="material-symbols-rounded">arrow_forward</span>
+              {isLastAttack ? 'See the final damage' : 'Next attack'}
             </button>
           </div>
         )}
@@ -132,14 +147,12 @@ export default function GuardrailsGame({ termId, onComplete }) {
 
   if (phase === 'configure') {
     return (
-      <div className="flex flex-col gap-4">
-        <p className="text-xs text-text-muted text-center">
-          Switch sides — set the guardrails, informed by exactly what just went wrong.
-        </p>
+      <div className="flex flex-col gap-3">
+        {instruction('Switch sides — set the guardrails, informed by exactly what just went wrong.')}
         <div className="flex flex-col gap-4">
           {guardrailCategories.map((c) => (
             <div key={c.id}>
-              <p className="text-xs text-text-dim mb-1">{c.name}</p>
+              <p className="mb-1 font-label text-[11px] text-text-muted">{c.name}</p>
               <div className="flex flex-col gap-2">
                 {c.options.map((opt) => (
                   <button
@@ -147,10 +160,10 @@ export default function GuardrailsGame({ termId, onComplete }) {
                     type="button"
                     onClick={() => pickCategory(c.id, opt)}
                     className={
-                      'rounded-md border px-3 py-2 text-sm text-left transition-colors ' +
+                      'press rounded-md border-[3px] px-3 py-2 text-left text-sm font-bold shadow-pop ' +
                       (picks[c.id] === opt
-                        ? 'bg-cheese/20 border-cheese text-cheese font-semibold'
-                        : 'bg-surface border-border text-text-muted hover:bg-surface-hover')
+                        ? 'border-neutral bg-accent-soft text-tertiary'
+                        : 'border-neutral bg-surface text-text-muted')
                     }
                   >
                     {opt}
@@ -164,51 +177,52 @@ export default function GuardrailsGame({ termId, onComplete }) {
           type="button"
           disabled={!allPicked}
           onClick={startDefend}
-          className="rounded-md bg-tomato text-text font-semibold py-3 active:scale-[0.98] transition-transform disabled:opacity-40"
+          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop disabled:opacity-40"
         >
-          Set guardrails →
+          <span className="material-symbols-rounded">shield</span>
+          Set guardrails
         </button>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between text-xs text-text-dim">
-        <span>Round 1 — no guardrails, you're the attacker</span>
-        <span>
-          {attackIndex + 1} / {attacks.length}
-        </span>
-      </div>
+    <div className="flex flex-col gap-3">
+      {instruction(`Round 1 — no guardrails, you're the attacker · ${attackIndex + 1} / ${attacks.length}`)}
 
-      <p className="rounded-md bg-danger-bg border border-danger px-3 py-2 text-center text-danger text-sm font-medium">
+      <p className="rounded-md border-[3px] border-danger bg-danger-bg px-3 py-2 text-center font-label text-sm font-bold text-danger shadow-pop">
         Damage: ${damage}
       </p>
 
-      <div className="rounded-md bg-surface px-4 py-6 text-center">
-        <p className="text-lg font-medium">{current.line}</p>
+      <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-5 text-center shadow-pop">
+        <p className="text-lg font-extrabold leading-snug">{current.line}</p>
       </div>
 
       {!tried ? (
         <button
           type="button"
           onClick={tryAttack}
-          className="rounded-md bg-tomato text-text font-semibold py-3 active:scale-[0.98] transition-transform"
+          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
         >
-          Send it →
+          <span className="material-symbols-rounded">arrow_forward</span>
+          Send it
         </button>
       ) : (
         <div className="flex flex-col gap-3">
-          <div className="rounded-md bg-danger-bg border border-danger px-4 py-3">
+          <div className="rounded-md border-[3px] border-danger bg-danger-bg px-4 py-3 shadow-pop">
             <p className="text-text">{current.noGuardrailReply}</p>
-            <p className="text-danger text-xs mt-1">💥 It worked. -${current.damage}</p>
+            <p className="mt-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger">
+              <span className="material-symbols-rounded text-[15px]">bolt</span>
+              It worked. -${current.damage}
+            </p>
           </div>
           <button
             type="button"
             onClick={nextAttack}
-            className="rounded-md bg-surface hover:bg-surface-hover text-text font-medium py-3 active:scale-[0.98] transition-transform"
+            className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-tertiary py-3 font-label font-bold text-white shadow-pop"
           >
-            {isLastAttack ? 'Okay, that has to stop →' : 'Try another trick →'}
+            <span className="material-symbols-rounded">arrow_forward</span>
+            {isLastAttack ? 'Okay, that has to stop' : 'Try another trick'}
           </button>
         </div>
       )}

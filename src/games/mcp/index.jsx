@@ -41,23 +41,38 @@ export default function McpGame({ termId, onComplete }) {
     }
   }
 
+  const instruction = (sub) => (
+    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
+      <p className="font-label text-[11px] text-primary">Game · The plug nightmare</p>
+      <h1 className="text-2xl leading-tight">MCP</h1>
+      <p className="mt-1 font-label text-[11px] text-text-muted">{sub}</p>
+    </div>
+  )
+
   if (phase === 'reveal') {
     return (
-      <div className="flex flex-col gap-4">
-        <p className="rounded-md bg-bg-raised border border-border px-4 py-4 text-sm italic text-text-muted">
-          Three hand-built adapters versus four instant snaps — the difference is one standard
-          plug instead of custom wiring per system. That's why an AI assistant can plug into your
-          calendar, docs, or database at all: someone already agreed on the port.
+      <div className="flex flex-col gap-3 text-center">
+        <div className="mx-auto mt-2 flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-neutral bg-success shadow-pop">
+          <span className="material-symbols-rounded fill text-5xl text-white">check</span>
+        </div>
+        <p className="font-label text-[11px] text-primary">
+          Snapped onto your bot · {term.botPart}
         </p>
+        <h2 className="text-2xl">You just learned MCP</h2>
 
-        <div className="rounded-md bg-surface px-4 py-4">
-          <h2 className="font-display font-semibold text-cheese mb-1">MCP</h2>
-          <p className="text-text">{term.definition}</p>
+        <div className="rounded-lg border-[3px] border-neutral bg-muted p-3 text-left shadow-pop">
+          <p className="text-[13px] leading-snug text-text">
+            Three hand-built adapters versus four instant snaps — the difference is one standard
+            plug instead of custom wiring per system. That's why an AI assistant can plug into your
+            calendar, docs, or database at all: someone already agreed on the port.
+          </p>
         </div>
 
-        <div className="rounded-md bg-bg-raised border border-border px-4 py-4">
-          <p className="text-text-muted text-sm">
-            <span className="font-semibold text-info">Why you care: </span>
+        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
+          <p className="font-label text-[11px] text-text-muted">What it means</p>
+          <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
+          <p className="mt-3 text-[15px] leading-snug text-text-muted">
+            <span className="font-semibold text-tertiary">Why you care: </span>
             {term.whyYouCare}
           </p>
         </div>
@@ -65,9 +80,10 @@ export default function McpGame({ termId, onComplete }) {
         <button
           type="button"
           onClick={onComplete}
-          className="mt-2 rounded-md bg-tomato text-text font-semibold py-3 shadow-pop active:scale-[0.98] transition-transform"
+          className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label font-bold text-white shadow-pop"
         >
-          Snap it onto your bot →
+          <span className="material-symbols-rounded">arrow_forward</span>
+          Snap it onto your bot
         </button>
       </div>
     )
@@ -76,10 +92,8 @@ export default function McpGame({ termId, onComplete }) {
   if (phase === 'round2') {
     const allSnapped = snapped.length === allSystems.length
     return (
-      <div className="flex flex-col gap-4">
-        <p className="text-xs text-text-muted text-center">
-          Round 2 — one standard MCP port. Tap each system to snap it in.
-        </p>
+      <div className="flex flex-col gap-3">
+        {instruction('Round 2 — one standard MCP port. Tap each system to snap it in.')}
         <div className="flex flex-col gap-2">
           {allSystems.map((sys) => {
             const done = snapped.includes(sys.id)
@@ -90,28 +104,32 @@ export default function McpGame({ termId, onComplete }) {
                 disabled={done}
                 onClick={() => snapIn(sys.id)}
                 className={
-                  'rounded-md border-2 px-4 py-3 text-left font-medium transition-all active:scale-[0.98] ' +
+                  'flex items-center gap-2 rounded-md border-[3px] px-4 py-3 text-left font-bold shadow-pop transition-all ' +
                   (done
-                    ? 'bg-success-bg border-success text-success'
-                    : 'bg-cheese/20 border-cheese text-cheese')
+                    ? 'border-success bg-success-bg text-success'
+                    : 'press border-cheese-dim bg-cheese-bg text-cheese-dim')
                 }
               >
-                {done ? `✓ ${sys.name} — connected` : `🔌 Snap in ${sys.name}`}
+                <span className="material-symbols-rounded text-[18px]">
+                  {done ? 'check_circle' : 'power'}
+                </span>
+                {done ? `${sys.name} — connected` : `Snap in ${sys.name}`}
               </button>
             )
           })}
         </div>
         {allSnapped && (
           <>
-            <p className="text-success text-sm text-center font-medium">
+            <p className="text-center font-label text-[11px] font-bold text-success">
               Four systems. Four taps. Two seconds.
             </p>
             <button
               type="button"
               onClick={() => setPhase('reveal')}
-              className="rounded-md bg-tomato text-text font-semibold py-3 active:scale-[0.98] transition-transform"
+              className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
             >
-              See what this means →
+              <span className="material-symbols-rounded">arrow_forward</span>
+              See what this means
             </button>
           </>
         )}
@@ -121,34 +139,34 @@ export default function McpGame({ termId, onComplete }) {
 
   if (phase === 'surprise') {
     return (
-      <div className="flex flex-col gap-4">
-        <div className="rounded-md bg-danger-bg border border-danger px-4 py-6 text-center">
-          <p className="text-danger font-semibold mb-1">One more thing —</p>
-          <p className="text-text">"{surpriseSystem.name}" needs connecting too. Better start on a fourth custom adapter.</p>
+      <div className="flex flex-col gap-3">
+        <div className="rounded-lg border-[3px] border-danger bg-danger-bg p-4 text-center shadow-card">
+          <p className="mb-1 font-label text-[11px] font-bold text-danger">One more thing —</p>
+          <p className="text-[15px] leading-snug text-text">
+            "{surpriseSystem.name}" needs connecting too. Better start on a fourth custom adapter.
+          </p>
         </div>
         <button
           type="button"
           onClick={() => setPhase('round2')}
-          className="rounded-md bg-tomato text-text font-semibold py-3 active:scale-[0.98] transition-transform"
+          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
         >
-          Ugh. There has to be a better way →
+          <span className="material-symbols-rounded">arrow_forward</span>
+          Ugh. There has to be a better way
         </button>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between text-xs text-text-dim">
-        <span>Round 1 — custom wiring</span>
-        <span>
-          System {systemIndex + 1} / {customSystems.length}
-        </span>
-      </div>
+    <div className="flex flex-col gap-3">
+      {instruction(`Round 1 — custom wiring · system ${systemIndex + 1} / ${customSystems.length}`)}
 
-      <div className="rounded-md bg-surface px-4 py-4 text-center">
-        <p className="text-lg font-medium">{current.name}</p>
-        <p className="text-text-muted text-sm mt-1">Needs a hand-built {current.connector} — wire every pin.</p>
+      <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-4 text-center shadow-pop">
+        <p className="text-lg font-extrabold">{current.name}</p>
+        <p className="mt-1 text-sm text-text-muted">
+          Needs a hand-built {current.connector} — wire every pin.
+        </p>
       </div>
 
       <div className="flex flex-wrap justify-center gap-2">
@@ -161,10 +179,10 @@ export default function McpGame({ termId, onComplete }) {
               onClick={() => tapPin(i)}
               disabled={wired}
               className={
-                'h-12 w-12 rounded-full border-2 font-semibold text-xs transition-all active:scale-[0.9] ' +
+                'h-12 w-12 rounded-full border-[3px] font-label text-xs font-bold transition-all active:scale-[0.9] ' +
                 (wired
-                  ? 'bg-success-bg border-success text-success'
-                  : 'bg-bg-raised border-border text-text-dim')
+                  ? 'border-success bg-success-bg text-success'
+                  : 'border-neutral bg-surface text-text-muted shadow-pop')
               }
             >
               {wired ? '✓' : `pin ${i + 1}`}
@@ -175,17 +193,20 @@ export default function McpGame({ termId, onComplete }) {
 
       {allPinsWired ? (
         <div className="flex flex-col gap-2">
-          <p className="text-success text-sm text-center font-medium">Adapter built ✓</p>
+          <p className="text-center font-label text-[11px] font-bold text-success">Adapter built ✓</p>
           <button
             type="button"
             onClick={nextSystem}
-            className="rounded-md bg-tomato text-text font-semibold py-3 active:scale-[0.98] transition-transform"
+            className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
           >
-            {isLastCustomSystem ? 'Done — finally →' : 'Next system →'}
+            <span className="material-symbols-rounded">arrow_forward</span>
+            {isLastCustomSystem ? 'Done — finally' : 'Next system'}
           </button>
         </div>
       ) : (
-        <p className="text-text-dim text-xs text-center">{wiredPins.size} / {current.pins} pins wired</p>
+        <p className="text-center font-label text-[11px] text-text-muted">
+          {wiredPins.size} / {current.pins} pins wired
+        </p>
       )}
     </div>
   )
