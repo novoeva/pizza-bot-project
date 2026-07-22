@@ -258,7 +258,7 @@ export default function TokenGame({ termId, onComplete }) {
         <span className="material-symbols-rounded fill text-5xl text-white">check</span>
       </div>
       <p className="font-label text-[11px] text-primary">Snapped onto your bot · {term.botPart}</p>
-      <h2 className="text-2xl">You just learned Token</h2>
+      <h2 className="text-2xl">You just learned the term Token</h2>
       <p className="font-label text-xs text-text-muted">
         You matched the model on {score} of {predictionRounds.length}.
       </p>

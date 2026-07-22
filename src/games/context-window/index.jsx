@@ -58,7 +58,7 @@ export default function ContextWindowGame({ termId, onComplete }) {
         <p className="font-label text-[11px] text-primary">
           Snapped onto your bot · {term.botPart}
         </p>
-        <h2 className="text-2xl">You just learned Context window</h2>
+        <h2 className="text-2xl">You just learned the term Context window</h2>
 
         <div className="rounded-lg border-[3px] border-neutral bg-muted p-3 text-left shadow-pop">
           <p className="text-[13px] leading-snug text-text">

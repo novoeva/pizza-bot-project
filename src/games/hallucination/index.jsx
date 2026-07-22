@@ -46,7 +46,7 @@ export default function HallucinationGame({ termId, onComplete }) {
         <p className="font-label text-[11px] text-primary">
           Snapped onto your bot · {term.botPart}
         </p>
-        <h2 className="text-2xl">You just learned Hallucination</h2>
+        <h2 className="text-2xl">You just learned the term Hallucination</h2>
         <p className="font-label text-xs text-text-muted">
           You caught {score} of {rounds.length} made-up answers.
         </p>
