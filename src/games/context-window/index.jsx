@@ -1,54 +1,44 @@
 import { useState } from 'react'
-import { messages, WINDOW_SIZE } from './messages.js'
+import {
+  order,
+  WINDOW_SIZE,
+  recallQuestion,
+  recallInWindow,
+  recallDropped,
+  newChatQuestion,
+  newChatReply,
+} from './messages.js'
 import terms from '../../content/terms.json'
 
 /**
  * Context window game — { termId, onComplete } interface.
- * "The long order": the window holds WINDOW_SIZE message chips; every new
- * message pushes the oldest one out. The player's one move per turn is to
- * re-pin a chip (send it to the fresh end) before the next message lands.
+ * A live "Context window" panel shows exactly what the bot can see right now.
+ * Beat 1: send messages until the window overflows; the earliest line ("no
+ * olives!!") scrolls out of view and the bot can't recall it. Beat 2: a brand
+ * new order starts with an empty window, so nothing carries over on its own.
  */
 export default function ContextWindowGame({ termId, onComplete }) {
-  const [window_, setWindow] = useState([])
-  const [turnIndex, setTurnIndex] = useState(0)
-  const [pinnedThisTurn, setPinnedThisTurn] = useState(false)
-  const [lastFallen, setLastFallen] = useState(null)
-  const [phase, setPhase] = useState('playing') // 'playing' | 'result' | 'reveal'
-
   const term = terms.find((t) => t.id === termId)
-  const isDone = turnIndex >= messages.length
-  const incoming = !isDone ? messages[turnIndex] : null
-  const atRiskId = window_.length === WINDOW_SIZE ? window_[0].id : null
+  const [phase, setPhase] = useState('fill') // 'fill' | 'newchat' | 'reveal'
+  const [sentCount, setSentCount] = useState(0)
+  const [recalled, setRecalled] = useState(false)
+  const [newChatAsked, setNewChatAsked] = useState(false)
 
-  function rePin(id) {
-    if (pinnedThisTurn) return
-    setWindow((prev) => {
-      const idx = prev.findIndex((m) => m.id === id)
-      if (idx === -1) return prev
-      const item = prev[idx]
-      return [...prev.slice(0, idx), ...prev.slice(idx + 1), item]
-    })
-    setPinnedThisTurn(true)
-  }
+  const sent = order.slice(0, sentCount)
+  const inWindow = sent.slice(-WINDOW_SIZE)
+  const allSent = sentCount === order.length
+  const nextMessage = order[sentCount]
+  const criticalInWindow = inWindow.some((m) => m.critical)
 
-  function letItArrive() {
-    setWindow((prev) => {
-      const next = [...prev, incoming]
-      if (next.length > WINDOW_SIZE) {
-        setLastFallen(next[0])
-        return next.slice(1)
-      }
-      setLastFallen(null)
-      return next
-    })
-    setPinnedThisTurn(false)
-    const nextIndex = turnIndex + 1
-    setTurnIndex(nextIndex)
-    if (nextIndex >= messages.length) setPhase('result')
-  }
+  const instruction = (sub) => (
+    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
+      <p className="font-label text-[11px] text-primary">Game · What the bot can see</p>
+      <h1 className="text-2xl leading-tight">Context window</h1>
+      <p className="mt-1 text-[13px] leading-snug text-text-muted">{sub}</p>
+    </div>
+  )
 
-  const savedTheDetail = window_.some((m) => m.critical)
-
+  // ---------- Reveal ----------
   if (phase === 'reveal') {
     return (
       <div className="flex flex-col gap-3 text-center">
@@ -62,9 +52,10 @@ export default function ContextWindowGame({ termId, onComplete }) {
 
         <div className="rounded-lg border-[3px] border-neutral bg-muted p-3 text-left shadow-pop">
           <p className="text-[13px] leading-snug text-text">
-            The bot never "forgot" on purpose — the window just filled up and the oldest chip fell
-            out to make room. Re-pinning is the fix, and it's the same move that works on you: in a
-            long chat with Claude or ChatGPT, if something matters, say it again near the end.
+            The bot only works with what's inside its context window right now. Send enough and the
+            oldest lines scroll out of view. Open a new order and the window starts empty. It isn't
+            being careless. It just can't see past the window. Making something stick across chats is
+            the Memory chip's job.
           </p>
         </div>
 
@@ -89,129 +80,200 @@ export default function ContextWindowGame({ termId, onComplete }) {
     )
   }
 
-  if (phase === 'result') {
+  // ---------- Beat 2: new order, empty window ----------
+  if (phase === 'newchat') {
     return (
       <div className="flex flex-col gap-3">
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-center shadow-card">
-          <p className="mb-2 font-label text-[11px] text-text-muted">
-            The bot assembles the order from whatever's still in the window
-          </p>
-          <p className="text-lg font-extrabold leading-snug">
-            {savedTheDetail
-              ? 'A large, extra cheese, mushroom pizza. No olives.'
-              : 'A large, extra cheese, mushroom pizza. Loaded with olives.'}
-          </p>
-        </div>
+        {instruction('Same bot, brand new order. Watch the window.')}
+        <ContextPanel sent={[]} />
 
-        <div
-          className={
-            'rounded-md border-[3px] px-4 py-3 shadow-pop ' +
-            (savedTheDetail
-              ? 'bg-success-bg border-success text-success'
-              : 'bg-danger-bg border-danger text-danger')
-          }
-        >
-          <p className="flex items-center gap-1.5 font-label text-sm font-bold">
-            <span className="material-symbols-rounded text-[18px]">
-              {savedTheDetail ? 'check_circle' : 'cancel'}
-            </span>
-            {savedTheDetail ? 'Correct pizza' : 'Wrong pizza'}
-          </p>
-          <p className="mt-1 text-[13px] leading-snug text-text">
-            {savedTheDetail
-              ? 'You kept "no olives!!" in the window until the end.'
-              : '"No olives!!" fell out of the window messages ago. The bot cheerfully explains it never saw that message.'}
-          </p>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => setPhase('reveal')}
-          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          See what this means
-        </button>
+        {!newChatAsked ? (
+          <div className="rounded-md border-[3px] border-neutral bg-surface p-3 shadow-pop">
+            <p className="mb-2 font-label text-[11px] text-text-muted">You, in the new chat</p>
+            <div className="rounded-md border-[3px] border-neutral bg-accent-soft px-3 py-2 text-sm text-text">
+              "{newChatQuestion}"
+            </div>
+            <button
+              type="button"
+              onClick={() => setNewChatAsked(true)}
+              className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-tertiary py-3 font-label font-bold text-white shadow-pop"
+            >
+              <span className="material-symbols-rounded">send</span>
+              Send in the new chat
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="ml-auto max-w-[85%] self-end rounded-md border-[3px] border-neutral bg-accent-soft px-4 py-2 text-sm text-text shadow-pop">
+              "{newChatQuestion}"
+            </div>
+            <div className="max-w-[85%] self-start rounded-md border-[3px] border-danger bg-danger-bg px-4 py-3 shadow-pop">
+              <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger">
+                <span className="material-symbols-rounded text-[15px]">visibility_off</span>
+                Empty window
+              </p>
+              <p className="text-[13px] leading-snug text-text">{newChatReply}</p>
+            </div>
+            <p className="rounded-md border-[3px] border-neutral bg-muted px-3 py-2 text-center text-[13px] leading-snug text-text shadow-pop">
+              Each conversation is its own window. Nothing carries over on its own.
+            </p>
+            <button
+              type="button"
+              onClick={() => setPhase('reveal')}
+              className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
+            >
+              <span className="material-symbols-rounded">arrow_forward</span>
+              See what this means
+            </button>
+          </>
+        )}
       </div>
     )
   }
 
+  // ---------- Beat 1: fill the window ----------
   return (
     <div className="flex flex-col gap-3">
-      {/* Instruction */}
-      <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-        <p className="font-label text-[11px] text-primary">Game · The long order</p>
-        <h1 className="text-2xl leading-tight">Context window</h1>
-        <p className="mt-1 text-[13px] leading-snug text-text-muted">
-          Tap a chip to re-pin it before the next message pushes one out — one re-pin per turn.
-        </p>
-      </div>
+      {instruction('Send the order one line at a time. Watch what the bot can still see.')}
 
-      <div className="flex items-center justify-between font-label text-[11px] text-text-muted">
-        <span>
-          Message {turnIndex + 1} / {messages.length}
-        </span>
-        <span>Window holds {WINDOW_SIZE}</span>
-      </div>
+      <ContextPanel sent={sent} />
 
-      <div className="min-h-[8rem] rounded-md border-[3px] border-neutral bg-muted px-3 py-3 shadow-pop">
-        {window_.length === 0 ? (
-          <p className="py-6 text-center text-sm text-text-muted">
-            Window is empty — the order hasn't started.
+      {!allSent && (
+        <div className="rounded-md border-[3px] border-neutral bg-surface p-3 shadow-pop">
+          <p className="mb-2 flex items-center justify-between font-label text-[11px] text-text-muted">
+            <span>Next message from the customer</span>
+            <span>
+              {sentCount + 1} / {order.length}
+            </span>
           </p>
-        ) : (
-          <div className="flex flex-col gap-2">
-            {window_.map((m) => {
-              const atRisk = m.id === atRiskId
-              return (
-                <button
-                  key={m.id}
-                  type="button"
-                  onClick={() => rePin(m.id)}
-                  disabled={pinnedThisTurn}
-                  className={
-                    'rounded-md border-[3px] px-3 py-2 text-left text-sm transition-all duration-300 ' +
-                    (m.critical
-                      ? 'border-success bg-success-bg font-bold text-success '
-                      : 'border-neutral bg-surface text-text-muted ') +
-                    (atRisk ? 'animate-pulse ring-2 ring-danger ' : '') +
-                    (pinnedThisTurn ? 'opacity-60' : 'press')
-                  }
-                >
-                  {atRisk && (
-                    <span className="mr-1 font-label text-[11px] font-bold text-danger">
-                      ⚠ about to fall out —
-                    </span>
-                  )}
-                  "{m.text}"
-                </button>
-              )
-            })}
+          <div className="rounded-md border-[3px] border-neutral bg-accent-soft px-3 py-2 text-sm text-text">
+            "{nextMessage.text}"
           </div>
-        )}
-      </div>
-
-      {lastFallen && (
-        <p className="text-center font-label text-[11px] text-danger">
-          "{lastFallen.text}" slid out of the window.
-        </p>
-      )}
-
-      {incoming && (
-        <div className="rounded-md border-[3px] border-neutral bg-surface px-4 py-3 text-center shadow-pop">
-          <p className="mb-1 font-label text-[11px] text-text-muted">Next message incoming</p>
-          <p className="font-bold text-text">"{incoming.text}"</p>
+          <button
+            type="button"
+            onClick={() => setSentCount((c) => c + 1)}
+            className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-tertiary py-3 font-label font-bold text-white shadow-pop"
+          >
+            <span className="material-symbols-rounded">send</span>
+            Send to the bot
+          </button>
         </div>
       )}
 
-      <button
-        type="button"
-        onClick={letItArrive}
-        className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-      >
-        <span className="material-symbols-rounded">arrow_forward</span>
-        Let it arrive
-      </button>
+      {allSent && !recalled && (
+        <div className="rounded-md border-[3px] border-neutral bg-surface p-3 shadow-pop">
+          <p className="mb-2 font-label text-[11px] text-text-muted">
+            The whole order is in. Now check what the bot still sees.
+          </p>
+          <button
+            type="button"
+            onClick={() => setRecalled(true)}
+            className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
+          >
+            <span className="material-symbols-rounded">quiz</span>
+            Ask: "{recallQuestion}"
+          </button>
+        </div>
+      )}
+
+      {allSent && recalled && (
+        <>
+          <div className="ml-auto max-w-[85%] self-end rounded-md border-[3px] border-neutral bg-accent-soft px-4 py-2 text-sm text-text shadow-pop">
+            "{recallQuestion}"
+          </div>
+          <div
+            className={
+              'max-w-[85%] self-start rounded-md border-[3px] px-4 py-3 shadow-pop ' +
+              (criticalInWindow ? 'border-success bg-success-bg' : 'border-danger bg-danger-bg')
+            }
+          >
+            <p
+              className={
+                'mb-1 flex items-center gap-1 font-label text-[11px] font-bold ' +
+                (criticalInWindow ? 'text-success' : 'text-danger')
+              }
+            >
+              <span className="material-symbols-rounded text-[15px]">
+                {criticalInWindow ? 'check_circle' : 'visibility_off'}
+              </span>
+              {criticalInWindow ? 'Still in view' : 'Out of view'}
+            </p>
+            <p className="text-[13px] leading-snug text-text">
+              {criticalInWindow ? recallInWindow : recallDropped}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setPhase('newchat')}
+            className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
+          >
+            <span className="material-symbols-rounded">arrow_forward</span>
+            Start a new order
+          </button>
+        </>
+      )}
+    </div>
+  )
+}
+
+/**
+ * The context window as a sliding frame over the conversation: messages that
+ * scrolled out sit faded and struck through above a boundary line; what the
+ * bot can actually see sits below it.
+ */
+function ContextPanel({ sent }) {
+  const dropped = sent.slice(0, Math.max(0, sent.length - WINDOW_SIZE))
+  const inWindow = sent.slice(-WINDOW_SIZE)
+  return (
+    <div className="overflow-hidden rounded-md border-[3px] border-neutral bg-surface shadow-card">
+      <div className="flex items-center justify-between bg-text px-3 py-1.5 font-label text-[10px] text-white">
+        <span className="flex items-center gap-1">
+          <span className="material-symbols-rounded text-[14px]">visibility</span>
+          Context window · what the bot sees
+        </span>
+        <span>
+          {inWindow.length} / {WINDOW_SIZE}
+        </span>
+      </div>
+
+      <div className="flex min-h-[7rem] flex-col gap-1.5 p-3">
+        {sent.length === 0 ? (
+          <p className="py-6 text-center text-sm text-text-muted">
+            Empty. The bot can't see anything yet.
+          </p>
+        ) : (
+          <>
+            {dropped.map((m) => (
+              <div
+                key={m.id}
+                className="rounded-md border-2 border-slot-empty bg-surface px-3 py-1.5 text-[13px] text-text-muted line-through opacity-60"
+              >
+                {m.text}
+              </div>
+            ))}
+            {dropped.length > 0 && (
+              <div className="my-0.5 flex items-center gap-2">
+                <span className="h-0 flex-1 border-t-2 border-dashed border-slot-empty" />
+                <span className="font-label text-[10px] text-text-muted">scrolled out of view</span>
+                <span className="h-0 flex-1 border-t-2 border-dashed border-slot-empty" />
+              </div>
+            )}
+            {inWindow.map((m) => (
+              <div
+                key={m.id}
+                className={
+                  'rounded-md border-2 px-3 py-1.5 text-[13px] ' +
+                  (m.critical
+                    ? 'border-primary bg-danger-bg font-bold text-text'
+                    : 'border-neutral bg-muted text-text-muted')
+                }
+              >
+                {m.text}
+              </div>
+            ))}
+          </>
+        )}
+      </div>
     </div>
   )
 }
