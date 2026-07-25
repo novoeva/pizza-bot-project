@@ -1,9 +1,9 @@
 // Self-contained content for the Token game.
 // Two beats, both grounded in the term's definition ("a token is a small
-// chunk of text — 'Pepperoni' breaks into four of them"):
-//   1. "Chop it up" — a token IS a chunk of text. The player guesses how many
+// chunk of text, 'Pepperoni' breaks into four of them"):
+//   1. "Chop it up", a token IS a chunk of text. The player guesses how many
 //      tokens a word is; "Pepperoni" splits into four.
-//   2. "Guess what's next" — the model writes one token at a time, each a
+//   2. "Guess what's next", the model writes one token at a time, each a
 //      prediction of what comes next. The player guesses the next token and
 //      then sees the model's probability ranking.
 
@@ -12,7 +12,7 @@
 export const hookWord = 'Pepperoni'
 export const hookTokens = ['Pep', 'per', 'on', 'i']
 
-// Supporting reveal: a whole short order, chunked, so the pattern is visible —
+// Supporting reveal: a whole short order, chunked, so the pattern is visible,
 // common words stay whole, rare ones split, punctuation is its own token.
 export const samplePhrase = {
   text: "I'd like a pepperoni pizza!",

@@ -31,7 +31,10 @@ export default function ProgressScreen() {
         {done} out of {total} completed
       </p>
       <div className="mt-3 h-4 rounded-full border-[3px] border-neutral bg-muted p-0.5">
-        <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${(done / total) * 100}%` }} />
+        <div
+          className="h-full rounded-full bg-primary transition-all"
+          style={{ width: `${(done / total) * 100}%` }}
+        />
       </div>
 
       {/* Mascot */}
@@ -51,21 +54,28 @@ export default function ProgressScreen() {
 
       {!powered ? (
         <div className="mt-6 rounded-lg border-[3px] border-neutral bg-muted p-6 text-center shadow-pop">
-          <span className="material-symbols-rounded fill text-3xl text-text-muted">hourglass_top</span>
+          <span className="material-symbols-rounded fill text-3xl text-text-muted">
+            hourglass_top
+          </span>
           <h3 className="mt-2 text-xl">Not finished yet</h3>
           <p className="mt-1 text-sm text-text-muted">
-            Build all {total} parts to switch your bot on and unlock the diploma. No shortcuts — but no
-            locks either. Play them in any order.
+            Build all {total} parts to switch your bot on and unlock the diploma. No shortcuts, but
+            no locks either. Play them in any order.
           </p>
         </div>
       ) : (
         <>
           <section
             className="relative mt-6 overflow-hidden rounded-sm border-[6px] border-neutral bg-surface text-center"
-            style={{ backgroundImage: 'radial-gradient(var(--color-primary) 1px, transparent 1px)', backgroundSize: '16px 16px' }}
+            style={{
+              backgroundImage: 'radial-gradient(var(--color-primary) 1px, transparent 1px)',
+              backgroundSize: '16px 16px',
+            }}
           >
             <div className="flex items-center justify-between border-b-[3px] border-neutral bg-muted px-4 py-3">
-              <span className="material-symbols-rounded fill text-text-muted">workspace_premium</span>
+              <span className="material-symbols-rounded fill text-text-muted">
+                workspace_premium
+              </span>
               <span className="font-label text-xs text-text-muted">Official Certification</span>
               <span className="material-symbols-rounded fill text-text-muted">verified_user</span>
             </div>

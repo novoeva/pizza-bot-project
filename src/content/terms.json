@@ -4,31 +4,39 @@
     "order": 1,
     "name": "Token",
     "botPart": "Voice box",
-    "definition": "A token is a small chunk of text — often part of a word — that's the unit an AI actually reads and writes in. \"Pepperoni\" alone breaks into four of them.",
-    "whyYouCare": "It's why the same question to Claude or ChatGPT can sound different each time — and why a 'more consistent' setting exists for the moments it needs to say the exact same thing."
+    "about": "An AI doesn't read whole words. It reads and writes in little chunks called tokens.",
+    "howToPlay": "Guess how a word splits into tokens, then play the model and pick which token comes next.",
+    "definition": "A token is a small chunk of text, often part of a word, that's the unit an AI actually reads and writes in. \"Pepperoni\" alone breaks into four of them.",
+    "whyYouCare": "It's why the same question to Claude or ChatGPT can sound different each time, and why a 'more consistent' setting exists for the moments it needs to say the exact same thing."
   },
   {
     "id": "context-window",
     "order": 2,
     "name": "Context window",
     "botPart": "Short-term memory chip",
-    "definition": "The context window is how much of the conversation an AI can still \"see\" at once — once it fills up, the oldest parts quietly fall out.",
-    "whyYouCare": "It's why a long chat sometimes forgets something you said 20 messages ago — it's not being careless, it ran out of window."
+    "about": "A bot can only keep so much of a conversation in mind at once.",
+    "howToPlay": "Send the order one line at a time and watch what the bot can still see.",
+    "definition": "The context window is how much of the conversation an AI can still \"see\" at once. Once it fills up, the oldest parts quietly fall out.",
+    "whyYouCare": "It's why a long chat sometimes forgets something you said 20 messages ago. It's not being careless, it just ran out of window."
   },
   {
     "id": "hallucination",
     "order": 3,
     "name": "Hallucination",
     "botPart": "Reality-check filter",
+    "about": "The bot sounds just as confident whether it knows the answer or made it up.",
+    "howToPlay": "Check each claim against the real menu and catch the ones the bot invented.",
     "definition": "A hallucination is when an AI states something false with full confidence, the same tone it uses for things that are true.",
-    "whyYouCare": "It's why you double-check anything an AI tells you that you can't verify elsewhere — confidence isn't the same as correctness."
+    "whyYouCare": "It's why you double-check anything an AI tells you that you can't verify elsewhere. Confidence isn't the same as correctness."
   },
   {
     "id": "prompt",
     "order": 4,
     "name": "Prompt",
     "botPart": "Instruction dial",
-    "definition": "A prompt is the instruction you give an AI — vague instructions reliably produce vague, weird results.",
+    "about": "The instruction you give an AI shapes what you get back.",
+    "howToPlay": "Order the same pizza three times, getting more specific each round, and watch the bot stop guessing.",
+    "definition": "A prompt is the instruction you give an AI. Vague instructions reliably produce vague, weird results.",
     "whyYouCare": "Better prompts, not better luck, are how you get useful answers out of Claude or ChatGPT."
   },
   {
@@ -36,15 +44,19 @@
     "order": 5,
     "name": "Agent",
     "botPart": "Legs (it can act on its own)",
-    "definition": "A chatbot talks about doing something; an agent actually does it — places the order, charges the card, notifies the kitchen, no human in between.",
-    "whyYouCare": "It's the line between \"AI that chats\" and \"AI that takes real actions for you\" — and why agents need more trust and more guardrails."
+    "about": "There is a real difference between an AI that just talks back and one that actually takes action — running a whole job in the real world for you.",
+    "howToPlay": "A chatbot only talks. Turn it into an agent by handing it real actions to take, in the right order, then run it and watch real systems fire.",
+    "definition": "A chatbot talks about doing something; an agent actually does it: it plans what needs to happen, acts, checks the result, and keeps going (or re-plans) until the job's done, charges the card, notifies the kitchen, no human in between.",
+    "whyYouCare": "It's the line between \"AI that chats\" and \"AI that takes real actions for you\", and why agents need more trust and more guardrails."
   },
   {
     "id": "tool-use",
     "order": 6,
     "name": "Tool use",
     "botPart": "Arms",
-    "definition": "Tool use is when an AI calls a real system — a real menu, a real delivery tracker — instead of guessing from memory.",
+    "about": "Left on its own, a bot guesses. Given a real system, it can check.",
+    "howToPlay": "Answer a few questions blind first, then hand the bot real tools and feel the difference.",
+    "definition": "Tool use is when an AI calls a real system, like a real menu or a real delivery tracker, instead of guessing from memory.",
     "whyYouCare": "It's why an assistant that can actually check your calendar or a real order is more reliable than one that's just talking."
   },
   {
@@ -52,6 +64,8 @@
     "order": 7,
     "name": "Skill",
     "botPart": "Training certificate",
+    "about": "Without a set process, a bot handles the same situation a different way every time.",
+    "howToPlay": "Watch the bot improvise three answers to one complaint, then build it a playbook and see them line up.",
     "definition": "A skill is a written playbook you hand an AI for one recurring situation, so it handles it the same, right way every time.",
     "whyYouCare": "It's the difference between an AI that improvises a response to a complaint and one that follows a process you actually trust."
   },
@@ -60,7 +74,9 @@
     "order": 8,
     "name": "Memory",
     "botPart": "Hard drive (chest)",
-    "definition": "Working memory lasts one conversation; persistent memory carries facts — like your usual order — across visits.",
+    "about": "A bot remembers everything within one chat and nothing once it ends.",
+    "howToPlay": "Chat with the bot, jump a week ahead, then pick which facts it should keep across visits.",
+    "definition": "Working memory lasts one conversation; persistent memory carries facts, like your usual order, across visits.",
     "whyYouCare": "It's why some AI tools remember your preferences next time, and others start from zero every single chat."
   },
   {
@@ -68,15 +84,19 @@
     "order": 9,
     "name": "MCP",
     "botPart": "Universal port",
-    "definition": "MCP is a standard plug that lets an AI connect to outside systems — the ordering system, the POS, delivery — without custom wiring for each one.",
-    "whyYouCare": "It's why an AI assistant can plug into your calendar, docs, or database at all — MCP is the universal port that makes it possible."
+    "about": "Every outside system has its own way of being plugged into, so every bot needs its own custom wiring to reach it. Add one more bot, or one more system, and the wiring multiplies.",
+    "howToPlay": "Wire each bot to each system by hand, one plug at a time. Then work out how bad it gets, and see what happens when everyone agrees on the same plug.",
+    "definition": "MCP is one shared plug that AI assistants and outside systems both agree to use, so neither side has to know anything about the other side specifically.",
+    "whyYouCare": "It means a tool built by people who have never heard of your AI assistant still works with it on day one. Nobody has to build a bridge for that exact pair. It's why you can connect an AI to your calendar, your files or your company's database without waiting for someone to make those two things fit together."
   },
   {
     "id": "guardrails",
     "order": 10,
     "name": "Guardrails",
     "botPart": "Safety casing",
-    "definition": "Guardrails are the hard limits an AI must never cross — no unlimited discounts, no promises it can't keep, no topics outside its job.",
+    "about": "A helpful bot with no limits will happily agree to things it shouldn't.",
+    "howToPlay": "Play the attacker and break the bot first, then set the limits and watch the same tricks fail.",
+    "definition": "Guardrails are the hard limits an AI must never cross: no unlimited discounts, no promises it can't keep, no topics outside its job.",
     "whyYouCare": "They're what keeps an AI assistant safe and on-brand instead of agreeing to anything a clever prompt asks for."
   }
 ]

@@ -3,8 +3,8 @@ export const complaint = 'My pizza came cold.'
 
 // Round 1: three improvised responses to the exact same complaint.
 export const improvisedReplies = [
-  "It probably wasn't that cold. Delivery times vary — nothing we can really do.",
-  "OH NO I am SO sorry, this is a disaster, please forgive us, we are terrible, I don't know what to say, I'm so sorry—",
+  "It probably wasn't that cold. Delivery times vary, nothing we can really do.",
+  "OH NO I am SO sorry, this is a disaster, please forgive us, we are terrible, I don't know what to say, I'm so sorry, ",
   'You know what? Free pizza for life. On us. Forever. No takebacks.',
 ]
 

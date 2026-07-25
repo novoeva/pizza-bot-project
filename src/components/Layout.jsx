@@ -20,7 +20,11 @@ function TopHeader({ inGame }) {
           Pizza Bot
         </Link>
         <div className="flex w-10 justify-end">
-          <Link to="/progress" aria-label="Progress" className="press rounded-md p-1 text-text-muted">
+          <Link
+            to="/progress"
+            aria-label="Progress"
+            className="press rounded-md p-1 text-text-muted"
+          >
             <span className="material-symbols-rounded">checklist</span>
           </Link>
         </div>
@@ -45,7 +49,7 @@ function NavItem({ to, active, icon, label }) {
   )
 }
 
-/** Fixed bottom tab bar — Workshop / Progress. */
+/** Fixed bottom tab bar, Workshop / Progress. */
 function BottomNav({ active }) {
   return (
     <nav className="fixed inset-x-0 bottom-0 z-50 mx-auto flex max-w-game items-center justify-around border-t-[3px] border-neutral bg-bg px-3 pt-2 pb-[calc(0.75rem+var(--space-safe-bottom))]">

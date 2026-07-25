@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { hookWord, hookTokens, samplePhrase, predictionRounds } from './content.js'
 import terms from '../../content/terms.json'
+import GameIntro from '../../components/GameIntro.jsx'
 
 const GUESS_OPTIONS = [1, 2, 3, 4]
 
@@ -9,11 +10,11 @@ function bestOf(options) {
 }
 
 /**
- * Token game — { termId, onComplete } interface.
+ * Token game, { termId, onComplete } interface.
  * Two beats that build the concept in order:
- *   1. Chop it up — a token is a chunk of text. Guess how many tokens
+ *   1. Chop it up, a token is a chunk of text. Guess how many tokens
  *      "Pepperoni" is (four), then see the chunks and a whole order tokenized.
- *   2. Guess what's next — the model writes one token at a time, predicting
+ *   2. Guess what's next, the model writes one token at a time, predicting
  *      the next from a ranked list. Guess the next token, then see the ranking.
  */
 export default function TokenGame({ termId, onComplete }) {
@@ -31,13 +32,7 @@ export default function TokenGame({ termId, onComplete }) {
     const wordCount = samplePhrase.text.trim().split(/\s+/).length
     return (
       <div className="flex flex-col gap-3">
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-          <p className="font-label text-[11px] text-primary">Game · Chop it up</p>
-          <h1 className="text-2xl leading-tight">Token</h1>
-          <p className="mt-1 text-[13px] leading-snug text-text-muted">
-            An AI doesn't read whole words. It reads little chunks called tokens.
-          </p>
-        </div>
+        <GameIntro term={term} />
 
         <div className="rounded-md border-[3px] border-neutral bg-surface p-4 shadow-card">
           <p className="text-center font-label text-[11px] text-text-muted">
@@ -101,7 +96,9 @@ export default function TokenGame({ termId, onComplete }) {
                 ))}
               </div>
               <p className="mt-2 text-[12px] leading-snug text-text-muted">
-                <span className="font-bold text-text">{wordCount} words, {samplePhrase.tokens.length} tokens.</span>{' '}
+                <span className="font-bold text-text">
+                  {wordCount} words, {samplePhrase.tokens.length} tokens.
+                </span>{' '}
                 Short, common words are usually one token. Long or unusual ones get split. Even
                 punctuation counts.
               </p>
@@ -156,8 +153,8 @@ export default function TokenGame({ termId, onComplete }) {
           </div>
           <h1 className="text-2xl leading-tight">Token</h1>
           <p className="mt-1 text-[13px] leading-snug text-text-muted">
-            An LLM never writes a whole reply at once. It predicts just the next token, statistically,
-            from everything it's seen so far. Then it does it again, and again.
+            An LLM never writes a whole reply at once. It predicts just the next token,
+            statistically, from everything it's seen so far. Then it does it again, and again.
           </p>
         </div>
 
@@ -206,7 +203,10 @@ export default function TokenGame({ termId, onComplete }) {
             </div>
 
             <div className="rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop">
-              <p className="mb-3 font-label text-[11px] text-text-muted">The model's ranking</p>
+              <div className="mb-3 flex items-baseline justify-between gap-2">
+                <p className="font-label text-[11px] text-text-muted">The model's ranking</p>
+                <p className="font-label text-[11px] text-text-muted">% = probability</p>
+              </div>
               <div className="flex flex-col gap-2">
                 {sorted.map((o) => {
                   const isBest = o.word === best.word
@@ -229,7 +229,9 @@ export default function TokenGame({ termId, onComplete }) {
                           style={{ width: `${o.pct}%` }}
                         />
                       </div>
-                      <div className="w-9 shrink-0 text-right text-xs text-text-muted">{o.pct}%</div>
+                      <div className="w-9 shrink-0 text-right text-xs text-text-muted">
+                        {o.pct}%
+                      </div>
                     </div>
                   )
                 })}
@@ -263,21 +265,14 @@ export default function TokenGame({ termId, onComplete }) {
         You matched the model on {score} of {predictionRounds.length}.
       </p>
 
-      <div className="rounded-lg border-[3px] border-neutral bg-muted p-3 text-left shadow-pop">
-        <p className="text-[13px] leading-snug text-text">
-          Tokens are the chunks an AI reads and writes in. It builds every reply one token at a time,
-          always predicting the next one from a ranked list of options. That same loop runs under
-          Claude and ChatGPT.
-        </p>
-      </div>
-
       <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
         <p className="font-label text-[11px] text-text-muted">What it means</p>
         <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
-        <p className="mt-3 text-[15px] leading-snug text-text-muted">
-          <span className="font-semibold text-tertiary">Why you care: </span>
-          {term.whyYouCare}
-        </p>
+      </div>
+
+      <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
+        <p className="font-label text-[11px] text-text-muted">Why you care</p>
+        <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
       </div>
 
       <button

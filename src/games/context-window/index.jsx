@@ -5,13 +5,20 @@ import {
   recallQuestion,
   recallInWindow,
   recallDropped,
+  goldfishNote,
   newChatQuestion,
   newChatReply,
+  bridgeToMemory,
+  honestyTitle,
+  honestyIntro,
+  honestyExample,
+  honestyClose,
 } from './messages.js'
 import terms from '../../content/terms.json'
+import GameIntro from '../../components/GameIntro.jsx'
 
 /**
- * Context window game — { termId, onComplete } interface.
+ * Context window game, { termId, onComplete } interface.
  * A live "Context window" panel shows exactly what the bot can see right now.
  * Beat 1: send messages until the window overflows; the earliest line ("no
  * olives!!") scrolls out of view and the bot can't recall it. Beat 2: a brand
@@ -50,22 +57,28 @@ export default function ContextWindowGame({ termId, onComplete }) {
         </p>
         <h2 className="text-2xl">You just learned the term Context window</h2>
 
-        <div className="rounded-lg border-[3px] border-neutral bg-muted p-3 text-left shadow-pop">
-          <p className="text-[13px] leading-snug text-text">
-            The bot only works with what's inside its context window right now. Send enough and the
-            oldest lines scroll out of view. Open a new order and the window starts empty. It isn't
-            being careless. It just can't see past the window. Making something stick across chats is
-            the Memory chip's job.
-          </p>
-        </div>
-
+        {/* What it means: the definition (the payoff) */}
         <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
           <p className="font-label text-[11px] text-text-muted">What it means</p>
           <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
-          <p className="mt-3 text-[15px] leading-snug text-text-muted">
-            <span className="font-semibold text-tertiary">Why you care: </span>
-            {term.whyYouCare}
+        </div>
+
+        {/* Why you care */}
+        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
+          <p className="font-label text-[11px] text-text-muted">Why you care</p>
+          <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
+        </div>
+
+        {/* Real talk: the honest note that owns the goldfish simplification */}
+        <div className="rounded-lg border-[3px] border-tertiary bg-surface p-3 text-left shadow-pop">
+          <p className="flex items-center gap-1 font-label text-[11px] font-bold text-tertiary">
+            <span className="material-symbols-rounded text-[15px]">info</span>
+            Real talk
           </p>
+          <p className="mt-1 text-[13px] font-semibold leading-snug text-text">{honestyTitle}</p>
+          <p className="mt-1 text-[13px] leading-snug text-text-muted">{honestyIntro}</p>
+          <p className="mt-2 text-[13px] leading-snug text-text-muted">{honestyExample}</p>
+          <p className="mt-2 text-[13px] leading-snug text-text">{honestyClose}</p>
         </div>
 
         <button
@@ -114,9 +127,13 @@ export default function ContextWindowGame({ termId, onComplete }) {
               </p>
               <p className="text-[13px] leading-snug text-text">{newChatReply}</p>
             </div>
-            <p className="rounded-md border-[3px] border-neutral bg-muted px-3 py-2 text-center text-[13px] leading-snug text-text shadow-pop">
-              Each conversation is its own window. Nothing carries over on its own.
-            </p>
+            <div className="rounded-md border-[3px] border-tertiary bg-surface px-3 py-2 shadow-pop">
+              <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-tertiary">
+                <span className="material-symbols-rounded text-[15px]">arrow_forward</span>
+                Where this hands off
+              </p>
+              <p className="text-[13px] leading-snug text-text">{bridgeToMemory}</p>
+            </div>
             <button
               type="button"
               onClick={() => setPhase('reveal')}
@@ -134,7 +151,7 @@ export default function ContextWindowGame({ termId, onComplete }) {
   // ---------- Beat 1: fill the window ----------
   return (
     <div className="flex flex-col gap-3">
-      {instruction('Send the order one line at a time. Watch what the bot can still see.')}
+      <GameIntro term={term} />
 
       <ContextPanel sent={sent} />
 
@@ -196,7 +213,7 @@ export default function ContextWindowGame({ termId, onComplete }) {
               <span className="material-symbols-rounded text-[15px]">
                 {criticalInWindow ? 'check_circle' : 'visibility_off'}
               </span>
-              {criticalInWindow ? 'Still in view' : 'Out of view'}
+              {criticalInWindow ? 'Still in the context window' : 'Out of the context window'}
             </p>
             <p className="text-[13px] leading-snug text-text">
               {criticalInWindow ? recallInWindow : recallDropped}
@@ -236,6 +253,11 @@ function ContextPanel({ sent }) {
         </span>
       </div>
 
+      <div className="flex items-center gap-1 border-b-2 border-slot-empty bg-accent-soft px-3 py-1 font-label text-[10px] text-text">
+        <span className="material-symbols-rounded text-[13px]">psychology</span>
+        {goldfishNote}
+      </div>
+
       <div className="flex min-h-[7rem] flex-col gap-1.5 p-3">
         {sent.length === 0 ? (
           <p className="py-6 text-center text-sm text-text-muted">
@@ -254,7 +276,9 @@ function ContextPanel({ sent }) {
             {dropped.length > 0 && (
               <div className="my-0.5 flex items-center gap-2">
                 <span className="h-0 flex-1 border-t-2 border-dashed border-slot-empty" />
-                <span className="font-label text-[10px] text-text-muted">scrolled out of view</span>
+                <span className="font-label text-[10px] text-text-muted">
+                  out of the context window
+                </span>
                 <span className="h-0 flex-1 border-t-2 border-dashed border-slot-empty" />
               </div>
             )}

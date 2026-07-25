@@ -1,21 +1,64 @@
-// Self-contained content for this game only.
-export const round1Lines = [
-  { speaker: 'customer', text: "Hi! I'd like a large diavola, please." },
-  {
-    speaker: 'bot',
-    text: 'Great choice! The diavola is one of our most popular pizzas — spicy salami, chili oil, and a rich tomato base.',
-  },
-  { speaker: 'customer', text: 'Sounds great. Can I get one delivered?' },
-  {
-    speaker: 'bot',
-    text: 'Absolutely — it pairs wonderfully with a nice Chianti if you feel like treating yourself!',
-  },
-  { speaker: 'customer', text: '...so where\'s my pizza?' },
+// Content + data for the Agent game ("From chat to agent").
+//
+// The whole lesson in one line: a chatbot only TALKS; an agent ACTS — it fires
+// real actions in real systems (checks stock, charges the card, tells the
+// kitchen, sends a driver), no human in between. The player feels it by first
+// watching a chatbot produce nothing but words, then BUILDING the agent: they
+// give it the real actions to take, in a sensible order, and watch each one
+// light up an external system. Order matters (an agent acts in the real world),
+// so a bad sequence — driver before the kitchen's even cooked — fails funnily
+// and sends the player back to fix it.
+
+// The incoming order the agent has to actually fulfill.
+export const order = {
+  customer: 'Marco',
+  text: '“One large diavola to 12 Main St, please — paying by card.”',
+}
+
+// Round 1: the plain chatbot. All talk, triggers nothing.
+export const chatbotReply =
+  '“Ooh, the diavola is our spiciest — you’ll love it! 😋 Just call the shop to order.”'
+
+// The real actions the player can hand the agent (the to-do list it builds).
+export const actions = [
+  { id: 'stock', icon: 'inventory_2', label: 'Check the stock' },
+  { id: 'charge', icon: 'credit_card', label: 'Charge the card' },
+  { id: 'kitchen', icon: 'skillet', label: 'Fire it to the kitchen' },
+  { id: 'driver', icon: 'moped', label: 'Send out a driver' },
 ]
 
-export const actionSteps = [
-  { id: 'menu', label: 'Check menu', kitchenText: 'Menu checked ✓' },
-  { id: 'confirm', label: 'Confirm order', kitchenText: 'Order confirmed: 1x large diavola ✓' },
-  { id: 'charge', label: 'Charge card', kitchenText: 'Payment: $18.00 charged ✓' },
-  { id: 'send', label: 'Send to kitchen', kitchenText: '🍕 Pizza in the oven!' },
+// The three headline external systems shown as "screens" that wake up when the
+// matching action fires. (Stock is a check, not a headline system, so it only
+// shows in the fired-actions feed.)
+export const systems = [
+  { id: 'charge', icon: 'credit_card', name: 'Payment' },
+  { id: 'kitchen', icon: 'skillet', name: 'Kitchen' },
+  { id: 'driver', icon: 'moped', name: 'Delivery' },
 ]
+
+// What each action reports when it fires — shown in the systems + the feed.
+export const fired = {
+  stock: { icon: 'inventory_2', name: 'Stock', result: 'Diavola in stock ✓' },
+  charge: { icon: 'credit_card', name: 'Payment', result: 'Charged €14.50' },
+  kitchen: { icon: 'skillet', name: 'Kitchen', result: 'Order #A12 firing 🔥' },
+  driver: { icon: 'moped', name: 'Delivery', result: 'Luca → 12 Main St' },
+}
+
+// The two order mistakes worth catching, with the real-world consequence.
+const snags = {
+  driverBeforeKitchen:
+    'You sent the driver before the kitchen even cooked — Luca’s parked outside with an empty bag.',
+  kitchenBeforeStock: 'The kitchen started before anyone checked stock — no dough, order jammed.',
+}
+
+/**
+ * Validate the player's action order the way the real world would. Returns null
+ * when the sequence holds up, or { msg, lit } describing the failure and which
+ * system fired out of turn. Assumes all four actions are present.
+ */
+export function validateSequence(seq) {
+  const at = (id) => seq.indexOf(id)
+  if (at('driver') < at('kitchen')) return { msg: snags.driverBeforeKitchen, lit: 'driver' }
+  if (at('kitchen') < at('stock')) return { msg: snags.kitchenBeforeStock, lit: 'kitchen' }
+  return null
+}

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { customerRequest, round1Options, round2Categories, round3Categories } from './rounds.js'
 import terms from '../../content/terms.json'
+import GameIntro from '../../components/GameIntro.jsx'
 
 function CategoryPicker({ category, value, onPick }) {
   return (
@@ -28,9 +29,9 @@ function CategoryPicker({ category, value, onPick }) {
 }
 
 /**
- * Prompt game — { termId, onComplete } interface.
+ * Prompt game, { termId, onComplete } interface.
  * "Say what you mean": round 1 offers only vague fragments and the bot
- * obeys literally into an absurd pizza. Rounds 2–3 unlock specific
+ * obeys literally into an absurd pizza. Rounds 2, 3 unlock specific
  * fragments (size, toppings, constraints) and the order converges.
  */
 export default function PromptGame({ termId, onComplete }) {
@@ -79,21 +80,14 @@ export default function PromptGame({ termId, onComplete }) {
         </p>
         <h2 className="text-2xl">You just learned the term Prompt</h2>
 
-        <div className="rounded-lg border-[3px] border-neutral bg-muted p-3 text-left shadow-pop">
-          <p className="text-[13px] leading-snug text-text">
-            Same bot, same customer, same order — the only thing that changed was how specific the
-            instruction got. That's the whole trick to better AI answers: refine the prompt, don't
-            just retry your luck.
-          </p>
-        </div>
-
         <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
           <p className="font-label text-[11px] text-text-muted">What it means</p>
           <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
-          <p className="mt-3 text-[15px] leading-snug text-text-muted">
-            <span className="font-semibold text-tertiary">Why you care: </span>
-            {term.whyYouCare}
-          </p>
+        </div>
+
+        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
+          <p className="font-label text-[11px] text-text-muted">Why you care</p>
+          <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
         </div>
 
         <button
@@ -120,7 +114,7 @@ export default function PromptGame({ termId, onComplete }) {
       <p className="font-label text-[11px] text-primary">Game · Say what you mean</p>
       <h1 className="text-2xl leading-tight">Prompt</h1>
       <p className="mt-1 font-label text-[11px] text-text-muted">
-        Round {round} / 3 — {sub}
+        Round {round} / 3, {sub}
       </p>
     </div>
   )
@@ -131,7 +125,7 @@ export default function PromptGame({ termId, onComplete }) {
         {customerBanner}
         <div className="rounded-lg border-[3px] border-neutral bg-success-bg p-4 text-center shadow-card">
           <p className="mb-2 font-label text-[11px] font-bold text-success">
-            Round 3 — fully specific prompt
+            Round 3, fully specific prompt
           </p>
           <p className="text-[15px] leading-snug text-text">
             A medium pepperoni pizza, thin crust, no onions. Exactly right. The customer is
@@ -157,12 +151,17 @@ export default function PromptGame({ termId, onComplete }) {
         {customerBanner}
         <div className="flex flex-col gap-4">
           {round3Categories.map((c) => (
-            <CategoryPicker key={c.name} category={c} value={round3Picks[c.name]} onPick={pickRound3} />
+            <CategoryPicker
+              key={c.name}
+              category={c}
+              value={round3Picks[c.name]}
+              onPick={pickRound3}
+            />
           ))}
         </div>
         {round3Mismatch && (
           <p className="rounded-md border-[3px] border-danger bg-danger-bg px-3 py-2 text-center text-sm font-bold text-danger">
-            Not quite what the customer asked for — check the order above and adjust.
+            Not quite what the customer asked for, check the order above and adjust.
           </p>
         )}
         <button
@@ -186,14 +185,14 @@ export default function PromptGame({ termId, onComplete }) {
           <p className="mb-2 font-label text-[11px] text-text-muted">Round 2 result</p>
           <p className="text-[15px] leading-snug text-text">
             {round2Matched
-              ? `A ${round2Picks.Size.toLowerCase()} ${round2Picks.Toppings.toLowerCase()} pizza arrives — right size, right topping!`
-              : `A ${round2Picks.Size.toLowerCase()} ${round2Picks.Toppings.toLowerCase()} pizza arrives — not quite what was ordered.`}
-            {' '}Nobody specified the crust or the onions, so the bot guessed: thick crust, piled
-            high with onions.
+              ? `A ${round2Picks.Size.toLowerCase()} ${round2Picks.Toppings.toLowerCase()} pizza arrives, right size, right topping!`
+              : `A ${round2Picks.Size.toLowerCase()} ${round2Picks.Toppings.toLowerCase()} pizza arrives, not quite what was ordered.`}{' '}
+            Nobody specified the crust or the onions, so the bot guessed: thick crust, piled high
+            with onions.
           </p>
         </div>
         <p className="text-center font-label text-[11px] text-text-muted">
-          Closer — but anything left vague still gets guessed for you.
+          Closer, but anything left vague still gets guessed for you.
         </p>
         <button
           type="button"
@@ -214,7 +213,12 @@ export default function PromptGame({ termId, onComplete }) {
         {customerBanner}
         <div className="flex flex-col gap-4">
           {round2Categories.map((c) => (
-            <CategoryPicker key={c.name} category={c} value={round2Picks[c.name]} onPick={pickRound2} />
+            <CategoryPicker
+              key={c.name}
+              category={c}
+              value={round2Picks[c.name]}
+              onPick={pickRound2}
+            />
           ))}
         </div>
         <button
@@ -257,7 +261,7 @@ export default function PromptGame({ termId, onComplete }) {
 
   return (
     <div className="flex flex-col gap-3">
-      {instruction(1, 'only vague instructions available.')}
+      <GameIntro term={term} />
       {customerBanner}
       <div className="flex flex-col gap-2">
         {round1Options.map((opt) => (

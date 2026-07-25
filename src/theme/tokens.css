@@ -1,9 +1,9 @@
 /*
- * Design tokens — the one file that governs Pizza Bot's look.
+ * Design tokens, the one file that governs Pizza Bot's look.
  * Swap values here to reskin the whole app; components must never
  * reference raw hex codes, only these variables (via Tailwind classes).
  *
- * Direction: v0 + Loveable mixed prototype — light, bold, "chunky"
+ * Direction: v0 + Loveable mixed prototype, light, bold, "chunky"
  * (3px borders + hard offset shadows), navy text on off-white, red
  * primary with blue accents. See design-mix/index.html.
  */
@@ -72,7 +72,7 @@
   /* ---- Spacing (extra steps beyond Tailwind defaults) ---- */
   --space-safe-bottom: env(safe-area-inset-bottom, 0px);
 
-  /* ---- Shadows — hard offset (chunky), not soft blur ---- */
+  /* ---- Shadows, hard offset (chunky), not soft blur ---- */
   --shadow-card: 6px 6px 0 0 var(--color-neutral);
   --shadow-pop: 4px 4px 0 0 var(--color-neutral);
 }

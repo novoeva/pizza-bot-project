@@ -1,5 +1,5 @@
 // Self-contained content for this game only.
-// The customer's actual request is always visible — the player is never
+// The customer's actual request is always visible, the player is never
 // asked to guess it, only to translate it into a specific enough prompt.
 export const customerRequest = 'Medium pepperoni pizza, thin crust, no onions, please!'
 
@@ -11,11 +11,13 @@ export const round1Options = [
   },
   {
     label: '"Give me the usual"',
-    result: 'The bot delivers a snack-sized pizza with a thin smear of ketchup on cardboard. There is no "usual."',
+    result:
+      'The bot delivers a snack-sized pizza with a thin smear of ketchup on cardboard. There is no "usual."',
   },
   {
     label: '"Surprise me!"',
-    result: 'The bot delivers a frosted, pizza-shaped cake with a candle in the middle. Happy... pizza day?',
+    result:
+      'The bot delivers a frosted, pizza-shaped cake with a candle in the middle. Happy... pizza day?',
   },
 ]
 

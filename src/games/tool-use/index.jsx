@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { questions, tools } from './questions.js'
 import terms from '../../content/terms.json'
+import GameIntro from '../../components/GameIntro.jsx'
 
 /**
- * Tool use game — { termId, onComplete } interface.
+ * Tool use game, { termId, onComplete } interface.
  * "Don't guess, check": round 1 answers the same questions blind, with no
- * way to know — deliberately uncomfortable, and the game says so. Round 2
+ * way to know, deliberately uncomfortable, and the game says so. Round 2
  * gives the player real tools to check instead of guessing.
  */
 export default function ToolUseGame({ termId, onComplete }) {
@@ -65,21 +66,14 @@ export default function ToolUseGame({ termId, onComplete }) {
         </p>
         <h2 className="text-2xl">You just learned the term Tool use</h2>
 
-        <div className="rounded-lg border-[3px] border-neutral bg-muted p-3 text-left shadow-pop">
-          <p className="text-[13px] leading-snug text-text">
-            Same questions, wildly different confidence — because round 2 wasn't guessing, it was
-            checking. That's the fix on the bot's side for the exact gap that causes hallucinations:
-            give it a real system to look at instead of asking it to remember.
-          </p>
-        </div>
-
         <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
           <p className="font-label text-[11px] text-text-muted">What it means</p>
           <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
-          <p className="mt-3 text-[15px] leading-snug text-text-muted">
-            <span className="font-semibold text-tertiary">Why you care: </span>
-            {term.whyYouCare}
-          </p>
+        </div>
+
+        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
+          <p className="font-label text-[11px] text-text-muted">Why you care</p>
+          <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
         </div>
 
         <button
@@ -116,21 +110,20 @@ export default function ToolUseGame({ termId, onComplete }) {
 
   return (
     <div className="flex flex-col gap-3">
-      {/* Instruction */}
-      <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-        <div className="flex items-center justify-between">
-          <p className="font-label text-[11px] text-primary">Game · Don't guess, check</p>
+      {/* Standard intro on the opening screen, light header with counter after */}
+      {round === 1 && qIndex === 0 ? (
+        <GameIntro term={term} />
+      ) : (
+        <div className="flex items-center justify-between rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
+          <p className="font-label text-[11px] text-primary">Tool use</p>
           <span className="font-label text-[11px] text-text-muted">
             Round {round} / 2 · Q{qIndex + 1}/{questions.length}
           </span>
         </div>
-        <h1 className="text-2xl leading-tight">Tool use</h1>
-      </div>
+      )}
 
       <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-5 text-center shadow-pop">
-        <p className="text-lg font-extrabold leading-snug">
-          A customer asks: "{current.question}"
-        </p>
+        <p className="text-lg font-extrabold leading-snug">A customer asks: "{current.question}"</p>
       </div>
 
       {round === 1 ? (
@@ -185,7 +178,7 @@ export default function ToolUseGame({ termId, onComplete }) {
           </div>
           {wrongToolTap && (
             <p className="text-center font-label text-[11px] italic text-text-muted">
-              That tool doesn't have this answer — try another.
+              That tool doesn't have this answer, try another.
             </p>
           )}
         </div>

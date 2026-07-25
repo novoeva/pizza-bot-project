@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { complaint, improvisedReplies, playbookSteps } from './content.js'
 import terms from '../../content/terms.json'
+import GameIntro from '../../components/GameIntro.jsx'
 
-// Fixed shuffle so the "build the playbook" step order isn't already the answer.
+// Fixed shuffle so the buttons don't appear in a suggestive top-to-bottom order.
 const shuffledSteps = [playbookSteps[2], playbookSteps[0], playbookSteps[3], playbookSteps[1]]
 
 /**
- * Skill game — { termId, onComplete } interface.
+ * Skill game, { termId, onComplete } interface.
  * "The complaint department": round 1 shows the same complaint getting three
  * wildly different improvised responses. Round 2, the player builds the
  * playbook step by step, then the same complaint gets identical, calm
@@ -21,14 +22,16 @@ export default function SkillGame({ termId, onComplete }) {
   const isLastReply = replyIndex === improvisedReplies.length - 1
 
   function tapStep(id) {
-    const nextExpected = playbookSteps[builtSteps.length]?.id
-    if (id !== nextExpected) return
+    if (builtSteps.includes(id)) return
     const next = [...builtSteps, id]
     setBuiltSteps(next)
     if (next.length === playbookSteps.length) {
       setPhase('round2')
     }
   }
+
+  // Round 2 uses the player's own order: the point is consistency, not a "right" sequence.
+  const builtPlaybook = builtSteps.map((id) => playbookSteps.find((s) => s.id === id))
 
   const instruction = (sub) => (
     <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
@@ -49,21 +52,14 @@ export default function SkillGame({ termId, onComplete }) {
         </p>
         <h2 className="text-2xl">You just learned the term Skill</h2>
 
-        <div className="rounded-lg border-[3px] border-neutral bg-muted p-3 text-left shadow-pop">
-          <p className="text-[13px] leading-snug text-text">
-            Same complaint, same bot — the only thing that changed was whether it had a playbook to
-            follow. Improvising means every answer depends on the model's mood that moment. A
-            skill is what makes it handle the same situation the same, right way, every time.
-          </p>
-        </div>
-
         <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
           <p className="font-label text-[11px] text-text-muted">What it means</p>
           <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
-          <p className="mt-3 text-[15px] leading-snug text-text-muted">
-            <span className="font-semibold text-tertiary">Why you care: </span>
-            {term.whyYouCare}
-          </p>
+        </div>
+
+        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
+          <p className="font-label text-[11px] text-text-muted">Why you care</p>
+          <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
         </div>
 
         <button
@@ -81,11 +77,11 @@ export default function SkillGame({ termId, onComplete }) {
   if (phase === 'round2') {
     return (
       <div className="flex flex-col gap-3">
-        {instruction('Same complaint, three times — now handled by the playbook.')}
+        {instruction('Same complaint, three times, now handled by the playbook.')}
         <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop">
           <p className="mb-2 font-label text-[11px] text-text-muted">Your playbook</p>
           <ol className="flex list-inside list-decimal flex-col gap-0.5 text-sm text-text-muted">
-            {playbookSteps.map((s) => (
+            {builtPlaybook.map((s) => (
               <li key={s.id}>{s.label}</li>
             ))}
           </ol>
@@ -98,9 +94,9 @@ export default function SkillGame({ termId, onComplete }) {
             >
               <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-success">
                 <span className="material-symbols-rounded text-[15px]">sentiment_satisfied</span>
-                Customer {i + 1} — same complaint
+                Customer {i + 1}, same complaint
               </p>
-              <p className="text-sm text-text">{playbookSteps.map((s) => s.scripted).join(' ')}</p>
+              <p className="text-sm text-text">{builtPlaybook.map((s) => s.scripted).join(' ')}</p>
             </div>
           ))}
         </div>
@@ -119,7 +115,7 @@ export default function SkillGame({ termId, onComplete }) {
   if (phase === 'build') {
     return (
       <div className="flex flex-col gap-3">
-        {instruction('Build the playbook — tap the steps in the order they should happen.')}
+        {instruction('Build the playbook, tap the steps in the order you would handle it.')}
         <div className="min-h-[4rem] rounded-md border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop">
           {builtSteps.length === 0 ? (
             <p className="text-center text-sm text-text-muted">Playbook is empty.</p>
@@ -159,7 +155,7 @@ export default function SkillGame({ termId, onComplete }) {
 
   return (
     <div className="flex flex-col gap-3">
-      {instruction('Round 1 — no playbook, the bot improvises.')}
+      <GameIntro term={term} />
       <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-5 text-center shadow-pop">
         <p className="text-lg font-extrabold leading-snug">Complaint: "{complaint}"</p>
       </div>
@@ -170,7 +166,7 @@ export default function SkillGame({ termId, onComplete }) {
             className="rounded-md border-[3px] border-danger bg-danger-bg px-4 py-3 shadow-pop"
           >
             <p className="mb-1 font-label text-[11px] font-bold text-danger">
-              Customer {i + 1} — same complaint
+              Customer {i + 1}, same complaint
             </p>
             <p className="text-sm text-text">{reply}</p>
           </div>

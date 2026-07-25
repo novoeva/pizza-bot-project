@@ -4,7 +4,7 @@ import terms from '../content/terms.json'
  * The half-built robot: the meta-game's progress bar.
  * Chassis (head + torso shells) is always visible; each completed term
  * lights up its part in full colour, missing parts stay as dashed slots.
- * When all 10 are in, the bot powers on — eyes and core glow, pizza appears.
+ * When all 10 are in, the bot powers on, eyes and core glow, pizza appears.
  */
 export default function BotCanvas({ completedTerms = [] }) {
   const done = new Set(completedTerms)
@@ -27,10 +27,18 @@ export default function BotCanvas({ completedTerms = [] }) {
     >
       <ellipse cx="130" cy="352" rx="78" ry="12" className="fill-ground" />
 
-      {/* SKILL — antenna */}
+      {/* SKILL, antenna */}
       {has('skill') ? (
         <g>
-          <line x1="130" y1="46" x2="130" y2="20" className="stroke-neutral" strokeWidth="4" strokeLinecap="round" />
+          <line
+            x1="130"
+            y1="46"
+            x2="130"
+            y2="20"
+            className="stroke-neutral"
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
           <circle cx="130" cy="15" r="8" className="fill-tertiary stroke-text" strokeWidth="2" />
         </g>
       ) : (
@@ -38,16 +46,32 @@ export default function BotCanvas({ completedTerms = [] }) {
       )}
 
       {/* head shell */}
-      <rect x="76" y="42" width="108" height="80" rx="24" className="fill-surface stroke-text" strokeWidth="5" />
+      <rect
+        x="76"
+        y="42"
+        width="108"
+        height="80"
+        rx="24"
+        className="fill-surface stroke-text"
+        strokeWidth="5"
+      />
 
-      {/* CONTEXT WINDOW — head panel / short-term memory chip */}
+      {/* CONTEXT WINDOW, head panel / short-term memory chip */}
       {has('context-window') ? (
-        <rect x="94" y="52" width="72" height="15" rx="7" className="fill-accent stroke-text" strokeWidth="2" />
+        <rect
+          x="94"
+          y="52"
+          width="72"
+          height="15"
+          rx="7"
+          className="fill-accent stroke-text"
+          strokeWidth="2"
+        />
       ) : (
         <rect x="94" y="52" width="72" height="15" rx="7" {...slot} />
       )}
 
-      {/* HALLUCINATION — eyes / reality-check filter */}
+      {/* HALLUCINATION, eyes / reality-check filter */}
       {has('hallucination') ? (
         <g>
           {powered && <circle cx="108" cy="90" r="16" className="fill-glow" />}
@@ -62,7 +86,7 @@ export default function BotCanvas({ completedTerms = [] }) {
         </g>
       )}
 
-      {/* TOKEN — voice box */}
+      {/* TOKEN, voice box */}
       {has('token') ? (
         <g>
           <rect x="102" y="104" width="56" height="12" rx="6" className="fill-text" />
@@ -78,11 +102,27 @@ export default function BotCanvas({ completedTerms = [] }) {
       {/* neck */}
       <rect x="118" y="120" width="24" height="16" rx="4" className="fill-neutral" />
 
-      {/* GUARDRAILS — safety-casing bumpers (behind torso) */}
+      {/* GUARDRAILS, safety-casing bumpers (behind torso) */}
       {has('guardrails') ? (
         <g>
-          <rect x="52" y="140" width="30" height="26" rx="12" className="fill-primary stroke-text" strokeWidth="2" />
-          <rect x="178" y="140" width="30" height="26" rx="12" className="fill-primary stroke-text" strokeWidth="2" />
+          <rect
+            x="52"
+            y="140"
+            width="30"
+            height="26"
+            rx="12"
+            className="fill-primary stroke-text"
+            strokeWidth="2"
+          />
+          <rect
+            x="178"
+            y="140"
+            width="30"
+            height="26"
+            rx="12"
+            className="fill-primary stroke-text"
+            strokeWidth="2"
+          />
         </g>
       ) : (
         <g>
@@ -92,12 +132,28 @@ export default function BotCanvas({ completedTerms = [] }) {
       )}
 
       {/* torso shell */}
-      <rect x="62" y="134" width="136" height="120" rx="30" className="fill-surface stroke-text" strokeWidth="5" />
+      <rect
+        x="62"
+        y="134"
+        width="136"
+        height="120"
+        rx="30"
+        className="fill-surface stroke-text"
+        strokeWidth="5"
+      />
 
-      {/* MCP — universal port pack */}
+      {/* MCP, universal port pack */}
       {has('mcp') ? (
         <g>
-          <rect x="192" y="158" width="26" height="56" rx="10" className="fill-neutral stroke-text" strokeWidth="2" />
+          <rect
+            x="192"
+            y="158"
+            width="26"
+            height="56"
+            rx="10"
+            className="fill-neutral stroke-text"
+            strokeWidth="2"
+          />
           <rect x="198" y="168" width="14" height="6" rx="3" className="fill-accent" />
           <rect x="198" y="180" width="14" height="6" rx="3" className="fill-accent" />
           <rect x="198" y="192" width="14" height="6" rx="3" className="fill-accent" />
@@ -106,7 +162,7 @@ export default function BotCanvas({ completedTerms = [] }) {
         <rect x="192" y="158" width="26" height="56" rx="10" {...slot} />
       )}
 
-      {/* TOOL USE — arms */}
+      {/* TOOL USE, arms */}
       {has('tool-use') ? (
         <g>
           <rect x="34" y="176" width="30" height="14" rx="7" className="fill-neutral" />
@@ -123,7 +179,7 @@ export default function BotCanvas({ completedTerms = [] }) {
         </g>
       )}
 
-      {/* MEMORY — hard-drive core (chest) */}
+      {/* MEMORY, hard-drive core (chest) */}
       {has('memory') ? (
         <g>
           {powered && <circle cx="130" cy="176" r="26" className="fill-glow" />}
@@ -134,18 +190,26 @@ export default function BotCanvas({ completedTerms = [] }) {
         <circle cx="130" cy="176" r="20" {...slot} />
       )}
 
-      {/* PROMPT — instruction dial */}
+      {/* PROMPT, instruction dial */}
       {has('prompt') ? (
         <g>
           <circle cx="96" cy="220" r="13" className="fill-accent stroke-text" strokeWidth="2" />
-          <line x1="96" y1="220" x2="103" y2="213" className="stroke-text" strokeWidth="3" strokeLinecap="round" />
+          <line
+            x1="96"
+            y1="220"
+            x2="103"
+            y2="213"
+            className="stroke-text"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
         </g>
       ) : (
         <circle cx="96" cy="220" r="13" {...slot} />
       )}
       <circle cx="164" cy="220" r="5" className="fill-slot-empty" />
 
-      {/* AGENT — legs / wheelbase */}
+      {/* AGENT, legs / wheelbase */}
       {has('agent') ? (
         <g>
           <rect x="82" y="254" width="96" height="22" rx="11" className="fill-neutral" />
@@ -162,7 +226,7 @@ export default function BotCanvas({ completedTerms = [] }) {
         </g>
       )}
 
-      {/* pizza — only once fully powered on */}
+      {/* pizza, only once fully powered on */}
       {powered && (
         <g>
           <circle cx="226" cy="176" r="22" className="fill-accent stroke-primary" strokeWidth="3" />

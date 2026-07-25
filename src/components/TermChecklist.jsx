@@ -15,7 +15,7 @@ const TERM_ICON = {
   guardrails: 'shield',
 }
 
-/** All 10 terms — doubles as the game menu. Free order, no locks. */
+/** All 10 terms, doubles as the game menu. Free order, no locks. */
 export default function TermChecklist({ completedTerms = [] }) {
   const completed = new Set(completedTerms)
   const sorted = [...terms].sort((a, b) => a.order - b.order)

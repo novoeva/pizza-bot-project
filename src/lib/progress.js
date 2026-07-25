@@ -26,7 +26,7 @@ function save(state) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
   } catch {
-    // localStorage unavailable (private mode, quota) — progress just won't persist
+    // localStorage unavailable (private mode, quota), progress just won't persist
   }
   listeners.forEach((listener) => listener(state))
 }

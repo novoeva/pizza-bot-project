@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { menu, rounds } from './content.js'
 import terms from '../../content/terms.json'
+import GameIntro from '../../components/GameIntro.jsx'
 
 /**
- * Hallucination game — { termId, onComplete } interface.
+ * Hallucination game, { termId, onComplete } interface.
  * "Spot the fake": the bot answers with the exact same confidence whether it
  * knows the answer or invented it (a BOT CONFIDENCE bar pinned at 100% for
  * every claim). The player checks each claim against the real menu and taps
- * Trust it / Made up — teaching that confidence isn't the same as correctness.
+ * Trust it / Made up, teaching that confidence isn't the same as correctness.
  */
 export default function HallucinationGame({ termId, onComplete }) {
   const term = terms.find((t) => t.id === termId)
@@ -54,10 +55,11 @@ export default function HallucinationGame({ termId, onComplete }) {
         <div className="mt-1 rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
           <p className="font-label text-[11px] text-text-muted">What it means</p>
           <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
-          <p className="mt-3 text-[15px] leading-snug text-text-muted">
-            <span className="font-semibold text-tertiary">Why you care: </span>
-            {term.whyYouCare}
-          </p>
+        </div>
+
+        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
+          <p className="font-label text-[11px] text-text-muted">Why you care</p>
+          <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
         </div>
 
         <button
@@ -74,15 +76,7 @@ export default function HallucinationGame({ termId, onComplete }) {
 
   return (
     <div className="flex flex-col gap-2">
-      {/* Instruction */}
-      <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-        <p className="font-label text-[11px] text-primary">Game · Reality-check filter</p>
-        <h1 className="text-2xl leading-tight">Hallucination</h1>
-        <p className="mt-1 text-[13px] leading-snug text-text-muted">
-          The bot sounds equally sure whether it knows the answer or invented it. Check each claim
-          against the real menu and catch the fakes.
-        </p>
-      </div>
+      <GameIntro term={term} />
 
       {/* Reference menu */}
       <div className="overflow-hidden rounded-md border-[3px] border-neutral bg-surface">
@@ -125,7 +119,7 @@ export default function HallucinationGame({ termId, onComplete }) {
         })}
       </div>
 
-      {/* The claim — fixed height so it never resizes */}
+      {/* The claim, fixed height so it never resizes */}
       <div className="flex h-[150px] flex-col overflow-hidden rounded-md border-[3px] border-neutral bg-surface shadow-card">
         <div className="flex items-center justify-between bg-text px-3 py-1.5 font-label text-[10px] text-white">
           <span>Bot says</span>
