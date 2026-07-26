@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { sessionOneLines, resetLines, facts } from './content.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 
 const PRACTICAL_IDS = ['order', 'allergy', 'address']
 
@@ -87,24 +88,22 @@ export default function MemoryGame({ termId, onComplete }) {
             </div>
           ))}
         </div>
-        <button
-          type="button"
-          onClick={() => {
-            if (isLast) {
-              setLineIndex(0)
-              onFinish()
-            } else {
-              setLineIndex((i) => i + 1)
-            }
-          }}
-          className={
-            'press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral py-3 font-label font-bold text-white shadow-pop ' +
-            (isLast ? 'bg-primary' : 'bg-tertiary')
-          }
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          {isLast ? buttonLabel : 'Continue'}
-        </button>
+        <GameActions>
+          <GameActionButton
+            variant={isLast ? 'primary' : 'accent'}
+            icon="arrow_forward"
+            onClick={() => {
+              if (isLast) {
+                setLineIndex(0)
+                onFinish()
+              } else {
+                setLineIndex((i) => i + 1)
+              }
+            }}
+          >
+            {isLast ? buttonLabel : 'Continue'}
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -141,14 +140,11 @@ export default function MemoryGame({ termId, onComplete }) {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={onComplete}
-          className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          Snap it onto your bot
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
+            Snap it onto your bot
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -168,7 +164,7 @@ export default function MemoryGame({ termId, onComplete }) {
     return (
       <div className="flex flex-col gap-3">
         {instruction(
-          'The hard drive is empty. Check whatever the bot should remember, anything you skip is forgotten when the chat ends.',
+          'The hard drive is empty. Tick whatever the bot should remember. Anything you skip is gone the moment the chat ends.',
         )}
         <div className="flex flex-col gap-2">
           {facts.map((fact) => {
@@ -196,15 +192,11 @@ export default function MemoryGame({ termId, onComplete }) {
             ? 'Nothing saved yet'
             : `${selected.size} fact${selected.size === 1 ? '' : 's'} saved to memory`}
         </p>
-        <button
-          type="button"
-          disabled={!done}
-          onClick={() => setPhase('revisit')}
-          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop disabled:opacity-40"
-        >
-          <span className="material-symbols-rounded">save</span>
-          Save to the hard drive
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="save" disabled={!done} onClick={() => setPhase('revisit')}>
+            Save to the hard drive
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -216,8 +208,9 @@ export default function MemoryGame({ termId, onComplete }) {
         <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 shadow-pop">
           <p className="font-label text-[11px] text-primary">The problem</p>
           <p className="mt-1 text-[15px] leading-snug">
-            Every visit, the bot starts from zero. Its working memory is perfect inside a single
-            chat, but nothing survives once that chat ends, so it can't recognize Anna at all.
+            Every visit, the bot starts from zero. Inside one chat its memory is perfect. That is
+            working memory. But nothing survives once the chat ends, so it cannot recognise Anna at
+            all.
           </p>
         </div>
         <div className="rounded-lg border-[3px] border-tertiary bg-surface p-4 shadow-pop">
@@ -227,14 +220,11 @@ export default function MemoryGame({ termId, onComplete }) {
             every visit. That's persistent memory.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => setPhase('install')}
-          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">database</span>
-          Install persistent memory
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="database" onClick={() => setPhase('install')}>
+            Install persistent memory
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -244,7 +234,7 @@ export default function MemoryGame({ termId, onComplete }) {
       resetLines,
       () => setPhase('diagnose'),
       'Why did it forget?',
-      'Same bot, new session, the slate is blank.',
+      'Same bot, new chat, nothing saved.',
     )
   }
 
@@ -254,14 +244,11 @@ export default function MemoryGame({ termId, onComplete }) {
         {instruction('The chat is over.')}
         <div className="flex flex-col items-center justify-center gap-4 rounded-lg border-[3px] border-neutral bg-muted py-16 shadow-card">
           <p className="font-display text-xl text-text-muted">One week later.</p>
-          <button
-            type="button"
-            onClick={() => setPhase('reset')}
-            className="press flex items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-tertiary px-6 py-3 font-label font-bold text-white shadow-pop"
-          >
-            <span className="material-symbols-rounded">arrow_forward</span>
-            Anna comes back
-          </button>
+          <GameActions>
+            <GameActionButton variant="accent" icon="arrow_forward" onClick={() => setPhase('reset')}>
+              Anna comes back
+            </GameActionButton>
+          </GameActions>
         </div>
       </div>
     )
@@ -271,7 +258,7 @@ export default function MemoryGame({ termId, onComplete }) {
     sessionOneLines,
     () => setPhase('timejump'),
     'End the chat',
-    'Session 1, the bot is chatting with Anna.',
+    'Visit 1: the bot is chatting with Anna.',
     true,
   )
 }

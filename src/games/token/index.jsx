@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { hookWord, hookTokens, samplePhrase, predictionRounds } from './content.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 
 const GUESS_OPTIONS = [1, 2, 3, 4]
 
@@ -104,14 +105,15 @@ export default function TokenGame({ termId, onComplete }) {
               </p>
             </div>
 
-            <button
-              type="button"
-              onClick={() => setPhase('predict')}
-              className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-            >
-              <span className="material-symbols-rounded">arrow_forward</span>
-              Next: predict the next token
-            </button>
+            <GameActions>
+              <GameActionButton
+                variant="primary"
+                icon="arrow_forward"
+                onClick={() => setPhase('predict')}
+              >
+                Next: predict the next token
+              </GameActionButton>
+            </GameActions>
           </>
         )}
       </div>
@@ -153,8 +155,9 @@ export default function TokenGame({ termId, onComplete }) {
           </div>
           <h1 className="text-2xl leading-tight">Token</h1>
           <p className="mt-1 text-[13px] leading-snug text-text-muted">
-            An LLM never writes a whole reply at once. It predicts just the next token,
-            statistically, from everything it's seen so far. Then it does it again, and again.
+            The model (an LLM, short for large language model) never writes a whole reply at
+            once. It picks one token, then the next, then the next. Every pick is a guess at what
+            fits best after everything it has seen so far.
           </p>
         </div>
 
@@ -167,7 +170,7 @@ export default function TokenGame({ termId, onComplete }) {
         {!answered ? (
           <div className="flex flex-col gap-2">
             <p className="text-center font-label text-[11px] text-text-muted">
-              You're the model. Which token is most likely to come next?
+              You're the model now. Which token is most likely to come next?
             </p>
             {round.options.map((o) => (
               <button
@@ -238,14 +241,11 @@ export default function TokenGame({ termId, onComplete }) {
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={next}
-              className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-            >
-              <span className="material-symbols-rounded">arrow_forward</span>
-              {isLast ? 'See what this means' : 'Next sentence'}
-            </button>
+            <GameActions>
+              <GameActionButton variant="primary" icon="arrow_forward" onClick={next}>
+                {isLast ? 'See what this means' : 'Next sentence'}
+              </GameActionButton>
+            </GameActions>
           </>
         )}
       </div>
@@ -275,14 +275,11 @@ export default function TokenGame({ termId, onComplete }) {
         <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
       </div>
 
-      <button
-        type="button"
-        onClick={onComplete}
-        className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label font-bold text-white shadow-pop"
-      >
-        <span className="material-symbols-rounded">arrow_forward</span>
-        Snap it onto your bot
-      </button>
+      <GameActions>
+        <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
+          Snap it onto your bot
+        </GameActionButton>
+      </GameActions>
     </div>
   )
 }

@@ -39,6 +39,10 @@
     "guardrails": [
       "Your bot can order pizza. It can also probably take down the internet. Maybe learn about guardrails.",
       "A customer just negotiated a free pizza for life. Your bot said yes. Guardrails would help."
+    ],
+    "temperature": [
+      "Your bot rewrites the allergy disclaimer a little differently every time. Legal is calling. Turn the temperature down.",
+      "Asked for one pizza name, your bot gives the same boring one every time. Nudge the temperature up."
     ]
   },
   "combo": [
@@ -47,6 +51,6 @@
   ],
   "almostDone": [
     "One part missing. So close. Your bot can taste the pizza. Which it also shouldn't be able to do.",
-    "9 out of 10. The bot is basically alive. Suspiciously alive."
+    "One part short. The bot is basically alive. Suspiciously alive."
   ]
 }

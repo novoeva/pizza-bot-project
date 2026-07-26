@@ -1,7 +1,16 @@
 import { useState } from 'react'
-import { customerRequest, round1Options, round2Categories, round3Categories } from './rounds.js'
+import {
+  customerRequest,
+  round1Options,
+  round1Result,
+  round2Options,
+  round3Categories,
+  round3Result,
+  round3Effects,
+} from './rounds.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 
 function CategoryPicker({ category, value, onPick }) {
   return (
@@ -30,44 +39,40 @@ function CategoryPicker({ category, value, onPick }) {
 
 /**
  * Prompt game, { termId, onComplete } interface.
- * "Say what you mean": round 1 offers only vague fragments and the bot
- * obeys literally into an absurd pizza. Rounds 2, 3 unlock specific
- * fragments (size, toppings, constraints) and the order converges.
+ * "You build the bot": the customer stays vague every round; the player writes
+ * the bot's instructions. Round 1's bare instruction lets the bot invent an
+ * order, round 2 adds the rule that turns "invent" into "ask", round 3
+ * assembles the full instructions and the same vague customer is handled well.
  */
 export default function PromptGame({ termId, onComplete }) {
   const [phase, setPhase] = useState('round1')
-  const [round1Result, setRound1Result] = useState(null)
-  const [round2Picks, setRound2Picks] = useState({})
+  const [round2Pick, setRound2Pick] = useState(null)
   const [round3Picks, setRound3Picks] = useState({})
-  const [round3Mismatch, setRound3Mismatch] = useState(false)
 
   const term = terms.find((t) => t.id === termId)
 
-  function pickRound1(option) {
-    setRound1Result(option)
-  }
-
-  function pickRound2(name, value) {
-    setRound2Picks((p) => ({ ...p, [name]: value }))
-  }
-
   function pickRound3(name, value) {
-    setRound3Mismatch(false)
     setRound3Picks((p) => ({ ...p, [name]: value }))
   }
 
-  const round2Complete = round2Categories.every((c) => round2Picks[c.name])
-  const round2Matched = round2Categories.every((c) => round2Picks[c.name] === c.correct)
   const round3Complete = round3Categories.every((c) => round3Picks[c.name])
-  const round3Matched = round3Categories.every((c) => round3Picks[c.name] === c.correct)
 
-  function submitRound3() {
-    if (!round3Matched) {
-      setRound3Mismatch(true)
-      return
-    }
-    setPhase('round3-result')
-  }
+  const customerBanner = (
+    <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-3 text-sm shadow-pop">
+      <span className="font-label text-[11px] text-text-muted">Customer says </span>
+      <span className="font-bold text-text">{customerRequest}</span>
+    </div>
+  )
+
+  const instruction = (round, sub) => (
+    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
+      <p className="font-label text-[11px] text-primary">Game · You build the bot</p>
+      <h1 className="text-2xl leading-tight">Prompt</h1>
+      <p className="mt-1 font-label text-[11px] text-text-muted">
+        Round {round} / 3, {sub}
+      </p>
+    </div>
+  )
 
   if (phase === 'reveal') {
     return (
@@ -90,56 +95,60 @@ export default function PromptGame({ termId, onComplete }) {
           <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
         </div>
 
-        <button
-          type="button"
-          onClick={onComplete}
-          className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          Snap it onto your bot
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
+            Snap it onto your bot
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
 
-  const customerBanner = (
-    <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-3 text-sm shadow-pop">
-      <span className="font-label text-[11px] text-text-muted">Customer wants </span>
-      <span className="font-bold text-text">{customerRequest}</span>
-    </div>
-  )
-
-  const instruction = (round, sub) => (
-    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-      <p className="font-label text-[11px] text-primary">Game · Say what you mean</p>
-      <h1 className="text-2xl leading-tight">Prompt</h1>
-      <p className="mt-1 font-label text-[11px] text-text-muted">
-        Round {round} / 3, {sub}
-      </p>
-    </div>
-  )
-
   if (phase === 'round3-result') {
+    const wrongRows = round3Categories.filter((c) => round3Picks[c.name] !== c.correct)
+    const allRight = wrongRows.length === 0
     return (
       <div className="flex flex-col gap-3">
         {customerBanner}
-        <div className="rounded-lg border-[3px] border-neutral bg-success-bg p-4 text-center shadow-card">
-          <p className="mb-2 font-label text-[11px] font-bold text-success">
-            Round 3, fully specific prompt
-          </p>
-          <p className="text-[15px] leading-snug text-text">
-            A medium pepperoni pizza, thin crust, no onions. Exactly right. The customer is
-            delighted.
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => setPhase('reveal')}
-          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          See what this means
-        </button>
+        {allRight ? (
+          <div className="rounded-lg border-[3px] border-neutral bg-success-bg p-4 text-center shadow-card">
+            <p className="mb-2 font-label text-[11px] font-bold text-success">
+              Round 3, full instructions
+            </p>
+            <p className="text-[15px] leading-snug text-text">{round3Result}</p>
+          </div>
+        ) : (
+          <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 shadow-card">
+            <p className="mb-3 text-center font-label text-[11px] font-bold text-primary">
+              Your bot runs, but a few of these choices will cause problems
+            </p>
+            <div className="flex flex-col gap-3">
+              {wrongRows.map((c) => (
+                <div key={c.name} className="rounded-md border-2 border-neutral bg-muted px-3 py-2 text-left">
+                  <p className="font-label text-[10px] text-text-muted">{c.name}</p>
+                  <p className="mt-0.5 text-[14px] leading-snug text-text">
+                    You picked <span className="font-bold">“{round3Picks[c.name]}”</span>, it{' '}
+                    {round3Effects[round3Picks[c.name]]}.
+                  </p>
+                  <p className="mt-1 text-[14px] leading-snug text-success">
+                    Better: <span className="font-bold">“{c.correct}”</span>, it{' '}
+                    {round3Effects[c.correct]}.
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        <GameActions>
+          {!allRight && (
+            <GameActionButton variant="neutral" icon="tune" onClick={() => setPhase('round3')}>
+              Adjust my bot
+            </GameActionButton>
+          )}
+          <GameActionButton variant="primary" icon="arrow_forward" onClick={() => setPhase('reveal')}>
+            See what this means
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -147,7 +156,7 @@ export default function PromptGame({ termId, onComplete }) {
   if (phase === 'round3') {
     return (
       <div className="flex flex-col gap-3">
-        {instruction(3, 'every fragment is now specific.')}
+        {instruction(3, 'assemble your bot’s full instructions.')}
         {customerBanner}
         <div className="flex flex-col gap-4">
           {round3Categories.map((c) => (
@@ -159,20 +168,16 @@ export default function PromptGame({ termId, onComplete }) {
             />
           ))}
         </div>
-        {round3Mismatch && (
-          <p className="rounded-md border-[3px] border-danger bg-danger-bg px-3 py-2 text-center text-sm font-bold text-danger">
-            Not quite what the customer asked for, check the order above and adjust.
-          </p>
-        )}
-        <button
-          type="button"
-          disabled={!round3Complete}
-          onClick={submitRound3}
-          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop disabled:opacity-40"
-        >
-          <span className="material-symbols-rounded">send</span>
-          Send to kitchen
-        </button>
+        <GameActions>
+          <GameActionButton
+            variant="primary"
+            icon="send"
+            disabled={!round3Complete}
+            onClick={() => setPhase('round3-result')}
+          >
+            Switch this bot on
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -181,27 +186,47 @@ export default function PromptGame({ termId, onComplete }) {
     return (
       <div className="flex flex-col gap-3">
         {customerBanner}
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-center shadow-card">
-          <p className="mb-2 font-label text-[11px] text-text-muted">Round 2 result</p>
-          <p className="text-[15px] leading-snug text-text">
-            {round2Matched
-              ? `A ${round2Picks.Size.toLowerCase()} ${round2Picks.Toppings.toLowerCase()} pizza arrives, right size, right topping!`
-              : `A ${round2Picks.Size.toLowerCase()} ${round2Picks.Toppings.toLowerCase()} pizza arrives, not quite what was ordered.`}{' '}
-            Nobody specified the crust or the onions, so the bot guessed: thick crust, piled high
-            with onions.
-          </p>
-        </div>
-        <p className="text-center font-label text-[11px] text-text-muted">
-          Closer, but anything left vague still gets guessed for you.
-        </p>
-        <button
-          type="button"
-          onClick={() => setPhase('round3')}
-          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
+        <div
+          className={
+            'rounded-lg border-[3px] border-neutral p-4 text-center shadow-card ' +
+            (round2Pick.correct ? 'bg-success-bg' : 'bg-danger-bg')
+          }
         >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          Unlock more specific fragments
-        </button>
+          <p
+            className={
+              'mb-2 font-label text-[11px] font-bold ' +
+              (round2Pick.correct ? 'text-success' : 'text-danger')
+            }
+          >
+            You added: {round2Pick.label}
+          </p>
+          <p className="text-[15px] leading-snug text-text">{round2Pick.result}</p>
+        </div>
+        {round2Pick.correct ? (
+          <>
+            <p className="text-center font-label text-[11px] text-text-muted">
+              One sentence changed the behavior, not the customer.
+            </p>
+            <GameActions>
+              <GameActionButton variant="primary" icon="arrow_forward" onClick={() => setPhase('round3')}>
+                Write the bot’s full instructions
+              </GameActionButton>
+            </GameActions>
+          </>
+        ) : (
+          <GameActions>
+            <GameActionButton
+              variant="primary"
+              icon="refresh"
+              onClick={() => {
+                setRound2Pick(null)
+                setPhase('round2')
+              }}
+            >
+              Try another rule
+            </GameActionButton>
+          </GameActions>
+        )}
       </div>
     )
   }
@@ -209,52 +234,45 @@ export default function PromptGame({ termId, onComplete }) {
   if (phase === 'round2') {
     return (
       <div className="flex flex-col gap-3">
-        {instruction(2, 'size and toppings are now specific.')}
+        {instruction(2, 'your bot invents things. Add one rule to stop it.')}
         {customerBanner}
-        <div className="flex flex-col gap-4">
-          {round2Categories.map((c) => (
-            <CategoryPicker
-              key={c.name}
-              category={c}
-              value={round2Picks[c.name]}
-              onPick={pickRound2}
-            />
+        <div className="flex flex-col gap-2">
+          {round2Options.map((opt) => (
+            <button
+              key={opt.label}
+              type="button"
+              onClick={() => {
+                setRound2Pick(opt)
+                setPhase('round2-result')
+              }}
+              className="press rounded-md border-[3px] border-neutral bg-surface px-3 py-4 text-left font-bold text-text shadow-pop"
+            >
+              {opt.label}
+            </button>
           ))}
         </div>
-        <button
-          type="button"
-          disabled={!round2Complete}
-          onClick={() => setPhase('round2-result')}
-          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop disabled:opacity-40"
-        >
-          <span className="material-symbols-rounded">send</span>
-          Send to kitchen
-        </button>
       </div>
     )
   }
 
-  if (round1Result) {
+  if (phase === 'round1-result') {
     return (
       <div className="flex flex-col gap-3">
         {customerBanner}
         <div className="rounded-lg border-[3px] border-neutral bg-danger-bg p-4 text-center shadow-card">
           <p className="mb-2 font-label text-[11px] font-bold text-danger">
-            You said: {round1Result.label}
+            Your bot's instructions were missing too much
           </p>
-          <p className="text-[15px] leading-snug text-text">{round1Result.result}</p>
+          <p className="text-[15px] leading-snug text-text">{round1Result}</p>
         </div>
         <p className="text-center font-label text-[11px] text-text-muted">
-          The bot did exactly what it was told. That was the problem.
+          You never told it what to do when the order is incomplete, so it decided for you.
         </p>
-        <button
-          type="button"
-          onClick={() => setPhase('round2')}
-          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          Try a more specific prompt
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="arrow_forward" onClick={() => setPhase('round2')}>
+            Add a rule to your bot
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -263,12 +281,15 @@ export default function PromptGame({ termId, onComplete }) {
     <div className="flex flex-col gap-3">
       <GameIntro term={term} />
       {customerBanner}
+      <p className="font-label text-[11px] text-text-muted">
+        Pick the instruction you’ll give your bot:
+      </p>
       <div className="flex flex-col gap-2">
         {round1Options.map((opt) => (
           <button
             key={opt.label}
             type="button"
-            onClick={() => pickRound1(opt)}
+            onClick={() => setPhase('round1-result')}
             className="press rounded-md border-[3px] border-neutral bg-surface px-3 py-4 text-left font-bold text-text shadow-pop"
           >
             {opt.label}

@@ -59,8 +59,8 @@ export default function ProgressScreen() {
           </span>
           <h3 className="mt-2 text-xl">Not finished yet</h3>
           <p className="mt-1 text-sm text-text-muted">
-            Build all {total} parts to switch your bot on and unlock the diploma. No shortcuts, but
-            no locks either. Play them in any order.
+            Build all {total} parts to switch your bot on and get the diploma. Nothing is locked.
+            Play them in any order.
           </p>
         </div>
       ) : (
@@ -120,7 +120,7 @@ export default function ProgressScreen() {
             Share to LinkedIn
           </button>
           <p className="mt-3 text-center font-label text-xs text-text-muted">
-            Let the world know your pizza agent is ready
+            Your pizza agent is ready. Tell people.
           </p>
         </>
       )}

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { menu, rounds } from './content.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 
 /**
  * Hallucination game, { termId, onComplete } interface.
@@ -62,14 +63,11 @@ export default function HallucinationGame({ termId, onComplete }) {
           <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
         </div>
 
-        <button
-          type="button"
-          onClick={onComplete}
-          className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          Snap it onto your bot
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
+            Snap it onto your bot
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -160,13 +158,11 @@ export default function HallucinationGame({ termId, onComplete }) {
       {pick && (
         <>
           <Feedback correct={results[index] === 'correct'} round={round} />
-          <button
-            type="button"
-            onClick={next}
-            className="press flex w-full items-center justify-center rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-          >
-            {isLast ? 'See result' : 'Next question'}
-          </button>
+          <GameActions>
+            <GameActionButton variant="primary" onClick={next}>
+              {isLast ? 'See result' : 'Next question'}
+            </GameActionButton>
+          </GameActions>
         </>
       )}
     </div>

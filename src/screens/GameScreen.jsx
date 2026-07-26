@@ -27,7 +27,13 @@ export default function GameScreen() {
   }
 
   return (
-    <main className="mx-auto max-w-game px-4 pb-[calc(6rem+var(--space-safe-bottom))] pt-5">
+    <main
+      className="mx-auto max-w-game px-4 pt-5"
+      // Clear the fixed bottom stack (action bar + nav), whatever its height,
+      // plus a little breathing room. Falls back to a sane constant on the
+      // first paint before Layout measures it.
+      style={{ paddingBottom: 'calc(var(--bottom-stack-h, 9rem) + 1.5rem)' }}
+    >
       <Suspense fallback={<p className="mt-12 text-center text-text-muted">Loading…</p>}>
         <GameComponent termId={term.id} onComplete={handleComplete} />
       </Suspense>

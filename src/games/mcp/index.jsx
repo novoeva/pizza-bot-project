@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { BOTS, SYSTEMS, PLUGS, STAGES, PREDICT, HUB, NEW_SYSTEM } from './systems.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 
 /**
  * MCP game, { termId, onComplete } interface.
@@ -341,14 +342,11 @@ export default function McpGame({ termId, onComplete }) {
           <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
         </div>
 
-        <button
-          type="button"
-          onClick={onComplete}
-          className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          Snap it onto your bot
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
+            Snap it onto your bot
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -362,9 +360,9 @@ export default function McpGame({ termId, onComplete }) {
           <p className="font-label text-[11px] text-primary">Game · The wiring board</p>
           <h1 className="text-2xl leading-tight">A tool nobody planned for</h1>
           <p className="mt-1 text-[13px] leading-snug text-text">
-            A stock tracking tool was built last month, by a company that has never heard of you. It
-            does not know your bots exist. Your bots were built before it existed. Nobody has ever
-            put these two things in the same room.
+            A stock tracking tool was built last month by a company that has never heard of you.
+            Your bots were built before that tool existed. Nobody has ever put these two things in
+            the same room.
           </p>
           <p className="mt-2 text-[13px] font-bold leading-snug text-text">
             But it uses the same plug. Tap it in.
@@ -420,14 +418,11 @@ export default function McpGame({ termId, onComplete }) {
                     another bot.
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setPhase('reveal')}
-                  className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-                >
-                  <span className="material-symbols-rounded">arrow_forward</span>
-                  See what this means
-                </button>
+                <GameActions>
+                  <GameActionButton variant="primary" icon="arrow_forward" onClick={() => setPhase('reveal')}>
+                    See what this means
+                  </GameActionButton>
+                </GameActions>
               </>
             )}
           </>
@@ -482,14 +477,11 @@ export default function McpGame({ termId, onComplete }) {
                 the plug.
               </p>
             </div>
-            <button
-              type="button"
-              onClick={() => setPhase('proof')}
-              className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-            >
-              <span className="material-symbols-rounded">arrow_forward</span>
-              But here is the real payoff
-            </button>
+            <GameActions>
+              <GameActionButton variant="primary" icon="arrow_forward" onClick={() => setPhase('proof')}>
+                Now the useful part
+              </GameActionButton>
+            </GameActions>
           </>
         ) : (
           <p className="text-center font-label text-[11px] text-text-muted">
@@ -551,14 +543,11 @@ export default function McpGame({ termId, onComplete }) {
         )}
 
         {right && (
-          <button
-            type="button"
-            onClick={() => setPhase('hub')}
-            className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-          >
-            <span className="material-symbols-rounded">arrow_forward</span>
-            There has to be a better way
-          </button>
+          <GameActions>
+            <GameActionButton variant="primary" icon="arrow_forward" onClick={() => setPhase('hub')}>
+              There has to be a better way
+            </GameActionButton>
+          </GameActions>
         )}
       </div>
     )
@@ -632,14 +621,11 @@ export default function McpGame({ termId, onComplete }) {
           <p className="text-center font-label text-[11px] font-bold text-success">
             {BOTS[st.target].name} is wired to all {st.systems.length} systems.
           </p>
-          <button
-            type="button"
-            onClick={nextStage}
-            className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-          >
-            <span className="material-symbols-rounded">arrow_forward</span>
-            {stage === STAGES.length - 1 ? 'Finally, done' : 'Next'}
-          </button>
+          <GameActions>
+            <GameActionButton variant="primary" icon="arrow_forward" onClick={nextStage}>
+              {stage === STAGES.length - 1 ? 'Finally, done' : 'Next'}
+            </GameActionButton>
+          </GameActions>
         </>
       )}
     </div>

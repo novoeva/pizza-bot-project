@@ -16,4 +16,5 @@ export const gameRegistry = {
   memory: lazy(() => import('./memory/index.jsx')),
   mcp: lazy(() => import('./mcp/index.jsx')),
   guardrails: lazy(() => import('./guardrails/index.jsx')),
+  temperature: lazy(() => import('./temperature/index.jsx')),
 }

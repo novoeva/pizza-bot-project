@@ -2,16 +2,17 @@ import { useEffect, useState } from 'react'
 import { order, chatbotReply, actions, systems, fired, validateSequence } from './script.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 
 /**
- * Agent game — { termId, onComplete } interface.
+ * Agent game, { termId, onComplete } interface.
  *
  * "From chat to agent." One idea: a chatbot only talks, an agent acts.
- *   1. Chat — the plain chatbot answers Marco with nice words; the real systems
+ *   1. Chat: the plain chatbot answers Marco with nice words; the real systems
  *      (Payment / Kitchen / Delivery) stay asleep. Nothing happened.
- *   2. Build — the player turns it into an agent by handing it real actions in a
+ *   2. Build: the player turns it into an agent by handing it real actions in a
  *      sensible order (check stock → charge → kitchen → driver).
- *   3. Run — each action fires and lights up its external system. Order matters:
+ *   3. Run: each action fires and lights up its external system. Order matters:
  *      a bad sequence (driver before the kitchen cooked) fails and sends the
  *      player back to fix it. That dependency is why an agent has to act, not
  *      just talk.
@@ -71,14 +72,11 @@ export default function AgentGame({ termId, onComplete }) {
           <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
         </div>
 
-        <button
-          type="button"
-          onClick={onComplete}
-          className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          Snap it onto your bot
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
+            Snap it onto your bot
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -98,16 +96,13 @@ export default function AgentGame({ termId, onComplete }) {
         <SystemsPanel lit={new Set()} />
         <div className="flex items-center gap-2 rounded-md border-[3px] border-danger bg-danger-bg px-3 py-2.5 text-[13px] font-bold leading-snug text-danger shadow-pop">
           <span className="material-symbols-rounded text-[20px]">sentiment_neutral</span>
-          It talked. Nothing actually happened — no pizza is coming.
+          It talked. Nothing actually happened. No pizza is coming.
         </div>
-        <button
-          type="button"
-          onClick={() => setPhase('build')}
-          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">build</span>
-          Turn it into an agent
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="build" onClick={() => setPhase('build')}>
+            Turn it into an agent
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -128,14 +123,11 @@ export default function AgentGame({ termId, onComplete }) {
           An agent acts in the <span className="font-bold text-primary">real world</span>, so the
           order matters. Fix the sequence and run it again.
         </p>
-        <button
-          type="button"
-          onClick={() => setPhase('build')}
-          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_back</span>
-          Fix the order
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="arrow_back" onClick={() => setPhase('build')}>
+            Fix the order
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -176,14 +168,11 @@ export default function AgentGame({ termId, onComplete }) {
           </div>
         )}
         {done && (
-          <button
-            type="button"
-            onClick={() => setPhase('reveal')}
-            className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-          >
-            <span className="material-symbols-rounded">arrow_forward</span>
-            See what it just did
-          </button>
+          <GameActions>
+            <GameActionButton variant="primary" icon="arrow_forward" onClick={() => setPhase('reveal')}>
+              See what it just did
+            </GameActionButton>
+          </GameActions>
         )}
       </div>
     )
@@ -196,7 +185,7 @@ export default function AgentGame({ termId, onComplete }) {
       <OrderCard />
       <p className="px-1 text-center text-[13px] leading-snug text-text">
         A chatbot only talks. An{' '}
-        <span className="font-bold text-primary">agent takes real actions</span> — in the order that
+        <span className="font-bold text-primary">agent takes real actions</span>, in the order that
         makes sense. Tap the actions to build its to-do list.
       </p>
 
@@ -282,18 +271,11 @@ export default function AgentGame({ termId, onComplete }) {
         </button>
       )}
 
-      <button
-        type="button"
-        onClick={runAgent}
-        disabled={!full}
-        className={
-          'press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral py-3 font-label font-bold text-white shadow-pop ' +
-          (full ? 'bg-primary' : 'bg-primary opacity-40')
-        }
-      >
-        <span className="material-symbols-rounded fill">play_arrow</span>
-        Run the agent
-      </button>
+      <GameActions>
+        <GameActionButton variant="primary" icon="play_arrow" iconFill disabled={!full} onClick={runAgent}>
+          Run the agent
+        </GameActionButton>
+      </GameActions>
     </div>
   )
 }
@@ -345,7 +327,7 @@ function SystemsPanel({ lit }) {
                 'text-[10px] font-bold leading-tight ' + (on ? 'text-success' : 'text-slot-empty')
               }
             >
-              {on ? fired[sys.id].result : '— asleep'}
+              {on ? fired[sys.id].result : 'asleep'}
             </span>
           </div>
         )

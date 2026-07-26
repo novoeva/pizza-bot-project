@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { questions, tools } from './questions.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 
 /**
  * Tool use game, { termId, onComplete } interface.
@@ -76,14 +77,11 @@ export default function ToolUseGame({ termId, onComplete }) {
           <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
         </div>
 
-        <button
-          type="button"
-          onClick={onComplete}
-          className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          Snap it onto your bot
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
+            Snap it onto your bot
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -96,14 +94,11 @@ export default function ToolUseGame({ termId, onComplete }) {
             Annoying, right? The bot feels this on every question it can't actually check.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={startRound2}
-          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          Give the bot some tools
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="arrow_forward" onClick={startRound2}>
+            Give the bot some tools
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -132,13 +127,11 @@ export default function ToolUseGame({ termId, onComplete }) {
             <p className="mb-3 font-label text-[11px] text-text-muted">
               There's no way to check. What do you say?
             </p>
-            <button
-              type="button"
-              onClick={() => setGuessed(true)}
-              className="press rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-4 py-3 font-label font-bold text-cheese-dim shadow-pop"
-            >
-              Guess anyway
-            </button>
+            <GameActions>
+              <GameActionButton variant="soft" onClick={() => setGuessed(true)}>
+                Guess anyway
+              </GameActionButton>
+            </GameActions>
           </div>
         ) : (
           <div className="flex flex-col gap-3">
@@ -149,14 +142,11 @@ export default function ToolUseGame({ termId, onComplete }) {
                 that's just a guess
               </p>
             </div>
-            <button
-              type="button"
-              onClick={nextQuestion}
-              className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-tertiary py-3 font-label font-bold text-white shadow-pop"
-            >
-              <span className="material-symbols-rounded">arrow_forward</span>
-              Next question
-            </button>
+            <GameActions>
+              <GameActionButton variant="accent" icon="arrow_forward" onClick={nextQuestion}>
+                Next question
+              </GameActionButton>
+            </GameActions>
           </div>
         )
       ) : !checked ? (
@@ -191,14 +181,11 @@ export default function ToolUseGame({ termId, onComplete }) {
               Correct answer, backed by real data.
             </p>
           </div>
-          <button
-            type="button"
-            onClick={nextQuestion}
-            className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-          >
-            <span className="material-symbols-rounded">arrow_forward</span>
-            Next question
-          </button>
+          <GameActions>
+            <GameActionButton variant="primary" icon="arrow_forward" onClick={nextQuestion}>
+              Next question
+            </GameActionButton>
+          </GameActions>
         </div>
       )}
     </div>

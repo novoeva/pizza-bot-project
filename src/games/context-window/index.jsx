@@ -16,6 +16,7 @@ import {
 } from './messages.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 
 /**
  * Context window game, { termId, onComplete } interface.
@@ -81,14 +82,11 @@ export default function ContextWindowGame({ termId, onComplete }) {
           <p className="mt-2 text-[13px] leading-snug text-text">{honestyClose}</p>
         </div>
 
-        <button
-          type="button"
-          onClick={onComplete}
-          className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          Snap it onto your bot
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
+            Snap it onto your bot
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -106,14 +104,11 @@ export default function ContextWindowGame({ termId, onComplete }) {
             <div className="rounded-md border-[3px] border-neutral bg-accent-soft px-3 py-2 text-sm text-text">
               "{newChatQuestion}"
             </div>
-            <button
-              type="button"
-              onClick={() => setNewChatAsked(true)}
-              className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-tertiary py-3 font-label font-bold text-white shadow-pop"
-            >
-              <span className="material-symbols-rounded">send</span>
-              Send in the new chat
-            </button>
+            <GameActions>
+              <GameActionButton variant="accent" icon="send" onClick={() => setNewChatAsked(true)}>
+                Send in the new chat
+              </GameActionButton>
+            </GameActions>
           </div>
         ) : (
           <>
@@ -134,14 +129,11 @@ export default function ContextWindowGame({ termId, onComplete }) {
               </p>
               <p className="text-[13px] leading-snug text-text">{bridgeToMemory}</p>
             </div>
-            <button
-              type="button"
-              onClick={() => setPhase('reveal')}
-              className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-            >
-              <span className="material-symbols-rounded">arrow_forward</span>
-              See what this means
-            </button>
+            <GameActions>
+              <GameActionButton variant="primary" icon="arrow_forward" onClick={() => setPhase('reveal')}>
+                See what this means
+              </GameActionButton>
+            </GameActions>
           </>
         )}
       </div>
@@ -166,14 +158,11 @@ export default function ContextWindowGame({ termId, onComplete }) {
           <div className="rounded-md border-[3px] border-neutral bg-accent-soft px-3 py-2 text-sm text-text">
             "{nextMessage.text}"
           </div>
-          <button
-            type="button"
-            onClick={() => setSentCount((c) => c + 1)}
-            className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-tertiary py-3 font-label font-bold text-white shadow-pop"
-          >
-            <span className="material-symbols-rounded">send</span>
-            Send to the bot
-          </button>
+          <GameActions>
+            <GameActionButton variant="accent" icon="send" onClick={() => setSentCount((c) => c + 1)}>
+              Send to the bot
+            </GameActionButton>
+          </GameActions>
         </div>
       )}
 
@@ -182,14 +171,11 @@ export default function ContextWindowGame({ termId, onComplete }) {
           <p className="mb-2 font-label text-[11px] text-text-muted">
             The whole order is in. Now check what the bot still sees.
           </p>
-          <button
-            type="button"
-            onClick={() => setRecalled(true)}
-            className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-          >
-            <span className="material-symbols-rounded">quiz</span>
-            Ask: "{recallQuestion}"
-          </button>
+          <GameActions>
+            <GameActionButton variant="primary" icon="quiz" onClick={() => setRecalled(true)}>
+              Ask: "{recallQuestion}"
+            </GameActionButton>
+          </GameActions>
         </div>
       )}
 
@@ -219,14 +205,11 @@ export default function ContextWindowGame({ termId, onComplete }) {
               {criticalInWindow ? recallInWindow : recallDropped}
             </p>
           </div>
-          <button
-            type="button"
-            onClick={() => setPhase('newchat')}
-            className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-          >
-            <span className="material-symbols-rounded">arrow_forward</span>
-            Start a new order
-          </button>
+          <GameActions>
+            <GameActionButton variant="primary" icon="arrow_forward" onClick={() => setPhase('newchat')}>
+              Start a new order
+            </GameActionButton>
+          </GameActions>
         </>
       )}
     </div>
@@ -285,12 +268,7 @@ function ContextPanel({ sent }) {
             {inWindow.map((m) => (
               <div
                 key={m.id}
-                className={
-                  'rounded-md border-2 px-3 py-1.5 text-[13px] ' +
-                  (m.critical
-                    ? 'border-primary bg-danger-bg font-bold text-text'
-                    : 'border-neutral bg-muted text-text-muted')
-                }
+                className="rounded-md border-2 border-neutral bg-muted px-3 py-1.5 text-[13px] text-text-muted"
               >
                 {m.text}
               </div>

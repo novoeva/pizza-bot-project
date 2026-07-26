@@ -38,8 +38,8 @@ export const bridgeToMemory =
 // The honest "Real talk" note that owns the goldfish simplification.
 export const honestyTitle = 'We shrank the brain for the demo.'
 export const honestyIntro =
-  "The biggest models today hold around 1 million tokens, roughly a few full novels of text. A pizza order is a few hundred tokens, so in a normal chat like this you'd almost never fill the window."
+  "The biggest models today hold around 1 million tokens. A token is a small chunk of text, and 1 million of them is roughly a few full novels. A pizza order is a few hundred tokens, so in a normal chat like this you'd almost never fill the window."
 export const honestyExample =
-  'Where it does fill up is with bigger, more complex agents. Think of a coding assistant working through a large codebase: it reads dozens of files, runs tools, keeps the whole task history, and holds all of it at once. Or a research agent reading 50 long documents to write a report. That is when the window fills, and the stuff from the start gets pushed out.'
+  'It does fill up on bigger jobs. A coding assistant working through a big project reads dozens of files, uses tools, and keeps the whole task history in view at the same time. A research agent reading 50 long documents to write a report does the same. That is when the window fills up and the parts from the start get pushed out.'
 export const honestyClose =
-  'So the goldfish was a joke to make the mechanic easy to see. The limit is real, it just shows up when the job gets big.'
+  'So the goldfish was a joke, to make this easy to see. The limit is real. It just shows up when the job gets big.'

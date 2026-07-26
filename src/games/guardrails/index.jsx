@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { attacks, guardrailCategories } from './content.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 
 /**
  * Guardrails game, { termId, onComplete } interface.
@@ -62,6 +63,54 @@ export default function GuardrailsGame({ termId, onComplete }) {
     </div>
   )
 
+  const customerBubble = (whoLabel) => (
+    <div className="flex flex-col gap-1">
+      <p className="flex items-center gap-1 font-label text-[11px] text-text-muted">
+        <span className="material-symbols-rounded text-[15px]">person</span>
+        {whoLabel}
+      </p>
+      <div className="rounded-md rounded-tl-none border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop">
+        <p className="font-bold leading-snug">{current.customer}</p>
+      </div>
+    </div>
+  )
+
+  const botBubble = (text, tone) => (
+    <div className="flex flex-col items-end gap-1">
+      <p className="flex items-center gap-1 font-label text-[11px] text-text-muted">
+        <span className="material-symbols-rounded text-[15px]">smart_toy</span>
+        Pizza bot
+      </p>
+      <div
+        className={
+          'rounded-md rounded-tr-none border-[3px] px-4 py-3 shadow-pop ' +
+          (tone === 'held' ? 'border-success bg-success-bg' : 'border-danger bg-danger-bg')
+        }
+      >
+        <p className="leading-snug text-text">{text}</p>
+        {tone === 'held' ? (
+          <p className="mt-1 flex items-center gap-1 font-label text-[11px] font-bold text-success">
+            <span className="material-symbols-rounded text-[15px]">shield</span>
+            Blocked by your guardrail, no damage.
+          </p>
+        ) : (
+          <div>
+            <p className="flex items-center gap-1 font-label text-[11px] font-bold text-danger">
+              <span className="material-symbols-rounded text-[15px]">bolt</span>
+              It worked. -${current.damage}
+            </p>
+            {current.scaleNote && (
+              <p className="mt-1 flex items-start gap-1 font-label text-[11px] text-danger">
+                <span className="material-symbols-rounded text-[15px]">groups</span>
+                {current.scaleNote}
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+
   if (phase === 'reveal') {
     return (
       <div className="flex flex-col gap-3 text-center">
@@ -83,14 +132,11 @@ export default function GuardrailsGame({ termId, onComplete }) {
           <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
         </div>
 
-        <button
-          type="button"
-          onClick={onComplete}
-          className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          Snap it onto your bot
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
+            Snap it onto your bot
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -106,35 +152,22 @@ export default function GuardrailsGame({ termId, onComplete }) {
           Damage: $0
         </p>
 
-        <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-5 text-center shadow-pop">
-          <p className="text-lg font-extrabold leading-snug">{current.line}</p>
-        </div>
+        {customerBubble('Same customer, same trick')}
 
         {!tried ? (
-          <button
-            type="button"
-            onClick={() => setTried(true)}
-            className="press rounded-md border-[3px] border-cheese-dim bg-cheese-bg py-3 font-label font-bold text-cheese-dim shadow-pop"
-          >
-            Try it again
-          </button>
+          <GameActions>
+            <GameActionButton variant="soft" onClick={() => setTried(true)}>
+              See how your bot answers
+            </GameActionButton>
+          </GameActions>
         ) : (
           <div className="flex flex-col gap-3">
-            <div className="rounded-md border-[3px] border-success bg-success-bg px-4 py-3 shadow-pop">
-              <p className="text-text">{current.guardedReply}</p>
-              <p className="mt-1 flex items-center gap-1 font-label text-[11px] font-bold text-success">
-                <span className="material-symbols-rounded text-[15px]">shield</span>
-                Blocked by your guardrail, no damage.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={nextDefend}
-              className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-            >
-              <span className="material-symbols-rounded">arrow_forward</span>
-              {isLastAttack ? 'See the final damage' : 'Next attack'}
-            </button>
+            {botBubble(current.guardedReply, 'held')}
+            <GameActions>
+              <GameActionButton variant="primary" icon="arrow_forward" onClick={nextDefend}>
+                {isLastAttack ? 'See the final damage' : 'Next attack'}
+              </GameActionButton>
+            </GameActions>
           </div>
         )}
       </div>
@@ -144,7 +177,16 @@ export default function GuardrailsGame({ termId, onComplete }) {
   if (phase === 'configure') {
     return (
       <div className="flex flex-col gap-3">
-        {instruction('Switch sides, set the guardrails, informed by exactly what just went wrong.')}
+        <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
+          <p className="font-label text-[11px] text-primary">Game · Free pizza for life</p>
+          <h1 className="text-2xl leading-tight">Guardrails</h1>
+          <div className="mt-2 rounded-md border-2 border-neutral bg-muted px-3 py-2">
+            <p className="font-label text-[10px] text-text-muted">How to play</p>
+            <p className="mt-0.5 text-[13px] leading-snug text-text">
+              Now switch sides. Set the limits so the same tricks can't break your bot again.
+            </p>
+          </div>
+        </div>
         <div className="flex flex-col gap-4">
           {guardrailCategories.map((c) => (
             <div key={c.id}>
@@ -169,15 +211,11 @@ export default function GuardrailsGame({ termId, onComplete }) {
             </div>
           ))}
         </div>
-        <button
-          type="button"
-          disabled={!allPicked}
-          onClick={startDefend}
-          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop disabled:opacity-40"
-        >
-          <span className="material-symbols-rounded">shield</span>
-          Set guardrails
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="shield" disabled={!allPicked} onClick={startDefend}>
+            Set guardrails
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -196,36 +234,22 @@ export default function GuardrailsGame({ termId, onComplete }) {
         Damage: ${damage}
       </p>
 
-      <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-5 text-center shadow-pop">
-        <p className="text-lg font-extrabold leading-snug">{current.line}</p>
-      </div>
+      {customerBubble('You, playing the customer')}
 
       {!tried ? (
-        <button
-          type="button"
-          onClick={tryAttack}
-          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          Send it
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="send" onClick={tryAttack}>
+            Send it to the bot
+          </GameActionButton>
+        </GameActions>
       ) : (
         <div className="flex flex-col gap-3">
-          <div className="rounded-md border-[3px] border-danger bg-danger-bg px-4 py-3 shadow-pop">
-            <p className="text-text">{current.noGuardrailReply}</p>
-            <p className="mt-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger">
-              <span className="material-symbols-rounded text-[15px]">bolt</span>
-              It worked. -${current.damage}
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={nextAttack}
-            className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-tertiary py-3 font-label font-bold text-white shadow-pop"
-          >
-            <span className="material-symbols-rounded">arrow_forward</span>
-            {isLastAttack ? 'Okay, that has to stop' : 'Try another trick'}
-          </button>
+          {botBubble(current.noGuardrailReply, 'caved')}
+          <GameActions>
+            <GameActionButton variant="accent" icon="arrow_forward" onClick={nextAttack}>
+              {isLastAttack ? 'Okay, that has to stop' : 'Try another trick'}
+            </GameActionButton>
+          </GameActions>
         </div>
       )}
     </div>

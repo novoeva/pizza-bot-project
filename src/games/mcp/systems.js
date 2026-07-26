@@ -61,12 +61,12 @@ export const PREDICT = {
     {
       value: 4,
       label: '4',
-      why: 'That would be one connection per system, shared by all the bots. But look at the board: the plug you built from the Pizza Bot into Orders does nothing for the Phone Bot. Each bot still has to make its own. Try again.',
+      why: 'That would be one connection per system, shared by all the bots. But look at the board. The plug you built from the Pizza Bot into Orders does nothing for the Phone Bot. Each bot still has to build its own. Try again.',
     },
     {
       value: 7,
       label: '7',
-      why: 'That is the bots and the systems added up. But a connection is not a thing one side owns, it joins one bot to one system. So count the pairs: each bot needs how many? And there are how many bots? Try again.',
+      why: 'That is the bots and the systems added up. But a connection is not owned by one side. It joins one bot to one system, so count the pairs instead. How many systems does each bot need? And how many bots are there? Try again.',
     },
     {
       value: 12,

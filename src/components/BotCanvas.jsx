@@ -4,7 +4,7 @@ import terms from '../content/terms.json'
  * The half-built robot: the meta-game's progress bar.
  * Chassis (head + torso shells) is always visible; each completed term
  * lights up its part in full colour, missing parts stay as dashed slots.
- * When all 10 are in, the bot powers on, eyes and core glow, pizza appears.
+ * When every term is in, the bot powers on, eyes and core glow, pizza appears.
  */
 export default function BotCanvas({ completedTerms = [] }) {
   const done = new Set(completedTerms)
@@ -97,6 +97,28 @@ export default function BotCanvas({ completedTerms = [] }) {
         </g>
       ) : (
         <rect x="102" y="104" width="56" height="12" rx="6" {...slot} />
+      )}
+
+      {/* TEMPERATURE, creativity dial on the side of the head */}
+      {has('temperature') ? (
+        <g>
+          {powered && <circle cx="177" cy="74" r="13" className="fill-glow" />}
+          <circle cx="177" cy="74" r="10" className="fill-accent stroke-text" strokeWidth="2" />
+          <line
+            x1="177"
+            y1="74"
+            x2="183"
+            y2="68"
+            className="stroke-text"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          />
+          <circle cx="172" cy="82" r="1.4" className="fill-text" />
+          <circle cx="182" cy="82" r="1.4" className="fill-text" />
+          <circle cx="177" cy="74" r="2" className="fill-text" />
+        </g>
+      ) : (
+        <circle cx="177" cy="74" r="10" {...slot} />
       )}
 
       {/* neck */}

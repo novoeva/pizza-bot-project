@@ -1,4 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom'
+import { GameActionsSlot } from './GameActions.jsx'
 
 /** Sticky top bar. Shows a back arrow inside a game, the pizza mark elsewhere. */
 function TopHeader({ inGame }) {
@@ -49,10 +50,10 @@ function NavItem({ to, active, icon, label }) {
   )
 }
 
-/** Fixed bottom tab bar, Workshop / Progress. */
+/** Bottom tab bar, Workshop / Progress. Lives in the fixed bottom stack. */
 function BottomNav({ active }) {
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-50 mx-auto flex max-w-game items-center justify-around border-t-[3px] border-neutral bg-bg px-3 pt-2 pb-[calc(0.75rem+var(--space-safe-bottom))]">
+    <nav className="mx-auto flex max-w-game items-center justify-around border-t-[3px] border-neutral bg-bg px-3 pt-2 pb-[calc(0.75rem+var(--space-safe-bottom))]">
       <NavItem to="/" active={active === 'workshop'} icon="restaurant" label="Workshop" />
       <NavItem to="/progress" active={active === 'progress'} icon="smart_toy" label="Progress" />
     </nav>
@@ -69,7 +70,14 @@ export default function Layout() {
     <>
       <TopHeader inGame={inGame} />
       <Outlet />
-      <BottomNav active={active} />
+      {/* One fixed bottom stack: the game action bar (when a game fills it)
+          sits directly above the nav, so a game's forward action is always on
+          screen. GameActions measures this stack and publishes its height as
+          --bottom-stack-h, which game screens reserve as bottom padding. */}
+      <div className="fixed inset-x-0 bottom-0 z-50">
+        <GameActionsSlot />
+        <BottomNav active={active} />
+      </div>
     </>
   )
 }

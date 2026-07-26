@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { complaint, improvisedReplies, playbookSteps } from './content.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 
 // Fixed shuffle so the buttons don't appear in a suggestive top-to-bottom order.
 const shuffledSteps = [playbookSteps[2], playbookSteps[0], playbookSteps[3], playbookSteps[1]]
@@ -62,14 +63,11 @@ export default function SkillGame({ termId, onComplete }) {
           <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
         </div>
 
-        <button
-          type="button"
-          onClick={onComplete}
-          className="press mt-2 flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          Snap it onto your bot
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
+            Snap it onto your bot
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -100,14 +98,11 @@ export default function SkillGame({ termId, onComplete }) {
             </div>
           ))}
         </div>
-        <button
-          type="button"
-          onClick={() => setPhase('reveal')}
-          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          See what this means
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="arrow_forward" onClick={() => setPhase('reveal')}>
+            See what this means
+          </GameActionButton>
+        </GameActions>
       </div>
     )
   }
@@ -173,23 +168,17 @@ export default function SkillGame({ termId, onComplete }) {
         ))}
       </div>
       {!isLastReply ? (
-        <button
-          type="button"
-          onClick={() => setReplyIndex((i) => i + 1)}
-          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-tertiary py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          Next customer
-        </button>
+        <GameActions>
+          <GameActionButton variant="accent" icon="arrow_forward" onClick={() => setReplyIndex((i) => i + 1)}>
+            Next customer
+          </GameActionButton>
+        </GameActions>
       ) : (
-        <button
-          type="button"
-          onClick={() => setPhase('build')}
-          className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded">arrow_forward</span>
-          Build a playbook
-        </button>
+        <GameActions>
+          <GameActionButton variant="primary" icon="arrow_forward" onClick={() => setPhase('build')}>
+            Build a playbook
+          </GameActionButton>
+        </GameActions>
       )}
     </div>
   )
