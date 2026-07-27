@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useGameScroll } from '../../lib/useGameScroll.js'
 import { attacks, guardrailCategories } from './content.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
@@ -16,6 +17,8 @@ export default function GuardrailsGame({ termId, onComplete }) {
   const [damage, setDamage] = useState(0)
   const [picks, setPicks] = useState({})
   const [phase, setPhase] = useState('attack') // 'attack' | 'configure' | 'defend' | 'reveal'
+
+  useGameScroll(`${phase}:${attackIndex}`)
 
   const term = terms.find((t) => t.id === termId)
   const current = attacks[attackIndex]

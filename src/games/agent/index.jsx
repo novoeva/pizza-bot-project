@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useGameScroll } from '../../lib/useGameScroll.js'
 import { order, chatbotReply, actions, systems, fired, validateSequence } from './script.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
@@ -23,6 +24,8 @@ export default function AgentGame({ termId, onComplete }) {
   const [seq, setSeq] = useState([]) // ordered action ids
   const [snag, setSnag] = useState(null) // { msg, lit }
   const [runIdx, setRunIdx] = useState(0) // how many actions have fired
+
+  useGameScroll(phase)
 
   const full = seq.length === actions.length
 

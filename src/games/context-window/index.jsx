@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useGameScroll } from '../../lib/useGameScroll.js'
 import {
   order,
   WINDOW_SIZE,
@@ -31,6 +32,8 @@ export default function ContextWindowGame({ termId, onComplete }) {
   const [sentCount, setSentCount] = useState(0)
   const [recalled, setRecalled] = useState(false)
   const [newChatAsked, setNewChatAsked] = useState(false)
+
+  useGameScroll(phase)
 
   const sent = order.slice(0, sentCount)
   const inWindow = sent.slice(-WINDOW_SIZE)

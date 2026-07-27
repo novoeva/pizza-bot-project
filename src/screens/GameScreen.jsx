@@ -1,4 +1,4 @@
-import { Suspense, useCallback } from 'react'
+import { Suspense, useCallback, useLayoutEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { gameRegistry } from '../games/registry.js'
 import { markTermCompleted } from '../lib/progress.js'
@@ -14,6 +14,13 @@ export default function GameScreen() {
     markTermCompleted(termId)
     navigate('/')
   }, [termId, navigate])
+
+  // Baseline: opening or switching games always starts at the top, even if a
+  // game forgets its own useGameScroll. Intra-game page turns are handled by
+  // that hook; this only covers game entry.
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0)
+  }, [termId])
 
   if (!GameComponent || !term) {
     return (

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useGameScroll } from '../../lib/useGameScroll.js'
 import { complaint, improvisedReplies, playbookSteps } from './content.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
@@ -18,6 +19,8 @@ export default function SkillGame({ termId, onComplete }) {
   const [replyIndex, setReplyIndex] = useState(0)
   const [builtSteps, setBuiltSteps] = useState([])
   const [phase, setPhase] = useState('round1') // 'round1' | 'build' | 'round2' | 'reveal'
+
+  useGameScroll(phase, replyIndex)
 
   const term = terms.find((t) => t.id === termId)
   const isLastReply = replyIndex === improvisedReplies.length - 1

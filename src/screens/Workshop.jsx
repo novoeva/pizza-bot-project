@@ -28,14 +28,14 @@ export default function Workshop() {
     : failureLine
 
   return (
-    <main className="mx-auto max-w-game px-4 pb-[calc(6rem+var(--space-safe-bottom))] pt-5">
+    <main className="mx-auto max-w-game px-4 pb-[calc(6rem+var(--space-safe-bottom))] pt-4">
       <p className="text-center font-label text-xs text-text-muted">What is this app?</p>
-      <h1 className="mt-1 text-center text-2xl leading-tight">
+      <h1 className="mt-1 text-center text-xl leading-tight">
         Learn AI terms and build a pizza bot
       </h1>
 
       <div
-        className="relative mt-4 rounded-lg border-[3px] border-neutral bg-muted p-4 pb-6 shadow-card"
+        className="relative mt-3 rounded-lg border-[3px] border-neutral bg-muted p-4 pb-6 shadow-card"
         style={PEGBOARD}
       >
         <BotCanvas completedTerms={completedTerms} />

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useGameScroll } from '../../lib/useGameScroll.js'
 import { sessionOneLines, resetLines, facts } from './content.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
@@ -45,6 +46,8 @@ export default function MemoryGame({ termId, onComplete }) {
   const [phase, setPhase] = useState('session1') // session1 -> timejump -> reset -> diagnose -> install -> revisit -> reveal
   const [lineIndex, setLineIndex] = useState(0)
   const [selected, setSelected] = useState(new Set())
+
+  useGameScroll(phase, lineIndex)
 
   const term = terms.find((t) => t.id === termId)
 

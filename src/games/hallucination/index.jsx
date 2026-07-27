@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useGameScroll } from '../../lib/useGameScroll.js'
 import { menu, rounds } from './content.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
@@ -17,6 +18,8 @@ export default function HallucinationGame({ termId, onComplete }) {
   const [results, setResults] = useState([]) // ('correct' | 'wrong')[]
   const [pick, setPick] = useState(null) // null | 'trust' | 'fake'
   const [done, setDone] = useState(false)
+
+  useGameScroll(`${index}:${done}`)
 
   const round = rounds[index]
   const isLast = index === rounds.length - 1

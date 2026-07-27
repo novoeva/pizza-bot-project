@@ -21,7 +21,7 @@ export default function BotCanvas({ completedTerms = [] }) {
   return (
     <svg
       viewBox="0 0 260 372"
-      className="mx-auto block h-auto w-full max-w-[280px] select-none"
+      className="mx-auto block h-auto w-full min-h-[200px] max-h-[calc(100svh-20rem)] max-w-[280px] select-none"
       role="img"
       aria-label={`Pizza bot, ${done.size} of ${terms.length} parts installed`}
     >

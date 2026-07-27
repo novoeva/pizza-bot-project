@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useGameScroll } from '../../lib/useGameScroll.js'
 import {
   sliderContext,
   candidates,
@@ -34,6 +35,8 @@ export default function TemperatureGame({ termId, onComplete }) {
   const [roundIndex, setRoundIndex] = useState(0)
   const [pick, setPick] = useState(null)
   const [results, setResults] = useState([])
+
+  useGameScroll(`${phase}:${roundIndex}`)
 
   // ---------- Beat 1: slide it ----------
   if (phase === 'play') {

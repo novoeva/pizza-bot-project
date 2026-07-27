@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useGameScroll } from '../../lib/useGameScroll.js'
 import { questions, tools } from './questions.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
@@ -17,6 +18,8 @@ export default function ToolUseGame({ termId, onComplete }) {
   const [wrongToolTap, setWrongToolTap] = useState(false)
   const [checked, setChecked] = useState(false)
   const [phase, setPhase] = useState('playing') // 'playing' | 'transition' | 'reveal'
+
+  useGameScroll(`${phase}:${round}:${qIndex}`)
 
   const term = terms.find((t) => t.id === termId)
   const current = questions[qIndex]

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useGameScroll } from '../../lib/useGameScroll.js'
 import {
   customerRequest,
   round1Options,
@@ -48,6 +49,8 @@ export default function PromptGame({ termId, onComplete }) {
   const [phase, setPhase] = useState('round1')
   const [round2Pick, setRound2Pick] = useState(null)
   const [round3Picks, setRound3Picks] = useState({})
+
+  useGameScroll(phase)
 
   const term = terms.find((t) => t.id === termId)
 

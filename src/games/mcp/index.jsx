@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useGameScroll } from '../../lib/useGameScroll.js'
 import { BOTS, SYSTEMS, PLUGS, STAGES, PREDICT, HUB, NEW_SYSTEM } from './systems.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
@@ -253,6 +254,8 @@ export default function McpGame({ termId, onComplete }) {
   const [hubPlugged, setHubPlugged] = useState([])
   const [stockPlugged, setStockPlugged] = useState(false)
   const [reached, setReached] = useState(0)
+
+  useGameScroll(`${phase}:${stage}`)
 
   // After the new system is plugged in, each bot reaches it one after the
   // other. Nobody wired them to it. They were already compatible.

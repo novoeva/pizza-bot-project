@@ -73,10 +73,17 @@ export default function Layout() {
       {/* One fixed bottom stack: the game action bar (when a game fills it)
           sits directly above the nav, so a game's forward action is always on
           screen. GameActions measures this stack and publishes its height as
-          --bottom-stack-h, which game screens reserve as bottom padding. */}
+          --bottom-stack-h, which game screens reserve as bottom padding.
+          Inside a game we drop the Workshop/Progress nav — you don't switch
+          tabs mid-game, and losing it gives the content the extra screen room.
+          A safe-area spacer keeps the action bar off the home indicator. */}
       <div className="fixed inset-x-0 bottom-0 z-50">
         <GameActionsSlot />
-        <BottomNav active={active} />
+        {inGame ? (
+          <div className="bg-bg" style={{ height: 'var(--space-safe-bottom)' }} />
+        ) : (
+          <BottomNav active={active} />
+        )}
       </div>
     </>
   )
