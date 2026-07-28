@@ -2,6 +2,7 @@ import { Suspense, useCallback, useLayoutEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { gameRegistry } from '../games/registry.js'
 import { markTermCompleted } from '../lib/progress.js'
+import { scrollToTop } from '../lib/useGameScroll.js'
 import terms from '../content/terms.json'
 
 export default function GameScreen() {
@@ -19,7 +20,7 @@ export default function GameScreen() {
   // game forgets its own useGameScroll. Intra-game page turns are handled by
   // that hook; this only covers game entry.
   useLayoutEffect(() => {
-    window.scrollTo(0, 0)
+    scrollToTop()
   }, [termId])
 
   if (!GameComponent || !term) {
