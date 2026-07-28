@@ -7,7 +7,12 @@
 html,
 body,
 #root {
-  height: 100%;
+  /* Standard document flow (no forced height: 100% with overflowing content).
+     The locked-height setup made iOS Safari's programmatic scroll unreliable —
+     resets were ignored or clamped, leaving pages stuck part-way down. Letting
+     the body grow with content makes window scrolling behave normally. The
+     background is filled by App's min-h-screen wrapper. */
+  min-height: 100%;
   /* Disable scroll anchoring: on a page turn we jump to the top ourselves, and
      iOS Safari's anchoring otherwise fights that scroll to "preserve" position,
      leaving you partway down the new page. */

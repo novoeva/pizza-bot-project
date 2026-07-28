@@ -21,11 +21,14 @@ function scrollWindowTo(y) {
  */
 function applyAcrossFrames(fn) {
   fn()
-  const raf1 = requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
     fn()
     requestAnimationFrame(fn)
   })
-  return raf1
+  // Re-assert on the macrotask queue too: iOS Safari can restore or clamp the
+  // scroll after the commit settles, which the animation-frame passes miss.
+  setTimeout(fn, 0)
+  setTimeout(fn, 200)
 }
 
 /** Jump to the very top. Exported for the route-change reset in Layout. */
