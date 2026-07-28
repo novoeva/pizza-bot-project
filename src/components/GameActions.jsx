@@ -1,4 +1,4 @@
-import { Children, createContext, useCallback, useContext, useLayoutEffect, useState } from 'react'
+import { createContext, useCallback, useContext, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 const GameActionsContext = createContext(null)
@@ -78,23 +78,6 @@ export function GameActionButton({
 export default function GameActions({ children }) {
   const ctx = useContext(GameActionsContext)
   const node = ctx?.node ?? null
-
-  // Keep the bottom-padding CSS var in sync with the real stack height (this
-  // bar + the nav) instead of a hand-tuned constant that hides content when the
-  // bar grows. A layout effect (not ResizeObserver, which proved unreliable)
-  // measures once this bar is in the DOM; keyed on button count so it re-runs
-  // when the bar's height can change (e.g. a two-button phase) but not on every
-  // parent re-render (e.g. a slider drag). Cleanup re-measures once the bar
-  // leaves, shrinking the reservation back to the nav.
-  const childCount = Children.count(children)
-  useLayoutEffect(() => {
-    const stack = node?.parentElement
-    if (!stack) return undefined
-    const publish = () =>
-      document.documentElement.style.setProperty('--bottom-stack-h', `${stack.offsetHeight}px`)
-    publish()
-    return publish
-  }, [node, childCount])
 
   if (!ctx) throw new Error('GameActions must be rendered inside GameActionsProvider')
   // ctx.node is legitimately null for the first render, before the slot's ref

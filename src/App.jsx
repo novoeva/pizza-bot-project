@@ -9,7 +9,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <GameActionsProvider>
-        <div className="min-h-screen bg-bg text-text">
+        <div className="h-full bg-bg text-text">
           <Routes>
             <Route element={<Layout />}>
               <Route path="/" element={<Workshop />} />

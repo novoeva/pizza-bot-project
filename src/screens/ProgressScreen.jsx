@@ -25,7 +25,7 @@ export default function ProgressScreen() {
   }
 
   return (
-    <main className="mx-auto max-w-game px-4 pb-[calc(6rem+var(--space-safe-bottom))] pt-6">
+    <main className="mx-auto max-w-game px-4 pb-6 pt-6">
       <p className="text-center font-label text-xs text-text-muted">Your progress</p>
       <p className="mt-1 text-center text-3xl font-extrabold">
         {done} out of {total} completed

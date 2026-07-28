@@ -1,16 +1,22 @@
 import { useLayoutEffect, useRef } from 'react'
 
 /**
- * Move the window to `y`, hitting every element iOS Safari might treat as the
- * scroller. `window.scrollTo` alone is unreliable there during a React commit
- * (see useGameScroll), so we also set scrollTop directly, which always applies
- * instantly regardless of CSS scroll-behavior.
+ * The app's scroll container (the middle of the Layout shell). Everything
+ * scrolls inside this element, not the window — resetting an element's
+ * scrollTop is reliable on iOS Safari, unlike scrolling the whole page. Falls
+ * back to the document scroller if the shell isn't mounted yet.
  */
-function scrollWindowTo(y) {
-  window.scrollTo(0, y)
-  const el = document.scrollingElement || document.documentElement
-  if (el) el.scrollTop = y
-  if (document.body) document.body.scrollTop = y
+function getScroller() {
+  return (
+    document.getElementById('app-scroll') || document.scrollingElement || document.documentElement
+  )
+}
+
+/** Set the scroller's position. `y` is a pixel offset, or 'bottom'. */
+function scrollScrollerTo(y) {
+  const el = getScroller()
+  if (!el) return
+  el.scrollTop = y === 'bottom' ? el.scrollHeight : y
 }
 
 /**
@@ -33,7 +39,7 @@ function applyAcrossFrames(fn) {
 
 /** Jump to the very top. Exported for the route-change reset in Layout. */
 export function scrollToTop() {
-  applyAcrossFrames(() => scrollWindowTo(0))
+  applyAcrossFrames(() => scrollScrollerTo(0))
 }
 
 /**
@@ -68,10 +74,10 @@ export function useGameScroll(page, within) {
 
     let apply
     if (page !== prevPage) {
-      apply = () => scrollWindowTo(0)
+      apply = () => scrollScrollerTo(0)
     } else if (within !== prevWithin) {
       // Same page, new content appended below — reveal it.
-      apply = () => scrollWindowTo(document.documentElement.scrollHeight)
+      apply = () => scrollScrollerTo('bottom')
     } else {
       return undefined
     }

@@ -7,16 +7,13 @@
 html,
 body,
 #root {
-  /* Standard document flow (no forced height: 100% with overflowing content).
-     The locked-height setup made iOS Safari's programmatic scroll unreliable —
-     resets were ignored or clamped, leaving pages stuck part-way down. Letting
-     the body grow with content makes window scrolling behave normally. The
-     background is filled by App's min-h-screen wrapper. */
-  min-height: 100%;
-  /* Disable scroll anchoring: on a page turn we jump to the top ourselves, and
-     iOS Safari's anchoring otherwise fights that scroll to "preserve" position,
-     leaving you partway down the new page. */
-  overflow-anchor: none;
+  /* Lock the app shell to the visible viewport; the page itself never scrolls.
+     All scrolling happens inside #app-scroll (see Layout). Resetting an inner
+     element's scrollTop is reliable on iOS Safari, unlike scrolling the whole
+     window — which was the root of the "stuck scrolled down" bug. dvh keeps the
+     shell sized to the *visible* viewport as Safari's toolbars show/hide. */
+  height: 100%;
+  height: 100dvh;
 }
 
 body {
@@ -24,7 +21,8 @@ body {
   color: var(--color-text);
   font-family: var(--font-body);
   -webkit-tap-highlight-color: transparent;
-  overscroll-behavior-y: contain;
+  /* The window doesn't scroll; the inner container does. */
+  overflow: hidden;
 }
 
 h1,

@@ -3,10 +3,10 @@ import { Link, Outlet, useLocation } from 'react-router-dom'
 import { GameActionsSlot } from './GameActions.jsx'
 import { scrollToTop } from '../lib/useGameScroll.js'
 
-/** Sticky top bar. Shows a back arrow inside a game, the pizza mark elsewhere. */
+/** Top bar. Shows a back arrow inside a game, the pizza mark elsewhere. */
 function TopHeader({ inGame }) {
   return (
-    <header className="sticky top-0 z-50 border-b-[3px] border-neutral bg-bg">
+    <header className="shrink-0 border-b-[3px] border-neutral bg-bg">
       <div className="mx-auto flex max-w-game items-center justify-between px-3 py-2">
         <div className="w-10">
           {inGame ? (
@@ -75,18 +75,22 @@ export default function Layout() {
     scrollToTop()
   }, [pathname])
 
+  // App shell: a fixed-height column where only the middle (#app-scroll)
+  // scrolls. The header and the bottom stack are flex-none, so the routed
+  // screen can never hide behind them and there's no fixed-position overlay to
+  // reserve padding for. Scrolling an inner element (not the window) is what
+  // makes the scroll reset reliable on iOS Safari.
   return (
-    <>
+    <div className="flex h-full flex-col">
       <TopHeader inGame={inGame} />
-      <Outlet />
-      {/* One fixed bottom stack: the game action bar (when a game fills it)
-          sits directly above the nav, so a game's forward action is always on
-          screen. GameActions measures this stack and publishes its height as
-          --bottom-stack-h, which game screens reserve as bottom padding.
-          Inside a game we drop the Workshop/Progress nav — you don't switch
-          tabs mid-game, and losing it gives the content the extra screen room.
-          A safe-area spacer keeps the action bar off the home indicator. */}
-      <div className="fixed inset-x-0 bottom-0 z-50">
+      <div id="app-scroll" className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain">
+        <Outlet />
+      </div>
+      {/* Bottom stack: the game action bar (when a game fills it) sits directly
+          above the nav. Inside a game we drop the Workshop/Progress nav — you
+          don't switch tabs mid-game — and a safe-area spacer keeps the action
+          bar off the home indicator. */}
+      <div className="shrink-0">
         <GameActionsSlot />
         {inGame ? (
           <div className="bg-bg" style={{ height: 'var(--space-safe-bottom)' }} />
@@ -94,6 +98,6 @@ export default function Layout() {
           <BottomNav active={active} />
         )}
       </div>
-    </>
+    </div>
   )
 }
