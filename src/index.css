@@ -63,3 +63,20 @@ h3,
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 0 0 var(--color-neutral) !important;
 }
+
+/* Desktop only (hover-capable pointers): a small lift on hover so cards and
+   buttons feel interactive with a mouse. Touch devices never trigger this, so
+   the mobile feel is untouched. */
+@media (hover: hover) and (pointer: fine) {
+  .press {
+    transition:
+      transform 120ms ease,
+      box-shadow 120ms ease;
+  }
+  .press:hover {
+    transform: translate(-1px, -1px);
+  }
+  .press:active {
+    transition: none;
+  }
+}

@@ -84,7 +84,7 @@ export default function GameActions({ children }) {
   // has attached; render nothing until it exists, then portal in.
   if (!node) return null
   return createPortal(
-    <div className="mx-auto max-w-game border-t-[3px] border-neutral bg-bg">
+    <div className="mx-auto max-w-game border-t-[3px] border-neutral bg-bg lg:max-w-[34rem]">
       <div className="flex flex-col gap-2 px-4 py-3">{children}</div>
     </div>,
     node,

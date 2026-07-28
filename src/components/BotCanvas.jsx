@@ -6,7 +6,7 @@ import terms from '../content/terms.json'
  * lights up its part in full colour, missing parts stay as dashed slots.
  * When every term is in, the bot powers on, eyes and core glow, pizza appears.
  */
-export default function BotCanvas({ completedTerms = [] }) {
+export default function BotCanvas({ completedTerms = [], className = '' }) {
   const done = new Set(completedTerms)
   const has = (id) => done.has(id)
   const powered = done.size >= terms.length
@@ -21,7 +21,10 @@ export default function BotCanvas({ completedTerms = [] }) {
   return (
     <svg
       viewBox="0 0 260 372"
-      className="mx-auto block h-auto w-full min-h-[200px] max-h-[calc(100svh-20rem)] max-w-[280px] select-none"
+      className={
+        'mx-auto block h-auto w-full min-h-[200px] max-h-[calc(100svh-20rem)] max-w-[280px] select-none ' +
+        className
+      }
       role="img"
       aria-label={`Pizza bot, ${done.size} of ${terms.length} parts installed`}
     >

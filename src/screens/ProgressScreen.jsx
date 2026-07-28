@@ -25,35 +25,41 @@ export default function ProgressScreen() {
   }
 
   return (
-    <main className="mx-auto max-w-game px-4 pb-6 pt-6">
+    <main className="mx-auto max-w-game px-4 pb-6 pt-6 lg:max-w-[72rem] lg:px-8 lg:pt-10">
       <p className="text-center font-label text-xs text-text-muted">Your progress</p>
-      <p className="mt-1 text-center text-3xl font-extrabold">
+      <p className="mt-1 text-center text-3xl font-extrabold lg:text-4xl">
         {done} out of {total} completed
       </p>
-      <div className="mt-3 h-4 rounded-full border-[3px] border-neutral bg-muted p-0.5">
+      <div className="mx-auto mt-3 h-4 rounded-full border-[3px] border-neutral bg-muted p-0.5 lg:max-w-xl">
         <div
           className="h-full rounded-full bg-primary transition-all"
           style={{ width: `${(done / total) * 100}%` }}
         />
       </div>
 
-      {/* Mascot */}
-      <div className="relative mx-auto mt-6 w-56 max-w-[70%]">
-        <span
-          className={
-            'absolute -right-2 -top-2 z-10 rotate-12 rounded-md border-[3px] border-neutral px-3 py-1 font-label text-sm shadow-pop ' +
-            (powered ? 'bg-success text-white' : 'bg-muted text-text-muted')
-          }
-        >
-          {powered ? 'COMPLETE!' : `${done}/${total}`}
-        </span>
-        <div className={powered ? '' : 'opacity-60 grayscale'}>
-          <BotCanvas completedTerms={completedTerms} />
+      {/* Below `lg`: mascot then status/certificate, stacked (mobile). At `lg`+:
+          mascot sits in a sticky left column, the status card / certificate in
+          the right column. */}
+      <div className="lg:mt-8 lg:grid lg:grid-cols-[1fr_1.15fr] lg:items-start lg:gap-x-12">
+        {/* Mascot */}
+        <div className="relative mx-auto mt-6 w-56 max-w-[70%] lg:mt-0 lg:w-full lg:max-w-xs lg:self-start lg:justify-self-center lg:sticky lg:top-10">
+          <span
+            className={
+              'absolute -right-2 -top-2 z-10 rotate-12 rounded-md border-[3px] border-neutral px-3 py-1 font-label text-sm shadow-pop ' +
+              (powered ? 'bg-success text-white' : 'bg-muted text-text-muted')
+            }
+          >
+            {powered ? 'COMPLETE!' : `${done}/${total}`}
+          </span>
+          <div className={powered ? '' : 'opacity-60 grayscale'}>
+            <BotCanvas completedTerms={completedTerms} />
+          </div>
         </div>
-      </div>
 
+        {/* Right column: status card while unfinished, certificate + share once done. */}
+        <div>
       {!powered ? (
-        <div className="mt-6 rounded-lg border-[3px] border-neutral bg-muted p-6 text-center shadow-pop">
+        <div className="mt-6 rounded-lg border-[3px] border-neutral bg-muted p-6 text-center shadow-pop lg:mt-0">
           <span className="material-symbols-rounded fill text-3xl text-text-muted">
             hourglass_top
           </span>
@@ -124,6 +130,8 @@ export default function ProgressScreen() {
           </p>
         </>
       )}
+        </div>
+      </div>
     </main>
   )
 }
