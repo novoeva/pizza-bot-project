@@ -1,5 +1,7 @@
+import { useLayoutEffect } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { GameActionsSlot } from './GameActions.jsx'
+import { scrollToTop } from '../lib/useGameScroll.js'
 
 /** Sticky top bar. Shows a back arrow inside a game, the pizza mark elsewhere. */
 function TopHeader({ inGame }) {
@@ -65,6 +67,13 @@ export default function Layout() {
   const { pathname } = useLocation()
   const inGame = pathname.startsWith('/game/')
   const active = pathname.startsWith('/progress') ? 'progress' : 'workshop'
+
+  // Every route change (open a game, switch games, back to the workshop) starts
+  // at the top. In-game page turns aren't route changes and are handled by each
+  // game's useGameScroll.
+  useLayoutEffect(() => {
+    scrollToTop()
+  }, [pathname])
 
   return (
     <>

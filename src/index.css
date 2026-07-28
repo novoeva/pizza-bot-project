@@ -8,6 +8,10 @@ html,
 body,
 #root {
   height: 100%;
+  /* Disable scroll anchoring: on a page turn we jump to the top ourselves, and
+     iOS Safari's anchoring otherwise fights that scroll to "preserve" position,
+     leaving you partway down the new page. */
+  overflow-anchor: none;
 }
 
 body {

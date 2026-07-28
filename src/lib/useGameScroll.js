@@ -13,12 +13,24 @@ function scrollWindowTo(y) {
   if (document.body) document.body.scrollTop = y
 }
 
-/** Jump to the very top. Exported for GameScreen's on-entry baseline. */
+/**
+ * Re-apply `fn` now, next frame, and the frame after. iOS Safari can ignore a
+ * scroll issued while the page height is still settling (and its scroll
+ * anchoring can nudge it back), so one synchronous call isn't enough — the
+ * follow-up frames land it once layout has settled.
+ */
+function applyAcrossFrames(fn) {
+  fn()
+  const raf1 = requestAnimationFrame(() => {
+    fn()
+    requestAnimationFrame(fn)
+  })
+  return raf1
+}
+
+/** Jump to the very top. Exported for the route-change reset in Layout. */
 export function scrollToTop() {
-  scrollWindowTo(0)
-  // iOS Safari can ignore a scroll issued mid-commit when the page height is
-  // changing in the same frame; re-apply once layout has settled.
-  requestAnimationFrame(() => scrollWindowTo(0))
+  applyAcrossFrames(() => scrollWindowTo(0))
 }
 
 /**
@@ -61,8 +73,7 @@ export function useGameScroll(page, within) {
       return undefined
     }
 
-    apply()
-    const raf = requestAnimationFrame(apply)
-    return () => cancelAnimationFrame(raf)
+    applyAcrossFrames(apply)
+    return undefined
   }, [page, within])
 }
