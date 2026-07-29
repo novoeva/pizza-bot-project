@@ -28,7 +28,7 @@ export default function Workshop() {
     : failureLine
 
   return (
-    <main className="mx-auto max-w-game px-4 pb-6 pt-4 lg:max-w-[72rem] lg:px-8 lg:pt-8">
+    <main className="mx-auto max-w-game px-4 pb-6 pt-4 lg:max-w-desktop lg:px-8 lg:pt-8">
       <p className="text-center font-label text-xs text-text-muted">What is this app?</p>
       <h1 className="mt-1 text-center text-xl leading-tight lg:text-3xl">
         Learn AI terms and build a pizza bot
@@ -48,11 +48,12 @@ export default function Workshop() {
           >
             <BotCanvas
               completedTerms={completedTerms}
-              // On desktop, cap the board's height so the board + status readout
-              // fit the visible viewport together — the status never gets pushed
-              // below the fold on shorter screens. Reserves ~30rem for the
-              // header, title, status and nav; no effect on tall displays.
-              className="lg:max-h-[calc(100dvh-30rem)]"
+              // On desktop the board scales down with the viewport so the status
+              // readout below it stays on screen. lg:min-h-0 drops the mobile
+              // 200px floor so on very short screens (or when a long failure line
+              // makes the status taller) the board keeps shrinking cleanly rather
+              // than overflowing and pushing the status below the fold.
+              className="lg:max-h-[calc(100dvh-30rem)] lg:min-h-0"
             />
             <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full border-[3px] border-neutral bg-surface px-4 py-1.5 font-label text-xs">
               {done} / {total} parts built

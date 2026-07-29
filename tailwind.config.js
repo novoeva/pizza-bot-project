@@ -58,7 +58,14 @@ export default {
         pop: 'var(--shadow-pop)',
       },
       maxWidth: {
+        // Mobile column width (single source for every screen's narrow layout).
         game: '28rem',
+        // Desktop shell width: the split-screen Workshop/Progress and the app
+        // chrome (header, bottom nav) all share this at `lg`+.
+        desktop: '72rem',
+        // Desktop reading column for game screens — comfortable, never so wide
+        // that a game's narrow-column design stretches.
+        read: '34rem',
       },
     },
   },

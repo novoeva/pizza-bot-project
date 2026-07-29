@@ -7,7 +7,7 @@ import { scrollToTop } from '../lib/useGameScroll.js'
 function TopHeader({ inGame }) {
   return (
     <header className="shrink-0 border-b-[3px] border-neutral bg-bg">
-      <div className="mx-auto flex max-w-game items-center justify-between px-3 py-2 lg:max-w-[72rem] lg:px-8 lg:py-3">
+      <div className="mx-auto flex max-w-game items-center justify-between px-3 py-2 lg:max-w-desktop lg:px-8 lg:py-3">
         <div className="w-10">
           {inGame ? (
             <Link to="/" aria-label="Back to workshop" className="press inline-flex rounded-md p-1">
@@ -55,7 +55,7 @@ function NavItem({ to, active, icon, label }) {
 /** Bottom tab bar, Workshop / Progress. Lives in the fixed bottom stack. */
 function BottomNav({ active }) {
   return (
-    <nav className="mx-auto flex max-w-game items-center justify-around border-t-[3px] border-neutral bg-bg px-3 pt-2 pb-[calc(0.75rem+var(--space-safe-bottom))] lg:max-w-[72rem] lg:justify-center lg:gap-4 lg:px-8">
+    <nav className="mx-auto flex max-w-game items-center justify-around border-t-[3px] border-neutral bg-bg px-3 pt-2 pb-[calc(0.75rem+var(--space-safe-bottom))] lg:max-w-desktop lg:justify-center lg:gap-4 lg:px-8">
       <NavItem to="/" active={active === 'workshop'} icon="restaurant" label="Workshop" />
       <NavItem to="/progress" active={active === 'progress'} icon="smart_toy" label="Progress" />
     </nav>

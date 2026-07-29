@@ -27,7 +27,7 @@ export default function GameScreen() {
   }
 
   return (
-    <main className="mx-auto max-w-game px-4 pb-6 pt-5 lg:max-w-[34rem] lg:pt-10">
+    <main className="mx-auto max-w-game px-4 pb-6 pt-5 lg:max-w-read lg:pt-10">
       <Suspense fallback={<p className="mt-12 text-center text-text-muted">Loading…</p>}>
         <GameComponent termId={term.id} onComplete={handleComplete} />
       </Suspense>
