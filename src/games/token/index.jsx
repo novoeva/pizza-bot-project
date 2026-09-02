@@ -155,7 +155,7 @@ export default function TokenGame({ termId, onComplete }) {
 
     return (
       <div className="flex flex-col gap-3">
-        <ProgressBar part={2} parts={2} step={roundIndex + 1} steps={predictionRounds.length} stepUnit="Sentence" />
+        <ProgressBar part={2} parts={2} step={roundIndex + 1} steps={predictionRounds.length} />
         <PhaseCard title="Read your bot's mind" heading="Token">
           Your bot (an LLM, short for large language model) never writes a whole reply at once.
           It picks one token, then the next, then the next. Every pick is a guess at what fits

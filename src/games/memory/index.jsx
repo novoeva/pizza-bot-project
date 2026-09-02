@@ -78,7 +78,7 @@ export default function MemoryGame({ termId, onComplete }) {
     const isLast = lineIndex >= lines.length - 1
     return (
       <div className="flex flex-col gap-3">
-        <ProgressBar part={part} parts={4} step={lineIndex + 1} steps={lines.length} stepUnit="Message" />
+        <ProgressBar part={part} parts={4} step={lineIndex + 1} steps={lines.length} />
         {intro ? <GameIntro term={term} /> : instruction(header)}
         {/* Standard sides: the customer (Anna) is received, on the left; your
             bot is on the right, like every other game. */}
@@ -166,7 +166,7 @@ export default function MemoryGame({ termId, onComplete }) {
     const done = selected.size > 0
     return (
       <div className="flex flex-col gap-3">
-        <ProgressBar part={3} parts={4} step={selected.size} steps={facts.length} stepUnit="Fact" />
+        <ProgressBar part={3} parts={4} step={selected.size} steps={facts.length} />
         {instruction(
           'The hard drive is empty. Tick whatever the bot should remember. Anything you skip is gone the moment the chat ends.',
         )}

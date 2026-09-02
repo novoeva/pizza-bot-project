@@ -66,8 +66,8 @@ export default function GuardrailsGame({ termId, onComplete }) {
   // you are on inside it.
   const progress =
     phase === 'configure'
-      ? { part: 2, parts: 2, step: Object.keys(picks).length, steps: guardrailCategories.length, stepUnit: 'Limit' }
-      : { part: phase === 'defend' ? 2 : 1, parts: 2, step: attackIndex + 1, steps: attacks.length, stepUnit: 'Customer' }
+      ? { part: 2, parts: 2, step: Object.keys(picks).length, steps: guardrailCategories.length }
+      : { part: phase === 'defend' ? 2 : 1, parts: 2, step: attackIndex + 1, steps: attacks.length }
 
   // Left column: constant orientation (what guardrails are + Your role).
   const stage = (main) => (

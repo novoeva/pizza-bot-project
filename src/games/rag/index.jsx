@@ -73,8 +73,8 @@ export default function RagGame({ termId, onComplete }) {
   // Progress: the customer (round), and while picking, the pages handed over.
   const progress =
     phase === 'pick'
-      ? { part: round.n, parts: rounds.length, partUnit: 'Customer', step: picked.length, steps: MAX_PAGES, stepUnit: 'Page' }
-      : { part: round.n, parts: rounds.length, partUnit: 'Customer' }
+      ? { part: round.n, parts: rounds.length, step: picked.length, steps: MAX_PAGES }
+      : { part: round.n, parts: rounds.length }
 
   // Left column: constant orientation (what RAG is + Your role).
   const stage = (context, main) => <GameStage context={context} main={main} progress={progress} />

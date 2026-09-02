@@ -136,7 +136,7 @@ export default function ContextWindowGame({ termId, onComplete }) {
   // ---------- Beat 1: fill the window ----------
   return (
     <div className="flex flex-col gap-3">
-      <ProgressBar part={1} parts={2} step={sentCount} steps={order.length} stepUnit="Message" />
+      <ProgressBar part={1} parts={2} step={sentCount} steps={order.length} />
       <GameIntro term={term} />
 
       <ContextPanel sent={sent} pinned={pinned} />

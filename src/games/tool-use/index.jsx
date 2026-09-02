@@ -63,10 +63,8 @@ export default function ToolUseGame({ termId, onComplete }) {
   const progress = {
     part: round,
     parts: 2,
-    partUnit: 'Round',
     step: phase === 'transition' ? questions.length : qIndex + 1,
     steps: questions.length,
-    stepUnit: 'Question',
   }
 
   // Left column: constant orientation (what tool use is + Your role).

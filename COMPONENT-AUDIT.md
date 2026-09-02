@@ -141,7 +141,7 @@ Core five first (they close the three FRs), then supporting primitives. All in `
 
 ### Supporting
 
-**6. `PhaseCard`** — `title`, `meta`, `heading`, children. Replaces G1. No progress in it (R6): progress is the `ProgressBar` strip at the top of the screen, passed to `GameStage` as `progress={{ part, parts, partUnit, step, steps, stepUnit }}` (single-column games render `<ProgressBar>` first). `meta` is a small text for counts that are not progress.
+**6. `PhaseCard`** — `title`, `meta`, `heading`, children. Replaces G1. No progress in it (R6): progress is the `ProgressBar` strip at the top of the screen, passed to `GameStage` as `progress={{ part, parts, step, steps }}` (single-column games render `<ProgressBar>` first). `meta` is a small text for counts that are not progress.
 
 **7. `Panel`** — `header="none" | "label" | "dark"`, `title`, `icon`, `meta`, children. Replaces G11, G12 wrappers (menu, claim, context window, dial, ranking, bot card). Games keep their inner content.
 
@@ -187,7 +187,7 @@ Reviewed visually in `design-system/gallery.html` on 2026-09-02.
 | — | Chat sides | Proposed rule: received = left, your side (bot or you) = right; Memory flips. Not yet reviewed. |
 | — | Bot face | Proposed: navy round `smart_toy` avatar in bubbles (matches R2 navy); the SVG robot stays the workshop mascot. Not yet reviewed. |
 | R4 | After Phase 1 review | **Applied:** bubble = only the reply, verdict in a Callout under it; context-window rows are small chat bubbles; dark panel header retired; result screens show the tapped option. (Pizza-slice progress tried, replaced in R5.) |
-| R6 | After Phase 1 review, round 3 | **Applied:** progress is a **two-level strip at the very top of every game screen** (`ProgressBar` via `GameStage progress`, or rendered first by the single-column games): "Part 1 / 2" for the parts of the game and "Customer 2 / 4" for the steps inside the current part, from the first screen on. `PhaseCard` no longer carries progress (only an optional `meta` text). |
+| R6 | After Phase 1 review, rounds 3–4 | **Applied:** progress is a strip at the very top of every game screen (`ProgressBar` via `GameStage progress`, or rendered first by the single-column games): **one line labelled "Progress", one segment per part of the game**; finished parts solid, the current part fills up with its steps, no numbers. `PhaseCard` no longer carries progress (only an optional `meta` text). |
 | R5 | After Phase 1 review, round 2 | **Applied:** bubbles are **never tinted** (verdict lives only in the Callout); progress is a labelled segmented **"Progress" bar** at the top of the PhaseCard (`ProgressBar`); on result screens the **pills carry the verdict** (your pick red, better green) inside a neutral card; the picked card is shown back unchanged; "How to play" is a plain white inset, only "Your role" is blue; verdict copy names who it worked for ("It worked for the customer. You lost $50."). Non-design findings logged as FR-19/20/21. |
 | — | `TermReveal` content | Proposed: `keyPoints[]` (3–4) + optional `dont[]`; `whyYouCare` becomes the first key point. Not yet reviewed. |
 

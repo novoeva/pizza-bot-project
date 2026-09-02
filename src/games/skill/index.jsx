@@ -45,10 +45,10 @@ export default function SkillGame({ termId, onComplete }) {
   // steps) · 3 with the playbook.
   const progress =
     phase === 'build'
-      ? { part: 2, parts: 3, step: builtSteps.length, steps: playbookSteps.length, stepUnit: 'Step' }
+      ? { part: 2, parts: 3, step: builtSteps.length, steps: playbookSteps.length }
       : phase === 'round2'
         ? { part: 3, parts: 3 }
-        : { part: 1, parts: 3, step: replyIndex + 1, steps: improvisedReplies.length, stepUnit: 'Customer' }
+        : { part: 1, parts: 3, step: replyIndex + 1, steps: improvisedReplies.length }
 
   // Left column: constant orientation (what a skill is + Your role).
   const stage = (main) => (

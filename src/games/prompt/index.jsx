@@ -135,8 +135,8 @@ export default function PromptGame({ termId, onComplete }) {
   const roundNo = phase.startsWith('round3') ? 3 : phase.startsWith('round2') ? 2 : 1
   const progress =
     roundNo === 3
-      ? { part: 3, parts: 3, partUnit: 'Round', step: Object.keys(round3Picks).length, steps: round3Categories.length, stepUnit: 'Part' }
-      : { part: roundNo, parts: 3, partUnit: 'Round' }
+      ? { part: 3, parts: 3, step: Object.keys(round3Picks).length, steps: round3Categories.length }
+      : { part: roundNo, parts: 3 }
 
   // Left column: constant orientation (what a prompt is + Your role).
   const stage = (main) => (

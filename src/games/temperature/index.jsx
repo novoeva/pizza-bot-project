@@ -264,7 +264,7 @@ export default function TemperatureGame({ termId, onComplete }) {
         <GameStage
           context={<GameIntro term={term} showHowTo={false} />}
           main={main}
-          progress={{ part: 2, parts: 2, step: roundIndex + 1, steps: taskRounds.length, stepUnit: 'Job' }}
+          progress={{ part: 2, parts: 2, step: roundIndex + 1, steps: taskRounds.length }}
         />
         {answered && (
           <GameActions>

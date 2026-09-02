@@ -71,8 +71,8 @@ export default function AgentGame({ termId, onComplete }) {
     phase === 'chat'
       ? { part: 1, parts: 3 }
       : phase === 'run'
-        ? { part: 3, parts: 3, step: Math.min(runIdx, seq.length), steps: seq.length, stepUnit: 'Action' }
-        : { part: 2, parts: 3, step: seq.length, steps: actions.length, stepUnit: 'Action' }
+        ? { part: 3, parts: 3, step: Math.min(runIdx, seq.length), steps: seq.length }
+        : { part: 2, parts: 3, step: seq.length, steps: actions.length }
 
   // Left column: constant orientation (what an agent is + Your role).
   const stage = (main) => (

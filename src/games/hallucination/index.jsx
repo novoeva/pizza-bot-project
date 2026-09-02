@@ -195,7 +195,7 @@ export default function HallucinationGame({ termId, onComplete }) {
       <GameStage
         context={context}
         main={main}
-        progress={{ part: 1, parts: 1, step: index + 1, steps: rounds.length, stepUnit: 'Claim' }}
+        progress={{ part: 1, parts: 1, step: index + 1, steps: rounds.length }}
       />
       {pick && (
         <GameActions>
