@@ -19,9 +19,10 @@
 import ProgressBar from './ProgressBar.jsx'
 
 /**
- * `progress` ({ part, parts, step, steps, … }, see ProgressBar) is drawn as a
- * strip above both columns, first thing on the screen, so the player always
- * sees where they are before reading anything else.
+ * `progress` ({ part, parts, step, steps }, see ProgressBar) is drawn as a
+ * slim line under the orientation card in the left column (Phase 4 review:
+ * a full-width strip on top took too much room on a phone). On a phone it
+ * therefore sits between the intro card and the play.
  */
 export default function GameStage({ context, main, wide = false, progress }) {
   // `wide`: a phase whose `main` itself holds two side-by-side panels needs more
@@ -46,12 +47,10 @@ export default function GameStage({ context, main, wide = false, progress }) {
         ' lg:items-start lg:gap-8'
       }
     >
-      {progress && (
-        <div className="lg:col-span-2">
-          <ProgressBar {...progress} />
-        </div>
-      )}
-      <div className="flex flex-col gap-3">{context}</div>
+      <div className="flex flex-col gap-3">
+        {context}
+        {progress && <ProgressBar {...progress} />}
+      </div>
       <div className="flex flex-col gap-3">{main}</div>
     </div>
   )
