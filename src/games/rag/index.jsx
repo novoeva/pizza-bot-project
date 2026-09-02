@@ -5,6 +5,10 @@ import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
 import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import Callout from '../../components/Callout.jsx'
+import ChatMessage from '../../components/ChatMessage.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
+import Panel from '../../components/Panel.jsx'
 
 /**
  * RAG game, { termId, onComplete } interface.
@@ -72,48 +76,23 @@ export default function RagGame({ termId, onComplete }) {
   // Per-phase instruction, at the top of the play column so it's always the
   // current step. Term name / role live on the left, so this stays slim.
   const instruction = (title, body, note) => (
-    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-      <div className="flex items-center justify-between gap-2">
-        <p className="font-label text-[11px] text-primary">Game · {title}</p>
-        {note && <span className="font-label text-[11px] text-text-muted">{note}</span>}
-      </div>
-      <p className="mt-1 text-[13px] leading-snug text-text-muted">{body}</p>
-    </div>
+    <PhaseCard title={title} progress={note}>
+      {body}
+    </PhaseCard>
   )
 
-  // The customer's question, as a received chat MESSAGE (person avatar + speech
-  // bubble, tail top-left). A different visual family from the page cards, so
-  // "the job" never reads as "a thing you give the bot".
+  // The customer's question as a received MESSAGE, the bot's answer as a sent
+  // one. A different visual family from the page cards, so "the job" never
+  // reads as "a thing you give the bot".
   const customerBubble = (
-    <div className="flex items-start gap-2">
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-surface">
-        <span className="material-symbols-rounded text-[20px] text-text-muted">person</span>
-      </span>
-      <div className="max-w-[85%]">
-        <p className="mb-1 font-label text-[10px] text-text-muted">
-          Customer · {round.customer} · asking your bot
-        </p>
-        <div className="rounded-2xl rounded-tl-sm border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop">
-          <p className="font-bold leading-snug text-text">{round.question}</p>
-        </div>
-      </div>
-    </div>
+    <ChatMessage from="customer" label={`Customer · ${round.customer} · asking your bot`}>
+      {round.question}
+    </ChatMessage>
   )
-
-  // The bot's reply — a sent MESSAGE (robot avatar, right-aligned), the mirror
-  // of the customer bubble.
   const botReply = (text) => (
-    <div className="flex items-start justify-end gap-2">
-      <div className="max-w-[85%]">
-        <p className="mb-1 text-right font-label text-[10px] text-text-muted">Your bot · out loud</p>
-        <div className="rounded-2xl rounded-tr-sm border-[3px] border-neutral bg-surface px-4 py-3 shadow-pop">
-          <p className="font-bold leading-snug text-text">{text}</p>
-        </div>
-      </div>
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary">
-        <span className="material-symbols-rounded text-[20px] text-white">smart_toy</span>
-      </span>
-    </div>
+    <ChatMessage from="bot" label="Your bot · out loud">
+      {text}
+    </ChatMessage>
   )
 
   // ---- Reveal (standard payoff card + a Real talk box) ----
@@ -138,13 +117,7 @@ export default function RagGame({ termId, onComplete }) {
           <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
         </div>
 
-        <div className="rounded-lg border-[3px] border-cheese-dim bg-cheese-bg p-4 text-left shadow-pop">
-          <p className="flex items-center gap-1 font-label text-[11px] font-bold text-cheese-dim">
-            <span className="material-symbols-rounded text-[15px]">bolt</span>
-            Real talk
-          </p>
-          <p className="mt-1 text-[15px] leading-snug text-text">{realTalk}</p>
-        </div>
+        <Callout tone="info" title="Real talk">{realTalk}</Callout>
 
         <GameActions>
           <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
@@ -158,16 +131,7 @@ export default function RagGame({ termId, onComplete }) {
   // ---- Answer: the bot speaks, using only the pages it was handed ----
   if (phase === 'answer') {
     const handedTitles = picked.map((id) => pages.find((p) => p.id === id).title)
-    const tone = outcome.tone
-    const cardClass =
-      tone === 'bad'
-        ? 'border-danger bg-danger-bg'
-        : tone === 'good'
-          ? 'border-success bg-success-bg'
-          : 'border-neutral bg-muted'
-    const labelClass =
-      tone === 'bad' ? 'text-danger' : tone === 'good' ? 'text-success' : 'text-text-muted'
-    const icon = tone === 'bad' ? 'warning' : tone === 'good' ? 'check' : 'info'
+    const tone = outcome.tone === 'bad' ? 'problem' : outcome.tone === 'good' ? 'success' : 'info'
 
     return stage(
       <GameIntro term={term} showHowTo={false} />,
@@ -178,22 +142,19 @@ export default function RagGame({ termId, onComplete }) {
           `round ${round.n}/${rounds.length}`,
         )}
         {customerBubble}
-        <div className="rounded-md border-[3px] border-neutral bg-surface px-3 py-2 shadow-pop">
-          <p className="flex items-center gap-1 font-label text-[10px] text-text-muted">
-            <span className="material-symbols-rounded text-[15px]">drafts</span>
-            {handedTitles.length
+        <Panel
+          compact
+          icon="drafts"
+          title={
+            handedTitles.length
               ? `You handed it: ${handedTitles.join(' + ')}`
-              : 'You handed it nothing'}
-          </p>
-        </div>
+              : 'You handed it nothing'
+          }
+        />
         {botReply(outcome.reply)}
-        <div className={'rounded-lg border-[3px] p-4 shadow-card ' + cardClass}>
-          <p className={'mb-1 flex items-center gap-1 font-label text-[11px] font-bold ' + labelClass}>
-            <span className="material-symbols-rounded text-[15px]">{icon}</span>
-            {outcome.note.title}
-          </p>
-          <p className="text-[15px] leading-snug text-text">{outcome.note.body}</p>
-        </div>
+        <Callout tone={tone} title={outcome.note.title}>
+          {outcome.note.body}
+        </Callout>
         <GameActions>
           <GameActionButton
             variant="primary"
@@ -225,16 +186,12 @@ export default function RagGame({ termId, onComplete }) {
   const workbench = (
     <>
       {customerBubble}
-      <div className="rounded-md border-[3px] border-neutral bg-surface px-3 py-2.5 shadow-pop">
-        <p className="mb-2 flex items-center justify-between font-label text-[10px] text-text-muted">
-          <span className="flex items-center gap-1">
-            <span className="material-symbols-rounded text-[15px]">drafts</span>
-            Handed to the bot
-          </span>
-          <span className="font-bold">
-            {picked.length}/{MAX_PAGES}
-          </span>
-        </p>
+      <Panel
+        compact
+        icon="drafts"
+        title="Handed to the bot"
+        meta={<span className="font-bold">{picked.length}/{MAX_PAGES}</span>}
+      >
         <div className="flex flex-col gap-1.5">
           {Array.from({ length: MAX_PAGES }).map((_, i) => {
             const id = picked[i]
@@ -269,7 +226,7 @@ export default function RagGame({ termId, onComplete }) {
             )
           })}
         </div>
-      </div>
+      </Panel>
     </>
   )
 

@@ -5,6 +5,10 @@ import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
 import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import Callout from '../../components/Callout.jsx'
+import ChatMessage from '../../components/ChatMessage.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
+import Panel from '../../components/Panel.jsx'
 
 /**
  * Agent game, { termId, onComplete } interface.
@@ -69,46 +73,23 @@ export default function AgentGame({ termId, onComplete }) {
   // Per-phase instruction, at the top of the right column so it's always the
   // current step. The term name / role live on the left, so this stays slim.
   const instruction = (title, body, note) => (
-    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-      <div className="flex items-center justify-between gap-2">
-        <p className="font-label text-[11px] text-primary">Game · {title}</p>
-        {note && <span className="font-label text-[11px] text-text-muted">{note}</span>}
-      </div>
-      <p className="mt-1 text-[13px] leading-snug text-text-muted">{body}</p>
-    </div>
+    <PhaseCard title={title} progress={note}>
+      {body}
+    </PhaseCard>
   )
 
-  // The customer's order, as a received chat MESSAGE (person avatar + speech
-  // bubble, tail top-left). A different visual family from the action cards, so
-  // "the job" never reads as "a thing you give the bot".
+  // The customer's order as a received MESSAGE, the chatbot's reply as a sent
+  // one. A different visual family from the action cards, so "the job" never
+  // reads as "a thing you give the bot".
   const customerBubble = (
-    <div className="flex items-start gap-2">
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-surface">
-        <span className="material-symbols-rounded text-[20px] text-text-muted">person</span>
-      </span>
-      <div className="max-w-[85%]">
-        <p className="mb-1 font-label text-[10px] text-text-muted">Customer · {order.customer}</p>
-        <div className="rounded-2xl rounded-tl-sm border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop">
-          <p className="font-bold leading-snug text-text">{order.text}</p>
-        </div>
-      </div>
-    </div>
+    <ChatMessage from="customer" label={`Customer · ${order.customer}`}>
+      {order.text}
+    </ChatMessage>
   )
-
-  // The bot's reply — a sent MESSAGE (robot avatar, right-aligned), the mirror
-  // of the customer bubble.
   const botReply = (text) => (
-    <div className="flex items-start justify-end gap-2">
-      <div className="max-w-[85%]">
-        <p className="mb-1 text-right font-label text-[10px] text-text-muted">Your chatbot</p>
-        <div className="rounded-2xl rounded-tr-sm border-[3px] border-neutral bg-surface px-4 py-3 shadow-pop">
-          <p className="font-bold leading-snug text-text">{text}</p>
-        </div>
-      </div>
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary">
-        <span className="material-symbols-rounded text-[20px] text-white">smart_toy</span>
-      </span>
-    </div>
+    <ChatMessage from="bot" label="Your chatbot">
+      {text}
+    </ChatMessage>
   )
 
   // ---- Reveal (standard payoff card) ----
@@ -153,16 +134,10 @@ export default function AgentGame({ termId, onComplete }) {
         {customerBubble}
         {botReply(chatbotReply)}
         <SystemsPanel lit={new Set()} />
-        <div className="rounded-lg border-[3px] border-danger bg-danger-bg p-4 shadow-card">
-          <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger">
-            <span className="material-symbols-rounded text-[15px]">warning</span>
-            The problem
-          </p>
-          <p className="text-[15px] leading-snug text-text">
-            It talked. Nothing actually happened — every system is still asleep, and no pizza is
-            coming.
-          </p>
-        </div>
+        <Callout tone="problem" title="The problem">
+          It talked. Nothing actually happened — every system is still asleep, and no pizza is
+          coming.
+        </Callout>
         <GameActions>
           <GameActionButton variant="primary" icon="build" onClick={() => setPhase('build')}>
             Turn it into an agent
@@ -183,13 +158,7 @@ export default function AgentGame({ termId, onComplete }) {
           'bad order',
         )}
         {customerBubble}
-        <div className="rounded-lg border-[3px] border-danger bg-danger-bg p-4 shadow-card">
-          <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger">
-            <span className="material-symbols-rounded text-[15px]">warning</span>
-            What went wrong
-          </p>
-          <p className="text-[15px] leading-snug text-text">{snag.msg}</p>
-        </div>
+        <Callout tone="problem" title="What went wrong">{snag.msg}</Callout>
         <SystemsPanel lit={litSet} />
         <GameActions>
           <GameActionButton variant="primary" icon="arrow_back" onClick={() => setPhase('build')}>
@@ -213,11 +182,7 @@ export default function AgentGame({ termId, onComplete }) {
         )}
         {customerBubble}
         <SystemsPanel lit={litSet} />
-        <div className="rounded-md border-[3px] border-neutral bg-surface px-3 py-2.5 shadow-pop">
-          <p className="mb-2 flex items-center gap-1 font-label text-[10px] text-text-muted">
-            <span className="material-symbols-rounded text-[15px]">wifi_tethering</span>
-            Real actions fired
-          </p>
+        <Panel compact title="Real actions fired" icon="wifi_tethering">
           <div className="flex flex-col gap-1.5">
             {seq.slice(0, runIdx).map((id) => (
               <div
@@ -230,7 +195,7 @@ export default function AgentGame({ termId, onComplete }) {
             ))}
             {!runIdx && <p className="text-[13px] italic text-text-muted">…starting…</p>}
           </div>
-        </div>
+        </Panel>
         {!done && (
           <div className="flex animate-pulse items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-3 py-2.5 text-[13px] font-bold text-cheese-dim shadow-pop">
             <span className="material-symbols-rounded text-[20px]">
@@ -261,11 +226,7 @@ export default function AgentGame({ termId, onComplete }) {
 
   // The to-do list the player is assembling (compact; sits beside the palette).
   const toDoList = (
-    <div className="rounded-md border-[3px] border-neutral bg-surface px-3 py-2.5 shadow-pop">
-      <p className="mb-2 flex items-center gap-1 font-label text-[10px] text-text-muted">
-        <span className="material-symbols-rounded text-[15px]">checklist</span>
-        The agent’s to-do list
-      </p>
+    <Panel compact title="The agent’s to-do list" icon="checklist">
       <div className="flex flex-col gap-1.5">
         {Array.from({ length: actions.length }).map((_, i) => {
           const id = seq[i]
@@ -310,7 +271,7 @@ export default function AgentGame({ termId, onComplete }) {
           ↻ clear the list
         </button>
       )}
-    </div>
+    </Panel>
   )
 
   // The parts palette. Each action is a CHOICE you hand the bot — a colour-coded

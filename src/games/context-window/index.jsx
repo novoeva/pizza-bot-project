@@ -19,6 +19,10 @@ import {
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import Callout from '../../components/Callout.jsx'
+import ChatMessage from '../../components/ChatMessage.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
+import Panel from '../../components/Panel.jsx'
 
 /**
  * Context window game, { termId, onComplete } interface.
@@ -44,11 +48,9 @@ export default function ContextWindowGame({ termId, onComplete }) {
   const nextMessage = order[sentCount]
 
   const instruction = (sub) => (
-    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-      <p className="font-label text-[11px] text-primary">Game · What the bot can see</p>
-      <h1 className="text-2xl leading-tight">Context window</h1>
-      <p className="mt-1 text-[13px] leading-snug text-text-muted">{sub}</p>
-    </div>
+    <PhaseCard title="What the bot can see" heading="Context window">
+      {sub}
+    </PhaseCard>
   )
 
   // ---------- Reveal ----------
@@ -76,16 +78,12 @@ export default function ContextWindowGame({ termId, onComplete }) {
         </div>
 
         {/* Real talk: the honest note that owns the goldfish simplification */}
-        <div className="rounded-lg border-[3px] border-tertiary bg-surface p-3 text-left shadow-pop">
-          <p className="flex items-center gap-1 font-label text-[11px] font-bold text-tertiary">
-            <span className="material-symbols-rounded text-[15px]">info</span>
-            Real talk
-          </p>
-          <p className="mt-1 text-[13px] font-semibold leading-snug text-text">{honestyTitle}</p>
-          <p className="mt-1 text-[13px] leading-snug text-text-muted">{honestyIntro}</p>
-          <p className="mt-2 text-[13px] leading-snug text-text-muted">{honestyExample}</p>
-          <p className="mt-2 text-[13px] leading-snug text-text">{honestyClose}</p>
-        </div>
+        <Callout tone="info" title="Real talk" compact>
+          <p className="font-semibold">{honestyTitle}</p>
+          <p className="mt-1 text-text-muted">{honestyIntro}</p>
+          <p className="mt-2 text-text-muted">{honestyExample}</p>
+          <p className="mt-2">{honestyClose}</p>
+        </Callout>
 
         <GameActions>
           <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
@@ -104,8 +102,7 @@ export default function ContextWindowGame({ termId, onComplete }) {
         <ContextPanel sent={[]} />
 
         {!newChatAsked ? (
-          <div className="rounded-md border-[3px] border-neutral bg-surface p-3 shadow-pop">
-            <p className="mb-2 font-label text-[11px] text-text-muted">You, in the new chat</p>
+          <Panel compact title="You, in the new chat">
             <div className="rounded-md border-[3px] border-neutral bg-accent-soft px-3 py-2 text-sm text-text">
               "{newChatQuestion}"
             </div>
@@ -114,26 +111,16 @@ export default function ContextWindowGame({ termId, onComplete }) {
                 Send in the new chat
               </GameActionButton>
             </GameActions>
-          </div>
+          </Panel>
         ) : (
           <>
-            <div className="ml-auto max-w-[85%] self-end rounded-md border-[3px] border-neutral bg-accent-soft px-4 py-2 text-sm text-text shadow-pop">
-              "{newChatQuestion}"
-            </div>
-            <div className="max-w-[85%] self-start rounded-md border-[3px] border-danger bg-danger-bg px-4 py-3 shadow-pop">
-              <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger">
-                <span className="material-symbols-rounded text-[15px]">visibility_off</span>
-                Empty window
-              </p>
-              <p className="text-[13px] leading-snug text-text">{newChatReply}</p>
-            </div>
-            <div className="rounded-md border-[3px] border-tertiary bg-surface px-3 py-2 shadow-pop">
-              <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-tertiary">
-                <span className="material-symbols-rounded text-[15px]">arrow_forward</span>
-                Where this hands off
-              </p>
-              <p className="text-[13px] leading-snug text-text">{bridgeToMemory}</p>
-            </div>
+            <ChatMessage from="you">{newChatQuestion}</ChatMessage>
+            <ChatMessage from="bot" tone="bad" note="Empty window" noteIcon="visibility_off">
+              {newChatReply}
+            </ChatMessage>
+            <Callout tone="info" title="Where this hands off" icon="arrow_forward" compact>
+              {bridgeToMemory}
+            </Callout>
             <GameActions>
               <GameActionButton variant="primary" icon="arrow_forward" onClick={() => setPhase('reveal')}>
                 See what this means
@@ -153,13 +140,7 @@ export default function ContextWindowGame({ termId, onComplete }) {
       <ContextPanel sent={sent} pinned={pinned} />
 
       {!allSent && (
-        <div className="rounded-md border-[3px] border-neutral bg-surface p-3 shadow-pop">
-          <p className="mb-2 flex items-center justify-between font-label text-[11px] text-text-muted">
-            <span>Next message from the customer</span>
-            <span>
-              {sentCount + 1} / {order.length}
-            </span>
-          </p>
+        <Panel compact title="Next message from the customer" meta={`${sentCount + 1} / ${order.length}`}>
           <div className="rounded-md border-[3px] border-neutral bg-accent-soft px-3 py-2 text-sm text-text">
             "{nextMessage.text}"
           </div>
@@ -168,47 +149,34 @@ export default function ContextWindowGame({ termId, onComplete }) {
               Send to the bot
             </GameActionButton>
           </GameActions>
-        </div>
+        </Panel>
       )}
 
       {allSent && !recalled && (
-        <div className="rounded-md border-[3px] border-neutral bg-surface p-3 shadow-pop">
-          <p className="mb-2 font-label text-[11px] text-text-muted">
-            The whole order is in. Now check what the bot still sees.
-          </p>
+        <Panel compact title="The whole order is in. Now check what the bot still sees.">
           <GameActions>
             <GameActionButton variant="primary" icon="quiz" onClick={() => setRecalled(true)}>
               Ask: "{recallQuestion}"
             </GameActionButton>
           </GameActions>
-        </div>
+        </Panel>
       )}
 
       {allSent && recalled && (
         <>
           {/* Ask #1 — the allergy has already scrolled out, so the bot can't answer. */}
-          <div className="ml-auto max-w-[85%] self-end rounded-md border-[3px] border-neutral bg-accent-soft px-4 py-2 text-sm text-text shadow-pop">
-            "{recallQuestion}"
-          </div>
-          <div className="max-w-[85%] self-start rounded-md border-[3px] border-danger bg-danger-bg px-4 py-3 shadow-pop">
-            <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger">
-              <span className="material-symbols-rounded text-[15px]">visibility_off</span>
-              Out of the context window
-            </p>
-            <p className="text-[13px] leading-snug text-text">{recallDropped}</p>
-          </div>
+          <ChatMessage from="you">{recallQuestion}</ChatMessage>
+          <ChatMessage from="bot" tone="bad" note="Out of the context window" noteIcon="visibility_off">
+            {recallDropped}
+          </ChatMessage>
 
           {!pinned ? (
             <>
               {/* Beat 1b: the owner's move — you can't grow the window, but you
                   decide what stays in it. */}
-              <div className="rounded-md border-[3px] border-tertiary bg-surface px-3 py-2 shadow-pop">
-                <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-tertiary">
-                  <span className="material-symbols-rounded text-[15px]">push_pin</span>
-                  You're the owner. You can fix this.
-                </p>
-                <p className="text-[13px] leading-snug text-text">{pinHint}</p>
-              </div>
+              <Callout tone="info" title="You're the owner. You can fix this." icon="push_pin" compact>
+                {pinHint}
+              </Callout>
               <GameActions>
                 <GameActionButton variant="primary" icon="push_pin" onClick={() => setPinned(true)}>
                   Pin the allergy to the top
@@ -218,16 +186,10 @@ export default function ContextWindowGame({ termId, onComplete }) {
           ) : (
             <>
               {/* Ask #2 — same question, but the pinned line is still in view. */}
-              <div className="ml-auto max-w-[85%] self-end rounded-md border-[3px] border-neutral bg-accent-soft px-4 py-2 text-sm text-text shadow-pop">
-                "{recallQuestion}"
-              </div>
-              <div className="max-w-[85%] self-start rounded-md border-[3px] border-success bg-success-bg px-4 py-3 shadow-pop">
-                <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-success">
-                  <span className="material-symbols-rounded text-[15px]">push_pin</span>
-                  Pinned, so it stays in the window
-                </p>
-                <p className="text-[13px] leading-snug text-text">{recallInWindow}</p>
-              </div>
+              <ChatMessage from="you">{recallQuestion}</ChatMessage>
+              <ChatMessage from="bot" tone="good" note="Pinned, so it stays in the window" noteIcon="push_pin">
+                {recallInWindow}
+              </ChatMessage>
               <GameActions>
                 <GameActionButton
                   variant="primary"
@@ -261,16 +223,14 @@ function ContextPanel({ sent, pinned = false }) {
   const inWindow = rest.slice(-cap)
   const seen = inWindow.length + (showPinned ? 1 : 0)
   return (
-    <div className="overflow-hidden rounded-md border-[3px] border-neutral bg-surface shadow-card">
-      <div className="flex items-center justify-between bg-text px-3 py-1.5 font-label text-[10px] text-white">
-        <span className="flex items-center gap-1">
-          <span className="material-symbols-rounded text-[14px]">visibility</span>
-          Context window · what the bot sees
-        </span>
-        <span>
-          {seen} / {WINDOW_SIZE}
-        </span>
-      </div>
+    <Panel
+      header="dark"
+      title="Context window · what the bot sees"
+      icon="visibility"
+      meta={`${seen} / ${WINDOW_SIZE}`}
+      shadow="card"
+      bodyClassName=""
+    >
 
       <div className="flex items-center gap-1 border-b-2 border-slot-empty bg-accent-soft px-3 py-1 font-label text-[10px] text-text">
         <span className="material-symbols-rounded text-[13px]">psychology</span>
@@ -321,6 +281,6 @@ function ContextPanel({ sent, pinned = false }) {
           </>
         )}
       </div>
-    </div>
+    </Panel>
   )
 }

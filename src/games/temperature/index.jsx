@@ -12,6 +12,9 @@ import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
 import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import Callout from '../../components/Callout.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
+import Panel from '../../components/Panel.jsx'
 
 /**
  * Temperature game, { termId, onComplete } interface.
@@ -55,12 +58,9 @@ export default function TemperatureGame({ termId, onComplete }) {
       <>
         {/* This beat's own instruction, at the top of the active column so it's
             always the current step (the constant orientation stays on the left). */}
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-          <p className="font-label text-[11px] text-primary">Game · Feel the dial</p>
-          <p className="mt-1 text-[13px] leading-snug text-text-muted">
-            Drag the temperature from low to high and watch the odds shift, then roll to see which word your bot picks.
-          </p>
-        </div>
+        <PhaseCard title="Feel the dial">
+          Drag the temperature from low to high and watch the odds shift, then roll to see which word your bot picks.
+        </PhaseCard>
 
         {/* The sentence the bot is about to finish */}
         <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-4 text-center shadow-pop">
@@ -81,19 +81,18 @@ export default function TemperatureGame({ termId, onComplete }) {
         </div>
 
         {/* The temperature dial */}
-        <div className="rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop">
-          <div className="mb-2 flex items-center justify-between">
-            <p className="flex items-center gap-1 font-label text-[11px] text-text-muted">
-              <span className="material-symbols-rounded text-[15px]">thermostat</span>
-              Temperature
-            </p>
-            <span className="flex items-center gap-2">
+        <Panel
+          title="Temperature"
+          icon="thermostat"
+          meta={
+            <>
               <span className="rounded-full border-2 border-neutral bg-accent-soft px-2 py-0.5 font-label text-[11px] font-bold text-tertiary">
                 {zone.label}
               </span>
               <span className="font-mono text-sm font-bold text-text">{temp.toFixed(1)}</span>
-            </span>
-          </div>
+            </>
+          }
+        >
           <input
             type="range"
             min={TEMP_MIN}
@@ -108,14 +107,10 @@ export default function TemperatureGame({ termId, onComplete }) {
             <span>Low · predictable</span>
             <span>High · wild</span>
           </div>
-        </div>
+        </Panel>
 
         {/* Live distribution */}
-        <div className="rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop">
-          <div className="mb-3 flex items-baseline justify-between gap-2">
-            <p className="font-label text-[11px] text-text-muted">Chance of each next word</p>
-            <p className="font-label text-[11px] text-text-muted">% = probability</p>
-          </div>
+        <Panel title="Chance of each next word" meta="% = probability">
           <div className="flex flex-col gap-2">
             {ranked.map((o) => {
               const isTop = o.word === top.word
@@ -145,7 +140,7 @@ export default function TemperatureGame({ termId, onComplete }) {
             })}
           </div>
           <p className="mt-3 text-[13px] leading-snug text-text-muted">{zone.note}</p>
-        </div>
+        </Panel>
 
         {/* Re-roll stays inline as a secondary; the pinned bar carries the
             forward action so it's always on screen. */}
@@ -212,17 +207,12 @@ export default function TemperatureGame({ termId, onComplete }) {
     // so it stays put while the right column switches from the dial to the jobs.
     const main = (
       <>
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-          <div className="flex items-center justify-between">
-            <p className="font-label text-[11px] text-primary">Game · Pick the setting</p>
-            <span className="font-label text-[11px] text-text-muted">
-              {roundIndex + 1} / {taskRounds.length}
-            </span>
-          </div>
-          <p className="mt-1 text-[13px] leading-snug text-text-muted">
-            Same bot, very different jobs. For each one, decide which way to turn the dial.
-          </p>
-        </div>
+        <PhaseCard
+          title="Pick the setting"
+          progress={{ unit: 'Job', current: roundIndex + 1, total: taskRounds.length }}
+        >
+          Same bot, very different jobs. For each one, decide which way to turn the dial.
+        </PhaseCard>
 
         <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-4 shadow-pop">
           <p className="font-label text-[11px] text-text-muted">The job</p>
@@ -252,27 +242,18 @@ export default function TemperatureGame({ termId, onComplete }) {
             </button>
           </div>
         ) : (
-          <div
-            className={
-              'rounded-md border-[3px] px-4 py-3 shadow-pop ' +
-              (correct ? 'border-success bg-success-bg' : 'border-danger bg-danger-bg')
-            }
-          >
-            <p
-              className={
-                'flex items-center gap-1.5 font-label text-sm font-bold ' +
-                (correct ? 'text-success' : 'text-danger')
-              }
-            >
-              <span className="material-symbols-rounded text-[18px]">
-                {correct ? 'check_circle' : 'cancel'}
-              </span>
-              {correct
+          <Callout
+            tone={correct ? 'success' : 'problem'}
+            icon={correct ? 'check_circle' : 'cancel'}
+            title={
+              correct
                 ? `Right, turn it ${round.answer === 'low' ? 'down' : 'up'}`
-                : `Better to turn it ${round.answer === 'low' ? 'down' : 'up'}`}
-            </p>
-            <p className="mt-1 text-[13px] leading-snug text-text">{round.why}</p>
-          </div>
+                : `Better to turn it ${round.answer === 'low' ? 'down' : 'up'}`
+            }
+            compact
+          >
+            {round.why}
+          </Callout>
         )}
       </>
     )

@@ -5,6 +5,9 @@ import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
 import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import Callout from '../../components/Callout.jsx'
+import ChatMessage from '../../components/ChatMessage.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
 
 /**
  * Tool use game, { termId, onComplete } interface.
@@ -63,61 +66,21 @@ export default function ToolUseGame({ termId, onComplete }) {
 
   // Per-phase instruction at the top of the right column.
   const instruction = (sub) => (
-    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-      <div className="flex items-center justify-between">
-        <p className="font-label text-[11px] text-primary">Game · Guess or check</p>
-        <span className="font-label text-[11px] text-text-muted">
-          Round {round} / 2 · Q{qIndex + 1}/{questions.length}
-        </span>
-      </div>
-      <p className="mt-1 text-[13px] leading-snug text-text-muted">{sub}</p>
-    </div>
+    <PhaseCard
+      title="Guess or check"
+      progress={`Round ${round} / 2 · Q${qIndex + 1}/${questions.length}`}
+    >
+      {sub}
+    </PhaseCard>
   )
 
-  // Message archetype — customer question as a received bubble.
-  const customerBubble = (text) => (
-    <div className="flex items-start gap-2">
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-surface">
-        <span className="material-symbols-rounded text-[20px] text-text-muted">person</span>
-      </span>
-      <div className="max-w-[85%]">
-        <p className="mb-1 font-label text-[10px] text-text-muted">Customer</p>
-        <div className="rounded-2xl rounded-tl-sm border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop">
-          <p className="font-bold leading-snug text-text">{text}</p>
-        </div>
-      </div>
-    </div>
-  )
-
-  // Bot's reply as a sent bubble; tone 'good' (backed by data) / 'bad' (a guess).
+  // The customer's question as a received MESSAGE; the bot's reply as a sent
+  // one whose tint is the verdict: 'good' (backed by data) / 'bad' (a guess).
+  const customerBubble = (text) => <ChatMessage from="customer">{text}</ChatMessage>
   const botBubble = (text, tone, note) => (
-    <div className="flex items-start justify-end gap-2">
-      <div className="max-w-[85%]">
-        <p className="mb-1 text-right font-label text-[10px] text-text-muted">Your bot</p>
-        <div
-          className={
-            'rounded-2xl rounded-tr-sm border-[3px] px-4 py-3 shadow-pop ' +
-            (tone === 'good' ? 'border-success bg-success-bg' : 'border-danger bg-danger-bg')
-          }
-        >
-          <p className="leading-snug text-text">{text}</p>
-          <p
-            className={
-              'mt-1 flex items-center gap-1 font-label text-[11px] font-bold ' +
-              (tone === 'good' ? 'text-success' : 'text-danger')
-            }
-          >
-            <span className="material-symbols-rounded text-[15px]">
-              {tone === 'good' ? 'check_circle' : 'error'}
-            </span>
-            {note}
-          </p>
-        </div>
-      </div>
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary">
-        <span className="material-symbols-rounded text-[20px] text-white">smart_toy</span>
-      </span>
-    </div>
+    <ChatMessage from="bot" tone={tone} note={note}>
+      {text}
+    </ChatMessage>
   )
 
   // Choice archetype — a tool the player hands the bot to check with.
@@ -174,16 +137,10 @@ export default function ToolUseGame({ termId, onComplete }) {
   if (phase === 'transition') {
     return stage(
       <div className="flex flex-col gap-3">
-        <div className="rounded-lg border-[3px] border-danger bg-danger-bg p-4 shadow-card">
-          <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger">
-            <span className="material-symbols-rounded text-[15px]">error</span>
-            Guessing every time
-          </p>
-          <p className="text-[15px] leading-snug text-text">
-            Annoying, right? Your bot feels this on every question it can&rsquo;t actually check.
-            Time to give it real tools.
-          </p>
-        </div>
+        <Callout tone="problem" title="Guessing every time" icon="error">
+          Annoying, right? Your bot feels this on every question it can&rsquo;t actually check.
+          Time to give it real tools.
+        </Callout>
         <GameActions>
           <GameActionButton variant="primary" icon="arrow_forward" onClick={startRound2}>
             Give the bot some tools

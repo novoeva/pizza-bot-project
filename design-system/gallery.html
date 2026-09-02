@@ -448,7 +448,7 @@
     <!-- ============================== INVENTORY ============================== -->
     <section class="block" id="c-phase">
       <p class="eyebrow">What exists today · 1 of 7</p>
-      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">Phase card ("what do I do on this screen")</h2>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">Phase card ("what do I do on this screen") <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">replaced in Phase 1</span></h2>
       <p class="lede">The same card is hand-written in all 12 games. The 8 two-column games keep it slim. The 4 single-column games (Token, Context window, Memory, MCP) lose the left intro panel after the first screen, so they stuff the term name into this card as a big heading.</p>
       <div class="grid-gallery three">
         <div class="item"><h4><span class="ref">G1</span>Stage games <span class="verdict v-ok">consistent</span></h4>
@@ -466,7 +466,7 @@
 
     <section class="block" id="c-chat">
       <p class="eyebrow">What exists today · 2 of 7</p>
-      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">Chat bubbles</h2>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">Chat bubbles <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">replaced in Phase 1</span></h2>
       <p class="lede">Six games share one bubble pair. Three of them tint the bot's bubble green or red to show the outcome. Two games (Memory, Context window) use plain boxes with no avatars, and Memory puts the customer on the <b>right</b>, where every other game puts the bot.</p>
       <div class="grid-gallery">
         <div class="item"><h4><span class="ref">G2 · G3</span>Standard pair <span class="verdict v-ok">shape consistent</span></h4>
@@ -528,7 +528,7 @@
 
     <section class="block" id="c-result">
       <p class="eyebrow">What exists today · 4 of 7</p>
-      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">Result callouts, four shapes for one job</h2>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">Result callouts, four shapes for one job <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">replaced in Phase 1</span></h2>
       <p class="lede">"You were right" / "here is the problem" is drawn ~20 times. Same job, but the corner radius, the shadow depth, the border colour, the heading size and the alignment all change from game to game.</p>
       <div class="grid-gallery four">
         <div class="item"><h4><span class="ref">G7</span>Prompt / Agent / RAG</h4>
@@ -552,7 +552,7 @@
 
     <section class="block" id="c-aside">
       <p class="eyebrow">What exists today · 5 of 7</p>
-      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">"Real talk" asides, three stylings for one label</h2>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">"Real talk" asides, three stylings for one label <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">replaced in Phase 1</span></h2>
       <div class="grid-gallery three">
         <div class="item"><h4><span class="ref">G8</span>Memory, Context window</h4>
           <div class="rounded-lg border-[3px] border-tertiary bg-surface p-3 shadow-pop"><p class="flex items-center gap-1 font-label text-[11px] font-bold text-tertiary"><span class="material-symbols-rounded text-[15px]">info</span>Real talk</p><p class="mt-1 text-[13px] leading-snug text-text">This app remembers your finished games the same way, saved in your browser.</p></div>
@@ -640,14 +640,14 @@
     </section>
 
     <section class="block" id="p-callout">
-      <p class="eyebrow">Proposed · 2 of 4</p>
-      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">Callout, one shape, four tones</h2>
+      <p class="eyebrow">Built · Phase 1 · src/components/Callout.jsx</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">Callout, one shape, three tones <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">built · Phase 1</span></h2>
       <p class="lede">Same radius, same 4px shadow, border always matches the tint, eyebrow with icon, body text. The only thing that changes is the tone.</p>
       <div class="grid-gallery four">
         <div class="item"><h4>problem</h4><div class="rounded-lg border-[3px] border-danger bg-danger-bg p-4 shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded text-[15px]">warning</span>The problem</p><p class="text-[15px] leading-snug text-text">It talked. Nothing actually happened.</p></div></div>
         <div class="item"><h4>success</h4><div class="rounded-lg border-[3px] border-success bg-success-bg p-4 shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-success"><span class="material-symbols-rounded text-[15px]">check_circle</span>Caught it</p><p class="text-[15px] leading-snug text-text">That pizza is not on the menu.</p></div></div>
         <div class="item"><h4>info</h4><div class="rounded-lg border-[3px] border-neutral bg-surface p-4 shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-text-muted"><span class="material-symbols-rounded text-[15px]">info</span>Real talk</p><p class="text-[15px] leading-snug text-text">A real bot needs guardrails enforced in code.</p></div></div>
-        <div class="item"><h4>cost</h4><div class="rounded-lg border-[3px] border-cheese-dim bg-cheese-bg p-4 shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-cheese-dim"><span class="material-symbols-rounded text-[15px]">schedule</span>12 weeks of work</p><p class="text-[15px] leading-snug text-text">And it never ends. Every new tool is another bridge.</p></div></div>
+        <div class="item"><h4>problem · a cost that hurts</h4><div class="rounded-lg border-[3px] border-danger bg-danger-bg p-4 shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded text-[15px]">schedule</span>Four custom connectors. 12 weeks of work.</p><p class="text-[15px] leading-snug text-text">And it never ends. Every new tool is another bridge.</p></div><p class="cap">Costs use the problem tone (R3): amber is only for parts of the bot.</p></div>
       </div>
       <div class="item" style="margin-top:1.25rem;max-width:30rem"><h4>FR-11 fixed by the same component</h4>
         <div class="rounded-lg border-[3px] border-danger bg-danger-bg p-4 shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded text-[15px]">warning</span>When info is missing · you picked “Guess”</p><p class="text-[15px] leading-snug text-text">It invents an order.</p><p class="mt-2 flex items-start gap-1 text-[14px] leading-snug text-text"><span class="material-symbols-rounded text-[16px] text-text-muted">arrow_forward</span><span>Better: <b>“Ask”</b>, it asks for the missing part.</span></p></div>

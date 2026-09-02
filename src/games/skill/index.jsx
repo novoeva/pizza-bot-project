@@ -5,6 +5,8 @@ import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
 import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import ChatMessage from '../../components/ChatMessage.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
 
 // Fixed shuffle so the buttons don't appear in a suggestive top-to-bottom order.
 const shuffledSteps = [playbookSteps[2], playbookSteps[0], playbookSteps[3], playbookSteps[1]]
@@ -44,59 +46,18 @@ export default function SkillGame({ termId, onComplete }) {
   )
 
   const instruction = (part, sub) => (
-    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-      <div className="flex items-center justify-between">
-        <p className="font-label text-[11px] text-primary">Game · The complaint department</p>
-        <span className="font-label text-[11px] text-text-muted">Part {part} of 2</span>
-      </div>
-      <p className="mt-1 text-[13px] leading-snug text-text-muted">{sub}</p>
-    </div>
+    <PhaseCard title="The complaint department" progress={`Part ${part} of 2`}>
+      {sub}
+    </PhaseCard>
   )
 
-  // Message archetype — the customer's complaint as a received bubble.
-  const customerBubble = (text) => (
-    <div className="flex items-start gap-2">
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-surface">
-        <span className="material-symbols-rounded text-[20px] text-text-muted">person</span>
-      </span>
-      <div className="max-w-[85%]">
-        <p className="mb-1 font-label text-[10px] text-text-muted">Customer</p>
-        <div className="rounded-2xl rounded-tl-sm border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop">
-          <p className="font-bold leading-snug text-text">{text}</p>
-        </div>
-      </div>
-    </div>
-  )
-
-  // Bot's reply; tone 'good' (consistent, on-script) / 'bad' (improvised).
+  // The complaint as a received MESSAGE; the bot's reply as a sent one whose
+  // tint is the verdict: 'good' (on-script) / 'bad' (improvised).
+  const customerBubble = (text) => <ChatMessage from="customer">{text}</ChatMessage>
   const botBubble = (key, text, tone, note) => (
-    <div key={key} className="flex items-start justify-end gap-2">
-      <div className="max-w-[85%]">
-        <p className="mb-1 text-right font-label text-[10px] text-text-muted">Your bot</p>
-        <div
-          className={
-            'rounded-2xl rounded-tr-sm border-[3px] px-4 py-3 shadow-pop ' +
-            (tone === 'good' ? 'border-success bg-success-bg' : 'border-danger bg-danger-bg')
-          }
-        >
-          <p className="text-sm leading-snug text-text">{text}</p>
-          <p
-            className={
-              'mt-1 flex items-center gap-1 font-label text-[11px] font-bold ' +
-              (tone === 'good' ? 'text-success' : 'text-danger')
-            }
-          >
-            <span className="material-symbols-rounded text-[15px]">
-              {tone === 'good' ? 'check_circle' : 'error'}
-            </span>
-            {note}
-          </p>
-        </div>
-      </div>
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary">
-        <span className="material-symbols-rounded text-[20px] text-white">smart_toy</span>
-      </span>
-    </div>
+    <ChatMessage key={key} from="bot" tone={tone} note={note}>
+      {text}
+    </ChatMessage>
   )
 
   // Choice archetype — a step you add to the playbook (turns green once added).

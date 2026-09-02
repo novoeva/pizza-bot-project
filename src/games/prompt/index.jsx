@@ -13,6 +13,9 @@ import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
 import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import Callout from '../../components/Callout.jsx'
+import ChatMessage from '../../components/ChatMessage.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
 
 // Each pickable type gets its OWN colour + pictogram, so an "Instruction"
 // (the bot's base prompt) and a "Rule" (a constraint) read as different things
@@ -99,38 +102,9 @@ export default function PromptGame({ termId, onComplete }) {
 
   const round3Complete = round3Categories.every((c) => round3Picks[c.name])
 
-  // A received chat MESSAGE: avatar beside a rounded speech bubble (tail on the
-  // top-left), constrained width. Deliberately a different visual family from
-  // the instruction/rule cards, so "a message" never reads as "a rule".
-  const customerBanner = (
-    <div className="flex items-start gap-2">
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-surface">
-        <span className="material-symbols-rounded text-[20px] text-text-muted">person</span>
-      </span>
-      <div className="max-w-[85%]">
-        <p className="mb-1 font-label text-[10px] text-text-muted">Customer</p>
-        <div className="rounded-2xl rounded-tl-sm border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop">
-          <p className="font-bold leading-snug text-text">{customerRequest}</p>
-        </div>
-      </div>
-    </div>
-  )
-
-  // The bot's reply — a sent MESSAGE (robot avatar, right-aligned), the mirror
-  // of the customer bubble, so you literally see what your instruction produced.
-  const botReplyBubble = (text) => (
-    <div className="flex items-start justify-end gap-2">
-      <div className="max-w-[85%]">
-        <p className="mb-1 text-right font-label text-[10px] text-text-muted">Your bot</p>
-        <div className="rounded-2xl rounded-tr-sm border-[3px] border-neutral bg-surface px-4 py-3 shadow-pop">
-          <p className="font-bold leading-snug text-text">{text}</p>
-        </div>
-      </div>
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary">
-        <span className="material-symbols-rounded text-[20px] text-white">smart_toy</span>
-      </span>
-    </div>
-  )
+  // The customer's request as a received MESSAGE; the bot's reply as a sent one.
+  const customerBanner = <ChatMessage from="customer">{customerRequest}</ChatMessage>
+  const botReplyBubble = (text) => <ChatMessage from="bot">{text}</ChatMessage>
 
   // Left column: constant orientation (what a prompt is + Your role).
   const stage = (main) => (
@@ -140,13 +114,9 @@ export default function PromptGame({ termId, onComplete }) {
   // Per-phase instruction, at the top of the right column so it's always the
   // current step. The term name/role live on the left, so this stays slim.
   const instruction = (round, sub) => (
-    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-      <div className="flex items-center justify-between">
-        <p className="font-label text-[11px] text-primary">Game · You build the bot</p>
-        <span className="font-label text-[11px] text-text-muted">Round {round} / 3</span>
-      </div>
-      <p className="mt-1 text-[13px] leading-snug text-text-muted">{sub}</p>
-    </div>
+    <PhaseCard title="You build the bot" progress={{ unit: 'Round', current: round, total: 3 }}>
+      {sub}
+    </PhaseCard>
   )
 
   if (phase === 'reveal') {
@@ -186,32 +156,29 @@ export default function PromptGame({ termId, onComplete }) {
       <div className="flex flex-col gap-3">
         {customerBanner}
         {allRight ? (
-          <div className="rounded-lg border-[3px] border-neutral bg-success-bg p-4 text-center shadow-card">
-            <p className="mb-2 font-label text-[11px] font-bold text-success">
-              Round 3, full instructions
-            </p>
-            <p className="text-[15px] leading-snug text-text">{round3Result}</p>
-          </div>
+          <Callout tone="success" title="Round 3, full instructions" align="center">
+            {round3Result}
+          </Callout>
         ) : (
-          <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 shadow-card">
-            <p className="mb-3 text-center font-label text-[11px] font-bold text-danger">
+          <div className="flex flex-col gap-2">
+            <p className="text-center font-label text-[11px] font-bold text-danger">
               Your bot runs, but a few of these choices will cause problems
             </p>
-            <div className="flex flex-col gap-3">
-              {wrongRows.map((c) => (
-                <div key={c.name} className="rounded-md border-2 border-neutral bg-muted px-3 py-2 text-left">
-                  <p className="font-label text-[10px] text-text-muted">{c.name}</p>
-                  <p className="mt-0.5 text-[14px] leading-snug text-text">
-                    You picked <span className="font-bold">“{round3Picks[c.name]}”</span>, it{' '}
-                    {round3Effects[round3Picks[c.name]]}.
-                  </p>
-                  <p className="mt-1 text-[14px] leading-snug text-success">
-                    Better: <span className="font-bold">“{c.correct}”</span>, it{' '}
-                    {round3Effects[c.correct]}.
-                  </p>
-                </div>
-              ))}
-            </div>
+            {/* Each wrong pick is a PROBLEM (muted red), never green: the better
+                option is plain text with an arrow, so it reads as advice, not as
+                "you got it right". (FR-11) */}
+            {wrongRows.map((c) => (
+              <Callout key={c.name} tone="problem" compact title={c.name}>
+                You picked <span className="font-bold">“{round3Picks[c.name]}”</span>, it{' '}
+                {round3Effects[round3Picks[c.name]]}.
+                <span className="mt-1 flex items-start gap-1">
+                  <span className="material-symbols-rounded text-[16px] text-text-muted">arrow_forward</span>
+                  <span>
+                    Better: <span className="font-bold">“{c.correct}”</span>, it {round3Effects[c.correct]}.
+                  </span>
+                </span>
+              </Callout>
+            ))}
           </div>
         )}
         <GameActions>
@@ -264,22 +231,13 @@ export default function PromptGame({ termId, onComplete }) {
     return stage(
       <div className="flex flex-col gap-3">
         {customerBanner}
-        <div
-          className={
-            'rounded-lg border-[3px] border-neutral p-4 text-center shadow-card ' +
-            (round2Pick.correct ? 'bg-success-bg' : 'bg-danger-bg')
-          }
+        <Callout
+          tone={round2Pick.correct ? 'success' : 'problem'}
+          title={`You added: ${round2Pick.label}`}
+          align="center"
         >
-          <p
-            className={
-              'mb-2 font-label text-[11px] font-bold ' +
-              (round2Pick.correct ? 'text-success' : 'text-danger')
-            }
-          >
-            You added: {round2Pick.label}
-          </p>
-          <p className="text-[15px] leading-snug text-text">{round2Pick.result}</p>
-        </div>
+          {round2Pick.result}
+        </Callout>
         {round2Pick.correct ? (
           <>
             <p className="text-center font-label text-[11px] text-text-muted">
@@ -337,13 +295,7 @@ export default function PromptGame({ termId, onComplete }) {
         {instruction(1, 'Here’s what your bot actually does with that instruction.')}
         {customerBanner}
         {round1Pick && botReplyBubble(round1Pick.reply)}
-        <div className="rounded-lg border-[3px] border-danger bg-danger-bg p-4 shadow-card">
-          <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger">
-            <span className="material-symbols-rounded text-[15px]">warning</span>
-            The problem
-          </p>
-          <p className="text-[15px] leading-snug text-text">{round1Result}</p>
-        </div>
+        <Callout tone="problem" title="The problem">{round1Result}</Callout>
         <GameActions>
           <GameActionButton variant="primary" icon="arrow_forward" onClick={() => setPhase('round2')}>
             Add a rule to your bot

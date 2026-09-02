@@ -4,6 +4,9 @@ import { sessionOneLines, resetLines, facts } from './content.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import Callout from '../../components/Callout.jsx'
+import ChatMessage from '../../components/ChatMessage.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
 
 const PRACTICAL_IDS = ['order', 'allergy', 'address']
 
@@ -64,11 +67,9 @@ export default function MemoryGame({ termId, onComplete }) {
   }
 
   const instruction = (sub) => (
-    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-      <p className="font-label text-[11px] text-primary">Game · Welcome, stranger</p>
-      <h1 className="text-2xl leading-tight">Memory</h1>
-      <p className="mt-1 font-label text-[11px] text-text-muted">{sub}</p>
-    </div>
+    <PhaseCard title="Welcome, stranger" heading="Memory">
+      {sub}
+    </PhaseCard>
   )
 
   function renderChatSequence(lines, onFinish, buttonLabel, header, intro = false) {
@@ -76,20 +77,20 @@ export default function MemoryGame({ termId, onComplete }) {
     return (
       <div className="flex flex-col gap-3">
         {intro ? <GameIntro term={term} /> : instruction(header)}
+        {/* Standard sides: the customer (Anna) is received, on the left; your
+            bot is on the right, like every other game. */}
         <div className="flex flex-col gap-2">
-          {lines.slice(0, lineIndex + 1).map((line, i) => (
-            <div
-              key={i}
-              className={
-                'max-w-[85%] rounded-md border-[3px] border-neutral px-4 py-3 text-sm shadow-pop ' +
-                (line.speaker === 'bot'
-                  ? 'self-start bg-surface text-text'
-                  : 'ml-auto self-end bg-accent-soft text-text')
-              }
-            >
-              {line.text}
-            </div>
-          ))}
+          {lines.slice(0, lineIndex + 1).map((line, i) =>
+            line.speaker === 'bot' ? (
+              <ChatMessage key={i} from="bot">
+                {line.text}
+              </ChatMessage>
+            ) : (
+              <ChatMessage key={i} from="customer" label="Customer · Anna">
+                {line.text}
+              </ChatMessage>
+            ),
+          )}
         </div>
         <GameActions>
           <GameActionButton
@@ -132,16 +133,10 @@ export default function MemoryGame({ termId, onComplete }) {
           <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
         </div>
 
-        <div className="rounded-lg border-[3px] border-tertiary bg-surface p-3 text-left shadow-pop">
-          <p className="flex items-center gap-1 font-label text-[11px] font-bold text-tertiary">
-            <span className="material-symbols-rounded text-[15px]">info</span>
-            Real talk
-          </p>
-          <p className="mt-1 text-[13px] leading-snug text-text">
-            This app remembers your finished games the exact same way, saved in your browser. That's
-            why your bot is still half-built when you come back tomorrow.
-          </p>
-        </div>
+        <Callout tone="info" title="Real talk" compact>
+          This app remembers your finished games the exact same way, saved in your browser. That's
+          why your bot is still half-built when you come back tomorrow.
+        </Callout>
 
         <GameActions>
           <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
@@ -208,21 +203,15 @@ export default function MemoryGame({ termId, onComplete }) {
     return (
       <div className="flex flex-col gap-3">
         {instruction('Why it forgot, and how to fix it.')}
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 shadow-pop">
-          <p className="font-label text-[11px] text-danger">The problem</p>
-          <p className="mt-1 text-[15px] leading-snug">
-            Every visit, the bot starts from zero. Inside one chat its memory is perfect. That is
-            working memory. But nothing survives once the chat ends, so it cannot recognise Anna at
-            all.
-          </p>
-        </div>
-        <div className="rounded-lg border-[3px] border-tertiary bg-surface p-4 shadow-pop">
-          <p className="font-label text-[11px] text-tertiary">The fix</p>
-          <p className="mt-1 text-[15px] leading-snug">
-            Give it a hard drive: a place to write facts down and read them back at the start of
-            every visit. That's persistent memory.
-          </p>
-        </div>
+        <Callout tone="problem" title="The problem">
+          Every visit, the bot starts from zero. Inside one chat its memory is perfect. That is
+          working memory. But nothing survives once the chat ends, so it cannot recognise Anna at
+          all.
+        </Callout>
+        <Callout tone="info" title="The fix" icon="build">
+          Give it a hard drive: a place to write facts down and read them back at the start of
+          every visit. That's persistent memory.
+        </Callout>
         <GameActions>
           <GameActionButton variant="primary" icon="database" onClick={() => setPhase('install')}>
             Install persistent memory
@@ -245,7 +234,7 @@ export default function MemoryGame({ termId, onComplete }) {
     return (
       <div className="flex flex-col gap-3">
         {instruction('The chat is over.')}
-        <div className="flex flex-col items-center justify-center gap-4 rounded-lg border-[3px] border-neutral bg-muted py-16 shadow-card">
+        <div className="flex flex-col items-center justify-center gap-4 rounded-lg border-[3px] border-neutral bg-muted py-16 shadow-pop">
           <p className="font-display text-xl text-text-muted">One week later.</p>
           <GameActions>
             <GameActionButton variant="accent" icon="arrow_forward" onClick={() => setPhase('reset')}>

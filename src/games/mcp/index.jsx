@@ -4,6 +4,8 @@ import { BOT, NEEDED, EXTRA, STRANGER, WEEKS_PER_CONNECTOR } from './systems.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import Callout from '../../components/Callout.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
 
 /**
  * MCP game, { termId, onComplete } interface.
@@ -76,7 +78,7 @@ function Counter({ n, label, tone = 'neutral' }) {
         (tone === 'good'
           ? 'border-success bg-success-bg text-success'
           : tone === 'bad'
-            ? 'border-cheese-dim bg-cheese-bg text-cheese-dim'
+            ? 'border-danger bg-danger-bg text-danger'
             : 'border-neutral bg-surface text-text')
       }
     >
@@ -145,18 +147,12 @@ export default function McpGame({ termId, onComplete }) {
   if (phase === 'proof') {
     return (
       <div className="flex flex-col gap-3">
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-          <p className="font-label text-[11px] text-primary">Game · One universal port</p>
-          <h1 className="text-2xl leading-tight">A tool nobody planned for</h1>
-          <p className="mt-1 text-[13px] leading-snug text-text">
-            A stock tracker was built last month by a company that has never heard of you or your
-            bot. The old way, it would sit unusable until someone found time to build it a custom
-            connector.
-          </p>
-          <p className="mt-2 text-[13px] font-bold leading-snug text-text">
-            But it speaks MCP. Plug it in.
-          </p>
-        </div>
+        <PhaseCard title="One universal port" heading="A tool nobody planned for">
+          A stock tracker was built last month by a company that has never heard of you or your
+          bot. The old way, it would sit unusable until someone found time to build it a custom
+          connector.
+          <span className="mt-2 block font-bold text-text">But it speaks MCP. Plug it in.</span>
+        </PhaseCard>
 
         <BotCard sub="one universal port, anything that speaks MCP fits" port />
 
@@ -184,15 +180,10 @@ export default function McpGame({ termId, onComplete }) {
 
         {strangerIn && (
           <>
-            <div className="rounded-lg border-[3px] border-success bg-success-bg p-3 shadow-pop">
-              <p className="text-[15px] font-bold leading-snug text-success">
-                It just worked. You waited for no one.
-              </p>
-              <p className="mt-1 text-[13px] leading-snug text-text">
-                The people who built the stock tracker and the people who built your bot never
-                spoke. They both built to the same port, so the two sides fit before they ever met.
-              </p>
-            </div>
+            <Callout tone="success" title="It just worked. You waited for no one.">
+              The people who built the stock tracker and the people who built your bot never
+              spoke. They both built to the same port, so the two sides fit before they ever met.
+            </Callout>
             <GameActions>
               <GameActionButton
                 variant="primary"
@@ -212,14 +203,10 @@ export default function McpGame({ termId, onComplete }) {
   if (phase === 'port') {
     return (
       <div className="flex flex-col gap-3">
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-          <p className="font-label text-[11px] text-primary">Game · One universal port</p>
-          <h1 className="text-2xl leading-tight">One universal port</h1>
-          <p className="mt-1 text-[13px] leading-snug text-text">
-            Instead of a custom connector per system, give your bot a single port that any tool can
-            plug into, as long as both sides speak the same standard. That standard is MCP.
-          </p>
-        </div>
+        <PhaseCard title="One universal port" heading="One universal port">
+          Instead of a custom connector per system, give your bot a single port that any tool can
+          plug into, as long as both sides speak the same standard. That standard is MCP.
+        </PhaseCard>
 
         <BotCard
           sub={portOn ? 'universal port installed' : 'no universal port yet'}
@@ -274,15 +261,10 @@ export default function McpGame({ termId, onComplete }) {
 
             {allClicked && (
               <>
-                <div className="rounded-lg border-[3px] border-success bg-success-bg p-3 text-center shadow-pop">
-                  <p className="text-[15px] font-bold leading-snug text-success">
-                    Same systems. Zero custom bridges.
-                  </p>
-                  <p className="mt-1 text-[13px] leading-snug text-text">
-                    No side has to know anything about the other any more. Each one only has to know
-                    the port.
-                  </p>
-                </div>
+                <Callout tone="success" title="Same systems. Zero custom bridges." align="center">
+                  No side has to know anything about the other any more. Each one only has to know
+                  the port.
+                </Callout>
                 <GameActions>
                   <GameActionButton
                     variant="primary"
@@ -338,11 +320,9 @@ export default function McpGame({ termId, onComplete }) {
       </div>
 
       {extraShown && !oldBuilt.includes(EXTRA.id) && (
-        <div className="rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-3 py-2 text-center shadow-pop">
-          <p className="text-[13px] font-bold leading-snug text-cheese-dim">
-            And you're not done: you want the Loyalty app too. Same story, another custom build.
-          </p>
-        </div>
+        <Callout tone="problem" title="And you're not done" compact>
+          You want the Loyalty app too. Same story, another custom build.
+        </Callout>
       )}
 
       <div className="flex justify-center">
@@ -355,15 +335,10 @@ export default function McpGame({ termId, onComplete }) {
 
       {allOldDone ? (
         <>
-          <div className="rounded-lg border-[3px] border-cheese-dim bg-cheese-bg p-3 text-center shadow-pop">
-            <p className="text-[15px] font-bold leading-snug text-cheese-dim">
-              Four custom connectors. {weeks} weeks of work.
-            </p>
-            <p className="mt-1 text-[13px] leading-snug text-text">
-              And it never ends. Every new tool your bot needs is another custom bridge someone
-              builds and keeps working.
-            </p>
-          </div>
+          <Callout tone="problem" title={`Four custom connectors. ${weeks} weeks of work.`} icon="schedule">
+            And it never ends. Every new tool your bot needs is another custom bridge someone
+            builds and keeps working.
+          </Callout>
           <GameActions>
             <GameActionButton
               variant="primary"

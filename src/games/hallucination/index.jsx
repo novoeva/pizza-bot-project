@@ -5,6 +5,8 @@ import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
 import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import Callout from '../../components/Callout.jsx'
+import Panel from '../../components/Panel.jsx'
 
 /**
  * Hallucination game, { termId, onComplete } interface.
@@ -93,11 +95,7 @@ export default function HallucinationGame({ termId, onComplete }) {
     <>
       {/* Reference menu — a game tool (you check every claim against it), so it
           sits WITH the game, not off in the orientation column. */}
-      <div className="overflow-hidden rounded-md border-[3px] border-neutral bg-surface">
-        <div className="flex items-center gap-1.5 border-b-[3px] border-neutral bg-primary px-3 py-1.5 font-label text-[11px] text-white">
-          <span className="material-symbols-rounded text-[15px]">menu_book</span>
-          Today's real menu
-        </div>
+      <Panel header="brand" title="Today's real menu" icon="menu_book" shadow="none" bodyClassName="">
         <ul className="grid grid-cols-2 gap-x-4 gap-y-1 px-3 py-2">
           {menu.map(([name, price]) => (
             <li
@@ -109,7 +107,7 @@ export default function HallucinationGame({ termId, onComplete }) {
             </li>
           ))}
         </ul>
-      </div>
+      </Panel>
 
       {/* Claim progress — labeled so it clearly reads as "which claim am I on",
           not as something attached to the menu above it. */}
@@ -139,22 +137,26 @@ export default function HallucinationGame({ termId, onComplete }) {
         </div>
       </div>
 
-      {/* The claim, fixed height so it never resizes */}
-      <div className="flex h-[150px] flex-col overflow-hidden rounded-md border-[3px] border-neutral bg-surface shadow-card">
-        <div className="flex items-center justify-between bg-text px-3 py-1.5 font-label text-[10px] text-white">
-          <span>Bot says</span>
-          <span className="flex items-center gap-2">
+      {/* The claim, fixed height so it never resizes. Dark header = inside the
+          bot's head. */}
+      <Panel
+        header="dark"
+        title="Bot says"
+        shadow="card"
+        className="flex h-[150px] flex-col"
+        bodyClassName="flex flex-1 items-center gap-3 px-4"
+        meta={
+          <>
             Bot confidence 100%
             <span className="h-2 w-14 overflow-hidden rounded-full bg-white/25">
               <span className="block h-full w-full bg-success" />
             </span>
-          </span>
-        </div>
-        <div className="flex flex-1 items-center gap-3 px-4">
-          <BotAvatar />
-          <p className="text-[1.05rem] font-extrabold leading-snug">&ldquo;{round.say}&rdquo;</p>
-        </div>
-      </div>
+          </>
+        }
+      >
+        <BotAvatar />
+        <p className="text-[1.05rem] font-extrabold leading-snug">&ldquo;{round.say}&rdquo;</p>
+      </Panel>
 
       {/* Choices */}
       <div className={'flex gap-2 ' + (pick ? 'pointer-events-none opacity-50' : '')}>
@@ -177,7 +179,16 @@ export default function HallucinationGame({ termId, onComplete }) {
       </div>
 
       {/* Feedback lands here, in place */}
-      {pick && <Feedback correct={results[index] === 'correct'} round={round} />}
+      {pick && (
+        <Callout
+          tone={results[index] === 'correct' ? 'success' : 'problem'}
+          title={results[index] === 'correct' ? 'Caught it' : 'Fooled you'}
+          icon={results[index] === 'correct' ? 'check_circle' : 'cancel'}
+          compact
+        >
+          {results[index] === 'correct' ? round.whyRight : round.whyWrong}
+        </Callout>
+      )}
     </>
   )
 
@@ -192,32 +203,6 @@ export default function HallucinationGame({ termId, onComplete }) {
         </GameActions>
       )}
     </>
-  )
-}
-
-function Feedback({ correct, round }) {
-  return (
-    <div
-      className={
-        'rounded-md border-[3px] border-neutral p-3 shadow-pop ' +
-        (correct ? 'bg-success-bg' : 'bg-danger-bg')
-      }
-    >
-      <p
-        className={
-          'flex items-center gap-1.5 font-label text-sm font-bold ' +
-          (correct ? 'text-success' : 'text-danger')
-        }
-      >
-        <span className="material-symbols-rounded text-[18px]">
-          {correct ? 'check_circle' : 'cancel'}
-        </span>
-        {correct ? 'Caught it' : 'Fooled you'}
-      </p>
-      <p className="mt-1 text-[13px] leading-snug text-text">
-        {correct ? round.whyRight : round.whyWrong}
-      </p>
-    </div>
   )
 }
 

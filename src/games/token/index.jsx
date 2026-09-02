@@ -4,6 +4,9 @@ import { hookWord, hookTokens, samplePhrase, predictionRounds } from './content.
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import Callout from '../../components/Callout.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
+import Panel from '../../components/Panel.jsx'
 
 const GUESS_OPTIONS = [1, 2, 3, 4]
 
@@ -39,7 +42,7 @@ export default function TokenGame({ termId, onComplete }) {
       <div className="flex flex-col gap-3">
         <GameIntro term={term} />
 
-        <div className="rounded-md border-[3px] border-neutral bg-surface p-4 shadow-card">
+        <div className="rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop">
           <p className="text-center font-label text-[11px] text-text-muted">
             {answered ? 'It splits into' : 'How many tokens is this word?'}
           </p>
@@ -150,20 +153,15 @@ export default function TokenGame({ termId, onComplete }) {
 
     return (
       <div className="flex flex-col gap-3">
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-          <div className="flex items-center justify-between">
-            <p className="font-label text-[11px] text-primary">Game · Read your bot's mind</p>
-            <span className="font-label text-[11px] text-text-muted">
-              {roundIndex + 1} / {predictionRounds.length}
-            </span>
-          </div>
-          <h1 className="text-2xl leading-tight">Token</h1>
-          <p className="mt-1 text-[13px] leading-snug text-text-muted">
-            Your bot (an LLM, short for large language model) never writes a whole reply at once.
-            It picks one token, then the next, then the next. Every pick is a guess at what fits
-            best after everything it has seen so far.
-          </p>
-        </div>
+        <PhaseCard
+          title="Read your bot's mind"
+          heading="Token"
+          progress={{ unit: 'Sentence', current: roundIndex + 1, total: predictionRounds.length }}
+        >
+          Your bot (an LLM, short for large language model) never writes a whole reply at once.
+          It picks one token, then the next, then the next. Every pick is a guess at what fits
+          best after everything it has seen so far.
+        </PhaseCard>
 
         <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-4 text-center shadow-pop">
           <p className="text-lg font-extrabold leading-snug">
@@ -189,31 +187,16 @@ export default function TokenGame({ termId, onComplete }) {
           </div>
         ) : (
           <>
-            <div
-              className={
-                'rounded-md border-[3px] px-4 py-3 shadow-pop ' +
-                (correct ? 'border-success bg-success-bg' : 'border-danger bg-danger-bg')
-              }
+            <Callout
+              tone={correct ? 'success' : 'problem'}
+              icon={correct ? 'check_circle' : 'cancel'}
+              title={correct ? 'You called it' : `Your bot picked "${best.word}"`}
+              compact
             >
-              <p
-                className={
-                  'flex items-center gap-1.5 font-label text-sm font-bold ' +
-                  (correct ? 'text-success' : 'text-danger')
-                }
-              >
-                <span className="material-symbols-rounded text-[18px]">
-                  {correct ? 'check_circle' : 'cancel'}
-                </span>
-                {correct ? 'You called it' : `Your bot picked "${best.word}"`}
-              </p>
-              <p className="mt-1 text-[13px] leading-snug text-text">{round.why}</p>
-            </div>
+              {round.why}
+            </Callout>
 
-            <div className="rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop">
-              <div className="mb-3 flex items-baseline justify-between gap-2">
-                <p className="font-label text-[11px] text-text-muted">Your bot's ranking</p>
-                <p className="font-label text-[11px] text-text-muted">% = probability</p>
-              </div>
+            <Panel title="Your bot's ranking" meta="% = probability">
               <div className="flex flex-col gap-2">
                 {sorted.map((o) => {
                   const isBest = o.word === best.word
@@ -243,7 +226,7 @@ export default function TokenGame({ termId, onComplete }) {
                   )
                 })}
               </div>
-            </div>
+            </Panel>
 
             <GameActions>
               <GameActionButton variant="primary" icon="arrow_forward" onClick={next}>

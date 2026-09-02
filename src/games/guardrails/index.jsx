@@ -5,6 +5,9 @@ import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
 import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import Callout from '../../components/Callout.jsx'
+import ChatMessage from '../../components/ChatMessage.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
 
 /**
  * Guardrails game, { termId, onComplete } interface.
@@ -66,71 +69,46 @@ export default function GuardrailsGame({ termId, onComplete }) {
 
   // Per-phase instruction, at the top of the right column so it's always the
   // current step. The term name/role live on the left, so this stays slim.
-  const instruction = (part, sub) => (
-    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-      <div className="flex items-center justify-between">
-        <p className="font-label text-[11px] text-primary">Game · Free pizza for life</p>
-        <span className="font-label text-[11px] text-text-muted">Part {part} of 2</span>
-      </div>
-      <p className="mt-1 text-[13px] leading-snug text-text-muted">{sub}</p>
-    </div>
+  // `progress` carries both levels ("Part 1 of 2 · 2 / 4") so the sentence
+  // below stays a sentence.
+  const instruction = (part, sub, progress) => (
+    <PhaseCard title="Free pizza for life" progress={progress ?? `Part ${part} of 2`}>
+      {sub}
+    </PhaseCard>
   )
 
-  // Message archetype — a received message: avatar beside a rounded bubble with
-  // a tail. Matches the shared look across games (see prompt).
+  // The customer's trick as a received MESSAGE.
   const customerBubble = (whoLabel) => (
-    <div className="flex items-start gap-2">
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-surface">
-        <span className="material-symbols-rounded text-[20px] text-text-muted">person</span>
-      </span>
-      <div className="max-w-[85%]">
-        <p className="mb-1 font-label text-[10px] text-text-muted">{whoLabel}</p>
-        <div className="rounded-2xl rounded-tl-sm border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop">
-          <p className="font-bold leading-snug text-text">{current.customer}</p>
-        </div>
-      </div>
-    </div>
+    <ChatMessage from="customer" label={whoLabel}>
+      {current.customer}
+    </ChatMessage>
   )
 
-  // Bot's reply — a sent message: right-aligned, robot avatar. Keeps the
-  // held (green) / caved (red) tone so the outcome still reads at a glance.
-  const botBubble = (text, tone) => (
-    <div className="flex items-start justify-end gap-2">
-      <div className="max-w-[85%]">
-        <p className="mb-1 text-right font-label text-[10px] text-text-muted">Pizza bot</p>
-        <div
-          className={
-            'rounded-2xl rounded-tr-sm border-[3px] px-4 py-3 shadow-pop ' +
-            (tone === 'held' ? 'border-success bg-success-bg' : 'border-danger bg-danger-bg')
-          }
-        >
-        <p className="leading-snug text-text">{text}</p>
-        {tone === 'held' ? (
-          <p className="mt-1 flex items-center gap-1 font-label text-[11px] font-bold text-success">
-            <span className="material-symbols-rounded text-[15px]">shield</span>
-            Blocked by your guardrail, no damage.
-          </p>
-        ) : (
-          <div>
-            <p className="flex items-center gap-1 font-label text-[11px] font-bold text-danger">
-              <span className="material-symbols-rounded text-[15px]">bolt</span>
-              It worked. -${current.damage}
+  // Bot's reply as a sent MESSAGE; the reply itself is the verdict, so it is
+  // tinted: held = good (green), caved = bad (muted red).
+  const botBubble = (text, tone) =>
+    tone === 'held' ? (
+      <ChatMessage from="bot" tone="good" note="Blocked by your guardrail, no damage." noteIcon="shield">
+        {text}
+      </ChatMessage>
+    ) : (
+      <ChatMessage
+        from="bot"
+        tone="bad"
+        note={`It worked. -$${current.damage}`}
+        noteIcon="bolt"
+        footer={
+          current.scaleNote && (
+            <p className="mt-1 flex items-start gap-1 font-label text-[11px] text-danger">
+              <span className="material-symbols-rounded text-[15px]">groups</span>
+              {current.scaleNote}
             </p>
-            {current.scaleNote && (
-              <p className="mt-1 flex items-start gap-1 font-label text-[11px] text-danger">
-                <span className="material-symbols-rounded text-[15px]">groups</span>
-                {current.scaleNote}
-              </p>
-            )}
-          </div>
-        )}
-      </div>
-      </div>
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary">
-        <span className="material-symbols-rounded text-[20px] text-white">smart_toy</span>
-      </span>
-    </div>
-  )
+          )
+        }
+      >
+        {text}
+      </ChatMessage>
+    )
 
   if (phase === 'reveal') {
     return (
@@ -153,17 +131,11 @@ export default function GuardrailsGame({ termId, onComplete }) {
           <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
         </div>
 
-        <div className="rounded-lg border-[3px] border-neutral bg-muted p-4 text-left shadow-pop">
-          <p className="flex items-center gap-1 font-label text-[11px] text-text-muted">
-            <span className="material-symbols-rounded text-[15px]">info</span>
-            In the real world
-          </p>
-          <p className="mt-1 text-[15px] leading-snug">
-            Picking safe options like this is only the start. A real bot needs much stronger
-            guardrails, enforced in code and tested against attackers, not just written as
-            instructions a clever customer can talk it out of.
-          </p>
-        </div>
+        <Callout tone="info" title="In the real world">
+          Picking safe options like this is only the start. A real bot needs much stronger
+          guardrails, enforced in code and tested against attackers, not just written as
+          instructions a clever customer can talk it out of.
+        </Callout>
 
         <GameActions>
           <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
@@ -179,7 +151,8 @@ export default function GuardrailsGame({ termId, onComplete }) {
       <div className="flex flex-col gap-3">
         {instruction(
           2,
-          `Your guardrails, under attack · ${attackIndex + 1} / ${attacks.length}`,
+          'Your guardrails, under attack.',
+          `Part 2 of 2 · ${attackIndex + 1} / ${attacks.length}`,
         )}
 
         <p className="rounded-md border-[3px] border-success bg-success-bg px-3 py-2 text-center font-label text-sm font-bold text-success shadow-pop">
@@ -252,7 +225,8 @@ export default function GuardrailsGame({ termId, onComplete }) {
     <div className="flex flex-col gap-3">
       {instruction(
         1,
-        `Your bot has no guardrails yet. Watch pushy customers talk it into anything · ${attackIndex + 1} / ${attacks.length}`,
+        'Your bot has no guardrails yet. Watch pushy customers talk it into anything.',
+        `Part 1 of 2 · ${attackIndex + 1} / ${attacks.length}`,
       )}
 
       <p className="flex items-center justify-center gap-2 rounded-md border-[3px] border-danger bg-danger-bg px-3 py-2 text-center font-label text-sm font-bold text-danger shadow-pop">
