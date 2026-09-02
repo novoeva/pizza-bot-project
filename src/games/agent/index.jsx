@@ -8,6 +8,9 @@ import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import Callout from '../../components/Callout.jsx'
 import ChatMessage from '../../components/ChatMessage.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
+import PartTile from '../../components/PartTile.jsx'
+import SlotList from '../../components/SlotList.jsx'
+import { useFirstTimeHint } from '../../lib/useFirstTimeHint.js'
 import Panel from '../../components/Panel.jsx'
 
 /**
@@ -47,6 +50,8 @@ export default function AgentGame({ termId, onComplete }) {
     const t = setTimeout(() => setRunIdx((i) => i + 1), runIdx === 0 ? 650 : 750)
     return () => clearTimeout(t)
   }, [phase, runIdx, seq.length])
+
+  const hint = useFirstTimeHint()
 
   function add(id) {
     if (seq.length < actions.length && !seq.includes(id)) setSeq([...seq, id])
@@ -233,96 +238,38 @@ export default function AgentGame({ termId, onComplete }) {
   // wide-screen viewport without scrolling. Below `lg` the inner grid collapses
   // to a single stacked column, so the phone keeps the plain vertical flow.
 
-  // The to-do list the player is assembling (compact; sits beside the palette).
+  // The to-do list the player is assembling: a SlotList (a part of your bot).
   const toDoList = (
-    <Panel compact title="The agent’s to-do list" icon="checklist">
-      <div className="flex flex-col gap-1.5">
-        {Array.from({ length: actions.length }).map((_, i) => {
-          const id = seq[i]
-          if (!id) {
-            return (
-              <div
-                key={i}
-                className="flex min-h-[40px] items-center gap-2 rounded-md border-2 border-dashed border-slot-empty px-2.5 py-2 text-[12px] text-text-muted"
-              >
-                <span className="w-4 text-center font-label text-[11px] font-bold">{i + 1}</span>
-                tap to add…
-              </div>
-            )
-          }
-          const action = actions.find((a) => a.id === id)
-          return (
-            <div
-              key={i}
-              className="flex min-h-[40px] items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-2.5 py-2 text-[12px] font-bold text-cheese-dim"
-            >
-              <span className="w-4 text-center font-label text-[11px] font-bold">{i + 1}</span>
-              <span className="material-symbols-rounded text-[16px]">{action.icon}</span>
-              <span className="leading-tight">{action.label}</span>
-              <button
-                type="button"
-                onClick={() => removeAt(i)}
-                className="ml-auto font-label text-[13px] font-bold text-cheese-dim"
-                aria-label={`Remove ${action.label}`}
-              >
-                ✕
-              </button>
-            </div>
-          )
-        })}
-      </div>
-      {seq.length > 0 && (
-        <button
-          type="button"
-          onClick={() => setSeq([])}
-          className="mt-2 w-full text-center font-label text-[11px] font-bold text-text-muted"
-        >
-          ↻ clear the list
-        </button>
-      )}
-    </Panel>
+    <SlotList
+      title="The agent’s to-do list"
+      icon="checklist"
+      capacity={actions.length}
+      items={seq.map((id) => actions.find((a) => a.id === id))}
+      onDrop={add}
+      onRemove={removeAt}
+      onClear={() => setSeq([])}
+      emptyLabel="drag an action here…"
+      pulse={hint}
+    />
   )
 
-  // The parts palette. Each action is a CHOICE you hand the bot — a colour-coded
-  // icon panel + a type tag — so it reads as its own thing, never as a message.
-  // Compact (stacked label under a short tag) to sit beside the to-do list.
+  // The parts palette: each action is a PartTile you drag (or tap) into the
+  // list. Amber on the shelf and in the bot; it changes place, not colour.
+  const firstFree = actions.findIndex((a) => !seq.includes(a.id))
   const actionPalette = (
     <div className="flex flex-col gap-2">
-      {actions.map((action) => {
-        const used = seq.includes(action.id)
-        return (
-          <button
-            key={action.id}
-            type="button"
-            onClick={() => add(action.id)}
-            disabled={used}
-            className={
-              'press flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-surface text-left shadow-pop ' +
-              (used ? 'opacity-40' : '')
-            }
-          >
-            <span
-              className="flex w-10 shrink-0 items-center justify-center border-r-[3px] border-neutral bg-cheese-bg text-cheese-dim"
-              aria-hidden="true"
-            >
-              <span className="material-symbols-rounded text-[19px]">{action.icon}</span>
-            </span>
-            <span className="flex flex-1 items-center gap-2 px-2.5 py-2">
-              <span className="min-w-0">
-                <span className="block font-label text-[9px] leading-none text-cheese-dim">
-                  Action you give your bot
-                </span>
-                <span className="mt-0.5 block text-[13px] font-bold leading-tight text-text">
-                  {action.label}
-                </span>
-              </span>
-              <span className="ml-auto shrink-0 font-label text-[10px] font-bold text-primary">
-                {used ? 'added' : '+ add'}
-              </span>
-            </span>
-          </button>
-        )
-      })}
+      {actions.map((action, i) => (
+        <PartTile
+          key={action.id}
+          id={action.id}
+          icon={action.icon}
+          label={action.label}
+          used={seq.includes(action.id)}
+          usedLabel="on the list"
+          onAdd={() => add(action.id)}
+          wiggle={hint && i === firstFree}
+        />
+      ))}
     </div>
   )
 
@@ -330,7 +277,7 @@ export default function AgentGame({ termId, onComplete }) {
     <div className="flex flex-col gap-3">
       {instruction(
         'Build the agent',
-        'A chatbot only talks. Hand your bot the real actions to take, in the order that makes sense — tap to add them to the list.',
+        'A chatbot only talks. Hand your bot the real actions to take, in the order that makes sense — drag them onto the list.',
         `${seq.length}/${actions.length}`,
       )}
       {customerBubble}

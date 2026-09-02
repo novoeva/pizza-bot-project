@@ -16,44 +16,20 @@ import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import Callout from '../../components/Callout.jsx'
 import ChatMessage from '../../components/ChatMessage.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
+import SelectableCard from '../../components/SelectableCard.jsx'
+import ChoiceGroup from '../../components/ChoiceGroup.jsx'
 
-// Each pickable type gets its OWN colour + pictogram, so an "Instruction"
-// (the bot's base prompt) and a "Rule" (a constraint) read as different things
-// at a glance, not just different labels.
-const CHOICE_STYLES = {
-  Instruction: { tag: 'Instruction you give your bot', icon: 'description', panel: 'bg-accent-soft', accent: 'text-tertiary' },
-  Rule: { tag: 'Rule you add to your bot', icon: 'gavel', panel: 'bg-cheese-bg', accent: 'text-cheese-dim' },
+// The two things you can hand the bot here. Both are "yours" (blue), told
+// apart by icon + tag: an Instruction (its base prompt) and a Rule (a
+// constraint). Never a chat bubble, so a rule never reads as a message.
+const CHOICE = {
+  Instruction: { tag: 'Instruction you give your bot', icon: 'description' },
+  Rule: { tag: 'Rule you add to your bot', icon: 'gavel' },
 }
-
-// A pickable INSTRUCTION/RULE the player writes into the bot. Its own visual
-// family (colour-coded icon panel on the left + a type tag on the card),
-// deliberately NOT a chat bubble — so a "rule you give the bot" never reads as
-// a "message".
 function ChoiceCard({ type, label, onClick, picked = false }) {
-  const s = CHOICE_STYLES[type]
-  // `picked`: the same card shown back on the result screen, inert, so the
-  // player recognises what they tapped (Phase 1 review, Q1).
+  const c = CHOICE[type]
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={picked}
-      className={
-        'flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-surface text-left shadow-pop ' +
-        (picked ? '' : 'press')
-      }
-    >
-      <span
-        className={'flex w-11 shrink-0 items-center justify-center border-r-[3px] border-neutral ' + s.panel + ' ' + s.accent}
-        aria-hidden="true"
-      >
-        <span className="material-symbols-rounded text-[20px]">{s.icon}</span>
-      </span>
-      <span className="flex-1 px-3 py-3">
-        <span className={'block font-label text-[10px] ' + s.accent}>{s.tag}</span>
-        <span className="mt-0.5 block font-bold leading-snug text-text">{label}</span>
-      </span>
-    </button>
+    <SelectableCard mode="commit" icon={c.icon} tag={c.tag} label={label} onSelect={onClick} inert={picked} />
   )
 }
 
@@ -77,29 +53,17 @@ function optionPill(label, tone) {
 
 function CategoryPicker({ index, category, value, onPick }) {
   return (
-    <div>
-      <p className="mb-1 font-label text-[11px] text-text-muted">
-        {index != null && <span className="text-tertiary">Part {index} · </span>}
-        {category.name}
-      </p>
-      <div className="flex flex-wrap gap-2">
-        {category.options.map((opt) => (
-          <button
-            key={opt}
-            type="button"
-            onClick={() => onPick(category.name, opt)}
-            className={
-              'press rounded-md border-[3px] px-3 py-2 text-sm font-bold ' +
-              (value === opt
-                ? 'border-neutral bg-accent-soft text-tertiary shadow-pop'
-                : 'border-neutral bg-surface text-text-muted shadow-pop')
-            }
-          >
-            {opt}
-          </button>
-        ))}
-      </div>
-    </div>
+    <ChoiceGroup mode="radio" label={`Part ${index} · ${category.name}`}>
+      {category.options.map((opt) => (
+        <SelectableCard
+          key={opt}
+          mode="radio"
+          label={opt}
+          selected={value === opt}
+          onSelect={() => onPick(category.name, opt)}
+        />
+      ))}
+    </ChoiceGroup>
   )
 }
 
@@ -307,9 +271,9 @@ export default function PromptGame({ termId, onComplete }) {
   if (phase === 'round2') {
     return stage(
       <div className="flex flex-col gap-3">
-        {instruction(2, 'Your bot invents things. Add one rule to stop it — tap one.')}
+        {instruction(2, 'Your bot invents things. Add one rule to stop it.')}
         {customerBanner}
-        <div className="flex flex-col gap-2">
+        <ChoiceGroup mode="commit" label="Rules you could add">
           {round2Options.map((opt) => (
             <ChoiceCard
               key={opt.label}
@@ -321,7 +285,7 @@ export default function PromptGame({ termId, onComplete }) {
               }}
             />
           ))}
-        </div>
+        </ChoiceGroup>
       </div>
     )
   }
@@ -344,9 +308,9 @@ export default function PromptGame({ termId, onComplete }) {
 
   return stage(
     <div className="flex flex-col gap-3">
-      {instruction(1, 'Which instruction do you give your bot? Tap one.')}
+      {instruction(1, 'Which instruction do you give your bot?')}
       {customerBanner}
-      <div className="flex flex-col gap-2">
+      <ChoiceGroup mode="commit" label="Instructions you could give">
         {round1Options.map((opt) => (
           <ChoiceCard
             key={opt.label}
@@ -358,7 +322,7 @@ export default function PromptGame({ termId, onComplete }) {
             }}
           />
         ))}
-      </div>
+      </ChoiceGroup>
     </div>
   )
 }

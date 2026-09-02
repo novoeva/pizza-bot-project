@@ -8,6 +8,8 @@ import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import Callout from '../../components/Callout.jsx'
 import ChatMessage from '../../components/ChatMessage.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
+import SelectableCard from '../../components/SelectableCard.jsx'
+import ChoiceGroup from '../../components/ChoiceGroup.jsx'
 
 /**
  * Guardrails game, { termId, onComplete } interface.
@@ -182,29 +184,17 @@ export default function GuardrailsGame({ termId, onComplete }) {
         {instruction(2, "Now switch sides. Set the limits so the same tricks can't break your bot again.")}
         <div className="flex flex-col gap-4">
           {guardrailCategories.map((c, i) => (
-            <div key={c.id}>
-              <p className="mb-1 font-label text-[11px] text-text-muted">
-                <span className="text-tertiary">Limit {i + 1} · </span>
-                {c.name}
-              </p>
-              <div className="flex flex-col gap-2">
-                {c.options.map((opt) => (
-                  <button
-                    key={opt}
-                    type="button"
-                    onClick={() => pickCategory(c.id, opt)}
-                    className={
-                      'press rounded-md border-[3px] px-3 py-2 text-left text-sm font-bold shadow-pop ' +
-                      (picks[c.id] === opt
-                        ? 'border-neutral bg-accent-soft text-tertiary'
-                        : 'border-neutral bg-surface text-text-muted')
-                    }
-                  >
-                    {opt}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <ChoiceGroup key={c.id} mode="radio" label={`Limit ${i + 1} · ${c.name}`}>
+              {c.options.map((opt) => (
+                <SelectableCard
+                  key={opt}
+                  mode="radio"
+                  label={opt}
+                  selected={picks[c.id] === opt}
+                  onSelect={() => pickCategory(c.id, opt)}
+                />
+              ))}
+            </ChoiceGroup>
           ))}
         </div>
         <GameActions>

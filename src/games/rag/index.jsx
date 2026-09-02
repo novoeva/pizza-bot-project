@@ -8,6 +8,9 @@ import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import Callout from '../../components/Callout.jsx'
 import ChatMessage from '../../components/ChatMessage.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
+import PartTile from '../../components/PartTile.jsx'
+import SlotList from '../../components/SlotList.jsx'
+import { useFirstTimeHint } from '../../lib/useFirstTimeHint.js'
 import Panel from '../../components/Panel.jsx'
 
 /**
@@ -40,6 +43,8 @@ export default function RagGame({ termId, onComplete }) {
   const round = rounds[roundIdx]
   useGameScroll(phase === 'reveal' ? 'reveal' : `${round.n}-${phase}`)
 
+  const hint = useFirstTimeHint()
+
   function toggle(id) {
     setPicked((cur) =>
       cur.includes(id)
@@ -48,6 +53,9 @@ export default function RagGame({ termId, onComplete }) {
           ? [...cur, id]
           : cur,
     )
+  }
+  function handOver(id) {
+    setPicked((cur) => (cur.includes(id) || cur.length >= MAX_PAGES ? cur : [...cur, id]))
   }
   function answer(ids) {
     setOutcome(answerFor(round.n, ids))
@@ -188,110 +196,56 @@ export default function RagGame({ termId, onComplete }) {
 
   const atCap = picked.length >= MAX_PAGES
 
-  // Left slot: the customer's question + the two handed-over slots.
+  // Left slot: the customer's question + the two handed-over slots, a SlotList
+  // (the pages become a part of what the bot reads).
   const workbench = (
     <>
       {customerBubble}
-      <Panel
-        compact
-        icon="drafts"
+      <SlotList
         title="Handed to the bot"
-        meta={<span className="font-bold">{picked.length}/{MAX_PAGES}</span>}
-      >
-        <div className="flex flex-col gap-1.5">
-          {Array.from({ length: MAX_PAGES }).map((_, i) => {
-            const id = picked[i]
-            if (!id) {
-              return (
-                <div
-                  key={i}
-                  className="flex min-h-[42px] items-center gap-2 rounded-md border-2 border-dashed border-slot-empty px-2.5 py-2 text-[13px] text-text-muted"
-                >
-                  <span className="material-symbols-rounded text-[17px]">add</span>
-                  tap a page to hand it over…
-                </div>
-              )
-            }
-            const page = pages.find((p) => p.id === id)
-            return (
-              <div
-                key={i}
-                className="flex min-h-[42px] items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-2.5 py-2 text-[13px] font-bold text-cheese-dim"
-              >
-                <span className="material-symbols-rounded text-[17px]">{page.icon}</span>
-                {page.title}
-                <button
-                  type="button"
-                  onClick={() => toggle(id)}
-                  className="ml-auto font-label text-[13px] font-bold text-cheese-dim"
-                  aria-label={`Take back ${page.title}`}
-                >
-                  ✕
-                </button>
-              </div>
-            )
-          })}
-        </div>
-      </Panel>
+        icon="drafts"
+        capacity={MAX_PAGES}
+        items={picked.map((id) => {
+          const p = pages.find((x) => x.id === id)
+          return { id, icon: p.icon, label: p.title }
+        })}
+        onDrop={handOver}
+        onRemove={(i) => toggle(picked[i])}
+        emptyLabel="drag a page here…"
+        numbered={false}
+        pulse={hint}
+      />
     </>
   )
 
-  // Right slot: this step's instruction + the binder. Each page is a CHOICE you
-  // hand the bot — a colour-coded icon panel + a "Page from the binder" tag — so
-  // it reads as its own thing, never as a message. Two pages are deliberately
-  // titled the same; the only tell is the small `foot` date.
+  // Right slot: this step's instruction + the binder. Each page is a PartTile
+  // you drag (or tap) over to the bot. Two pages are deliberately titled the
+  // same; the only tell is the small `foot` date.
+  const firstFree = pages.findIndex((p) => !picked.includes(p.id))
   const binder = (
     <div className="flex flex-col gap-3">
       {instruction(round.instruction ? `Round ${round.n}` : 'Round', round.instruction)}
       <p className="flex items-center gap-1 pl-1 font-label text-[10px] text-text-muted">
         <span className="material-symbols-rounded text-[15px]">menu_book</span>
-        The binder · the bot reads at most {MAX_PAGES}
+        The binder · the bot reads at most {MAX_PAGES} · drag pages over
       </p>
       <div className="flex flex-col gap-2">
-        {pages.map((page) => {
+        {pages.map((page, i) => {
           const on = picked.includes(page.id)
           const locked = atCap && !on
           return (
-            <button
+            <PartTile
               key={page.id}
-              type="button"
-              onClick={() => toggle(page.id)}
-              disabled={locked}
-              className={
-                'press flex items-stretch overflow-hidden rounded-md border-[3px] text-left shadow-pop ' +
-                (on ? 'border-cheese-dim bg-cheese-bg ' : 'border-neutral bg-surface ') +
-                (locked ? 'opacity-40' : '')
-              }
-            >
-              <span
-                className={
-                  'flex w-11 shrink-0 items-center justify-center border-r-[3px] ' +
-                  (on
-                    ? 'border-cheese-dim bg-cheese-bg text-cheese-dim'
-                    : 'border-neutral bg-accent-soft text-tertiary')
-                }
-                aria-hidden="true"
-              >
-                <span className="material-symbols-rounded text-[20px]">{page.icon}</span>
-              </span>
-              <span className="flex flex-1 flex-col px-3 py-2.5">
-                <span className="flex items-center justify-between gap-2">
-                  <span className="font-label text-[10px] text-tertiary">
-                    Page from the binder · {page.kind}
-                  </span>
-                  <span className="shrink-0 font-label text-[11px] font-bold text-primary">
-                    {on ? 'handed ✓' : '+ hand over'}
-                  </span>
-                </span>
-                <span className="mt-0.5 font-bold leading-snug text-text">{page.title}</span>
-                <span className="mt-0.5 text-[12px] leading-snug text-text-muted">
-                  {page.snippet}
-                </span>
-                {page.foot && (
-                  <span className="mt-1 font-label text-[9px] text-text-muted">{page.foot}</span>
-                )}
-              </span>
-            </button>
+              id={page.id}
+              icon={page.icon}
+              label={page.title}
+              detail={`${page.kind} · ${page.snippet}`}
+              foot={page.foot}
+              used={on || locked}
+              usedLabel={on ? 'handed over' : 'bot is full'}
+              onAdd={() => handOver(page.id)}
+              wiggle={hint && i === firstFree}
+            />
           )
         })}
       </div>

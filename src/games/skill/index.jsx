@@ -8,6 +8,9 @@ import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import Callout from '../../components/Callout.jsx'
 import ChatMessage from '../../components/ChatMessage.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
+import PartTile from '../../components/PartTile.jsx'
+import SlotList from '../../components/SlotList.jsx'
+import { useFirstTimeHint } from '../../lib/useFirstTimeHint.js'
 
 // Fixed shuffle so the buttons don't appear in a suggestive top-to-bottom order.
 const shuffledSteps = [playbookSteps[2], playbookSteps[0], playbookSteps[3], playbookSteps[1]]
@@ -29,6 +32,8 @@ export default function SkillGame({ termId, onComplete }) {
   const term = terms.find((t) => t.id === termId)
   const isLastReply = replyIndex === improvisedReplies.length - 1
 
+  const hint = useFirstTimeHint()
+
   function tapStep(id) {
     if (builtSteps.includes(id)) return
     const next = [...builtSteps, id]
@@ -36,6 +41,9 @@ export default function SkillGame({ termId, onComplete }) {
     if (next.length === playbookSteps.length) {
       setPhase('round2')
     }
+  }
+  function removeStep(index) {
+    setBuiltSteps((b) => b.filter((_, i) => i !== index))
   }
 
   // Round 2 uses the player's own order: the point is consistency, not a "right" sequence.
@@ -68,62 +76,11 @@ export default function SkillGame({ termId, onComplete }) {
     </ChatMessage>
   )
 
-  // Choice archetype — a step you add to the playbook (turns green once added).
-  const stepCard = (step) => {
-    const done = builtSteps.includes(step.id)
-    return (
-      <button
-        key={step.id}
-        type="button"
-        disabled={done}
-        onClick={() => tapStep(step.id)}
-        className={
-          'flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral text-left shadow-pop ' +
-          (done ? 'bg-success-bg' : 'press bg-surface')
-        }
-      >
-        <span
-          className={
-            'flex w-11 shrink-0 items-center justify-center border-r-[3px] border-neutral ' +
-            (done ? 'bg-success text-white' : 'bg-accent-soft text-tertiary')
-          }
-          aria-hidden="true"
-        >
-          <span className="material-symbols-rounded text-[20px]">
-            {done ? 'check' : 'playlist_add'}
-          </span>
-        </span>
-        <span className="flex-1 px-3 py-3">
-          <span
-            className={'block font-label text-[10px] ' + (done ? 'text-success' : 'text-tertiary')}
-          >
-            {done ? 'Added to playbook' : 'Playbook step'}
-          </span>
-          <span className="mt-0.5 block font-bold leading-snug text-text">{step.label}</span>
-        </span>
-      </button>
-    )
-  }
-
-  const playbookPanel = (steps, muted) => (
-    <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop">
-      <p className="mb-1 font-label text-[10px] text-text-muted">Your playbook</p>
-      {steps.length === 0 ? (
-        <p className="text-sm text-text-muted">Empty — tap a step below to add it.</p>
-      ) : (
-        <ol
-          className={
-            'flex list-inside list-decimal flex-col gap-0.5 text-sm ' +
-            (muted ? 'text-text-muted' : 'text-text')
-          }
-        >
-          {steps.map((s) => (
-            <li key={s.id}>{s.label}</li>
-          ))}
-        </ol>
-      )}
-    </div>
-  )
+  // The playbook is a SlotList (a part of your bot, amber); the steps on the
+  // shelf are PartTiles you drag (or tap) into it. Order = the order you
+  // handle a complaint.
+  const playbookItems = builtPlaybook.map((s) => ({ id: s.id, label: s.label }))
+  const firstFree = shuffledSteps.findIndex((s) => !builtSteps.includes(s.id))
 
   if (phase === 'reveal') {
     return (
@@ -160,7 +117,7 @@ export default function SkillGame({ termId, onComplete }) {
     return stage(
       <div className="flex flex-col gap-3">
         {instruction(3, 'Same complaint, three times — now handled by your playbook, identically.')}
-        {playbookPanel(builtPlaybook, true)}
+        <SlotList title="Your playbook" capacity={playbookSteps.length} items={playbookItems} />
         {customerBubble(complaint)}
         <div className="flex flex-col gap-2">
           {[0, 1, 2].map((i) => botBubble(i, script, 'good', `Customer ${i + 1}`))}
@@ -180,12 +137,32 @@ export default function SkillGame({ termId, onComplete }) {
   if (phase === 'build') {
     return stage(
       <div className="flex flex-col gap-3">
-        {instruction(2, 'Build the playbook — tap the steps in the order you would handle it.')}
-        {playbookPanel(
-          builtSteps.map((id) => playbookSteps.find((s) => s.id === id)),
-          false,
-        )}
-        <div className="flex flex-col gap-2">{shuffledSteps.map((step) => stepCard(step))}</div>
+        {instruction(2, 'Build the playbook. Drag the steps into it in the order you would handle a complaint.')}
+        <SlotList
+          title="Your playbook"
+          capacity={playbookSteps.length}
+          items={playbookItems}
+          onDrop={tapStep}
+          onRemove={removeStep}
+          pulse={hint}
+        />
+        <p className="flex items-center gap-1 pl-1 font-label text-[10px] text-text-muted">
+          <span className="material-symbols-rounded text-[15px]">handyman</span>
+          Steps · drag into the playbook
+        </p>
+        <div className="flex flex-col gap-2">
+          {shuffledSteps.map((step, i) => (
+            <PartTile
+              key={step.id}
+              id={step.id}
+              label={step.label}
+              used={builtSteps.includes(step.id)}
+              usedLabel="in the playbook"
+              onAdd={() => tapStep(step.id)}
+              wiggle={hint && i === firstFree}
+            />
+          ))}
+        </div>
       </div>
     )
   }

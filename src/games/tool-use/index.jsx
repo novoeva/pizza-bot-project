@@ -8,6 +8,8 @@ import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import Callout from '../../components/Callout.jsx'
 import ChatMessage from '../../components/ChatMessage.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
+import SelectableCard from '../../components/SelectableCard.jsx'
+import ChoiceGroup from '../../components/ChoiceGroup.jsx'
 
 /**
  * Tool use game, { termId, onComplete } interface.
@@ -89,25 +91,16 @@ export default function ToolUseGame({ termId, onComplete }) {
     </>
   )
 
-  // Choice archetype — a tool the player hands the bot to check with.
+  // A tool the player hands the bot to check with: a commit choice.
   const toolCard = (tool) => (
-    <button
+    <SelectableCard
       key={tool.id}
-      type="button"
-      onClick={() => tapTool(tool.id)}
-      className="press flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-surface text-left shadow-pop"
-    >
-      <span
-        className="flex w-11 shrink-0 items-center justify-center border-r-[3px] border-neutral bg-accent-soft text-tertiary"
-        aria-hidden="true"
-      >
-        <span className="material-symbols-rounded text-[20px]">build</span>
-      </span>
-      <span className="flex-1 px-3 py-3">
-        <span className="block font-label text-[10px] text-tertiary">Tool your bot can check</span>
-        <span className="mt-0.5 block font-bold leading-snug text-text">{tool.label}</span>
-      </span>
-    </button>
+      mode="commit"
+      icon="build"
+      tag="Tool your bot can check"
+      label={tool.label}
+      onSelect={() => tapTool(tool.id)}
+    />
   )
 
   if (phase === 'reveal') {
@@ -190,10 +183,9 @@ export default function ToolUseGame({ termId, onComplete }) {
         )
       ) : !checked ? (
         <div className="flex flex-col gap-2">
-          <p className="font-label text-[11px] text-text-muted">
-            Tap the right tool for your bot to check:
-          </p>
-          <div className="flex flex-col gap-2">{tools.map((tool) => toolCard(tool))}</div>
+          <ChoiceGroup mode="commit" label="Which tool has the answer?">
+            {tools.map((tool) => toolCard(tool))}
+          </ChoiceGroup>
           {wrongToolTap && (
             <p className="font-label text-[11px] italic text-text-muted">
               That tool doesn&rsquo;t have this answer, try another.

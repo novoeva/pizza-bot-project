@@ -14,6 +14,8 @@ import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import Callout from '../../components/Callout.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
+import SelectableCard from '../../components/SelectableCard.jsx'
+import ChoiceGroup from '../../components/ChoiceGroup.jsx'
 import Panel from '../../components/Panel.jsx'
 
 /**
@@ -222,26 +224,25 @@ export default function TemperatureGame({ termId, onComplete }) {
         </div>
 
         {!answered ? (
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => choose('low')}
-              className="press flex flex-col items-center gap-1 rounded-md border-[3px] border-neutral bg-surface py-4 shadow-pop"
-            >
-              <span className="material-symbols-rounded text-2xl text-tertiary">ac_unit</span>
-              <span className="font-label text-sm font-bold text-text">Turn it down</span>
-              <span className="font-label text-[10px] text-text-muted">Low · consistent</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => choose('high')}
-              className="press flex flex-col items-center gap-1 rounded-md border-[3px] border-neutral bg-surface py-4 shadow-pop"
-            >
-              <span className="material-symbols-rounded text-2xl text-tomato">local_fire_department</span>
-              <span className="font-label text-sm font-bold text-text">Turn it up</span>
-              <span className="font-label text-[10px] text-text-muted">High · creative</span>
-            </button>
-          </div>
+          <ChoiceGroup mode="commit" columns={2} label="Which way do you turn the dial?">
+            <SelectableCard
+              mode="commit"
+              variant="tile"
+              icon="ac_unit"
+              label="Turn it down"
+              detail="Low · consistent"
+              onSelect={() => choose('low')}
+            />
+            <SelectableCard
+              mode="commit"
+              variant="tile"
+              icon="local_fire_department"
+              iconClassName="text-tomato"
+              label="Turn it up"
+              detail="High · creative"
+              onSelect={() => choose('high')}
+            />
+          </ChoiceGroup>
         ) : (
           <Callout
             tone={correct ? 'success' : 'problem'}

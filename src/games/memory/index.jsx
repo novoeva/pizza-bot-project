@@ -7,6 +7,9 @@ import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import Callout from '../../components/Callout.jsx'
 import ChatMessage from '../../components/ChatMessage.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
+import PartTile from '../../components/PartTile.jsx'
+import SlotList from '../../components/SlotList.jsx'
+import { useFirstTimeHint } from '../../lib/useFirstTimeHint.js'
 import ProgressBar from '../../components/ProgressBar.jsx'
 
 const PRACTICAL_IDS = ['order', 'allergy', 'address']
@@ -55,15 +58,16 @@ export default function MemoryGame({ termId, onComplete }) {
 
   const term = terms.find((t) => t.id === termId)
 
-  function toggleFact(id) {
+  const hint = useFirstTimeHint()
+
+  function saveFact(id) {
+    setSelected((prev) => (prev.has(id) ? prev : new Set([...prev, id])))
+  }
+  function forgetFact(index) {
     setSelected((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) {
-        next.delete(id)
-      } else {
-        next.add(id)
-      }
-      return next
+      const next = [...prev]
+      next.splice(index, 1)
+      return new Set(next)
     })
   }
 
@@ -168,34 +172,36 @@ export default function MemoryGame({ termId, onComplete }) {
       <div className="flex flex-col gap-3">
         <ProgressBar part={3} parts={4} step={selected.size} steps={facts.length} />
         {instruction(
-          'The hard drive is empty. Tick whatever the bot should remember. Anything you skip is gone the moment the chat ends.',
+          'The hard drive is empty. Drag in whatever the bot should remember. Anything you leave out is gone the moment the chat ends.',
         )}
-        <div className="flex flex-col gap-2">
-          {facts.map((fact) => {
-            const isSelected = selected.has(fact.id)
-            return (
-              <button
-                key={fact.id}
-                type="button"
-                onClick={() => toggleFact(fact.id)}
-                className={
-                  'press rounded-md border-[3px] px-4 py-3 text-left font-bold shadow-pop transition-all ' +
-                  (isSelected
-                    ? 'border-cheese-dim bg-cheese-bg text-cheese-dim'
-                    : 'border-neutral bg-surface text-text-muted')
-                }
-              >
-                {isSelected ? '✓ ' : ''}
-                {fact.label}
-              </button>
-            )
-          })}
-        </div>
-        <p className="text-center font-label text-[11px] text-text-muted">
-          {selected.size === 0
-            ? 'Nothing saved yet'
-            : `${selected.size} fact${selected.size === 1 ? '' : 's'} saved to memory`}
+        <SlotList
+          title="The hard drive"
+          icon="database"
+          capacity={facts.length}
+          items={[...selected].map((id) => ({ id, label: facts.find((f) => f.id === id).label }))}
+          onDrop={saveFact}
+          onRemove={forgetFact}
+          emptyLabel="drag a fact here…"
+          numbered={false}
+          pulse={hint}
+        />
+        <p className="flex items-center gap-1 pl-1 font-label text-[10px] text-text-muted">
+          <span className="material-symbols-rounded text-[15px]">handyman</span>
+          What the bot heard today · drag what it should keep
         </p>
+        <div className="flex flex-col gap-2">
+          {facts.map((fact, i) => (
+            <PartTile
+              key={fact.id}
+              id={fact.id}
+              label={fact.label}
+              used={selected.has(fact.id)}
+              usedLabel="saved"
+              onAdd={() => saveFact(fact.id)}
+              wiggle={hint && i === facts.findIndex((f) => !selected.has(f.id))}
+            />
+          ))}
+        </div>
         <GameActions>
           <GameActionButton variant="primary" icon="save" disabled={!done} onClick={() => setPhase('revisit')}>
             Save to the hard drive

@@ -6,6 +6,8 @@ import GameIntro from '../../components/GameIntro.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import Callout from '../../components/Callout.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
+import SelectableCard from '../../components/SelectableCard.jsx'
+import ChoiceGroup from '../../components/ChoiceGroup.jsx'
 import ProgressBar from '../../components/ProgressBar.jsx'
 import Panel from '../../components/Panel.jsx'
 
@@ -52,17 +54,19 @@ export default function TokenGame({ termId, onComplete }) {
           {!answered ? (
             <>
               <p className="mt-2 text-center text-3xl font-extrabold tracking-tight">{hookWord}</p>
-              <div className="mt-3 grid grid-cols-4 gap-2">
-                {GUESS_OPTIONS.map((n) => (
-                  <button
-                    key={n}
-                    type="button"
-                    onClick={() => setChopGuess(n)}
-                    className="press rounded-md border-[3px] border-neutral bg-surface py-3 font-label text-lg font-bold text-text shadow-pop"
-                  >
-                    {n}
-                  </button>
-                ))}
+              <div className="mt-3 text-left">
+                <ChoiceGroup mode="commit" columns={4}>
+                  {GUESS_OPTIONS.map((n) => (
+                    <SelectableCard
+                      key={n}
+                      mode="commit"
+                      variant="tile"
+                      label={String(n)}
+                      labelClassName="text-lg"
+                      onSelect={() => setChopGuess(n)}
+                    />
+                  ))}
+                </ChoiceGroup>
               </div>
             </>
           ) : (
@@ -169,21 +173,17 @@ export default function TokenGame({ termId, onComplete }) {
         </div>
 
         {!answered ? (
-          <div className="flex flex-col gap-2">
-            <p className="text-center font-label text-[11px] text-text-muted">
-              Which token does your bot pick next?
-            </p>
+          <ChoiceGroup mode="commit" label="Which token does your bot pick next?">
             {round.options.map((o) => (
-              <button
+              <SelectableCard
                 key={o.word}
-                type="button"
-                onClick={() => choose(o.word)}
-                className="press rounded-md border-[3px] border-neutral bg-surface py-3 font-mono text-sm font-bold text-text shadow-pop"
-              >
-                {o.word}
-              </button>
+                mode="commit"
+                label={o.word}
+                labelClassName="font-mono text-sm"
+                onSelect={() => choose(o.word)}
+              />
             ))}
-          </div>
+          </ChoiceGroup>
         ) : (
           <>
             <Callout
