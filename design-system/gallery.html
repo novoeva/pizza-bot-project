@@ -29,8 +29,8 @@
     --color-bg: #f9f9ff; --color-surface: #ffffff; --color-border: #586158;
     --color-text: #001b3c; --color-text-muted: #586158; --color-text-dim: #8a938a;
     --color-cheese: #d9992b; --color-cheese-dim: #b37d1f;
-    --color-primary: #b7102a; --color-tertiary: #286182; --color-accent: #98cdf2;
-    --color-neutral: #586158; --color-muted: #dce5d9;
+    --color-primary: #001b3c; --color-tertiary: #286182; --color-accent: #98cdf2;
+    --color-neutral: #586158; --color-muted: #e6e7ee;
     --color-success: #2a9d8f; --color-success-bg: #e7f4f1;
     --color-danger: #b7102a; --color-danger-bg: #fbe7ea;
     --color-slot-empty: #a8b1a7; --color-accent-soft: #d9edfb; --color-cheese-bg: #f9efd7;
@@ -97,7 +97,9 @@
   .item h4 .ref { font-family: var(--font-label); font-size: 10px; color: var(--g-ink-soft); margin-right: .4rem; }
   .verdict { display: inline-block; font-size: 11px; padding: .1rem .45rem; border-radius: 999px; font-weight: 700; }
   .v-ok { background: #e7f4f1; color: #1f7a6f; } .v-warn { background: #f9efd7; color: #8a5f10; } .v-bad { background: #fbe7ea; color: #9c0d24; }
-  .prop-col { --color-muted: #e6e7ee; } /* D2 proposed neutral, scoped to one column */
+  .prop-col { --color-muted: #e6e7ee; }
+  /* "Today" columns show the app as it was before Phase 0 (green muted, red primary). */
+  .stage.today, .item.was { --color-muted: #dce5d9; --color-primary: #b7102a; }
 </style>
 
 <div class="wrap">
@@ -138,20 +140,20 @@
     <section class="block" id="colors">
       <p class="eyebrow">Tokens</p>
       <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">The colour tokens, and what each one means today</h2>
-      <p class="lede">A token is a named colour in <code>tokens.css</code>. Components never say "green", they say <code>bg-muted</code> or <code>bg-success-bg</code>. So a colour with three jobs is a token with three jobs. The four flagged rows are the problem.</p>
+      <p class="lede">A token is a named colour in <code>tokens.css</code>. Components never say "green", they say <code>bg-muted</code> or <code>bg-success-bg</code>. So a colour with three jobs is a token with three jobs. Two of the four problem rows are fixed by Phase 0 (muted, primary). Blue and amber get their single meaning when the components land (Phases 1–2).</p>
       <div class="swatch-row">
         <div class="sw"><div class="chip" style="background:#ffffff;border-bottom:1px solid #e5e7eb"></div><div class="meta"><b>surface</b><code>#ffffff</code><br>Default card. Fine.</div></div>
         <div class="sw"><div class="chip" style="background:#f9f9ff"></div><div class="meta"><b>bg</b><code>#f9f9ff</code><br>Page ground. Fine.</div></div>
         <div class="sw"><div class="chip" style="background:#586158"></div><div class="meta"><b>neutral / border</b><code>#586158</code><br>All 3px outlines + shadows. Fine.</div></div>
-        <div class="sw"><div class="chip" style="background:#dce5d9"></div><div class="meta"><b class="flag">muted ⚑ R1</b><code>#dce5d9</code><br>Meant as "neutral grey box". <b>It is sage green.</b> 26 uses.</div></div>
+        <div class="sw"><div class="chip" style="background:#e6e7ee"></div><div class="meta"><b>muted</b> <span class="verdict v-ok">Phase 0 done</span><code>#e6e7ee</code><br>Was sage green #dce5d9. Now the one grey surface: received messages, inert boxes.</div></div>
         <div class="sw"><div class="chip" style="background:#e7f4f1"></div><div class="meta"><b>success-bg</b><code>#e7f4f1</code><br>"You got it right". Mint green. Collides with muted.</div></div>
         <div class="sw"><div class="chip" style="background:#2a9d8f"></div><div class="meta"><b>success</b><code>#2a9d8f</code><br>Teal. Correct / held / online.</div></div>
         <div class="sw"><div class="chip" style="background:#d9edfb"></div><div class="meta"><b class="flag">accent-soft ⚑ R1</b><code>#d9edfb</code><br>Light blue. 5 meanings today.</div></div>
         <div class="sw"><div class="chip" style="background:#286182"></div><div class="meta"><b>tertiary</b><code>#286182</code><br>Blue text/border. Pairs with accent-soft.</div></div>
         <div class="sw"><div class="chip" style="background:#f9efd7"></div><div class="meta"><b class="flag">cheese-bg ⚑ R3</b><code>#f9efd7</code><br>Light amber. 5 meanings today.</div></div>
         <div class="sw"><div class="chip" style="background:#d9992b"></div><div class="meta"><b>cheese / cheese-dim</b><code>#d9992b · #b37d1f</code><br>Amber text/border.</div></div>
-        <div class="sw"><div class="chip" style="background:#b7102a"></div><div class="meta"><b class="flag">primary ⚑ R2</b><code>#b7102a</code><br>Buttons, eyebrows, bot avatar.</div></div>
-        <div class="sw"><div class="chip" style="background:#b7102a"></div><div class="meta"><b class="flag">danger ⚑ R2</b><code>#b7102a</code><br><b>Same hex as primary.</b> "Something went wrong".</div></div>
+        <div class="sw"><div class="chip" style="background:#001b3c"></div><div class="meta"><b>primary</b> <span class="verdict v-ok">Phase 0 done</span><code>#001b3c</code><br>Was red. Now navy: buttons, title, active tab, bot avatar.</div></div>
+        <div class="sw"><div class="chip" style="background:#b7102a"></div><div class="meta"><b>danger / tomato</b><code>#b7102a</code><br>Red now means only "wrong / it hurts", plus the pizza mark and the mascot's pizza parts (tomato).</div></div>
         <div class="sw"><div class="chip" style="background:#fbe7ea"></div><div class="meta"><b>danger-bg</b><code>#fbe7ea</code><br>Light red tint. Wrong / problem.</div></div>
         <div class="sw"><div class="chip" style="background:#001b3c"></div><div class="meta"><b>text</b><code>#001b3c</code><br>Navy. Also used as a dark header.</div></div>
       </div>

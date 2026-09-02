@@ -14,7 +14,7 @@ function TopHeader({ inGame }) {
               <span className="material-symbols-rounded text-primary">arrow_back</span>
             </Link>
           ) : (
-            <span className="material-symbols-rounded fill p-1 text-primary" aria-hidden="true">
+            <span className="material-symbols-rounded fill p-1 text-tomato" aria-hidden="true">
               local_pizza
             </span>
           )}

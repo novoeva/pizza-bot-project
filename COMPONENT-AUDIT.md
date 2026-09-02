@@ -159,7 +159,7 @@ Keep local (one-off, fine as is): agent `SystemsPanel`, context-window `ContextP
 
 No behavior or game-logic changes in any phase; every phase is "same screens, fewer copies". Estimates assume one person, familiar with the repo.
 
-**Phase 0 — Tokens & dictionary (½ day).** Decide D2, D5, D7. Apply the `muted` value change and prune unused tokens in `tokens.css`. Write the dictionary (§2) into `GAME-DESIGN-PRINCIPLES.md` or a `VISUAL-LANGUAGE.md`. Blocks everything else: extracted components must be born with the right meanings.
+**Phase 0 — Tokens & dictionary. ✅ Done 2026-09-02** (`muted` → `#e6e7ee`, `primary` → navy `#001b3c`, `danger`/`tomato` keep red; unused tokens pruned; red kept only where it means "wrong" or is the pizza brand mark). Decide D2, D5, D7. Apply the `muted` value change and prune unused tokens in `tokens.css`. Write the dictionary (§2) into `GAME-DESIGN-PRINCIPLES.md` or a `VISUAL-LANGUAGE.md`. Blocks everything else: extracted components must be born with the right meanings.
 
 **Phase 1 — Pure visual primitives (1–2 days).** Build `Callout`, `ChatMessage` + `Avatar`, `PhaseCard`, `Panel`. Swap them in game by game, stage games first (they are already structured for it), then misfits. Closes FR-11 (Prompt wrong rows → `Callout problem`) and fixes Memory's flipped chat sides. No prop-driven behavior, so risk is visual only; verify by screenshots per game.
 

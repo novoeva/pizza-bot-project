@@ -194,7 +194,7 @@ export default function PromptGame({ termId, onComplete }) {
           </div>
         ) : (
           <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 shadow-card">
-            <p className="mb-3 text-center font-label text-[11px] font-bold text-primary">
+            <p className="mb-3 text-center font-label text-[11px] font-bold text-danger">
               Your bot runs, but a few of these choices will cause problems
             </p>
             <div className="flex flex-col gap-3">

@@ -4,16 +4,17 @@
  * reference raw hex codes, only these variables (via Tailwind classes).
  *
  * Direction: v0 + Loveable mixed prototype, light, bold, "chunky"
- * (3px borders + hard offset shadows), navy text on off-white, red
- * primary with blue accents. See design-mix/index.html.
+ * (3px borders + hard offset shadows), navy text on off-white, navy
+ * primary with blue accents; tomato red is the brand mark and the
+ * danger colour. Colour roles are defined in COMPONENT-AUDIT.md §2 and
+ * shown in design-system/gallery.html.
  */
 
 :root {
   /* ---- Color: surfaces ---- */
   --color-bg: #f9f9ff;
-  --color-bg-raised: #eef2ef;
   --color-surface: #ffffff;
-  --color-surface-hover: #f1f4f2;
+  --color-surface-hover: #eef0f5;
   --color-border: #586158;
 
   /* ---- Color: text ---- */
@@ -26,15 +27,17 @@
   --color-tomato-dim: #8f0c20;
   --color-cheese: #d9992b;
   --color-cheese-dim: #b37d1f;
-  --color-crust: #001b3c;
-  --color-basil: #2a9d8f;
 
   /* ---- Color: new-world accents ---- */
-  --color-primary: #b7102a;
+  /* primary = navy: the action that moves you on (role 8). Red is no longer
+     a button colour, so red only ever means "wrong / it hurts". */
+  --color-primary: #001b3c;
   --color-tertiary: #286182;
   --color-accent: #98cdf2;
   --color-neutral: #586158;
-  --color-muted: #dce5d9;
+  /* muted = the one grey surface: received messages, inert/reference boxes.
+     Deliberately NOT green, so green is left to success-bg alone. */
+  --color-muted: #e6e7ee;
 
   /* ---- Color: feedback ---- */
   --color-success: #2a9d8f;
@@ -44,8 +47,6 @@
   --color-info: #286182;
 
   /* ---- Color: robot / meta-game ---- */
-  --color-metal: #586158;
-  --color-metal-dim: #dce5d9;
   --color-slot-empty: #a8b1a7;
   --color-slot-fill: #e7ece5;
   --color-glow: #bfe6df;

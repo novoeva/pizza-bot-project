@@ -128,7 +128,7 @@ export default function HallucinationGame({ termId, onComplete }) {
                   (r === 'correct'
                     ? 'bg-success'
                     : r === 'wrong'
-                      ? 'bg-primary'
+                      ? 'bg-danger'
                       : i === index
                         ? 'bg-accent'
                         : 'bg-transparent')

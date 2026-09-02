@@ -1,0 +1,112 @@
+<meta charset="utf-8">
+<title>Phase 0 Review Kit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=swap">
+<style>
+  :root {
+    --ink: #001b3c; --ink-soft: #4b5563; --rule: #cfd3dc; --paper: #f3f4f8; --card: #ffffff;
+    --navy: #001b3c; --red: #b7102a; --red-bg: #fbe7ea; --grey-new: #e6e7ee; --green-old: #dce5d9; --mint: #e7f4f1; --teal: #2a9d8f; --blue: #286182; --blue-bg: #d9edfb; --neutral: #586158;
+    --label: 'Space Grotesk', ui-monospace, monospace; --body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+  html { color-scheme: light; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); }
+  .wrap { max-width: 44rem; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
+  h1 { font-size: 1.8rem; letter-spacing: -.02em; margin: .2rem 0 .5rem; text-wrap: balance; }
+  h2 { font-size: 1.15rem; letter-spacing: -.01em; margin: 2.2rem 0 .6rem; }
+  .eyebrow { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 11px; color: var(--ink-soft); }
+  p { line-height: 1.55; font-size: 15px; max-width: 62ch; }
+  .lede { color: var(--ink-soft); }
+  ol.steps { padding-left: 1.4rem; font-size: 15px; line-height: 1.55; }
+  ol.steps li { margin: .35rem 0; }
+  code { font-family: var(--label); font-size: 13px; background: #fff; border: 1px solid var(--rule); border-radius: 5px; padding: .05rem .35rem; }
+  .cmd { display: block; background: var(--ink); color: #fff; border-radius: 8px; padding: .7rem .9rem; font-family: var(--label); font-size: 13px; margin: .5rem 0 1rem; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .6rem 0 .2rem; }
+  .cell { background: #f9f9ff; border: 1px solid var(--rule); border-radius: 10px; padding: .8rem; }
+  .cell .tag { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 10px; color: var(--ink-soft); display: block; margin-bottom: .5rem; }
+  .q { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .9rem 1.1rem; margin: .8rem 0; }
+  .q .n { font-family: var(--label); font-size: 11px; letter-spacing: .08em; color: var(--blue); }
+  .q .ask { font-weight: 700; font-size: 16px; margin: .25rem 0 .4rem; }
+  .q .how { font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
+  .q .ans { margin-top: .5rem; font-size: 14px; }
+  .q .ans b { display: inline-block; border: 2px solid var(--neutral); border-radius: 999px; padding: .05rem .6rem; margin-right: .3rem; font-size: 13px; }
+  .dont { border-left: 3px solid var(--red); background: #fff; padding: .6rem .9rem; font-size: 14px; line-height: 1.5; }
+  .dont ul { margin: .3rem 0 0; padding-left: 1.2rem; }
+  /* mini app bits */
+  .chunk { border: 3px solid var(--neutral); box-shadow: 4px 4px 0 0 var(--neutral); border-radius: .9rem; }
+  .btn { display: flex; align-items: center; justify-content: center; gap: .4rem; color: #fff; font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; font-size: 13px; padding: .7rem; }
+  .bubble { border-radius: 1rem; border-top-left-radius: .3rem; padding: .6rem .9rem; font-weight: 700; font-size: 14px; }
+  .callout { border-radius: 1rem; padding: .7rem .9rem; font-size: 13px; border: 3px solid var(--red); background: var(--red-bg); }
+  .callout .t { font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: 10px; font-weight: 700; color: var(--red); }
+  .title { font-weight: 800; font-size: 20px; letter-spacing: -.02em; text-align: center; }
+  .ms { font-family: 'Material Symbols Rounded'; font-size: 18px; line-height: 1; vertical-align: middle; }
+  .stack { display: flex; flex-direction: column; gap: .5rem; }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Pizza Bot · Phase 0 · colour tokens</p>
+  <h1>How to review Phase 0 in 10 minutes</h1>
+  <p class="lede">Phase 0 changed <b>two colour values</b> and nothing else. No layout moved, no text changed, no component was built. You are judging one thing: <b>does red now only appear where something is wrong, and is the "neutral grey" box no longer green?</b></p>
+
+  <h2>1 · What changed (the whole list)</h2>
+  <div class="pair">
+    <div class="cell"><span class="tag">Before</span>
+      <div class="stack">
+        <div class="title" style="color:var(--red)">Pizza Bot</div>
+        <div class="btn chunk" style="background:var(--red)"><span class="ms">arrow_forward</span> Add a rule to your bot</div>
+        <div class="bubble chunk" style="background:var(--green-old)">Ugh, I'm starving. Just get me a pizza.</div>
+        <div class="callout chunk"><div class="t">The problem</div>It invented an order.</div>
+      </div></div>
+    <div class="cell"><span class="tag">After</span>
+      <div class="stack">
+        <div class="title" style="color:var(--navy)">Pizza Bot</div>
+        <div class="btn chunk" style="background:var(--navy)"><span class="ms">arrow_forward</span> Add a rule to your bot</div>
+        <div class="bubble chunk" style="background:var(--grey-new)">Ugh, I'm starving. Just get me a pizza.</div>
+        <div class="callout chunk"><div class="t">The problem</div>It invented an order.</div>
+      </div></div>
+  </div>
+  <ol class="steps">
+    <li><b>Grey instead of green</b> for the neutral box: customer bubbles, "How to play", "Your playbook", the fill-in sentence, the workshop pegboard, done items in the list.</li>
+    <li><b>Navy instead of red</b> for the main button, the "Pizza Bot" title, the active bottom tab, the bot's avatar, the "Game · …" labels, the progress bar.</li>
+    <li><b>Red stays</b> on: "The problem" cards, wrong answers, the damage counter, the broken status readout, the pizza slice icon, and the mascot's pizza parts.</li>
+  </ol>
+
+  <h2>2 · Open the app</h2>
+  <p>In a terminal, inside the <code>pizza-bot</code> folder (branch <code>docs/interview-1-feedback</code>):</p>
+  <code class="cmd">npm run dev</code>
+  <p class="lede">Then open the address it prints (usually <code>http://localhost:5173</code>) on your phone-sized browser window, or your phone on the same Wi-Fi. Phone width matters: that is what Klára saw.</p>
+
+  <h2>3 · Five questions, one screen each</h2>
+  <p class="lede">Answer each with a yes or no. Trust the first impression; do not go back and forth.</p>
+
+  <div class="q"><div class="n">Q1 · Workshop (the first screen)</div><div class="ask">Is anything red that is not the pizza icon or the status readout?</div>
+    <div class="how">Look at the title, the bottom tab, the "Fix it now" link. Expected: navy. The status box's robot icon and dot are red on purpose: your bot is broken.</div>
+    <div class="ans"><b>no red elsewhere ✓</b> <b>found red ✗ → say where</b></div></div>
+
+  <div class="q"><div class="n">Q2 · Open the Prompt game</div><div class="ask">Does the customer's speech bubble look like "someone said this", not like "a correct answer"?</div>
+    <div class="how">It is grey now. If it still reads as a result or a highlight, that is a no.</div>
+    <div class="ans"><b>reads as a message ✓</b> <b>still looks like a result ✗</b></div></div>
+
+  <div class="q"><div class="n">Q3 · Tap the first instruction, then look at the result screen</div><div class="ask">Is the red "The problem" card the only red thing on the screen?</div>
+    <div class="how">The button below it should be navy. If red and the button still "rhyme", that is a no.</div>
+    <div class="ans"><b>yes, only the problem ✓</b> <b>no ✗</b></div></div>
+
+  <div class="q"><div class="n">Q4 · Open the Hallucination game</div><div class="ask">Are the "How to play" box and the menu header clearly not green?</div>
+    <div class="how">Both were sage green before. Now grey. Then pick "Made up" on the first claim: the feedback card that appears is the only green or red thing.</div>
+    <div class="ans"><b>not green ✓</b> <b>still greenish ✗</b></div></div>
+
+  <div class="q"><div class="n">Q5 · Gut check, any screen</div><div class="ask">Does the app still feel like Pizza Bot?</div>
+    <div class="how">Navy title, grey board, less red. If it now feels "bank-like" or dead, say so. That is useful, and it is fixable (the pizza red can come back as an accent in Phase 1 without going back on buttons).</div>
+    <div class="ans"><b>still Pizza Bot ✓</b> <b>lost something ✗ → one word for what</b></div></div>
+
+  <h2>4 · What NOT to judge yet</h2>
+  <div class="dont">These are unchanged on purpose and belong to later phases. Ignore them today:
+    <ul>
+      <li>Choice cards still have no radio circles or drag handles (Phase 2).</li>
+      <li>The end screen is still two paragraphs, no checklist (Phase 3).</li>
+      <li>"Trust it" (blue) and "Made up" (navy) are both dark now; they get redesigned in Phase 2.</li>
+      <li>The blank "___" in Token and Temperature is blue now; fine for today.</li>
+      <li>Any wording.</li>
+    </ul></div>
+
+  <h2>5 · How to answer</h2>
+  <p>Reply in chat with five characters, one per question, for example: <code>✓ ✓ ✓ ✓ ✓</code> or <code>✓ ✗(title) ✓ ✓ ✓</code>. Anything with a ✗ gets one sentence. That is the whole review.</p>
+</div>

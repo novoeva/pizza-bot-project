@@ -209,7 +209,7 @@ export default function MemoryGame({ termId, onComplete }) {
       <div className="flex flex-col gap-3">
         {instruction('Why it forgot, and how to fix it.')}
         <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 shadow-pop">
-          <p className="font-label text-[11px] text-primary">The problem</p>
+          <p className="font-label text-[11px] text-danger">The problem</p>
           <p className="mt-1 text-[15px] leading-snug">
             Every visit, the bot starts from zero. Inside one chat its memory is perfect. That is
             working memory. But nothing survives once the chat ends, so it cannot recognise Anna at

@@ -167,7 +167,7 @@ export default function TokenGame({ termId, onComplete }) {
 
         <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-4 text-center shadow-pop">
           <p className="text-lg font-extrabold leading-snug">
-            "{round.context} <span className="text-primary">___</span>"
+            "{round.context} <span className="text-tertiary">___</span>"
           </p>
         </div>
 

@@ -67,9 +67,9 @@ export default function TemperatureGame({ termId, onComplete }) {
           <p className="text-lg font-extrabold leading-snug">
             "{sliderContext}{' '}
             {sampled ? (
-              <span className="text-primary">{sampled}</span>
+              <span className="text-tertiary">{sampled}</span>
             ) : (
-              <span className="text-primary">___</span>
+              <span className="text-tertiary">___</span>
             )}
             {sampled ? '.' : ''}"
           </p>
@@ -246,7 +246,7 @@ export default function TemperatureGame({ termId, onComplete }) {
               onClick={() => choose('high')}
               className="press flex flex-col items-center gap-1 rounded-md border-[3px] border-neutral bg-surface py-4 shadow-pop"
             >
-              <span className="material-symbols-rounded text-2xl text-primary">local_fire_department</span>
+              <span className="material-symbols-rounded text-2xl text-tomato">local_fire_department</span>
               <span className="font-label text-sm font-bold text-text">Turn it up</span>
               <span className="font-label text-[10px] text-text-muted">High · creative</span>
             </button>

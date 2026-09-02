@@ -136,7 +136,7 @@ export default function BotCanvas({ completedTerms = [], className = '' }) {
             width="30"
             height="26"
             rx="12"
-            className="fill-primary stroke-text"
+            className="fill-tomato stroke-text"
             strokeWidth="2"
           />
           <rect
@@ -145,7 +145,7 @@ export default function BotCanvas({ completedTerms = [], className = '' }) {
             width="30"
             height="26"
             rx="12"
-            className="fill-primary stroke-text"
+            className="fill-tomato stroke-text"
             strokeWidth="2"
           />
         </g>
@@ -208,7 +208,7 @@ export default function BotCanvas({ completedTerms = [], className = '' }) {
       {has('memory') ? (
         <g>
           {powered && <circle cx="130" cy="176" r="26" className="fill-glow" />}
-          <circle cx="130" cy="176" r="20" className="fill-primary stroke-text" strokeWidth="2" />
+          <circle cx="130" cy="176" r="20" className="fill-tomato stroke-text" strokeWidth="2" />
           <circle cx="130" cy="176" r="9" className="fill-accent" />
         </g>
       ) : (
@@ -254,11 +254,11 @@ export default function BotCanvas({ completedTerms = [], className = '' }) {
       {/* pizza, only once fully powered on */}
       {powered && (
         <g>
-          <circle cx="226" cy="176" r="22" className="fill-accent stroke-primary" strokeWidth="3" />
-          <circle cx="220" cy="170" r="3" className="fill-primary" />
-          <circle cx="232" cy="172" r="3" className="fill-primary" />
-          <circle cx="223" cy="183" r="3" className="fill-primary" />
-          <circle cx="233" cy="182" r="2.5" className="fill-primary" />
+          <circle cx="226" cy="176" r="22" className="fill-accent stroke-tomato" strokeWidth="3" />
+          <circle cx="220" cy="170" r="3" className="fill-tomato" />
+          <circle cx="232" cy="172" r="3" className="fill-tomato" />
+          <circle cx="223" cy="183" r="3" className="fill-tomato" />
+          <circle cx="233" cy="182" r="2.5" className="fill-tomato" />
         </g>
       )}
     </svg>
