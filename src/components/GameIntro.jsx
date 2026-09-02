@@ -4,7 +4,7 @@
  *
  * Shows, in a fixed order so every game opens the same way:
  *   1. the term name
- *   2. the DEFINITION (term.definition), labelled as such. Phase 4 decision:
+ *   2. the definition (term.definition), labelled "What it is". Phase 4 decision:
  *      say it up front, apply it during the game, repeat it at the end
  *      (TermReveal). The old "teaser" line (term.about) is no longer shown.
  *   3. "Your role" (term.role): who you are and what you're doing in THIS
@@ -24,7 +24,7 @@ export default function GameIntro({ term, showHowTo = true }) {
       <p className="font-label text-[11px] text-primary">Term · {term.name}</p>
       <h1 className="text-2xl leading-tight">{term.name}</h1>
       <div className="mt-2 rounded-md border-2 border-neutral bg-surface px-3 py-2">
-        <p className="font-label text-[10px] text-text-muted">Definition</p>
+        <p className="font-label text-[10px] text-text-muted">What it is</p>
         <p className="mt-0.5 text-[13px] leading-snug text-text">{term.definition}</p>
       </div>
       {term.role && (

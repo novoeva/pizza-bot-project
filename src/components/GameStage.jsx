@@ -38,7 +38,7 @@ export default function GameStage({ context, main, wide = false, progress }) {
     // full-bleed-from-a-centered-parent trick), so both columns get real width.
     <div
       className={
-        'flex flex-col gap-2 ' +
+        'flex flex-col gap-3 ' +
         'lg:relative lg:left-1/2 lg:-translate-x-1/2 ' +
         width +
         ' lg:grid ' +
@@ -51,8 +51,8 @@ export default function GameStage({ context, main, wide = false, progress }) {
           <ProgressBar {...progress} />
         </div>
       )}
-      <div className="flex flex-col gap-2">{context}</div>
-      <div className="flex flex-col gap-2">{main}</div>
+      <div className="flex flex-col gap-3">{context}</div>
+      <div className="flex flex-col gap-3">{main}</div>
     </div>
   )
 }

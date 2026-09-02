@@ -230,6 +230,11 @@ Struktura závěrečné obrazovky je schválená (Definition · What you learned
 - **📍 Kde:** `src/content/terms.json` — pole `definition`, `inGame` (3 věty), `do` (2), `dont` (1) u každého pojmu. Přehled všech textů na jedné stránce: `design-system/reviews/phase-3.html`.
 - **✅ Hotovo když:** každý z 12 pojmů má review od Evy (schváleno / přepsáno); pravidlo z review kola 1 platí: každý řádek je věta, kterou by člověk řekl nahlas, o něčem, co se ve hře ukázalo.
 
+**FR-24 — MCP: hra neučí, jen se kliká a čte** 🔴 *(obsah + mechanika, ne design)*
+Eva při review Fáze 4: „Nejsem si jistá, co mě to má naučit. Není tu žádná simulace." Hra je dnes tři obrazovky tlačítek „Build connector / Click in / Plug it in" a text. Navrhnout novou simulaci, kde hráč něco *dělá* a *cítí* rozdíl (např. sám tvaruje konektor pro každý systém vs. jeden port; nebo čas/peníze reálně ubývají).
+- **📍 Kde:** `src/games/mcp/index.jsx` + `src/games/mcp/systems.js`.
+- **✅ Hotovo když:** hráč po hře umí říct, co MCP řeší, aniž by četl definici; ve hře je aspoň jedna akce, kde se „starý způsob" a „MCP" liší tím, co hráč musí udělat.
+
 ### Otevřené / navazující
 - [x] **Component audit (FR-18, varianta A)** — hotovo: `COMPONENT-AUDIT.md` + `design-system/gallery.html`.
 - [x] ~~Ověřit žargon z FR-7~~ → vyjasněno: šlo o label **„Log it"** ve Skill hře (`src/games/skill/content.js:16`).

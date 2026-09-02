@@ -18,9 +18,6 @@
   ol.steps li { margin: .35rem 0; }
   code { font-family: var(--label); font-size: 13px; background: #fff; border: 1px solid var(--rule); border-radius: 5px; padding: .05rem .35rem; }
   .cmd { display: block; background: var(--ink); color: #fff; border-radius: 8px; padding: .7rem .9rem; font-family: var(--label); font-size: 13px; margin: .5rem 0 1rem; }
-  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .6rem 0 .2rem; }
-  .cell { background: #f9f9ff; border: 1px solid var(--rule); border-radius: 10px; padding: .8rem; }
-  .cell .tag { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 10px; color: var(--ink-soft); display: block; margin-bottom: .5rem; }
   .q { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .9rem 1.1rem; margin: .8rem 0; }
   .q .n { font-family: var(--label); font-size: 11px; letter-spacing: .08em; color: var(--blue); }
   .q .ask { font-weight: 700; font-size: 16px; margin: .25rem 0 .4rem; }
@@ -29,69 +26,42 @@
   .q .ans b { display: inline-block; border: 2px solid var(--neutral); border-radius: 999px; padding: .05rem .6rem; margin-right: .3rem; font-size: 13px; }
   .done { background: var(--mint); border: 1px solid #b9dcd5; border-radius: 10px; padding: .7rem 1rem; font-size: 14px; line-height: 1.5; }
   .done b { color: #1f7a6f; }
-  .dont { border-left: 3px solid var(--wrong); background: #fff; padding: .6rem .9rem; font-size: 14px; line-height: 1.5; }
-  .dont ul { margin: .3rem 0 0; padding-left: 1.2rem; }
-  .card { border-radius: .9rem; border: 3px solid var(--neutral); box-shadow: 3px 3px 0 0 var(--neutral); background: #fff; padding: .6rem .8rem; font-size: 12px; }
-  .box { border-radius: .6rem; border: 2px solid var(--neutral); padding: .4rem .6rem; margin-top: .4rem; font-size: 12px; }
-  .box .l { font-family: var(--label); font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); }
-  .box.blue { background: var(--blue-bg); } .box.blue .l { color: var(--blue); }
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; }
+  .term { background: #fff; border: 1px solid var(--rule); border-radius: 10px; padding: .6rem .9rem; margin: .4rem 0; font-size: 13.5px; line-height: 1.5; }
+  .term b { display: block; font-family: var(--label); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); }
+  .term .s { color: var(--ink-soft); font-size: 11px; font-family: var(--label); text-transform: uppercase; margin-top: .35rem; }
 </style>
 
 <div class="wrap">
-  <p class="eyebrow">Pizza Bot · Phase 4 · the intro, and the last four games</p>
-  <h1>How to review Phase 4 in 10 minutes</h1>
-  <div class="done"><b>Last phase of the plan.</b> Step 1 of the framework: define the term before playing. Your call: show the full definition, not a teaser. Plus the four games that were still single-column now use the same two-column stage as the rest.</div>
+  <p class="eyebrow">Pizza Bot · Phase 4 · round 2</p>
+  <h1>Phase 4, second look: 3 questions</h1>
+  <div class="done"><b>Round 1 result:</b> Q2 passed (two columns). Applied: the label is <b>"What it is"</b>; the end screen now says the definition <b>in different words</b> (labelled "In other words"); the uneven spacing is fixed (the stack had 8px between the first cards and 12px between the rest, now 12px everywhere). MCP's weak simulation is logged as <b>FR-24</b>, outside the design system.</div>
 
-  <h2>1 · What changed</h2>
-  <ol class="steps">
-    <li><b>Definition first.</b> The intro card on the left now reads: name, <b>Definition</b>, <b>Your role</b>. The old teaser line is gone. The same definition comes back on the end screen, so the arc is define → apply → repeat.</li>
-    <li><b>Token, Context window, Memory and MCP</b> use the two-column stage on every screen: intro on the left, "Game · …" card and the play on the right, progress strip on top. Before, they dropped the intro after the first screen and stacked everything in one column on desktop (FR-20).</li>
-    <li><b>Every game now starts with a "Game · …" card</b> telling you what to do on this screen, including Hallucination and the first screens of the four games above.</li>
-    <li>No game logic changed.</li>
-  </ol>
-  <div class="pair">
-    <div class="cell"><span class="tag">Before · Memory, second screen (desktop)</span>
-      <div class="card"><div style="font-family:var(--label);font-size:9px;color:var(--red);text-transform:uppercase">Game · Welcome, stranger</div><div style="font-weight:800;font-size:16px">Memory</div><div style="color:var(--ink-soft)">Same bot, new chat, nothing saved.</div></div>
-      <p style="font-size:12px;color:var(--ink-soft);margin:.4rem 0 0">One column. The definition was gone after screen one.</p>
-    </div>
-    <div class="cell"><span class="tag">After</span>
-      <div class="grid">
-        <div class="card"><div style="font-family:var(--label);font-size:9px;color:var(--red);text-transform:uppercase">Term · Memory</div><div style="font-weight:800;font-size:16px">Memory</div><div class="box"><div class="l">Definition</div>An AI has two kinds of memory. Working memory lasts one conversation…</div><div class="box blue"><div class="l">Your role</div>You're the owner setting up your bot…</div></div>
-        <div class="card"><div style="font-family:var(--label);font-size:9px;color:var(--red);text-transform:uppercase">Game · Welcome, stranger</div><div style="color:var(--ink-soft)">Same bot, new chat, nothing saved.</div></div>
-      </div>
-      <p style="font-size:12px;color:var(--ink-soft);margin:.4rem 0 0">Two columns, definition stays.</p>
-    </div>
-  </div>
+  <h2>1 · Restart the worktree server, then reload</h2>
+  <code class="cmd">cd "/Users/admin/Documents/Claude/Projects/Agentic AI/pizza-bot/.claude/worktrees/design-system" && npm run dev</code>
 
-  <h2>2 · Open the app</h2>
-  <p>This is in the <code>design-system</code> worktree. In a terminal:</p>
-  <code class="cmd">cd .claude/worktrees/design-system && npm run dev</code>
-  <p>Then open the address it prints. Check on a wide window first, then narrow it to phone width.</p>
+  <h2>2 · Three questions</h2>
+  <div class="q"><div class="n">Q1 · Agent, first screen, phone width</div><div class="ask">Is the spacing between the cards even now?</div>
+    <div class="ans"><b>yes ✓</b> <b>no ✗ → between which two cards</b></div></div>
+  <div class="q"><div class="n">Q2 · Any game, start and end</div><div class="ask">"What it is" at the start, "In other words" at the end. Do the two wordings reinforce each other, or does one of them read worse?</div>
+    <div class="how">The 12 end-screen wordings are below so you can read them without playing. They fall under FR-23 for the real content pass; today only "is the idea of two wordings right".</div>
+    <div class="ans"><b>right idea ✓</b> <b>no ✗ → what instead</b></div></div>
+  <div class="q"><div class="n">Q3 · The plan</div><div class="ask">Phases 0 to 4 are built. Is the design-system plan closed, with FR-19 to FR-24 as the open list?</div>
+    <div class="ans"><b>closed ✓</b> <b>one more thing ✗ → what</b></div></div>
 
-  <h2>3 · Four questions</h2>
+  <h2>3 · The 12 "In other words" lines</h2>
+  <div class="term"><b>Token</b>The bot never sees whole words. It sees small chunks called tokens, and every chunk it reads or writes takes time and costs money.</div>
+  <div class="term"><b>Context window</b>The context window is the bot's short-term memory: the part of the conversation it can still see. When it is full, the oldest lines drop out.</div>
+  <div class="term"><b>Hallucination</b>A hallucination is a confident answer that happens to be false. The bot doesn't know it is guessing, so it sounds just as sure as when it is right.</div>
+  <div class="term"><b>Prompt</b>The prompt is the set of instructions your bot works from. Whatever the instructions don't cover, the bot fills in with a guess.</div>
+  <div class="term"><b>Agent</b>An agent is a bot that doesn't just answer, it acts: it takes real steps in real systems, one after another, to get the job done.</div>
+  <div class="term"><b>Tool use</b>Tool use means the bot checks a real source, like the menu or the delivery tracker, instead of answering from what it remembers.</div>
+  <div class="term"><b>Skill</b>A skill is a fixed routine you write once for a situation that keeps coming back, so the bot handles it the same right way every time.</div>
+  <div class="term"><b>Memory</b>Working memory is what the bot keeps during one chat. Persistent memory is what you save on purpose so it is still there next time.</div>
+  <div class="term"><b>MCP</b>MCP is a shared standard, one universal port, so any tool that speaks it can plug into your bot without a custom connector.</div>
+  <div class="term"><b>Guardrails</b>Guardrails are the limits you set in advance: the discounts, promises and topics the bot may never go past, no matter how a customer pushes.</div>
+  <div class="term"><b>Temperature</b>Temperature is the dial for how adventurous the bot's wording is: low picks the safe word almost every time, high lets surprising words win.</div>
+  <div class="term"><b>RAG</b>RAG means the bot looks things up in your documents for each question and answers only from the pages it found, without knowing whether they are current.</div>
 
-  <div class="q"><div class="n">Q1 · Skill, first screen</div><div class="ask">Reading the left card before playing, do you know what a skill is?</div>
-    <div class="how">This is Klára's exact complaint. The definition is now the first thing under the name.</div>
-    <div class="ans"><b>yes ✓</b> <b>no ✗ → what is missing</b></div></div>
-
-  <div class="q"><div class="n">Q2 · Memory, tap Continue a few times, then Context window, send two messages</div><div class="ask">Wide window: is it two columns with the intro staying on the left, like Prompt?</div>
-    <div class="ans"><b>yes ✓</b> <b>no ✗ → which game</b></div></div>
-
-  <div class="q"><div class="n">Q3 · Token and MCP, first screen</div><div class="ask">Is it clear what to do on the first screen without the old "How to play" box?</div>
-    <div class="how">The instruction moved into the "Game · …" card on the right ("Chop it up", "The old way").</div>
-    <div class="ans"><b>clear ✓</b> <b>unclear ✗ → which game</b></div></div>
-
-  <div class="q"><div class="n">Q4 · Phone width, any game</div><div class="ask">Order is: progress, intro card, "Game · …" card, then the play. Does that still feel right on a phone?</div>
-    <div class="how">The intro with the definition is now a bit taller. If it pushes the play too far down on a phone, say so; a collapsed "Definition" on phones is an option.</div>
-    <div class="ans"><b>fine ✓</b> <b>too tall on phone ✗</b></div></div>
-
-  <h2>4 · Not for today</h2>
-  <div class="dont"><ul>
-      <li>The wording of the 12 definitions and the end-screen recaps (FR-23, your content review).</li>
-      <li>FR-19 (context window auto-play), FR-21, FR-22 (RAG layout).</li>
-    </ul></div>
-
-  <h2>5 · How to answer</h2>
-  <p>Four marks, for example <code>✓ ✓ ✓ ✓</code>. One sentence per cross. Four ticks closes the design-system plan.</p>
+  <h2>4 · How to answer</h2>
+  <p>Three marks, for example <code>✓ ✓ ✓</code>. One sentence per cross.</p>
 </div>

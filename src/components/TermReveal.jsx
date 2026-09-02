@@ -7,7 +7,8 @@ import GameActions, { GameActionButton } from './GameActions.jsx'
  *   1. the success mark and "Snapped onto your bot · <part>"
  *   2. "You just learned the term <name>" (from data, never typed by hand)
  *   3. an optional one-line score from the game
- *   4. "Definition": the payoff kept back until now
+ *   4. "In other words": the definition again, in different words
+ *      (term.recap), so the same idea lands twice without repeating itself
  *   5. "What you learned in the game": three plain sentences that tie the
  *      definition back to what the player just did (term.inGame), so the
  *      lesson is reinforced by the game, not by more theory
@@ -16,7 +17,7 @@ import GameActions, { GameActionButton } from './GameActions.jsx'
  *   7. an optional aside the game passes in (a Callout), e.g. "Real talk"
  *   8. the pinned "Snap it onto your bot" action
  *
- * Content lives in content/terms.json (definition, inGame, do, dont).
+ * Content lives in content/terms.json (recap, inGame, do, dont).
  */
 function Card({ label, children }) {
   return (
@@ -52,8 +53,8 @@ export default function TermReveal({ term, score, aside, onComplete }) {
       <h2 className="text-2xl">You just learned the term {term.name}</h2>
       {score && <p className="font-label text-xs text-text-muted">{score}</p>}
 
-      <Card label="Definition">
-        <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
+      <Card label="In other words">
+        <p className="mt-1 text-[15px] leading-snug">{term.recap ?? term.definition}</p>
       </Card>
 
       {term.inGame?.length > 0 && (

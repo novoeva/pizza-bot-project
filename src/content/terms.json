@@ -20,7 +20,8 @@
     "do": [
       "Expect the bot to read and write in chunks, not words. One word can cost several chunks.",
       "Keep chats short when speed and cost matter. Every chunk is paid for."
-    ]
+    ],
+    "recap": "The bot never sees whole words. It sees small chunks called tokens, and every chunk it reads or writes takes time and costs money."
   },
   {
     "id": "context-window",
@@ -43,7 +44,8 @@
     "do": [
       "Put the important line where the bot can still see it: pin it, repeat it, or start a fresh chat.",
       "Expect a long chat to lose its beginning. That is how the window works."
-    ]
+    ],
+    "recap": "The context window is the bot's short-term memory: the part of the conversation it can still see. When it is full, the oldest lines drop out."
   },
   {
     "id": "hallucination",
@@ -66,7 +68,8 @@
     "do": [
       "Check any price, dish or fact you can't verify against something real.",
       "Give the bot real data to check, like a menu or a tracker. The guessing drops."
-    ]
+    ],
+    "recap": "A hallucination is a confident answer that happens to be false. The bot doesn't know it is guessing, so it sounds just as sure as when it is right."
   },
   {
     "id": "prompt",
@@ -89,7 +92,8 @@
     "do": [
       "Say in the instructions what the bot should do when information is missing: ask, don't invent.",
       "When the bot misbehaves, fix the instructions before blaming the customer."
-    ]
+    ],
+    "recap": "The prompt is the set of instructions your bot works from. Whatever the instructions don't cover, the bot fills in with a guess."
   },
   {
     "id": "agent",
@@ -112,7 +116,8 @@
     "do": [
       "Decide what the agent may do, and in which order, before it acts.",
       "Give a bot that acts in the real world more guardrails than a bot that only talks."
-    ]
+    ],
+    "recap": "An agent is a bot that doesn't just answer, it acts: it takes real steps in real systems, one after another, to get the job done."
   },
   {
     "id": "tool-use",
@@ -135,7 +140,8 @@
     "do": [
       "Give the bot a tool for every live question: the menu, the tracker, the stock list.",
       "Match the tool to the question. The stock list can't answer a delivery question."
-    ]
+    ],
+    "recap": "Tool use means the bot checks a real source, like the menu or the delivery tracker, instead of answering from what it remembers."
   },
   {
     "id": "skill",
@@ -158,7 +164,8 @@
     "do": [
       "Write a playbook for every situation that keeps coming back and costs you money.",
       "Write the steps in the order you would handle it yourself."
-    ]
+    ],
+    "recap": "A skill is a fixed routine you write once for a situation that keeps coming back, so the bot handles it the same right way every time."
   },
   {
     "id": "memory",
@@ -181,7 +188,8 @@
     "do": [
       "Decide on purpose which facts get saved for the next visit.",
       "Save what serves the customer, like an allergy, and skip the noise."
-    ]
+    ],
+    "recap": "Working memory is what the bot keeps during one chat. Persistent memory is what you save on purpose so it is still there next time."
   },
   {
     "id": "mcp",
@@ -203,7 +211,8 @@
     ],
     "do": [
       "Prefer tools that speak MCP. They plug in on day one, with no custom bridge."
-    ]
+    ],
+    "recap": "MCP is a shared standard, one universal port, so any tool that speaks it can plug into your bot without a custom connector."
   },
   {
     "id": "guardrails",
@@ -226,7 +235,8 @@
     "do": [
       "Set hard limits in advance: money, promises, topics.",
       "Test your limits with the tricks a pushy customer would try."
-    ]
+    ],
+    "recap": "Guardrails are the limits you set in advance: the discounts, promises and topics the bot may never go past, no matter how a customer pushes."
   },
   {
     "id": "temperature",
@@ -249,7 +259,8 @@
     "do": [
       "Turn the dial down for anything that must read the same every time.",
       "Turn it up when you want fresh ideas and surprises are welcome."
-    ]
+    ],
+    "recap": "Temperature is the dial for how adventurous the bot's wording is: low picks the safe word almost every time, high lets surprising words win."
   },
   {
     "id": "rag",
@@ -272,6 +283,7 @@
     "do": [
       "Ask the bot which page its answer came from.",
       "Keep the documents it can find up to date. It can't tell old from new."
-    ]
+    ],
+    "recap": "RAG means the bot looks things up in your documents for each question and answers only from the pages it found, without knowing whether they are current."
   }
 ]
