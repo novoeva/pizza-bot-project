@@ -94,7 +94,7 @@ export default function HallucinationGame({ termId, onComplete }) {
       {/* Reference menu — a game tool (you check every claim against it), so it
           sits WITH the game, not off in the orientation column. */}
       <div className="overflow-hidden rounded-md border-[3px] border-neutral bg-surface">
-        <div className="flex items-center gap-1.5 border-b-[3px] border-neutral bg-muted px-3 py-1.5 font-label text-[11px] text-text-muted">
+        <div className="flex items-center gap-1.5 border-b-[3px] border-neutral bg-primary px-3 py-1.5 font-label text-[11px] text-white">
           <span className="material-symbols-rounded text-[15px]">menu_book</span>
           Today's real menu
         </div>

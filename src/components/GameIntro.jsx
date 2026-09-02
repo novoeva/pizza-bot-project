@@ -36,8 +36,8 @@ export default function GameIntro({ term, showHowTo = true }) {
         </div>
       )}
       {showHowTo && (
-        <div className="mt-2 rounded-md border-2 border-neutral bg-muted px-3 py-2">
-          <p className="font-label text-[10px] text-text-muted">How to play</p>
+        <div className="mt-2 rounded-md border-2 border-neutral bg-accent-soft px-3 py-2">
+          <p className="font-label text-[10px] text-tertiary">How to play</p>
           <p className="mt-0.5 text-[13px] leading-snug text-text">{term.howToPlay}</p>
         </div>
       )}

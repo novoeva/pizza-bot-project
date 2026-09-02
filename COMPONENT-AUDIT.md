@@ -76,7 +76,7 @@ Files are `src/games/<id>/index.jsx` unless noted. "stage games" = the 8 games t
 
 ## 2. Color & visual-language dictionary
 
-> **Status (2026-09-02):** the role map below was reviewed visually in `design-system/gallery.html` (section R1) and **approved** by Eva, with the note that individual roles may still be revised. The big-button colour is **decided: navy** (R2). The build mechanic is **decided: part tiles with real drag-and-drop** (R3), with the condition that it must be obviously draggable.
+> **Status (2026-09-02):** the role map below was reviewed visually in `design-system/gallery.html` (section R1) and **approved** by Eva, with the note that individual roles may still be revised. R2 was revised after the Phase 0 review: **two reds**, marinara (`primary`, brand + labels + buttons) and a muted brick red (`danger`, "wrong"). The build mechanic is **decided: part tiles with real drag-and-drop** (R3), with the condition that it must be obviously draggable.
 
 Shape carries the **role**; colour carries the **verdict or ownership**. Eight roles, each with its own shape and its own colour. Green belongs to exactly one role; grey belongs to exactly one role.
 
@@ -88,16 +88,16 @@ Shape carries the **role**; colour carries the **verdict or ownership**. Eight r
 | 4 | **A question to answer** (pick one / pick any) | card with a radio circle or checkbox square on the left, lifts on hover | white → blue when picked | `bg-surface` → `bg-accent-soft`, control `bg-tertiary` | Guardrails limits, Prompt rounds 1–3, Temperature up/down, Token guesses, Hallucination trust/made-up. `SelectableCard` + `ChoiceGroup`. |
 | 5 | **A part of your bot** (build mechanic) | part tile with a grab handle; slot list with dashed empty slots | amber, on the shelf **and** in the bot | `bg-cheese-bg`, `border-cheese-dim`, handle/label `text-cheese-dim`; empty slot `border-slot-empty` dashed | Skill steps → playbook, Agent actions → to-do list, RAG pages → handed, Memory facts → hard drive, MCP systems → port, "Firing…". `PartTile` + `SlotList` (R3, decided). A part never changes colour; it changes **place**. |
 | 6 | **It went right** | tinted callout (`rounded-lg`), border matches tint, eyebrow + icon | green | `bg-success-bg`, `border-success`, `text-success` | correct pick, held guardrail, system fired, pinned line kept. **Nothing else is ever green** (Skill's "added" step and Prompt's "Better:" text lose their green). |
-| 7 | **It went wrong / it hurts** | same callout shape | pale red | `bg-danger-bg`, `border-danger`, `text-danger` | wrong pick, caved bot, dropped allergy, "The problem", damage counters, MCP's weeks counter and "And you're not done". |
-| 8 | **The action that moves you on** | solid full-width button, pinned bar | **navy** (decided, R2) | `bg-text` for `primary`; `accent` stays blue, `soft` stays amber, `neutral` white | `GameActionButton`. Red is no longer a button colour. |
+| 7 | **It went wrong / it hurts** | same callout shape | **muted brick red** (`#9c4444` on `#f2e2e0`), visibly duller than the brand red | `bg-danger-bg`, `border-danger`, `text-danger` | wrong pick, caved bot, dropped allergy, "The problem", damage counters, MCP's weeks counter and "And you're not done". |
+| 8 | **The action that moves you on** | solid full-width button, pinned bar | **marinara red** (`primary`, R2 revised) | `bg-primary`; `accent` blue, `soft` amber, `neutral` white | `GameActionButton`. Also the signature colour of the chrome: logo, active tab, "Term ·"/"Game ·" labels, bot avatar, reference headers. |
 
 ### Token-level consequences
 
 - **D2 — `muted`:** keep the name, change the value to a true light neutral (a cool grey close to `bg`, e.g. `#e6e7ee`; exact value tuned in Phase 0). Every `bg-muted` use stops reading as green in one line.
 - **D4 — `tertiary` / `accent-soft`:** blue = *the owner's side*: the game talking to you (role 3) and your answer (role 4). Info asides ("Real talk", "The fix", "In the real world") leave blue and become `Callout tone="info"`: white, `border-neutral`, info icon, muted eyebrow. Token chips become neutral.
 - **D5 — `cheese`:** amber = *a part of your bot* (role 5). It is no longer "cost/caution": painful counters move to red (role 7). Prompt's *Rule* card stops using the amber panel; Rule vs Instruction is carried by icon (`gavel` / `description`) and tag text only, both in role 4 blue.
-- **D7 — `primary` = `danger`:** `primary` is remapped to navy (`--color-text`) for buttons, the header title and the active nav tab; `danger` keeps `#b7102a`. Red text is never decorative: no red eyebrows, no red "+ add" hints, no red bot avatar (the avatar is navy).
-- **D8 — `text` as a surface:** navy header on a `Panel` = "inside the bot's head" (claim card, context window). Now also the button colour, which is consistent: navy = the bot / the owner acting.
+- **D7 — `primary` = `danger`:** split into two reds. `primary` stays the bright marinara `#b7102a` (the signature: logo, tabs, labels, buttons, avatars, reference headers); `danger` becomes a muted brick `#9c4444` with tint `#f2e2e0`, so "wrong" never looks like the brand. (First attempt, navy buttons + one red, was reviewed and rejected as overcorrection.)
+- **D8 — `text` as a surface:** navy header on a `Panel` = "inside the bot's head" (claim card, context window). A marinara header on a `Panel` = reference material you consult ("Today's real menu").
 - Shadows: `shadow-pop` everywhere; `shadow-card` only on the workshop board, `Panel header="dark"`, and the tile being dragged. Radii: `rounded-lg` = reading cards and callouts; `rounded-md` = controls, tiles, panels.
 
 ---
@@ -159,7 +159,7 @@ Keep local (one-off, fine as is): agent `SystemsPanel`, context-window `ContextP
 
 No behavior or game-logic changes in any phase; every phase is "same screens, fewer copies". Estimates assume one person, familiar with the repo.
 
-**Phase 0 — Tokens & dictionary. ✅ Done 2026-09-02** (`muted` → `#e6e7ee`, `primary` → navy `#001b3c`, `danger`/`tomato` keep red; unused tokens pruned; red kept only where it means "wrong" or is the pizza brand mark). Decide D2, D5, D7. Apply the `muted` value change and prune unused tokens in `tokens.css`. Write the dictionary (§2) into `GAME-DESIGN-PRINCIPLES.md` or a `VISUAL-LANGUAGE.md`. Blocks everything else: extracted components must be born with the right meanings.
+**Phase 0 — Tokens & dictionary. ✅ Done 2026-09-02, reviewed, revised once** (`muted` → `#e6e7ee`; `primary` stays marinara `#b7102a`; `danger` → muted brick `#9c4444` / `#f2e2e0`; "How to play" box blue; "Today's real menu" header marinara; unused tokens pruned). Decide D2, D5, D7. Apply the `muted` value change and prune unused tokens in `tokens.css`. Write the dictionary (§2) into `GAME-DESIGN-PRINCIPLES.md` or a `VISUAL-LANGUAGE.md`. Blocks everything else: extracted components must be born with the right meanings.
 
 **Phase 1 — Pure visual primitives (1–2 days).** Build `Callout`, `ChatMessage` + `Avatar`, `PhaseCard`, `Panel`. Swap them in game by game, stage games first (they are already structured for it), then misfits. Closes FR-11 (Prompt wrong rows → `Callout problem`) and fixes Memory's flipped chat sides. No prop-driven behavior, so risk is visual only; verify by screenshots per game.
 
@@ -182,7 +182,7 @@ Reviewed visually in `design-system/gallery.html` on 2026-09-02.
 | # | Decision | Status |
 |---|---|---|
 | R1 | 8-role colour map (§2) | **Approved.** Roles may be revised individually; the gallery is the source of truth. |
-| R2 | Big button colour | **Decided: navy** (`bg-text`). Red is reserved for "wrong / it hurts". |
+| R2 | Reds | **Decided (revised after Phase 0 review):** two reds. Marinara `#b7102a` = brand, labels, buttons, avatars, reference headers. Muted brick `#9c4444` / `#f2e2e0` = wrong / it hurts. Navy-button attempt rejected as overcorrection. |
 | R3 | Amber = a part of your bot; build mechanic | **Decided.** Amber = part. Checkbox mechanic **rejected**. Part tiles with **real drag-and-drop**, must be obviously draggable (five signals, §3 1b); tap stays as the fallback. |
 | — | Chat sides | Proposed rule: received = left, your side (bot or you) = right; Memory flips. Not yet reviewed. |
 | — | Bot face | Proposed: navy round `smart_toy` avatar in bubbles (matches R2 navy); the SVG robot stays the workshop mascot. Not yet reviewed. |

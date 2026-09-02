@@ -4,7 +4,7 @@
 <style>
   :root {
     --ink: #001b3c; --ink-soft: #4b5563; --rule: #cfd3dc; --paper: #f3f4f8; --card: #ffffff;
-    --navy: #001b3c; --red: #b7102a; --red-bg: #fbe7ea; --grey-new: #e6e7ee; --green-old: #dce5d9; --mint: #e7f4f1; --teal: #2a9d8f; --blue: #286182; --blue-bg: #d9edfb; --neutral: #586158;
+    --navy: #001b3c; --red: #b7102a; --red-old-bg: #fbe7ea; --wrong: #9c4444; --wrong-bg: #f2e2e0; --grey-new: #e6e7ee; --green-old: #dce5d9; --blue: #286182; --blue-bg: #d9edfb; --neutral: #586158;
     --label: 'Space Grotesk', ui-monospace, monospace; --body: 'Plus Jakarta Sans', system-ui, sans-serif;
   }
   html { color-scheme: light; }
@@ -28,85 +28,84 @@
   .q .how { font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
   .q .ans { margin-top: .5rem; font-size: 14px; }
   .q .ans b { display: inline-block; border: 2px solid var(--neutral); border-radius: 999px; padding: .05rem .6rem; margin-right: .3rem; font-size: 13px; }
-  .dont { border-left: 3px solid var(--red); background: #fff; padding: .6rem .9rem; font-size: 14px; line-height: 1.5; }
+  .done { background: #e7f4f1; border: 1px solid #b9dcd5; border-radius: 10px; padding: .7rem 1rem; font-size: 14px; line-height: 1.5; }
+  .done b { color: #1f7a6f; }
+  .dont { border-left: 3px solid var(--wrong); background: #fff; padding: .6rem .9rem; font-size: 14px; line-height: 1.5; }
   .dont ul { margin: .3rem 0 0; padding-left: 1.2rem; }
-  /* mini app bits */
   .chunk { border: 3px solid var(--neutral); box-shadow: 4px 4px 0 0 var(--neutral); border-radius: .9rem; }
   .btn { display: flex; align-items: center; justify-content: center; gap: .4rem; color: #fff; font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; font-size: 13px; padding: .7rem; }
-  .bubble { border-radius: 1rem; border-top-left-radius: .3rem; padding: .6rem .9rem; font-weight: 700; font-size: 14px; }
-  .callout { border-radius: 1rem; padding: .7rem .9rem; font-size: 13px; border: 3px solid var(--red); background: var(--red-bg); }
-  .callout .t { font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: 10px; font-weight: 700; color: var(--red); }
+  .callout { border-radius: 1rem; padding: .7rem .9rem; font-size: 13px; border: 3px solid; }
+  .callout .t { font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: 10px; font-weight: 700; }
+  .lbl { font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: 11px; font-weight: 700; }
   .title { font-weight: 800; font-size: 20px; letter-spacing: -.02em; text-align: center; }
   .ms { font-family: 'Material Symbols Rounded'; font-size: 18px; line-height: 1; vertical-align: middle; }
   .stack { display: flex; flex-direction: column; gap: .5rem; }
+  .hdr { border-radius: .6rem .6rem 0 0; padding: .35rem .6rem; font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: 10px; color: #fff; }
+  .box { border-radius: .6rem; border: 2px solid var(--neutral); padding: .45rem .6rem; font-size: 13px; }
+  .box .t { font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: 9px; }
 </style>
 
 <div class="wrap">
-  <p class="eyebrow">Pizza Bot · Phase 0 · colour tokens</p>
-  <h1>How to review Phase 0 in 10 minutes</h1>
-  <p class="lede">Phase 0 changed <b>two colour values</b> and nothing else. No layout moved, no text changed, no component was built. You are judging one thing: <b>does red now only appear where something is wrong, and is the "neutral grey" box no longer green?</b></p>
+  <p class="eyebrow">Pizza Bot · Phase 0 · colour tokens · round 2</p>
+  <h1>Phase 0, second look: 4 questions, 5 minutes</h1>
+  <div class="done"><b>Round 1 result:</b> Q2 passed (the grey bubble reads as a message). Q1, Q3, Q4, Q5 came back as "overcorrected": the bright red is Pizza Bot's signature and removing it made everything blue-grey. That feedback is now applied. Round 2 checks only the fix.</div>
 
-  <h2>1 · What changed (the whole list)</h2>
+  <h2>1 · The new rule, in one picture</h2>
+  <p class="lede">Two reds. The <b>bright marinara red</b> is the signature: logo, tab, labels, buttons, reference headers. A <b>duller brick red</b> means "wrong". They must look different next to each other.</p>
   <div class="pair">
-    <div class="cell"><span class="tag">Before</span>
-      <div class="stack">
-        <div class="title" style="color:var(--red)">Pizza Bot</div>
-        <div class="btn chunk" style="background:var(--red)"><span class="ms">arrow_forward</span> Add a rule to your bot</div>
-        <div class="bubble chunk" style="background:var(--green-old)">Ugh, I'm starving. Just get me a pizza.</div>
-        <div class="callout chunk"><div class="t">The problem</div>It invented an order.</div>
-      </div></div>
-    <div class="cell"><span class="tag">After</span>
+    <div class="cell"><span class="tag">Round 1 (rejected)</span>
       <div class="stack">
         <div class="title" style="color:var(--navy)">Pizza Bot</div>
+        <div class="lbl" style="color:var(--navy)">Game · You build the bot</div>
+        <div class="callout chunk" style="border-color:var(--red);background:var(--red-old-bg)"><div class="t" style="color:var(--red)">The problem</div>It invented an order.</div>
         <div class="btn chunk" style="background:var(--navy)"><span class="ms">arrow_forward</span> Add a rule to your bot</div>
-        <div class="bubble chunk" style="background:var(--grey-new)">Ugh, I'm starving. Just get me a pizza.</div>
-        <div class="callout chunk"><div class="t">The problem</div>It invented an order.</div>
+      </div></div>
+    <div class="cell"><span class="tag">Round 2 (now)</span>
+      <div class="stack">
+        <div class="title" style="color:var(--red)">Pizza Bot</div>
+        <div class="lbl" style="color:var(--red)">Game · You build the bot</div>
+        <div class="callout chunk" style="border-color:var(--wrong);background:var(--wrong-bg)"><div class="t" style="color:var(--wrong)">The problem</div>It invented an order.</div>
+        <div class="btn chunk" style="background:var(--red)"><span class="ms">arrow_forward</span> Add a rule to your bot</div>
       </div></div>
   </div>
   <ol class="steps">
-    <li><b>Grey instead of green</b> for the neutral box: customer bubbles, "How to play", "Your playbook", the fill-in sentence, the workshop pegboard, done items in the list.</li>
-    <li><b>Navy instead of red</b> for the main button, the "Pizza Bot" title, the active bottom tab, the bot's avatar, the "Game · …" labels, the progress bar.</li>
-    <li><b>Red stays</b> on: "The problem" cards, wrong answers, the damage counter, the broken status readout, the pizza slice icon, and the mascot's pizza parts.</li>
+    <li><b>Back to bright red:</b> "Pizza Bot" title, the Workshop tab, "Term ·" and "Game ·" labels, the main button, the bot's avatar, "Made up".</li>
+    <li><b>New muted red</b> for "wrong": "The problem" cards, wrong-answer feedback, damage counter, the broken status readout.</li>
+    <li><b>Two small extras from your Q4:</b> "How to play" is now a blue box (teaching = blue), and the "Today's real menu" header is bright red, so the two no longer share a grey.</li>
+    <li><b>Unchanged and approved:</b> the grey customer bubble and grey pegboard.</li>
   </ol>
 
   <h2>2 · Open the app</h2>
-  <p>In a terminal, inside the <code>pizza-bot</code> folder (branch <code>docs/interview-1-feedback</code>):</p>
+  <p>Inside the <code>pizza-bot</code> folder, branch <code>docs/interview-1-feedback</code>:</p>
   <code class="cmd">npm run dev</code>
-  <p class="lede">Then open the address it prints (usually <code>http://localhost:5173</code>) on your phone-sized browser window, or your phone on the same Wi-Fi. Phone width matters: that is what Klára saw.</p>
+  <p class="lede">Phone-width window again.</p>
 
-  <h2>3 · Five questions, one screen each</h2>
-  <p class="lede">Answer each with a yes or no. Trust the first impression; do not go back and forth.</p>
+  <h2>3 · Four questions</h2>
 
-  <div class="q"><div class="n">Q1 · Workshop (the first screen)</div><div class="ask">Is anything red that is not the pizza icon or the status readout?</div>
-    <div class="how">Look at the title, the bottom tab, the "Fix it now" link. Expected: navy. The status box's robot icon and dot are red on purpose: your bot is broken.</div>
-    <div class="ans"><b>no red elsewhere ✓</b> <b>found red ✗ → say where</b></div></div>
+  <div class="q"><div class="n">Q1 · Workshop</div><div class="ask">Does it feel like Pizza Bot again?</div>
+    <div class="how">Red title, red Workshop tab, red pizza icon, grey board. Gut answer only.</div>
+    <div class="ans"><b>yes ✓</b> <b>no ✗ → one word</b></div></div>
 
-  <div class="q"><div class="n">Q2 · Open the Prompt game</div><div class="ask">Does the customer's speech bubble look like "someone said this", not like "a correct answer"?</div>
-    <div class="how">It is grey now. If it still reads as a result or a highlight, that is a no.</div>
-    <div class="ans"><b>reads as a message ✓</b> <b>still looks like a result ✗</b></div></div>
+  <div class="q"><div class="n">Q2 · Prompt game, tap the first instruction</div><div class="ask">On the result screen, can you tell the "problem" red from the button red without thinking?</div>
+    <div class="how">The problem card should look dusty and calmer; the button should look like the logo. If they look like the same red, that is a no and I make the muted red duller.</div>
+    <div class="ans"><b>clearly two reds ✓</b> <b>too close ✗</b> <b>muted red too dull/brown ✗</b></div></div>
 
-  <div class="q"><div class="n">Q3 · Tap the first instruction, then look at the result screen</div><div class="ask">Is the red "The problem" card the only red thing on the screen?</div>
-    <div class="how">The button below it should be navy. If red and the button still "rhyme", that is a no.</div>
-    <div class="ans"><b>yes, only the problem ✓</b> <b>no ✗</b></div></div>
+  <div class="q"><div class="n">Q3 · Hallucination game</div><div class="ask">Do "How to play" (blue) and "Today's real menu" (red header) now read as two different kinds of thing?</div>
+    <div class="how">One tells you what to do; the other is something you look things up in.</div>
+    <div class="ans"><b>yes ✓</b> <b>no ✗</b> <b>menu header should not be red ✗</b></div></div>
 
-  <div class="q"><div class="n">Q4 · Open the Hallucination game</div><div class="ask">Are the "How to play" box and the menu header clearly not green?</div>
-    <div class="how">Both were sage green before. Now grey. Then pick "Made up" on the first claim: the feedback card that appears is the only green or red thing.</div>
-    <div class="ans"><b>not green ✓</b> <b>still greenish ✗</b></div></div>
+  <div class="q"><div class="n">Q4 · Same screen, tap "Made up"</div><div class="ask">Is the feedback card the only muted-red thing, with the bright red still on the button above it?</div>
+    <div class="how">"Our Margherita is $9" is real, so "Made up" is wrong: you get a muted-red "Fooled you" card under a bright-red button. That contrast is the whole point of round 2.</div>
+    <div class="ans"><b>yes ✓</b> <b>no ✗</b></div></div>
 
-  <div class="q"><div class="n">Q5 · Gut check, any screen</div><div class="ask">Does the app still feel like Pizza Bot?</div>
-    <div class="how">Navy title, grey board, less red. If it now feels "bank-like" or dead, say so. That is useful, and it is fixable (the pizza red can come back as an accent in Phase 1 without going back on buttons).</div>
-    <div class="ans"><b>still Pizza Bot ✓</b> <b>lost something ✗ → one word for what</b></div></div>
-
-  <h2>4 · What NOT to judge yet</h2>
-  <div class="dont">These are unchanged on purpose and belong to later phases. Ignore them today:
-    <ul>
-      <li>Choice cards still have no radio circles or drag handles (Phase 2).</li>
-      <li>The end screen is still two paragraphs, no checklist (Phase 3).</li>
-      <li>"Trust it" (blue) and "Made up" (navy) are both dark now; they get redesigned in Phase 2.</li>
-      <li>The blank "___" in Token and Temperature is blue now; fine for today.</li>
-      <li>Any wording.</li>
+  <h2>4 · Still not for today</h2>
+  <div class="dont"><ul>
+      <li>Choice cards, radio circles, drag handles (Phase 2).</li>
+      <li>End screen checklist (Phase 3).</li>
+      <li>A pizza illustration at the end: noted as your wish, it belongs with FR-3 (landing / visual identity).</li>
+      <li>Wording.</li>
     </ul></div>
 
   <h2>5 · How to answer</h2>
-  <p>Reply in chat with five characters, one per question, for example: <code>✓ ✓ ✓ ✓ ✓</code> or <code>✓ ✗(title) ✓ ✓ ✓</code>. Anything with a ✗ gets one sentence. That is the whole review.</p>
+  <p>Four marks in chat, for example <code>✓ ✓ ✓ ✓</code> or <code>✓ ✗(too close) ✓ ✓</code>. One sentence per cross.</p>
 </div>
