@@ -6,6 +6,7 @@ import GameIntro from '../../components/GameIntro.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import Callout from '../../components/Callout.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
+import ProgressBar from '../../components/ProgressBar.jsx'
 import Panel from '../../components/Panel.jsx'
 
 const GUESS_OPTIONS = [1, 2, 3, 4]
@@ -40,6 +41,7 @@ export default function TokenGame({ termId, onComplete }) {
     const wordCount = samplePhrase.text.trim().split(/\s+/).length
     return (
       <div className="flex flex-col gap-3">
+        <ProgressBar part={1} parts={2} />
         <GameIntro term={term} />
 
         <div className="rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop">
@@ -153,11 +155,8 @@ export default function TokenGame({ termId, onComplete }) {
 
     return (
       <div className="flex flex-col gap-3">
-        <PhaseCard
-          title="Read your bot's mind"
-          heading="Token"
-          progress={{ unit: 'Sentence', current: roundIndex + 1, total: predictionRounds.length }}
-        >
+        <ProgressBar part={2} parts={2} step={roundIndex + 1} steps={predictionRounds.length} stepUnit="Sentence" />
+        <PhaseCard title="Read your bot's mind" heading="Token">
           Your bot (an LLM, short for large language model) never writes a whole reply at once.
           It picks one token, then the next, then the next. Every pick is a guess at what fits
           best after everything it has seen so far.

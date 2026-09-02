@@ -1,15 +1,20 @@
 /**
- * ProgressBar, the game's progress as a labelled, segmented line: one segment
- * per step, the first `current` of them marinara, the rest grey. Sits at the
- * top of the PhaseCard so it is the first thing on the play column (Phase 1
- * review, round 2: "call it Progress, a line divided into the parts").
- * The count is kept for screen readers.
+ * ProgressBar, the game's progress strip. Sits at the very top of every game
+ * screen (GameStage renders it above both columns; the single-column games
+ * render it first) and shows up to two levels:
+ *
+ *   part / parts   which part of the game you are in ("Part 1 / 2")
+ *   step / steps   how far you are inside the current part ("Customer 2 / 4")
+ *
+ * Each level is a labelled line of segments, one per unit, filled in marinara
+ * up to where you are. Games pass only the levels they have: a one-part game
+ * shows just the step line; a part with no countable steps shows just the
+ * part line. (Phase 1 review, round 3.)
  */
-export default function ProgressBar({ current, total, unit }) {
-  const label = `${unit ? unit + ' ' : ''}${current} of ${total}`
+function Line({ label, current, total }) {
   return (
-    <div className="flex items-center gap-2" role="img" aria-label={`Progress: ${label}`}>
-      <span className="font-label text-[10px] text-text-muted">Progress</span>
+    <div className="flex items-center gap-2">
+      <span className="w-28 shrink-0 font-label text-[10px] text-text-muted">{label}</span>
       <span className="flex flex-1 gap-1" aria-hidden="true">
         {Array.from({ length: total }).map((_, i) => (
           <span
@@ -21,9 +26,36 @@ export default function ProgressBar({ current, total, unit }) {
           />
         ))}
       </span>
-      <span className="font-label text-[10px] text-text-muted" aria-hidden="true">
-        {current}/{total}
-      </span>
+    </div>
+  )
+}
+
+export default function ProgressBar({
+  part,
+  parts,
+  partUnit = 'Part',
+  step,
+  steps,
+  stepUnit = 'Step',
+}) {
+  const showParts = parts > 1
+  const showSteps = steps > 0
+  if (!showParts && !showSteps) return null
+  const label =
+    (showParts ? `${partUnit} ${part} of ${parts}` : '') +
+    (showParts && showSteps ? ', ' : '') +
+    (showSteps ? `${stepUnit} ${step} of ${steps}` : '')
+  return (
+    <div
+      className="rounded-md border-[3px] border-neutral bg-surface px-3 py-2 shadow-pop"
+      role="img"
+      aria-label={`Progress: ${label}`}
+    >
+      <p className="mb-1 font-label text-[10px] font-bold text-text-muted">Progress</p>
+      <div className="flex flex-col gap-1">
+        {showParts && <Line label={`${partUnit} ${part} / ${parts}`} current={part} total={parts} />}
+        {showSteps && <Line label={`${stepUnit} ${step} / ${steps}`} current={step} total={steps} />}
+      </div>
     </div>
   )
 }

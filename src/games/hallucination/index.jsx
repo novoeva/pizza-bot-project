@@ -109,12 +109,10 @@ export default function HallucinationGame({ termId, onComplete }) {
         </ul>
       </Panel>
 
-      {/* Claim progress — labeled so it clearly reads as "which claim am I on",
-          not as something attached to the menu above it. */}
+      {/* Score so far: one dot per claim, green caught / red fooled. (Progress
+          itself is the strip at the top of the screen.) */}
       <div className="flex items-center justify-between px-1">
-        <p className="font-label text-[11px] text-text-muted">
-          Claim {index + 1} / {rounds.length}
-        </p>
+        <p className="font-label text-[11px] text-text-muted">Your score so far</p>
         <div className="flex gap-1.5">
           {rounds.map((_, i) => {
             const r = results[i]
@@ -194,7 +192,11 @@ export default function HallucinationGame({ termId, onComplete }) {
 
   return (
     <>
-      <GameStage context={context} main={main} />
+      <GameStage
+        context={context}
+        main={main}
+        progress={{ part: 1, parts: 1, step: index + 1, steps: rounds.length, stepUnit: 'Claim' }}
+      />
       {pick && (
         <GameActions>
           <GameActionButton variant="primary" onClick={next}>

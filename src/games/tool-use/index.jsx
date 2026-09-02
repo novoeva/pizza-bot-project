@@ -59,17 +59,24 @@ export default function ToolUseGame({ termId, onComplete }) {
     }
   }
 
+  // Progress: the round (guess / check) and the question inside it.
+  const progress = {
+    part: round,
+    parts: 2,
+    partUnit: 'Round',
+    step: phase === 'transition' ? questions.length : qIndex + 1,
+    steps: questions.length,
+    stepUnit: 'Question',
+  }
+
   // Left column: constant orientation (what tool use is + Your role).
   const stage = (main) => (
-    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} />
+    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
   )
 
   // Per-phase instruction at the top of the right column.
   const instruction = (sub) => (
-    <PhaseCard
-      title={`Guess or check · Round ${round}`}
-      progress={{ unit: 'Question', current: qIndex + 1, total: questions.length }}
-    >
+    <PhaseCard title={`Guess or check · Round ${round}`}>
       {sub}
     </PhaseCard>
   )

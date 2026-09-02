@@ -7,6 +7,7 @@ import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import Callout from '../../components/Callout.jsx'
 import ChatMessage from '../../components/ChatMessage.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
+import ProgressBar from '../../components/ProgressBar.jsx'
 
 const PRACTICAL_IDS = ['order', 'allergy', 'address']
 
@@ -72,10 +73,12 @@ export default function MemoryGame({ termId, onComplete }) {
     </PhaseCard>
   )
 
-  function renderChatSequence(lines, onFinish, buttonLabel, header, intro = false) {
+  // Progress: 1 visit one · 2 a week later · 3 install memory · 4 Anna is back.
+  function renderChatSequence(lines, onFinish, buttonLabel, header, intro = false, part = 1) {
     const isLast = lineIndex >= lines.length - 1
     return (
       <div className="flex flex-col gap-3">
+        <ProgressBar part={part} parts={4} step={lineIndex + 1} steps={lines.length} stepUnit="Message" />
         {intro ? <GameIntro term={term} /> : instruction(header)}
         {/* Standard sides: the customer (Anna) is received, on the left; your
             bot is on the right, like every other game. */}
@@ -154,6 +157,8 @@ export default function MemoryGame({ termId, onComplete }) {
       () => setPhase('reveal'),
       'See what this means',
       'A week later, Anna is back.',
+      false,
+      4,
     )
   }
 
@@ -161,6 +166,7 @@ export default function MemoryGame({ termId, onComplete }) {
     const done = selected.size > 0
     return (
       <div className="flex flex-col gap-3">
+        <ProgressBar part={3} parts={4} step={selected.size} steps={facts.length} stepUnit="Fact" />
         {instruction(
           'The hard drive is empty. Tick whatever the bot should remember. Anything you skip is gone the moment the chat ends.',
         )}
@@ -202,6 +208,7 @@ export default function MemoryGame({ termId, onComplete }) {
   if (phase === 'diagnose') {
     return (
       <div className="flex flex-col gap-3">
+        <ProgressBar part={3} parts={4} />
         {instruction('Why it forgot, and how to fix it.')}
         <Callout tone="problem" title="The problem">
           Every visit, the bot starts from zero. Inside one chat its memory is perfect. That is
@@ -227,12 +234,15 @@ export default function MemoryGame({ termId, onComplete }) {
       () => setPhase('diagnose'),
       'Why did it forget?',
       'Same bot, new chat, nothing saved.',
+      false,
+      2,
     )
   }
 
   if (phase === 'timejump') {
     return (
       <div className="flex flex-col gap-3">
+        <ProgressBar part={2} parts={4} />
         {instruction('The chat is over.')}
         <div className="flex flex-col items-center justify-center gap-4 rounded-lg border-[3px] border-neutral bg-muted py-16 shadow-pop">
           <p className="font-display text-xl text-text-muted">One week later.</p>

@@ -16,7 +16,14 @@
  * choices, the feedback). Feedback then appears in place in the right column
  * instead of pushing the page down.
  */
-export default function GameStage({ context, main, wide = false }) {
+import ProgressBar from './ProgressBar.jsx'
+
+/**
+ * `progress` ({ part, parts, step, steps, … }, see ProgressBar) is drawn as a
+ * strip above both columns, first thing on the screen, so the player always
+ * sees where they are before reading anything else.
+ */
+export default function GameStage({ context, main, wide = false, progress }) {
   // `wide`: a phase whose `main` itself holds two side-by-side panels needs more
   // room, so it opts into a wider stage and gives the right column the larger
   // share. The default keeps the standard balanced two-column reading width.
@@ -39,6 +46,11 @@ export default function GameStage({ context, main, wide = false }) {
         ' lg:items-start lg:gap-8'
       }
     >
+      {progress && (
+        <div className="lg:col-span-2">
+          <ProgressBar {...progress} />
+        </div>
+      )}
       <div className="flex flex-col gap-2">{context}</div>
       <div className="flex flex-col gap-2">{main}</div>
     </div>

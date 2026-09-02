@@ -161,7 +161,11 @@ export default function TemperatureGame({ termId, onComplete }) {
     // live dial, the distribution and the roll — the part you actually touch.
     return (
       <>
-        <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} />
+        <GameStage
+          context={<GameIntro term={term} showHowTo={false} />}
+          main={main}
+          progress={{ part: 1, parts: 2 }}
+        />
         <GameActions>
           {!interacted ? (
             <GameActionButton variant="accent" icon="casino" onClick={roll}>
@@ -207,10 +211,7 @@ export default function TemperatureGame({ termId, onComplete }) {
     // so it stays put while the right column switches from the dial to the jobs.
     const main = (
       <>
-        <PhaseCard
-          title="Pick the setting"
-          progress={{ unit: 'Job', current: roundIndex + 1, total: taskRounds.length }}
-        >
+        <PhaseCard title="Pick the setting">
           Same bot, very different jobs. For each one, decide which way to turn the dial.
         </PhaseCard>
 
@@ -260,7 +261,11 @@ export default function TemperatureGame({ termId, onComplete }) {
 
     return (
       <>
-        <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} />
+        <GameStage
+          context={<GameIntro term={term} showHowTo={false} />}
+          main={main}
+          progress={{ part: 2, parts: 2, step: roundIndex + 1, steps: taskRounds.length, stepUnit: 'Job' }}
+        />
         {answered && (
           <GameActions>
             <GameActionButton variant="primary" icon="arrow_forward" onClick={next}>

@@ -62,18 +62,22 @@ export default function GuardrailsGame({ termId, onComplete }) {
     setTried(false)
   }
 
+  // Progress: part 1 attacks / part 2 your limits, and the customer (or limit)
+  // you are on inside it.
+  const progress =
+    phase === 'configure'
+      ? { part: 2, parts: 2, step: Object.keys(picks).length, steps: guardrailCategories.length, stepUnit: 'Limit' }
+      : { part: phase === 'defend' ? 2 : 1, parts: 2, step: attackIndex + 1, steps: attacks.length, stepUnit: 'Customer' }
+
   // Left column: constant orientation (what guardrails are + Your role).
   const stage = (main) => (
-    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} />
+    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
   )
 
   // Per-phase instruction, at the top of the right column so it's always the
   // current step. The term name/role live on the left, so this stays slim.
-  // The part lives in the title; the pizza shows the customer we are on.
-  const instruction = (part, sub, progress) => (
-    <PhaseCard title={`Free pizza for life · Part ${part}`} progress={progress}>
-      {sub}
-    </PhaseCard>
+  const instruction = (part, sub) => (
+    <PhaseCard title={`Free pizza for life · Part ${part}`}>{sub}</PhaseCard>
   )
 
   // The customer's trick as a received MESSAGE.
@@ -144,11 +148,7 @@ export default function GuardrailsGame({ termId, onComplete }) {
   if (phase === 'defend') {
     return stage(
       <div className="flex flex-col gap-3">
-        {instruction(2, 'Your guardrails, under attack.', {
-          unit: 'Customer',
-          current: attackIndex + 1,
-          total: attacks.length,
-        })}
+        {instruction(2, 'Your guardrails, under attack.')}
 
         <p className="rounded-md border-[3px] border-success bg-success-bg px-3 py-2 text-center font-label text-sm font-bold text-success shadow-pop">
           Damage: $0
@@ -218,11 +218,7 @@ export default function GuardrailsGame({ termId, onComplete }) {
 
   return stage(
     <div className="flex flex-col gap-3">
-      {instruction(1, 'Your bot has no guardrails yet. Watch pushy customers talk it into anything.', {
-        unit: 'Customer',
-        current: attackIndex + 1,
-        total: attacks.length,
-      })}
+      {instruction(1, 'Your bot has no guardrails yet. Watch pushy customers talk it into anything.')}
 
       <p className="flex items-center justify-center gap-2 rounded-md border-[3px] border-danger bg-danger-bg px-3 py-2 text-center font-label text-sm font-bold text-danger shadow-pop">
         <span className="material-symbols-rounded text-[18px]">gpp_bad</span>

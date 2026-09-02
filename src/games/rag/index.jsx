@@ -70,13 +70,19 @@ export default function RagGame({ termId, onComplete }) {
     }
   }
 
+  // Progress: the customer (round), and while picking, the pages handed over.
+  const progress =
+    phase === 'pick'
+      ? { part: round.n, parts: rounds.length, partUnit: 'Customer', step: picked.length, steps: MAX_PAGES, stepUnit: 'Page' }
+      : { part: round.n, parts: rounds.length, partUnit: 'Customer' }
+
   // Left column: constant orientation (what RAG is + Your role).
-  const stage = (context, main) => <GameStage context={context} main={main} />
+  const stage = (context, main) => <GameStage context={context} main={main} progress={progress} />
 
   // Per-phase instruction, at the top of the play column so it's always the
   // current step. Term name / role live on the left, so this stays slim.
   const instruction = (title, body, note) => (
-    <PhaseCard title={title} progress={note}>
+    <PhaseCard title={title} meta={note}>
       {body}
     </PhaseCard>
   )
@@ -139,7 +145,7 @@ export default function RagGame({ termId, onComplete }) {
         {instruction(
           'It answered',
           'The bot read only the pages you handed it, then answered the customer out loud. Here’s what came out.',
-          { unit: 'Customer', current: round.n, total: rounds.length },
+          undefined,
         )}
         {customerBubble}
         <Panel
@@ -236,7 +242,7 @@ export default function RagGame({ termId, onComplete }) {
   // titled the same; the only tell is the small `foot` date.
   const binder = (
     <div className="flex flex-col gap-3">
-      {instruction(round.instruction ? `Round ${round.n}` : 'Round', round.instruction, `${picked.length}/${MAX_PAGES} handed`)}
+      {instruction(round.instruction ? `Round ${round.n}` : 'Round', round.instruction)}
       <p className="flex items-center gap-1 pl-1 font-label text-[10px] text-text-muted">
         <span className="material-symbols-rounded text-[15px]">menu_book</span>
         The binder · the bot reads at most {MAX_PAGES}

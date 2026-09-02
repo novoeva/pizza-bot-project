@@ -130,17 +130,23 @@ export default function PromptGame({ termId, onComplete }) {
   const customerBanner = <ChatMessage from="customer">{customerRequest}</ChatMessage>
   const botReplyBubble = (text) => <ChatMessage from="bot">{text}</ChatMessage>
 
+  // Progress: the round you are in, and inside round 3 how many of its parts
+  // you have picked.
+  const roundNo = phase.startsWith('round3') ? 3 : phase.startsWith('round2') ? 2 : 1
+  const progress =
+    roundNo === 3
+      ? { part: 3, parts: 3, partUnit: 'Round', step: Object.keys(round3Picks).length, steps: round3Categories.length, stepUnit: 'Part' }
+      : { part: roundNo, parts: 3, partUnit: 'Round' }
+
   // Left column: constant orientation (what a prompt is + Your role).
   const stage = (main) => (
-    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} />
+    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
   )
 
   // Per-phase instruction, at the top of the right column so it's always the
   // current step. The term name/role live on the left, so this stays slim.
   const instruction = (round, sub) => (
-    <PhaseCard title="You build the bot" progress={{ unit: 'Round', current: round, total: 3 }}>
-      {sub}
-    </PhaseCard>
+    <PhaseCard title={`You build the bot · Round ${round}`}>{sub}</PhaseCard>
   )
 
   if (phase === 'reveal') {

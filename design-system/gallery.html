@@ -336,11 +336,13 @@
       <p class="eyebrow">Round 5 · from the Phase 1 review, round 2</p>
       <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">R5 · Progress bar, untinted bubbles, pills carry the verdict <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">applied</span></h2>
       <div class="grid-gallery">
-        <div class="item"><h4>1 · Progress is a labelled line on top</h4>
-          <div class="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-            <div class="mb-2 border-b-2 border-dashed border-slot-empty pb-2 flex items-center gap-2"><span class="font-label text-[10px] text-text-muted">Progress</span><span class="flex flex-1 gap-1"><span class="h-2.5 flex-1 rounded-full border-2 border-neutral bg-primary"></span><span class="h-2.5 flex-1 rounded-full border-2 border-neutral bg-primary"></span><span class="h-2.5 flex-1 rounded-full border-2 border-neutral bg-muted"></span><span class="h-2.5 flex-1 rounded-full border-2 border-neutral bg-muted"></span></span><span class="font-label text-[10px] text-text-muted">2/4</span></div>
-            <p class="font-label text-[11px] text-primary">Game · Free pizza for life · Part 1</p><p class="mt-1 text-[13px] leading-snug text-text-muted">Your bot has no guardrails yet.</p></div>
-          <p class="cap">The pizza slice (R4) was cute but not readable as progress. Now: "Progress", one segment per step, filled in marinara, first thing on the card.</p></div>
+        <div class="item"><h4>1 · Progress is a two-level strip at the top of the screen <span class="verdict v-ok">R6</span></h4>
+          <div class="rounded-md border-[3px] border-neutral bg-surface px-3 py-2 shadow-pop"><p class="mb-1 font-label text-[10px] font-bold text-text-muted">Progress</p>
+            <div class="flex flex-col gap-1">
+              <div class="flex items-center gap-2"><span class="w-28 shrink-0 font-label text-[10px] text-text-muted">Part 2 / 2</span><span class="flex flex-1 gap-1"><span class="h-2.5 flex-1 rounded-full border-2 border-neutral bg-primary"></span><span class="h-2.5 flex-1 rounded-full border-2 border-neutral bg-primary"></span></span></div>
+              <div class="flex items-center gap-2"><span class="w-28 shrink-0 font-label text-[10px] text-text-muted">Job 2 / 3</span><span class="flex flex-1 gap-1"><span class="h-2.5 flex-1 rounded-full border-2 border-neutral bg-primary"></span><span class="h-2.5 flex-1 rounded-full border-2 border-neutral bg-primary"></span><span class="h-2.5 flex-1 rounded-full border-2 border-neutral bg-muted"></span></span></div>
+            </div></div>
+          <p class="cap">Temperature, part 2. Line one: which part of the game. Line two: how far inside it. First thing on every screen of every game, from the first screen on; a part with nothing to count shows only line one. (R5's single line inside the card was one level too few and too far down.)</p></div>
         <div class="item"><h4>2 · Bubbles are never tinted</h4>
           <div class="col">
             <div class="flex items-start justify-end gap-2"><div class="max-w-[85%]"><p class="mb-1 text-right font-label text-[10px] text-text-muted">Your bot</p><div class="rounded-2xl rounded-tr-sm border-[3px] border-neutral bg-surface px-4 py-3 shadow-pop"><p class="font-bold leading-snug text-text">Of course! 100% off, approved.</p></div></div><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary"><span class="material-symbols-rounded text-[20px] text-white">smart_toy</span></span></div>
@@ -762,7 +764,8 @@
       <div class="q"><div class="qn">R2 · decided, revised</div>Two reds: marinara (#b7102a) for brand, labels and buttons; muted brick (#9c4444) for "wrong".</div>
       <div class="q"><div class="qn">R3 · decided</div>Part tiles, real drag-and-drop, with the five "obviously draggable" signals listed in <a href="#r3">R3</a>. Tap stays as the fallback.</div>
       <div class="q"><div class="qn">R4 · applied</div>Bubble = only the reply, verdict in a Callout below · context window rows are small chat bubbles, dark header retired · result screens show the option you tapped. (Pizza-slice progress replaced in R5.)</div>
-      <div class="q"><div class="qn">R5 · applied</div>Labelled "Progress" bar on top of the PhaseCard · bubbles never tinted · red/green pills carry the verdict · "How to play" white, only "Your role" blue · verdict copy names who it worked for.</div>
+      <div class="q"><div class="qn">R6 · applied</div>Two-level "Progress" strip (part of the game + step inside it) at the top of every game screen, from the first screen.</div>
+      <div class="q"><div class="qn">R5 · applied</div>Bubbles never tinted · red/green pills carry the verdict · "How to play" white, only "Your role" blue · verdict copy names who it worked for.</div>
       <p class="lede" style="margin-top:1.25rem">All three decided. Next step is Phase 0 in <b>COMPONENT-AUDIT.md</b> (tokens), then Phase 1 (Callout, ChatMessage, PhaseCard, Panel).</p>
     </section>
   </main>

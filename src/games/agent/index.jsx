@@ -65,15 +65,24 @@ export default function AgentGame({ termId, onComplete }) {
     setPhase('run')
   }
 
+  // Progress: 1 the chatbot · 2 build the agent (actions added) · 3 run it
+  // (actions fired).
+  const progress =
+    phase === 'chat'
+      ? { part: 1, parts: 3 }
+      : phase === 'run'
+        ? { part: 3, parts: 3, step: Math.min(runIdx, seq.length), steps: seq.length, stepUnit: 'Action' }
+        : { part: 2, parts: 3, step: seq.length, steps: actions.length, stepUnit: 'Action' }
+
   // Left column: constant orientation (what an agent is + Your role).
   const stage = (main) => (
-    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} />
+    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
   )
 
   // Per-phase instruction, at the top of the right column so it's always the
   // current step. The term name / role live on the left, so this stays slim.
   const instruction = (title, body, note) => (
-    <PhaseCard title={title} progress={note}>
+    <PhaseCard title={title} meta={note}>
       {body}
     </PhaseCard>
   )
@@ -344,7 +353,7 @@ export default function AgentGame({ termId, onComplete }) {
 
   return (
     <>
-      <GameStage wide context={<GameIntro term={term} showHowTo={false} />} main={main} />
+      <GameStage wide context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
       <GameActions>
         <GameActionButton variant="primary" icon="play_arrow" iconFill disabled={!full} onClick={runAgent}>
           Run the agent

@@ -41,18 +41,22 @@ export default function SkillGame({ termId, onComplete }) {
   // Round 2 uses the player's own order: the point is consistency, not a "right" sequence.
   const builtPlaybook = builtSteps.map((id) => playbookSteps.find((s) => s.id === id))
 
+  // Progress: 1 no process (three customers) · 2 build the playbook (four
+  // steps) · 3 with the playbook.
+  const progress =
+    phase === 'build'
+      ? { part: 2, parts: 3, step: builtSteps.length, steps: playbookSteps.length, stepUnit: 'Step' }
+      : phase === 'round2'
+        ? { part: 3, parts: 3 }
+        : { part: 1, parts: 3, step: replyIndex + 1, steps: improvisedReplies.length, stepUnit: 'Customer' }
+
   // Left column: constant orientation (what a skill is + Your role).
   const stage = (main) => (
-    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} />
+    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
   )
 
   const instruction = (part, sub) => (
-    <PhaseCard
-      title="The complaint department"
-      progress={{ unit: 'Part', current: part, total: 2 }}
-    >
-      {sub}
-    </PhaseCard>
+    <PhaseCard title={`The complaint department · Part ${part}`}>{sub}</PhaseCard>
   )
 
   // The complaint as a received MESSAGE; the bot's reply as a sent one whose
@@ -155,7 +159,7 @@ export default function SkillGame({ termId, onComplete }) {
     const script = builtPlaybook.map((s) => s.scripted).join(' ')
     return stage(
       <div className="flex flex-col gap-3">
-        {instruction(2, 'Same complaint, three times — now handled by your playbook, identically.')}
+        {instruction(3, 'Same complaint, three times — now handled by your playbook, identically.')}
         {playbookPanel(builtPlaybook, true)}
         {customerBubble(complaint)}
         <div className="flex flex-col gap-2">

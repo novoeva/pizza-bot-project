@@ -22,6 +22,7 @@ import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import Callout from '../../components/Callout.jsx'
 import ChatMessage from '../../components/ChatMessage.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
+import ProgressBar from '../../components/ProgressBar.jsx'
 import Panel from '../../components/Panel.jsx'
 
 /**
@@ -98,6 +99,7 @@ export default function ContextWindowGame({ termId, onComplete }) {
   if (phase === 'newchat') {
     return (
       <div className="flex flex-col gap-3">
+        <ProgressBar part={2} parts={2} />
         {instruction('Same bot, brand new order. Watch the window.')}
         <ContextPanel sent={[]} />
 
@@ -134,6 +136,7 @@ export default function ContextWindowGame({ termId, onComplete }) {
   // ---------- Beat 1: fill the window ----------
   return (
     <div className="flex flex-col gap-3">
+      <ProgressBar part={1} parts={2} step={sentCount} steps={order.length} stepUnit="Message" />
       <GameIntro term={term} />
 
       <ContextPanel sent={sent} pinned={pinned} />
