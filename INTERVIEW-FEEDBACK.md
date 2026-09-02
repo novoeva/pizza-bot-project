@@ -225,6 +225,11 @@ Po Fázi 2 (drag-and-drop) je slot „Handed to the bot" v levém sloupci (u int
 - **📍 Kde:** `src/games/rag/index.jsx` — `workbench` (levý slot) vs. `binder` (pravý slot) ve fázi `pick`.
 - **✅ Hotovo když:** cíl přetažení je vedle dlaždic (stejný sloupec nebo hned nad nimi) a texty kol 1–3 jsou po review.
 
+**FR-23 — Závěrečná obrazovka: projít obsah všech 12 rekapitulací** 🔴 *(copy, ne design)*
+Struktura závěrečné obrazovky je schválená (Definition · What you learned in the game · Do and don't, sdílený `TermReveal`). Texty v ní napsal Claude jako první verzi; Eva: „obsah nemiluju, ale zatím stačí". Projít **všechny** řádky pro 12 pojmů jako člověk-čtenář: srozumitelné, věty (ne poznámky z přednášky), navázané na to, co se ve hře opravdu stalo.
+- **📍 Kde:** `src/content/terms.json` — pole `definition`, `inGame` (3 věty), `do` (2), `dont` (1) u každého pojmu. Přehled všech textů na jedné stránce: `design-system/reviews/phase-3.html`.
+- **✅ Hotovo když:** každý z 12 pojmů má review od Evy (schváleno / přepsáno); pravidlo z review kola 1 platí: každý řádek je věta, kterou by člověk řekl nahlas, o něčem, co se ve hře ukázalo.
+
 ### Otevřené / navazující
 - [x] **Component audit (FR-18, varianta A)** — hotovo: `COMPONENT-AUDIT.md` + `design-system/gallery.html`.
 - [x] ~~Ověřit žargon z FR-7~~ → vyjasněno: šlo o label **„Log it"** ve Skill hře (`src/games/skill/content.js:16`).
