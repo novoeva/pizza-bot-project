@@ -8,14 +8,15 @@ import GameActions, { GameActionButton } from './GameActions.jsx'
  *   2. "You just learned the term <name>" (from data, never typed by hand)
  *   3. an optional one-line score from the game
  *   4. "Definition": the payoff kept back until now
- *   5. "What happened in the game": three plain sentences that tie the
+ *   5. "What you learned in the game": three plain sentences that tie the
  *      definition back to what the player just did (term.inGame), so the
  *      lesson is reinforced by the game, not by more theory
- *   6. "Don't": one cross line (term.dont), optional
+ *   6. "Do and don't": the takeaways for real life, as sentences a person
+ *      would say (term.do with checks, term.dont with crosses)
  *   7. an optional aside the game passes in (a Callout), e.g. "Real talk"
  *   8. the pinned "Snap it onto your bot" action
  *
- * Content lives in content/terms.json (definition, inGame, dont).
+ * Content lives in content/terms.json (definition, inGame, do, dont).
  */
 function Card({ label, children }) {
   return (
@@ -56,14 +57,15 @@ export default function TermReveal({ term, score, aside, onComplete }) {
       </Card>
 
       {term.inGame?.length > 0 && (
-        <Card label="What happened in the game">
+        <Card label="What you learned in the game">
           <Lines items={term.inGame} icon="check_circle" tone="text-success" />
         </Card>
       )}
 
-      {term.dont?.length > 0 && (
-        <Card label="Don't">
-          <Lines items={term.dont} icon="cancel" tone="text-danger" />
+      {(term.do?.length > 0 || term.dont?.length > 0) && (
+        <Card label="Do and don't">
+          {term.do?.length > 0 && <Lines items={term.do} icon="check_circle" tone="text-success" />}
+          {term.dont?.length > 0 && <Lines items={term.dont} icon="cancel" tone="text-danger" />}
         </Card>
       )}
 

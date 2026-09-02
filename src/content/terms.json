@@ -10,12 +10,16 @@
     "definition": "A token is a small chunk of text, often part of a word, and it is the unit an AI actually reads and writes in. \"Pepperoni\" alone breaks into four of them.",
     "whyYouCare": "It's why long chats get slower and cost more. The AI has to look at every chunk, and a long conversation is a lot of chunks. It's also why AI is bad at counting the letters in a word: it never sees the letters, only the chunks.",
     "dont": [
-      "Don't judge an answer by its length. The bot pays for every chunk, so a long chat gets slower and more expensive."
+      "Don't judge an answer by its length. A long chat gets slower and more expensive."
     ],
     "inGame": [
       "You guessed how many chunks are in “Pepperoni”. The bot saw four, not one word.",
       "The whole order was chopped the same way: short words stayed whole, long ones were split.",
       "Then you watched the bot pick the next chunk from a ranked list. It writes one chunk at a time."
+    ],
+    "do": [
+      "Expect the bot to read and write in chunks, not words. One word can cost several chunks.",
+      "Keep chats short when speed and cost matter. Every chunk is paid for."
     ]
   },
   {
@@ -29,12 +33,16 @@
     "definition": "The context window is how much of the conversation an AI can still \"see\" at once. Once it fills up, the oldest parts quietly fall out.",
     "whyYouCare": "It's why a long chat sometimes forgets something you said 20 messages ago. It's not being careless, it just ran out of window.",
     "dont": [
-      "Don't assume the bot still sees something a customer said a while ago. Keep the important line where it can see it."
+      "Don't assume the bot still sees something a customer said a while ago."
     ],
     "inGame": [
       "The customer's first line, “No olives!!”, fell out of the window once five newer messages arrived.",
       "The bot then answered as if the allergy had never been mentioned. It wasn't careless. The line was gone.",
       "When you pinned that line to the top, it stayed in view and the bot got it right."
+    ],
+    "do": [
+      "Put the important line where the bot can still see it: pin it, repeat it, or start a fresh chat.",
+      "Expect a long chat to lose its beginning. That is how the window works."
     ]
   },
   {
@@ -48,12 +56,16 @@
     "definition": "A hallucination is when an AI says something false with full confidence, in the same tone it uses for things that are true.",
     "whyYouCare": "It's why you double-check anything an AI tells you that you can't verify elsewhere. Sounding sure is not the same as being right.",
     "dont": [
-      "Don't trust a price or a dish just because the bot sounds sure. Check it against something real."
+      "Don't trust a detail because the bot sounds sure. Confidence is not evidence."
     ],
     "inGame": [
       "Every claim came with the same 100% confidence bar, whether it was on the menu or invented.",
       "The only way to tell that the vegan halal pizza was made up was to check the real menu yourself.",
       "Sounding sure told you nothing. Checking did."
+    ],
+    "do": [
+      "Check any price, dish or fact you can't verify against something real.",
+      "Give the bot real data to check, like a menu or a tracker. The guessing drops."
     ]
   },
   {
@@ -67,12 +79,16 @@
     "definition": "A prompt is the instructions you give an AI. The more your instructions cover, including what to do when something is left unsaid, the less the AI has to guess. Less guessing means the same reliable answer instead of a new surprise every time.",
     "whyYouCare": "Better instructions, not better luck, are how you get useful answers out of Claude or ChatGPT.",
     "dont": [
-      "Don't leave out what the bot should do when a customer is vague. It will fill the gap with a guess."
+      "Don't leave gaps in the instructions. The bot fills them with guesses."
     ],
     "inGame": [
       "With “You take pizza orders” as its only instruction, your bot invented a pineapple-anchovy pizza for a customer who said nothing about toppings.",
       "One added rule, “if size, crust or toppings are missing, ask”, made the same bot ask a question instead.",
       "The customer never changed. Only your instructions did."
+    ],
+    "do": [
+      "Say in the instructions what the bot should do when information is missing: ask, don't invent.",
+      "When the bot misbehaves, fix the instructions before blaming the customer."
     ]
   },
   {
@@ -86,12 +102,16 @@
     "definition": "A chatbot talks about doing something. An agent actually does it. It works out what needs to happen, then does it: charges the card, tells the kitchen, sends out a driver. No human in between.",
     "whyYouCare": "It's the line between \"AI that chats\" and \"AI that takes real actions for you\", and why agents need more trust and more guardrails.",
     "dont": [
-      "Don't give a bot the power to act without deciding what it may do, and in which order."
+      "Don't hand a bot real actions without limits."
     ],
     "inGame": [
       "The chatbot told Marco his pizza was coming, and nothing happened. Payment, kitchen and delivery all stayed asleep.",
       "Once you handed the bot real actions, each one woke up a real system.",
       "Sending the driver before the kitchen had cooked failed. In the real world, the order of actions matters."
+    ],
+    "do": [
+      "Decide what the agent may do, and in which order, before it acts.",
+      "Give a bot that acts in the real world more guardrails than a bot that only talks."
     ]
   },
   {
@@ -105,12 +125,16 @@
     "definition": "Tool use is when an AI looks something up in a real system, like the live menu or the delivery tracker, instead of answering from memory.",
     "whyYouCare": "It's why an assistant that can actually check your calendar or a real order is more reliable than one that is only talking.",
     "dont": [
-      "Don't let a bot answer a live question, like stock or delivery time, from memory. Give it the tool that knows."
+      "Don't let a bot answer a live question from memory."
     ],
     "inGame": [
       "Asked when the pizza arrives, your bot guessed “around 6:45” because it had no way to check.",
       "With the delivery tracker in its hands, the same question got a real answer: 7:10, delayed by traffic.",
       "Each question needed one specific tool. The stock list can't answer a delivery question."
+    ],
+    "do": [
+      "Give the bot a tool for every live question: the menu, the tracker, the stock list.",
+      "Match the tool to the question. The stock list can't answer a delivery question."
     ]
   },
   {
@@ -124,12 +148,16 @@
     "definition": "A skill is a written playbook you hand an AI for one situation that keeps coming back, so it handles that situation the same, right way every time.",
     "whyYouCare": "It's the difference between an AI that improvises an answer to a complaint and one that follows a process you actually trust.",
     "dont": [
-      "Don't leave the situations that cost you money, like complaints, to improvisation."
+      "Don't leave complaints to improvisation."
     ],
     "inGame": [
       "The same cold-pizza complaint got three different answers: a brush-off, a panic, and free pizza for life.",
       "You wrote a four-step playbook: apologize, verify the order, offer a voucher, record it.",
       "After that, all three customers got the same calm answer. The playbook decided, not the bot's mood."
+    ],
+    "do": [
+      "Write a playbook for every situation that keeps coming back and costs you money.",
+      "Write the steps in the order you would handle it yourself."
     ]
   },
   {
@@ -143,12 +171,16 @@
     "definition": "An AI has two kinds of memory. Working memory lasts one conversation and then it is gone. Persistent memory is written down and saved, so facts like your usual order are still there on your next visit.",
     "whyYouCare": "It's why some AI tools remember your preferences next time, and others start from zero every single chat.",
     "dont": [
-      "Don't count on a bot remembering last week's customer unless something was saved on purpose."
+      "Don't expect a bot to remember last week unless something was saved."
     ],
     "inGame": [
       "Inside one chat, the bot knew Anna's order and her anchovy allergy perfectly.",
       "A week later it greeted her like a stranger. Nothing had been written down, so nothing survived.",
       "Once you saved her facts to the hard drive, she was recognised on the next visit."
+    ],
+    "do": [
+      "Decide on purpose which facts get saved for the next visit.",
+      "Save what serves the customer, like an allergy, and skip the noise."
     ]
   },
   {
@@ -162,12 +194,15 @@
     "definition": "MCP (short for Model Context Protocol) is one shared plug that AI assistants and outside systems both agree to use, so neither side has to know anything about the other side specifically.",
     "whyYouCare": "It means a tool built by people who have never heard of your AI assistant still works with it on day one. Nobody has to build a bridge for that exact pair. It's why you can connect an AI to your calendar, your files or your company's database without waiting for someone to make those two things fit together.",
     "dont": [
-      "Don't build a custom bridge for a tool that already speaks MCP."
+      "Don't build a custom connector for a tool that already speaks MCP."
     ],
     "inGame": [
       "Each system needed its own custom connector, three weeks apiece, and you were never done.",
       "With one universal port, the same systems clicked in with no building at all.",
       "A stock tracker built by people who had never heard of your bot plugged in on day one."
+    ],
+    "do": [
+      "Prefer tools that speak MCP. They plug in on day one, with no custom bridge."
     ]
   },
   {
@@ -187,6 +222,10 @@
       "A “store manager” talked your bot into a 100% discount, and a stranger got a free essay.",
       "Each trick cost real money, because there was no limit the bot was allowed to refuse with.",
       "After you set four limits, the same four tricks bounced off."
+    ],
+    "do": [
+      "Set hard limits in advance: money, promises, topics.",
+      "Test your limits with the tricks a pushy customer would try."
     ]
   },
   {
@@ -200,12 +239,16 @@
     "definition": "Temperature is a setting that controls how random an AI's word choice is. Low temperature makes it pick the safest, most likely word almost every time. High temperature lets less likely, more surprising words win.",
     "whyYouCare": "It's the dial behind \"why did it answer differently this time?\" Turn it down when you need the same reliable wording. Turn it up when you want fresh ideas.",
     "dont": [
-      "Don't leave the dial high for anything that must read exactly the same every time."
+      "Don't leave it high for exact wording, like disclaimers and prices."
     ],
     "inGame": [
       "At low temperature the bot picked “classic” almost every roll. At high temperature almost any word could win.",
       "The words to choose from never changed. Only the odds did.",
       "The allergy disclaimer needed the dial turned down. The mystery-pizza names needed it turned up."
+    ],
+    "do": [
+      "Turn the dial down for anything that must read the same every time.",
+      "Turn it up when you want fresh ideas and surprises are welcome."
     ]
   },
   {
@@ -219,12 +262,16 @@
     "definition": "RAG is when an AI searches a specific set of documents before answering, grabs the few passages that look relevant, and writes its answer from those. It doesn't know your documents. It looks them up, one question at a time, and only sees what the search found.",
     "whyYouCare": "It's what's behind every \"ask our company AI\" tool. The answer is only as good as the pages it happened to find, and the AI can't tell a current document from an outdated one. So ask it which document the answer came from.",
     "dont": [
-      "Don't assume an answer “from our documents” came from the right document. Ask which page it used."
+      "Don't assume “from our documents” means “from the right document”."
     ],
     "inGame": [
       "Your bot could read only two pages at a time, so you chose which pages it saw.",
       "When you handed it the two-year-old price list, it quoted the old price with full confidence. It couldn't tell the pages apart.",
       "With no page about weddings, it invented a wedding package. With nothing handed over, it honestly said it didn't know."
+    ],
+    "do": [
+      "Ask the bot which page its answer came from.",
+      "Keep the documents it can find up to date. It can't tell old from new."
     ]
   }
 ]
