@@ -8,69 +8,79 @@
  *   from="bot"       your bot, RIGHT, marinara robot avatar, white bubble
  *   from="you"       you the owner typing to your bot, RIGHT, blue bubble
  *
- * `tone` tints the bot's bubble when the reply itself IS the verdict
- * ("good" = green, "bad" = muted red) and `note` puts the one-line verdict
- * under the text with its icon. `footer` is for any extra line under the note.
+ * The bubble holds the words that were said and nothing else (Phase 1
+ * review, Q3). `tone` may tint it when the reply itself is the verdict
+ * ("good" = green, "bad" = muted red); the explanation of that verdict goes in
+ * a Callout under the bubble, never inside it.
+ *
+ * `size="sm"` is the compact transcript row (context window). `label={null}`
+ * hides the name line.
  */
 const SIDE = {
-  customer: { right: false, bubble: 'rounded-tl-sm border-neutral bg-muted', label: 'Customer' },
-  bot: { right: true, bubble: 'rounded-tr-sm border-neutral bg-surface', label: 'Your bot' },
-  you: { right: true, bubble: 'rounded-tr-sm border-neutral bg-accent-soft', label: 'You' },
+  customer: { right: false, corner: 'rounded-tl-sm', fill: 'border-neutral bg-muted', label: 'Customer' },
+  bot: { right: true, corner: 'rounded-tr-sm', fill: 'border-neutral bg-surface', label: 'Your bot' },
+  you: { right: true, corner: 'rounded-tr-sm', fill: 'border-neutral bg-accent-soft', label: 'You' },
 }
 
 const TONE = {
-  good: { bubble: 'rounded-tr-sm border-success bg-success-bg', note: 'text-success', icon: 'check_circle' },
-  bad: { bubble: 'rounded-tr-sm border-danger bg-danger-bg', note: 'text-danger', icon: 'error' },
+  good: 'border-success bg-success-bg',
+  bad: 'border-danger bg-danger-bg',
 }
 
 /** Person or robot avatar. `who`: 'customer' | 'bot'. */
-export function Avatar({ who = 'customer', className = '' }) {
+export function Avatar({ who = 'customer', size = 'md', className = '' }) {
   const bot = who === 'bot'
+  const sm = size === 'sm'
   return (
     <span
       className={
-        'flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral ' +
+        'flex shrink-0 items-center justify-center rounded-full border-neutral ' +
+        (sm ? 'h-7 w-7 border-2 ' : 'h-9 w-9 border-[3px] ') +
         (bot ? 'bg-primary ' : 'bg-surface ') +
         className
       }
       aria-hidden="true"
     >
-      <span className={'material-symbols-rounded text-[20px] ' + (bot ? 'text-white' : 'text-text-muted')}>
+      <span
+        className={
+          'material-symbols-rounded ' + (sm ? 'text-[16px] ' : 'text-[20px] ') + (bot ? 'text-white' : 'text-text-muted')
+        }
+      >
         {bot ? 'smart_toy' : 'person'}
       </span>
     </span>
   )
 }
 
-export default function ChatMessage({ from = 'customer', label, tone, note, noteIcon, footer, children }) {
+export default function ChatMessage({ from = 'customer', label, tone, size = 'md', className = '', children }) {
   const side = SIDE[from] || SIDE.customer
-  const t = tone ? TONE[tone] : null
-  const bubble = 'rounded-2xl border-[3px] px-4 py-3 shadow-pop ' + (t ? t.bubble : side.bubble)
-  const avatar = <Avatar who={from === 'bot' ? 'bot' : 'customer'} />
+  const sm = size === 'sm'
+  const bubble =
+    'rounded-2xl ' +
+    side.corner +
+    (sm ? ' border-2 px-3 py-1.5 ' : ' border-[3px] px-4 py-3 shadow-pop ') +
+    (tone ? TONE[tone] : side.fill)
+  const avatar = <Avatar who={from === 'bot' ? 'bot' : 'customer'} size={size} />
   const body = (
     <div className="max-w-[85%]">
-      <p className={'mb-1 font-label text-[10px] text-text-muted' + (side.right ? ' text-right' : '')}>
-        {label ?? side.label}
-      </p>
+      {label !== null && (
+        <p className={'mb-1 font-label text-[10px] text-text-muted' + (side.right ? ' text-right' : '')}>
+          {label ?? side.label}
+        </p>
+      )}
       <div className={bubble}>
-        <p className="font-bold leading-snug text-text">{children}</p>
-        {note && (
-          <p className={'mt-1 flex items-center gap-1 font-label text-[11px] font-bold ' + (t ? t.note : 'text-text-muted')}>
-            <span className="material-symbols-rounded text-[15px]">{noteIcon ?? t?.icon ?? 'info'}</span>
-            {note}
-          </p>
-        )}
-        {footer}
+        <p className={(sm ? 'text-[13px] ' : 'font-bold ') + 'leading-snug text-text'}>{children}</p>
       </div>
     </div>
   )
+  const row = 'flex items-start gap-2 ' + className
   return side.right ? (
-    <div className="flex items-start justify-end gap-2">
+    <div className={row + ' justify-end'}>
       {body}
       {avatar}
     </div>
   ) : (
-    <div className="flex items-start gap-2">
+    <div className={row}>
       {avatar}
       {body}
     </div>

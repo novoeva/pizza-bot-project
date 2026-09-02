@@ -43,18 +43,21 @@ export default function Callout({
       {title && (
         <p
           className={
-            'mb-1 flex items-center gap-1 font-label text-[11px] font-bold ' +
+            (children ? 'mb-1 ' : '') +
+            'flex items-start gap-1 font-label text-[11px] font-bold leading-snug ' +
             (align === 'center' ? 'justify-center ' : '') +
             t.label
           }
         >
-          {glyph && <span className="material-symbols-rounded text-[15px]">{glyph}</span>}
-          {title}
+          {glyph && <span className="material-symbols-rounded mt-px shrink-0 text-[15px]">{glyph}</span>}
+          <span>{title}</span>
         </p>
       )}
-      <div className={(compact ? 'text-[13px]' : 'text-[15px]') + ' leading-snug text-text'}>
-        {children}
-      </div>
+      {children && (
+        <div className={(compact ? 'text-[13px]' : 'text-[15px]') + ' leading-snug text-text'}>
+          {children}
+        </div>
+      )}
     </div>
   )
 }

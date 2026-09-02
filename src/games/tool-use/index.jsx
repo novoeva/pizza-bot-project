@@ -67,8 +67,8 @@ export default function ToolUseGame({ termId, onComplete }) {
   // Per-phase instruction at the top of the right column.
   const instruction = (sub) => (
     <PhaseCard
-      title="Guess or check"
-      progress={`Round ${round} / 2 · Q${qIndex + 1}/${questions.length}`}
+      title={`Guess or check · Round ${round}`}
+      progress={{ unit: 'Question', current: qIndex + 1, total: questions.length }}
     >
       {sub}
     </PhaseCard>
@@ -78,9 +78,12 @@ export default function ToolUseGame({ termId, onComplete }) {
   // one whose tint is the verdict: 'good' (backed by data) / 'bad' (a guess).
   const customerBubble = (text) => <ChatMessage from="customer">{text}</ChatMessage>
   const botBubble = (text, tone, note) => (
-    <ChatMessage from="bot" tone={tone} note={note}>
-      {text}
-    </ChatMessage>
+    <>
+      <ChatMessage from="bot" tone={tone}>
+        {text}
+      </ChatMessage>
+      <Callout tone={tone === 'good' ? 'success' : 'problem'} title={note} compact />
+    </>
   )
 
   // Choice archetype — a tool the player hands the bot to check with.

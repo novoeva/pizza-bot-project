@@ -46,7 +46,10 @@ export default function SkillGame({ termId, onComplete }) {
   )
 
   const instruction = (part, sub) => (
-    <PhaseCard title="The complaint department" progress={`Part ${part} of 2`}>
+    <PhaseCard
+      title="The complaint department"
+      progress={{ unit: 'Part', current: part, total: 2 }}
+    >
       {sub}
     </PhaseCard>
   )
@@ -55,7 +58,7 @@ export default function SkillGame({ termId, onComplete }) {
   // tint is the verdict: 'good' (on-script) / 'bad' (improvised).
   const customerBubble = (text) => <ChatMessage from="customer">{text}</ChatMessage>
   const botBubble = (key, text, tone, note) => (
-    <ChatMessage key={key} from="bot" tone={tone} note={note}>
+    <ChatMessage key={key} from="bot" tone={tone} label={`Your bot · ${note}`}>
       {text}
     </ChatMessage>
   )

@@ -115,9 +115,10 @@ export default function ContextWindowGame({ termId, onComplete }) {
         ) : (
           <>
             <ChatMessage from="you">{newChatQuestion}</ChatMessage>
-            <ChatMessage from="bot" tone="bad" note="Empty window" noteIcon="visibility_off">
+            <ChatMessage from="bot" tone="bad">
               {newChatReply}
             </ChatMessage>
+            <Callout tone="problem" title="Empty window" icon="visibility_off" compact />
             <Callout tone="info" title="Where this hands off" icon="arrow_forward" compact>
               {bridgeToMemory}
             </Callout>
@@ -166,9 +167,10 @@ export default function ContextWindowGame({ termId, onComplete }) {
         <>
           {/* Ask #1 — the allergy has already scrolled out, so the bot can't answer. */}
           <ChatMessage from="you">{recallQuestion}</ChatMessage>
-          <ChatMessage from="bot" tone="bad" note="Out of the context window" noteIcon="visibility_off">
+          <ChatMessage from="bot" tone="bad">
             {recallDropped}
           </ChatMessage>
+          <Callout tone="problem" title="Out of the context window" icon="visibility_off" compact />
 
           {!pinned ? (
             <>
@@ -187,9 +189,10 @@ export default function ContextWindowGame({ termId, onComplete }) {
             <>
               {/* Ask #2 — same question, but the pinned line is still in view. */}
               <ChatMessage from="you">{recallQuestion}</ChatMessage>
-              <ChatMessage from="bot" tone="good" note="Pinned, so it stays in the window" noteIcon="push_pin">
+              <ChatMessage from="bot" tone="good">
                 {recallInWindow}
               </ChatMessage>
+              <Callout tone="success" title="Pinned, so it stays in the window" icon="push_pin" compact />
               <GameActions>
                 <GameActionButton
                   variant="primary"
@@ -208,9 +211,10 @@ export default function ContextWindowGame({ termId, onComplete }) {
 }
 
 /**
- * The context window as a sliding frame over the conversation: messages that
- * scrolled out sit faded and struck through above a boundary line; what the
- * bot can actually see sits below it.
+ * The context window as a sliding frame over the conversation: the same
+ * customer bubbles as everywhere else, in a small size. Messages that scrolled
+ * out sit faded and struck through above a boundary line; what the bot can
+ * actually see sits below it.
  */
 function ContextPanel({ sent, pinned = false }) {
   const critical = sent.find((m) => m.critical)
@@ -224,7 +228,7 @@ function ContextPanel({ sent, pinned = false }) {
   const seen = inWindow.length + (showPinned ? 1 : 0)
   return (
     <Panel
-      header="dark"
+      header="label"
       title="Context window · what the bot sees"
       icon="visibility"
       meta={`${seen} / ${WINDOW_SIZE}`}
@@ -245,21 +249,15 @@ function ContextPanel({ sent, pinned = false }) {
         ) : (
           <>
             {showPinned && (
-              <div className="flex items-center gap-2 rounded-md border-2 border-success bg-success-bg px-3 py-1.5 text-[13px] text-text">
-                <span className="material-symbols-rounded text-[14px] text-success">push_pin</span>
-                <span className="font-bold">{critical.text}</span>
-                <span className="ml-auto shrink-0 font-label text-[10px] font-bold text-success">
-                  pinned
-                </span>
-              </div>
+              <ChatMessage from="customer" size="sm" tone="good" label={null}>
+                <span className="material-symbols-rounded mr-1 align-middle text-[14px] text-success">push_pin</span>
+                {critical.text}
+              </ChatMessage>
             )}
             {dropped.map((m) => (
-              <div
-                key={m.id}
-                className="rounded-md border-2 border-slot-empty bg-surface px-3 py-1.5 text-[13px] text-text-muted line-through opacity-60"
-              >
+              <ChatMessage key={m.id} from="customer" size="sm" label={null} className="opacity-50 line-through">
                 {m.text}
-              </div>
+              </ChatMessage>
             ))}
             {dropped.length > 0 && (
               <div className="my-0.5 flex items-center gap-2">
@@ -271,12 +269,9 @@ function ContextPanel({ sent, pinned = false }) {
               </div>
             )}
             {inWindow.map((m) => (
-              <div
-                key={m.id}
-                className="rounded-md border-2 border-neutral bg-muted px-3 py-1.5 text-[13px] text-text-muted"
-              >
+              <ChatMessage key={m.id} from="customer" size="sm" label={null}>
                 {m.text}
-              </div>
+              </ChatMessage>
             ))}
           </>
         )}

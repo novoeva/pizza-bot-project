@@ -137,18 +137,18 @@ export default function HallucinationGame({ termId, onComplete }) {
         </div>
       </div>
 
-      {/* The claim, fixed height so it never resizes. Dark header = inside the
-          bot's head. */}
+      {/* The claim, fixed height so it never resizes */}
       <Panel
-        header="dark"
+        header="label"
         title="Bot says"
+        icon="smart_toy"
         shadow="card"
         className="flex h-[150px] flex-col"
         bodyClassName="flex flex-1 items-center gap-3 px-4"
         meta={
           <>
             Bot confidence 100%
-            <span className="h-2 w-14 overflow-hidden rounded-full bg-white/25">
+            <span className="h-2 w-14 overflow-hidden rounded-full border border-neutral bg-surface">
               <span className="block h-full w-full bg-success" />
             </span>
           </>

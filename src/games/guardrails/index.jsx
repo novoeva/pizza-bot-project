@@ -69,10 +69,9 @@ export default function GuardrailsGame({ termId, onComplete }) {
 
   // Per-phase instruction, at the top of the right column so it's always the
   // current step. The term name/role live on the left, so this stays slim.
-  // `progress` carries both levels ("Part 1 of 2 · 2 / 4") so the sentence
-  // below stays a sentence.
+  // The part lives in the title; the pizza shows the customer we are on.
   const instruction = (part, sub, progress) => (
-    <PhaseCard title="Free pizza for life" progress={progress ?? `Part ${part} of 2`}>
+    <PhaseCard title={`Free pizza for life · Part ${part}`} progress={progress}>
       {sub}
     </PhaseCard>
   )
@@ -84,30 +83,25 @@ export default function GuardrailsGame({ termId, onComplete }) {
     </ChatMessage>
   )
 
-  // Bot's reply as a sent MESSAGE; the reply itself is the verdict, so it is
-  // tinted: held = good (green), caved = bad (muted red).
+  // Bot's reply as a sent MESSAGE holding only the words; the verdict is the
+  // Callout right under it (held = success, caved = problem).
   const botBubble = (text, tone) =>
     tone === 'held' ? (
-      <ChatMessage from="bot" tone="good" note="Blocked by your guardrail, no damage." noteIcon="shield">
-        {text}
-      </ChatMessage>
+      <>
+        <ChatMessage from="bot" tone="good">
+          {text}
+        </ChatMessage>
+        <Callout tone="success" title="Blocked by your guardrail, no damage." icon="shield" compact />
+      </>
     ) : (
-      <ChatMessage
-        from="bot"
-        tone="bad"
-        note={`It worked. -$${current.damage}`}
-        noteIcon="bolt"
-        footer={
-          current.scaleNote && (
-            <p className="mt-1 flex items-start gap-1 font-label text-[11px] text-danger">
-              <span className="material-symbols-rounded text-[15px]">groups</span>
-              {current.scaleNote}
-            </p>
-          )
-        }
-      >
-        {text}
-      </ChatMessage>
+      <>
+        <ChatMessage from="bot" tone="bad">
+          {text}
+        </ChatMessage>
+        <Callout tone="problem" title={`It worked. -$${current.damage}`} icon="bolt" compact>
+          {current.scaleNote ?? 'Your bot gave the customer exactly what they asked for.'}
+        </Callout>
+      </>
     )
 
   if (phase === 'reveal') {
@@ -149,11 +143,11 @@ export default function GuardrailsGame({ termId, onComplete }) {
   if (phase === 'defend') {
     return stage(
       <div className="flex flex-col gap-3">
-        {instruction(
-          2,
-          'Your guardrails, under attack.',
-          `Part 2 of 2 · ${attackIndex + 1} / ${attacks.length}`,
-        )}
+        {instruction(2, 'Your guardrails, under attack.', {
+          unit: 'Customer',
+          current: attackIndex + 1,
+          total: attacks.length,
+        })}
 
         <p className="rounded-md border-[3px] border-success bg-success-bg px-3 py-2 text-center font-label text-sm font-bold text-success shadow-pop">
           Damage: $0
@@ -223,11 +217,11 @@ export default function GuardrailsGame({ termId, onComplete }) {
 
   return stage(
     <div className="flex flex-col gap-3">
-      {instruction(
-        1,
-        'Your bot has no guardrails yet. Watch pushy customers talk it into anything.',
-        `Part 1 of 2 · ${attackIndex + 1} / ${attacks.length}`,
-      )}
+      {instruction(1, 'Your bot has no guardrails yet. Watch pushy customers talk it into anything.', {
+        unit: 'Customer',
+        current: attackIndex + 1,
+        total: attacks.length,
+      })}
 
       <p className="flex items-center justify-center gap-2 rounded-md border-[3px] border-danger bg-danger-bg px-3 py-2 text-center font-label text-sm font-bold text-danger shadow-pop">
         <span className="material-symbols-rounded text-[18px]">gpp_bad</span>

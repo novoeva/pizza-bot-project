@@ -97,7 +97,7 @@ Shape carries the **role**; colour carries the **verdict or ownership**. Eight r
 - **D4 — `tertiary` / `accent-soft`:** blue = *the owner's side*: the game talking to you (role 3) and your answer (role 4). Info asides ("Real talk", "The fix", "In the real world") leave blue and become `Callout tone="info"`: white, `border-neutral`, info icon, muted eyebrow. Token chips become neutral.
 - **D5 — `cheese`:** amber = *a part of your bot* (role 5). It is no longer "cost/caution": painful counters move to red (role 7). Prompt's *Rule* card stops using the amber panel; Rule vs Instruction is carried by icon (`gavel` / `description`) and tag text only, both in role 4 blue.
 - **D7 — `primary` = `danger`:** split into two reds. `primary` stays the bright marinara `#b7102a` (the signature: logo, tabs, labels, buttons, avatars, reference headers); `danger` becomes a muted brick `#9c4444` with tint `#f2e2e0`, so "wrong" never looks like the brand. (First attempt, navy buttons + one red, was reviewed and rejected as overcorrection.)
-- **D8 — `text` as a surface:** navy header on a `Panel` = "inside the bot's head" (claim card, context window). A marinara header on a `Panel` = reference material you consult ("Today's real menu").
+- **D8 — `text` as a surface:** retired after the Phase 1 review (the navy-headed context window looked like a different design). `Panel` headers are the grey label strip or the marinara strip ("Today's real menu"). The context window's rows are small `ChatMessage` bubbles.
 - Shadows: `shadow-pop` everywhere; `shadow-card` only on the workshop board, `Panel header="dark"`, and the tile being dragged. Radii: `rounded-lg` = reading cards and callouts; `rounded-md` = controls, tiles, panels.
 
 ---
@@ -141,7 +141,7 @@ Core five first (they close the three FRs), then supporting primitives. All in `
 
 ### Supporting
 
-**6. `PhaseCard`** — `title`, `progress={{ current, total, unit }}`, children. Replaces G1. Progress renders as `Round 2 / 3`; never inside the body string.
+**6. `PhaseCard`** — `title`, `progress={{ current, total, unit }}`, children. Replaces G1. Progress is drawn by `ProgressPie` as a pizza with `total` slices, `current` of them marinara (R4); a string is shown as plain text for counts that are not rounds. Never inside the body string.
 
 **7. `Panel`** — `header="none" | "label" | "dark"`, `title`, `icon`, `meta`, children. Replaces G11, G12 wrappers (menu, claim, context window, dial, ranking, bot card). Games keep their inner content.
 
@@ -161,7 +161,7 @@ No behavior or game-logic changes in any phase; every phase is "same screens, fe
 
 **Phase 0 — Tokens & dictionary. ✅ Done and approved 2026-09-02 (review round 2: 4/4)** (`muted` → `#e6e7ee`; `primary` stays marinara `#b7102a`; `danger` → muted brick `#9c4444` / `#f2e2e0`; "How to play" box blue; "Today's real menu" header marinara; unused tokens pruned). Decide D2, D5, D7. Apply the `muted` value change and prune unused tokens in `tokens.css`. Write the dictionary (§2) into `GAME-DESIGN-PRINCIPLES.md` or a `VISUAL-LANGUAGE.md`. Blocks everything else: extracted components must be born with the right meanings.
 
-**Phase 1 — Pure visual primitives. ✅ Done 2026-09-02, awaiting review.** Built `Callout` (problem / success / info), `ChatMessage` + `Avatar`, `PhaseCard`, `Panel` (inline / label / brand / dark headers) in `src/components/` and swapped them into all 12 games. Side effects delivered: FR-11 (Prompt wrong rows are muted-red callouts with the better option as plain advice), Memory chat sides fixed, MCP cost counters red, the three "Real talk" stylings unified. Build `Callout`, `ChatMessage` + `Avatar`, `PhaseCard`, `Panel`. Swap them in game by game, stage games first (they are already structured for it), then misfits. Closes FR-11 (Prompt wrong rows → `Callout problem`) and fixes Memory's flipped chat sides. No prop-driven behavior, so risk is visual only; verify by screenshots per game.
+**Phase 1 — Pure visual primitives. ✅ Done 2026-09-02, review round 1 applied (R4): progress is a `ProgressPie` (pizza slices), bubbles hold only the reply with the verdict in a `Callout` below, context window rows are small bubbles, dark panel header retired, result screens show the tapped option as a pill.** Built `Callout` (problem / success / info), `ChatMessage` + `Avatar`, `PhaseCard`, `Panel` (inline / label / brand / dark headers) in `src/components/` and swapped them into all 12 games. Side effects delivered: FR-11 (Prompt wrong rows are muted-red callouts with the better option as plain advice), Memory chat sides fixed, MCP cost counters red, the three "Real talk" stylings unified. Build `Callout`, `ChatMessage` + `Avatar`, `PhaseCard`, `Panel`. Swap them in game by game, stage games first (they are already structured for it), then misfits. Closes FR-11 (Prompt wrong rows → `Callout problem`) and fixes Memory's flipped chat sides. No prop-driven behavior, so risk is visual only; verify by screenshots per game.
 
 **Phase 2 — `SelectableCard` + `ChoiceGroup`, then `PartTile` + `SlotList` (2–3 days).** Depends on Phase 0 (selected color) and `Tag`. Answers first: Prompt (the FR-10 anchor) → Guardrails (FR-16) → Tool-use, Token, Temperature. Then the build mechanic with drag-and-drop: Skill → Agent → RAG → Memory → MCP. Hallucination last or skipped.
 
@@ -186,7 +186,7 @@ Reviewed visually in `design-system/gallery.html` on 2026-09-02.
 | R3 | Amber = a part of your bot; build mechanic | **Decided.** Amber = part. Checkbox mechanic **rejected**. Part tiles with **real drag-and-drop**, must be obviously draggable (five signals, §3 1b); tap stays as the fallback. |
 | — | Chat sides | Proposed rule: received = left, your side (bot or you) = right; Memory flips. Not yet reviewed. |
 | — | Bot face | Proposed: navy round `smart_toy` avatar in bubbles (matches R2 navy); the SVG robot stays the workshop mascot. Not yet reviewed. |
-| — | Dark `Panel` header | Proposed meaning "inside the bot's head". Not yet reviewed. |
+| R4 | After Phase 1 review | **Applied:** progress = pizza slices; bubble = only the reply, verdict in a Callout under it; context-window rows are small chat bubbles; dark panel header retired; result screens show the tapped option as a pill. |
 | — | `TermReveal` content | Proposed: `keyPoints[]` (3–4) + optional `dont[]`; `whyYouCare` becomes the first key point. Not yet reviewed. |
 
 Out of scope, noted only: the untracked `Update landing page/` folder at the repo root is a separate Lovable/TanStack project (FR-1), not part of this app.

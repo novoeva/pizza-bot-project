@@ -139,7 +139,7 @@ export default function RagGame({ termId, onComplete }) {
         {instruction(
           'It answered',
           'The bot read only the pages you handed it, then answered the customer out loud. Here’s what came out.',
-          `round ${round.n}/${rounds.length}`,
+          { unit: 'Customer', current: round.n, total: rounds.length },
         )}
         {customerBubble}
         <Panel

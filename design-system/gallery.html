@@ -111,6 +111,7 @@
     <a href="#r1">R1 · One colour per role</a>
     <a href="#r2">R2 · Two reds</a>
     <a href="#r3">R3 · Part tiles</a>
+    <a href="#r4">R4 · After Phase 1 review</a>
     <div class="grp">What exists today</div>
     <a href="#c-phase">Phase card</a>
     <a href="#c-chat">Chat bubbles</a>
@@ -298,6 +299,36 @@
         3. The empty slot says the verb too: "drag a step here…".<br>
         4. On the first build screen of a session, the top tile does one short wiggle and the first slot pulses amber once (skipped when reduced-motion is on).<br>
         5. Tap still works as a fallback and animates the tile sliding into the slot, so nobody is stuck.</div>
+    </section>
+
+    <section class="block" id="r4">
+      <p class="eyebrow">Round 4 · from the Phase 1 review</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">R4 · Four rules added after seeing Phase 1 <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">applied</span></h2>
+      <div class="grid-gallery">
+        <div class="item"><h4>1 · Progress is a pizza, not a number</h4>
+          <div class="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop"><div class="flex items-center justify-between gap-2"><p class="font-label text-[11px] text-primary">Game · Free pizza for life · Part 1</p>
+            <svg viewBox="0 0 32 32" width="22" height="22" aria-label="Customer 2 of 4"><circle cx="16" cy="16" r="16" fill="#586158"/><path d="M16,16 L16,0 A16,16 0 0 1 32,16 Z" fill="#b7102a" stroke="#586158" stroke-width="1.5"/><path d="M16,16 L32,16 A16,16 0 0 1 16,32 Z" fill="#b7102a" stroke="#586158" stroke-width="1.5"/><path d="M16,16 L16,32 A16,16 0 0 1 0,16 Z" fill="#e6e7ee" stroke="#586158" stroke-width="1.5"/><path d="M16,16 L0,16 A16,16 0 0 1 16,0 Z" fill="#e6e7ee" stroke="#586158" stroke-width="1.5"/></svg></div>
+            <p class="mt-1 text-[13px] leading-snug text-text-muted">Your bot has no guardrails yet. Watch pushy customers talk it into anything.</p></div>
+          <p class="cap">"Part 1 of 2 · 2 / 4" read as a label, not as progress. Now: the part is in the title, the customers are slices. Two of four eaten.</p></div>
+        <div class="item"><h4>2 · The bubble is only the reply</h4>
+          <div class="col">
+            <div class="flex items-start justify-end gap-2"><div class="max-w-[85%]"><p class="mb-1 text-right font-label text-[10px] text-text-muted">Your bot</p><div class="rounded-2xl rounded-tr-sm border-[3px] border-danger bg-danger-bg px-4 py-3 shadow-pop"><p class="font-bold leading-snug text-text">Sure! The French Revolution began in 1789 when…</p></div></div><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary"><span class="material-symbols-rounded text-[20px] text-white">smart_toy</span></span></div>
+            <div class="rounded-lg border-[3px] border-danger bg-danger-bg p-3 shadow-pop"><p class="flex items-start gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded mt-px text-[15px]">bolt</span><span>It worked. -$1</span></p><p class="mt-1 text-[13px] leading-snug text-text">Just $1 each, but word gets out and thousands show up for free essays.</p></div>
+          </div>
+          <p class="cap">The verdict ("it worked", "-$1") used to sit inside the bubble. Now the bubble holds the words the bot said and the Callout under it holds the consequence.</p></div>
+        <div class="item"><h4>3 · What the bot sees is a chat</h4>
+          <div class="overflow-hidden rounded-md border-[3px] border-neutral bg-surface shadow-card"><div class="flex items-center justify-between gap-2 border-b-[3px] border-neutral bg-muted px-3 py-1.5 font-label text-[11px] text-text-muted"><span class="flex items-center gap-1"><span class="material-symbols-rounded text-[15px]">visibility</span>Context window · what the bot sees</span><span>5 / 5</span></div>
+            <div class="flex flex-col gap-1.5 p-3">
+              <div class="flex items-start gap-2 opacity-50 line-through"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-neutral bg-surface"><span class="material-symbols-rounded text-[16px] text-text-muted">person</span></span><div class="rounded-2xl rounded-tl-sm border-2 border-neutral bg-muted px-3 py-1.5"><p class="text-[13px] leading-snug text-text">No olives!! I really hate them.</p></div></div>
+              <div class="my-0.5 flex items-center gap-2"><span class="h-0 flex-1 border-t-2 border-dashed border-slot-empty"></span><span class="font-label text-[10px] text-text-muted">out of the context window</span><span class="h-0 flex-1 border-t-2 border-dashed border-slot-empty"></span></div>
+              <div class="flex items-start gap-2"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-neutral bg-surface"><span class="material-symbols-rounded text-[16px] text-text-muted">person</span></span><div class="rounded-2xl rounded-tl-sm border-2 border-neutral bg-muted px-3 py-1.5"><p class="text-[13px] leading-snug text-text">One large, please.</p></div></div>
+            </div></div>
+          <p class="cap">The rows inside the context window are the same customer bubbles as everywhere else, smaller. The navy "inside the bot's head" header is retired; all panels use the grey or marinara strip.</p></div>
+        <div class="item"><h4>4 · Show the option you tapped, not a sentence about it</h4>
+          <div class="rounded-lg border-[3px] border-danger bg-danger-bg p-3 shadow-pop"><p class="mb-1 flex items-start gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded mt-px text-[15px]">warning</span><span>Role</span></p>
+            <div class="flex flex-col gap-1.5 text-[13px] leading-snug text-text"><span class="flex flex-wrap items-center gap-1.5"><span class="font-label text-[10px] text-text-muted">You picked</span><span class="inline-block rounded-md border-2 border-neutral bg-accent-soft px-2 py-0.5 text-[12px] font-bold text-tertiary">Whatever the customer wants</span><span>it agrees with anything.</span></span><span class="flex flex-wrap items-center gap-1.5"><span class="material-symbols-rounded text-[16px] text-text-muted">arrow_forward</span><span class="font-label text-[10px] text-text-muted">Better</span><span class="inline-block rounded-md border-2 border-neutral bg-surface px-2 py-0.5 text-[12px] font-bold text-text">Tony, the pizza shop’s assistant</span><span>it has a clear job.</span></span></div></div>
+          <p class="cap">On a result screen, your pick is drawn as the pill you tapped (blue = yours). Less prose, and you recognise it. Same idea for the rule card in round 2.</p></div>
+      </div>
     </section>
 
     <details style="margin-top:2rem;max-width:62ch;font-size:13px;color:var(--g-ink-soft)"><summary style="cursor:pointer">Round 1 decisions (superseded, kept for reference)</summary>
@@ -573,7 +604,7 @@
       <div class="grid-gallery">
         <div class="item"><h4><span class="ref">G12</span>Panel with dark header <span class="verdict v-warn">no rule for when</span></h4>
           <div class="overflow-hidden rounded-md border-[3px] border-neutral bg-surface shadow-card"><div class="flex items-center justify-between bg-text px-3 py-1.5 font-label text-[10px] text-white"><span>Bot says</span><span class="flex items-center gap-2">Bot confidence 100%<span class="h-2 w-14 overflow-hidden rounded-full bg-white/25"><span class="block h-full w-full bg-success"></span></span></span></div><div class="flex items-center gap-3 px-4 py-4"><span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border-[3px] border-neutral bg-primary"><span class="material-symbols-rounded text-white">smart_toy</span></span><p class="text-[1.05rem] font-extrabold leading-snug">“The Diavola is our vegan option.”</p></div></div>
-          <p class="cap">Hallucination claim, Context window. Navy header = "inside the bot's head"?</p></div>
+          <p class="cap">Hallucination claim, Context window. <b>Retired in R4:</b> both now use the grey label strip.</p></div>
         <div class="item"><h4><span class="ref">G12</span>Panel with label header</h4>
           <div class="overflow-hidden rounded-md border-[3px] border-neutral bg-surface"><div class="flex items-center gap-1.5 border-b-[3px] border-neutral bg-muted px-3 py-1.5 font-label text-[11px] text-text-muted"><span class="material-symbols-rounded text-[15px]">menu_book</span>Today's real menu</div><ul class="grid grid-cols-2 gap-x-4 gap-y-1 px-3 py-2"><li class="flex justify-between gap-2 border-b border-dotted border-slot-empty pb-0.5 text-[13px]"><span class="font-bold">Margherita</span><span class="text-text-muted">€9</span></li><li class="flex justify-between gap-2 border-b border-dotted border-slot-empty pb-0.5 text-[13px]"><span class="font-bold">Diavola</span><span class="text-text-muted">€11</span></li></ul></div>
           <p class="cap">Hallucination reference menu. Green-grey header (D2 again).</p></div>
@@ -703,6 +734,7 @@
       <div class="q"><div class="qn">R1 · approved</div>8-role colour map. Becomes the dictionary; can still be revised per role.</div>
       <div class="q"><div class="qn">R2 · decided, revised</div>Two reds: marinara (#b7102a) for brand, labels and buttons; muted brick (#9c4444) for "wrong".</div>
       <div class="q"><div class="qn">R3 · decided</div>Part tiles, real drag-and-drop, with the five "obviously draggable" signals listed in <a href="#r3">R3</a>. Tap stays as the fallback.</div>
+      <div class="q"><div class="qn">R4 · applied</div>Progress = pizza slices · bubble = only the reply, verdict in a Callout below · context window rows are small chat bubbles, dark header retired · result screens show the option you tapped.</div>
       <p class="lede" style="margin-top:1.25rem">All three decided. Next step is Phase 0 in <b>COMPONENT-AUDIT.md</b> (tokens), then Phase 1 (Callout, ChatMessage, PhaseCard, Panel).</p>
     </section>
   </main>

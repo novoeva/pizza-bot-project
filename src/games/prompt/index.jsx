@@ -29,13 +29,19 @@ const CHOICE_STYLES = {
 // family (colour-coded icon panel on the left + a type tag on the card),
 // deliberately NOT a chat bubble — so a "rule you give the bot" never reads as
 // a "message".
-function ChoiceCard({ type, label, onClick }) {
+function ChoiceCard({ type, label, onClick, picked = false }) {
   const s = CHOICE_STYLES[type]
+  // `picked`: the same card shown back on the result screen, inert, so the
+  // player recognises what they tapped (Phase 1 review, Q1).
   return (
     <button
       type="button"
       onClick={onClick}
-      className="press flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-surface text-left shadow-pop"
+      disabled={picked}
+      className={
+        'flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral text-left shadow-pop ' +
+        (picked ? 'bg-accent-soft' : 'press bg-surface')
+      }
     >
       <span
         className={'flex w-11 shrink-0 items-center justify-center border-r-[3px] border-neutral ' + s.panel + ' ' + s.accent}
@@ -48,6 +54,21 @@ function ChoiceCard({ type, label, onClick }) {
         <span className="mt-0.5 block font-bold leading-snug text-text">{label}</span>
       </span>
     </button>
+  )
+}
+
+// A round-3 option drawn as the pill you tapped (blue when it was your pick),
+// used inert on the result screen so the pick is recognisable at a glance.
+function optionPill(label, picked) {
+  return (
+    <span
+      className={
+        'inline-block rounded-md border-2 border-neutral px-2 py-0.5 text-[12px] font-bold ' +
+        (picked ? 'bg-accent-soft text-tertiary' : 'bg-surface text-text')
+      }
+    >
+      {label}
+    </span>
   )
 }
 
@@ -156,7 +177,7 @@ export default function PromptGame({ termId, onComplete }) {
       <div className="flex flex-col gap-3">
         {customerBanner}
         {allRight ? (
-          <Callout tone="success" title="Round 3, full instructions" align="center">
+          <Callout tone="success" title="Round 3, full instructions">
             {round3Result}
           </Callout>
         ) : (
@@ -169,12 +190,19 @@ export default function PromptGame({ termId, onComplete }) {
                 "you got it right". (FR-11) */}
             {wrongRows.map((c) => (
               <Callout key={c.name} tone="problem" compact title={c.name}>
-                You picked <span className="font-bold">“{round3Picks[c.name]}”</span>, it{' '}
-                {round3Effects[round3Picks[c.name]]}.
-                <span className="mt-1 flex items-start gap-1">
-                  <span className="material-symbols-rounded text-[16px] text-text-muted">arrow_forward</span>
-                  <span>
-                    Better: <span className="font-bold">“{c.correct}”</span>, it {round3Effects[c.correct]}.
+                {/* The option as you tapped it (the round-3 pill), then the
+                    consequence; the better option is the same pill, unpicked. */}
+                <span className="flex flex-col gap-1.5">
+                  <span className="flex flex-wrap items-center gap-1.5">
+                    <span className="font-label text-[10px] text-text-muted">You picked</span>
+                    {optionPill(round3Picks[c.name], true)}
+                    <span>it {round3Effects[round3Picks[c.name]]}.</span>
+                  </span>
+                  <span className="flex flex-wrap items-center gap-1.5">
+                    <span className="material-symbols-rounded text-[16px] text-text-muted">arrow_forward</span>
+                    <span className="font-label text-[10px] text-text-muted">Better</span>
+                    {optionPill(c.correct, false)}
+                    <span>it {round3Effects[c.correct]}.</span>
                   </span>
                 </span>
               </Callout>
@@ -231,10 +259,11 @@ export default function PromptGame({ termId, onComplete }) {
     return stage(
       <div className="flex flex-col gap-3">
         {customerBanner}
+        {/* The rule you tapped, exactly as you tapped it, then the verdict. */}
+        <ChoiceCard type="Rule" label={round2Pick.label} picked />
         <Callout
           tone={round2Pick.correct ? 'success' : 'problem'}
-          title={`You added: ${round2Pick.label}`}
-          align="center"
+          title={round2Pick.correct ? 'One rule, different bot' : 'Worse'}
         >
           {round2Pick.result}
         </Callout>
