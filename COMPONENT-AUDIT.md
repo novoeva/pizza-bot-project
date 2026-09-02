@@ -159,7 +159,7 @@ Keep local (one-off, fine as is): agent `SystemsPanel`, context-window `ContextP
 
 No behavior or game-logic changes in any phase; every phase is "same screens, fewer copies". Estimates assume one person, familiar with the repo.
 
-**Phase 0 — Tokens & dictionary. ✅ Done 2026-09-02, reviewed, revised once** (`muted` → `#e6e7ee`; `primary` stays marinara `#b7102a`; `danger` → muted brick `#9c4444` / `#f2e2e0`; "How to play" box blue; "Today's real menu" header marinara; unused tokens pruned). Decide D2, D5, D7. Apply the `muted` value change and prune unused tokens in `tokens.css`. Write the dictionary (§2) into `GAME-DESIGN-PRINCIPLES.md` or a `VISUAL-LANGUAGE.md`. Blocks everything else: extracted components must be born with the right meanings.
+**Phase 0 — Tokens & dictionary. ✅ Done and approved 2026-09-02 (review round 2: 4/4)** (`muted` → `#e6e7ee`; `primary` stays marinara `#b7102a`; `danger` → muted brick `#9c4444` / `#f2e2e0`; "How to play" box blue; "Today's real menu" header marinara; unused tokens pruned). Decide D2, D5, D7. Apply the `muted` value change and prune unused tokens in `tokens.css`. Write the dictionary (§2) into `GAME-DESIGN-PRINCIPLES.md` or a `VISUAL-LANGUAGE.md`. Blocks everything else: extracted components must be born with the right meanings.
 
 **Phase 1 — Pure visual primitives (1–2 days).** Build `Callout`, `ChatMessage` + `Avatar`, `PhaseCard`, `Panel`. Swap them in game by game, stage games first (they are already structured for it), then misfits. Closes FR-11 (Prompt wrong rows → `Callout problem`) and fixes Memory's flipped chat sides. No prop-driven behavior, so risk is visual only; verify by screenshots per game.
 
