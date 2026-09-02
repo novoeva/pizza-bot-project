@@ -12,14 +12,14 @@ export default function GameScreen() {
 
   const handleComplete = useCallback(() => {
     markTermCompleted(termId)
-    navigate('/')
+    navigate('/workshop')
   }, [termId, navigate])
 
   if (!GameComponent || !term) {
     return (
       <main className="mx-auto max-w-game px-4 py-8 text-center">
         <p className="mb-4 text-text-muted">This game doesn't exist yet.</p>
-        <Link to="/" className="font-label text-primary underline">
+        <Link to="/workshop" className="font-label text-primary underline">
           Back to the workshop
         </Link>
       </main>
