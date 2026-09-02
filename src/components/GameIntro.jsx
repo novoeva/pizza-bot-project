@@ -23,18 +23,18 @@ export default function GameIntro({ term, showHowTo = true }) {
     <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
       <p className="font-label text-[11px] text-primary">Term · {term.name}</p>
       <h1 className="text-2xl leading-tight">{term.name}</h1>
-      <div className="mt-2 rounded-md border-2 border-neutral bg-surface px-3 py-2">
+      <div className="mt-2">
         <p className="font-label text-[10px] text-text-muted">What it is</p>
         <p className="mt-0.5 text-[13px] leading-snug text-text">{term.definition}</p>
       </div>
       {term.role && (
-        <div className="mt-2 rounded-md border-2 border-neutral bg-accent-soft px-3 py-2">
+        <div className="mt-3 rounded-md bg-accent-soft px-3 py-2">
           <p className="font-label text-[10px] text-tertiary">Your role</p>
           <p className="mt-0.5 text-[13px] font-bold leading-snug text-text">{term.role}</p>
         </div>
       )}
       {showHowTo && (
-        <div className="mt-2 rounded-md border-2 border-neutral bg-surface px-3 py-2">
+        <div className="mt-3">
           <p className="font-label text-[10px] text-text-muted">How to play</p>
           <p className="mt-0.5 text-[13px] leading-snug text-text">{term.howToPlay}</p>
         </div>

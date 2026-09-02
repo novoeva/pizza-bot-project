@@ -1,6 +1,8 @@
 /**
- * PhaseCard, the "what do I do on THIS screen" card (role 3, teaching &
- * instructions, in COMPONENT-AUDIT.md §2). Sits at the top of the play column
+ * PhaseCard, the "what do I do on THIS screen" line (role 3, teaching &
+ * instructions, in COMPONENT-AUDIT.md §2). Deliberately NOT a box: on a phone
+ * the screen is already a stack of boxes (Phase 4 review), so the instruction
+ * is plain text with a marinara eyebrow and a hairline under it. Sits at the top of the play column
  * in every phase of every game, so the current step is always where the
  * player is acting. Progress is NOT here: it lives in the ProgressBar strip
  * at the top of the screen (GameStage `progress`).
@@ -14,7 +16,7 @@
  */
 export default function PhaseCard({ title, meta, heading, children }) {
   return (
-    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
+    <div className="border-b-2 border-dashed border-slot-empty px-1 pb-2">
       <div className="flex items-center justify-between gap-2">
         <p className="font-label text-[11px] text-primary">Game · {title}</p>
         {meta && <span className="shrink-0 font-label text-[11px] text-text-muted">{meta}</span>}

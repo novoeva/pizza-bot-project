@@ -20,7 +20,7 @@ export default function ProgressBar({ part = 1, parts = 1, step, steps }) {
   }
   return (
     <div
-      className="flex items-center gap-3 rounded-md border-[3px] border-neutral bg-surface px-3 py-2 shadow-pop"
+      className="flex items-center gap-3 px-1"
       role="img"
       aria-label={`Progress: ${label}`}
     >
