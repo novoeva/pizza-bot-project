@@ -8,7 +8,15 @@
     "howToPlay": "Guess how a word splits into chunks, then call which chunk your bot writes next.",
     "role": "You're the owner getting to know your bot. Peek inside its voice box: it reads and writes in chunks, not whole words, and that's what drives its cost and its quirks.",
     "definition": "A token is a small chunk of text, often part of a word, and it is the unit an AI actually reads and writes in. \"Pepperoni\" alone breaks into four of them.",
-    "whyYouCare": "It's why long chats get slower and cost more. The AI has to look at every chunk, and a long conversation is a lot of chunks. It's also why AI is bad at counting the letters in a word: it never sees the letters, only the chunks."
+    "whyYouCare": "It's why long chats get slower and cost more. The AI has to look at every chunk, and a long conversation is a lot of chunks. It's also why AI is bad at counting the letters in a word: it never sees the letters, only the chunks.",
+    "keyPoints": [
+      "The AI reads and writes in chunks, not words. One word can be several tokens.",
+      "More tokens means slower and more expensive. Long chats cost more.",
+      "It never sees letters, so counting letters or spelling tricks go wrong."
+    ],
+    "dont": [
+      "Don't ask it to count the letters in a word and trust the answer."
+    ]
   },
   {
     "id": "context-window",
@@ -19,7 +27,15 @@
     "howToPlay": "Send the order line by line, watch what drops out of the window, then pin the part that matters.",
     "role": "You're the owner setting up your bot. Its memory chip only holds so much at once, so learn to keep what matters, like an allergy, where the bot can still see it.",
     "definition": "The context window is how much of the conversation an AI can still \"see\" at once. Once it fills up, the oldest parts quietly fall out.",
-    "whyYouCare": "It's why a long chat sometimes forgets something you said 20 messages ago. It's not being careless, it just ran out of window."
+    "whyYouCare": "It's why a long chat sometimes forgets something you said 20 messages ago. It's not being careless, it just ran out of window.",
+    "keyPoints": [
+      "The bot only sees the last few messages. The oldest fall out quietly.",
+      "It isn't careless. The fact is simply no longer in view.",
+      "Put what matters where the bot can still see it: pin it, repeat it, or start fresh."
+    ],
+    "dont": [
+      "Don't assume something you said 20 messages ago is still in view."
+    ]
   },
   {
     "id": "hallucination",
@@ -30,7 +46,15 @@
     "howToPlay": "Check each answer against the real menu and catch the ones your bot made up.",
     "role": "You're the owner giving your bot its last check before it goes live. It sounds just as sure when it's guessing, so your job is to catch what it made up.",
     "definition": "A hallucination is when an AI says something false with full confidence, in the same tone it uses for things that are true.",
-    "whyYouCare": "It's why you double-check anything an AI tells you that you can't verify elsewhere. Sounding sure is not the same as being right."
+    "whyYouCare": "It's why you double-check anything an AI tells you that you can't verify elsewhere. Sounding sure is not the same as being right.",
+    "keyPoints": [
+      "A made-up answer sounds exactly as confident as a true one.",
+      "Confidence is not evidence. Check against a real source.",
+      "Give the bot real data to check, like a menu or a tracker, and the guessing drops."
+    ],
+    "dont": [
+      "Don't trust a detail you can't verify just because it sounds sure."
+    ]
   },
   {
     "id": "prompt",
@@ -41,7 +65,15 @@
     "howToPlay": "Write your bot's instructions across three rounds and watch the same vague customer get handled better each time.",
     "role": "You're the owner setting up your bot. Write its instructions so it asks for what's missing instead of inventing an order.",
     "definition": "A prompt is the instructions you give an AI. The more your instructions cover, including what to do when something is left unsaid, the less the AI has to guess. Less guessing means the same reliable answer instead of a new surprise every time.",
-    "whyYouCare": "Better instructions, not better luck, are how you get useful answers out of Claude or ChatGPT."
+    "whyYouCare": "Better instructions, not better luck, are how you get useful answers out of Claude or ChatGPT.",
+    "keyPoints": [
+      "The prompt is the bot's instructions. Everything you leave out, it guesses.",
+      "Say what to do when information is missing: ask, don't invent.",
+      "A small change in wording changes the bot's behaviour, not the customer's."
+    ],
+    "dont": [
+      "Don't blame the customer for a vague order when the instructions were vague."
+    ]
   },
   {
     "id": "agent",
@@ -52,7 +84,15 @@
     "howToPlay": "A chatbot only talks. Turn it into an agent by handing it real actions to take, in the right order, then run it and watch real systems fire.",
     "role": "You're the owner setting up your bot. Hand it the actions to run the whole job on its own, not just talk about doing it.",
     "definition": "A chatbot talks about doing something. An agent actually does it. It works out what needs to happen, then does it: charges the card, tells the kitchen, sends out a driver. No human in between.",
-    "whyYouCare": "It's the line between \"AI that chats\" and \"AI that takes real actions for you\", and why agents need more trust and more guardrails."
+    "whyYouCare": "It's the line between \"AI that chats\" and \"AI that takes real actions for you\", and why agents need more trust and more guardrails.",
+    "keyPoints": [
+      "A chatbot talks. An agent acts: it charges, cooks, dispatches.",
+      "It works through steps in order, and in the real world the order matters.",
+      "More power means more trust and more guardrails."
+    ],
+    "dont": [
+      "Don't let an agent act without limits on what it may do."
+    ]
   },
   {
     "id": "tool-use",
@@ -63,7 +103,15 @@
     "howToPlay": "Answer a few questions blind first, then hand the bot real tools and feel the difference.",
     "role": "You're the owner setting up your bot. Give it real systems to check, so it looks answers up instead of guessing.",
     "definition": "Tool use is when an AI looks something up in a real system, like the live menu or the delivery tracker, instead of answering from memory.",
-    "whyYouCare": "It's why an assistant that can actually check your calendar or a real order is more reliable than one that is only talking."
+    "whyYouCare": "It's why an assistant that can actually check your calendar or a real order is more reliable than one that is only talking.",
+    "keyPoints": [
+      "Answering from memory is a guess. Looking it up in a real system is a check.",
+      "Give the bot tools: the live menu, the delivery tracker, the stock list.",
+      "The right tool for the question, not just any tool."
+    ],
+    "dont": [
+      "Don't let a bot answer a live question, like stock or delivery time, without a tool."
+    ]
   },
   {
     "id": "skill",
@@ -74,7 +122,15 @@
     "howToPlay": "Watch the bot improvise three answers to one complaint, then build it a playbook and see them line up.",
     "role": "You're the owner setting up your bot. Give it a playbook so it handles the same situation the right way every time.",
     "definition": "A skill is a written playbook you hand an AI for one situation that keeps coming back, so it handles that situation the same, right way every time.",
-    "whyYouCare": "It's the difference between an AI that improvises an answer to a complaint and one that follows a process you actually trust."
+    "whyYouCare": "It's the difference between an AI that improvises an answer to a complaint and one that follows a process you actually trust.",
+    "keyPoints": [
+      "A skill is a written playbook for one situation that keeps coming back.",
+      "With it, the same complaint gets the same right answer every time.",
+      "Write the steps in the order you would handle it yourself."
+    ],
+    "dont": [
+      "Don't let the bot improvise the situations that matter most."
+    ]
   },
   {
     "id": "memory",
@@ -85,7 +141,15 @@
     "howToPlay": "Chat with the bot, jump a week ahead, then pick which facts it should keep across visits.",
     "role": "You're the owner setting up your bot. Decide what it should remember across visits, so your regulars don't start from zero every time.",
     "definition": "An AI has two kinds of memory. Working memory lasts one conversation and then it is gone. Persistent memory is written down and saved, so facts like your usual order are still there on your next visit.",
-    "whyYouCare": "It's why some AI tools remember your preferences next time, and others start from zero every single chat."
+    "whyYouCare": "It's why some AI tools remember your preferences next time, and others start from zero every single chat.",
+    "keyPoints": [
+      "Working memory lasts one chat, then it is gone.",
+      "Persistent memory is written down and comes back on the next visit.",
+      "You choose what is saved. Save what serves the customer, skip the noise."
+    ],
+    "dont": [
+      "Don't expect a bot to remember last week unless something was saved."
+    ]
   },
   {
     "id": "mcp",
@@ -96,7 +160,15 @@
     "howToPlay": "Connect your bot to the systems it needs the hard way, then give it one universal port and watch a brand-new tool just click in.",
     "role": "You're the owner setting up your bot. Give it one universal port so every system it needs just clicks in, instead of wiring each one by hand.",
     "definition": "MCP (short for Model Context Protocol) is one shared plug that AI assistants and outside systems both agree to use, so neither side has to know anything about the other side specifically.",
-    "whyYouCare": "It means a tool built by people who have never heard of your AI assistant still works with it on day one. Nobody has to build a bridge for that exact pair. It's why you can connect an AI to your calendar, your files or your company's database without waiting for someone to make those two things fit together."
+    "whyYouCare": "It means a tool built by people who have never heard of your AI assistant still works with it on day one. Nobody has to build a bridge for that exact pair. It's why you can connect an AI to your calendar, your files or your company's database without waiting for someone to make those two things fit together.",
+    "keyPoints": [
+      "MCP is one shared plug that AI assistants and outside tools both use.",
+      "No custom bridge per pair: both sides build to the same port.",
+      "A tool made by strangers can still click in on day one."
+    ],
+    "dont": [
+      "Don't build a custom connector when the tool already speaks MCP."
+    ]
   },
   {
     "id": "guardrails",
@@ -107,19 +179,34 @@
     "howToPlay": "Play the attacker and break the bot. No guardrails yet, so every trick works. Then switch sides and set the limits yourself.",
     "role": "You're the owner setting up your bot. Set the limits it must never cross, so a clever customer can't talk it into anything.",
     "definition": "Guardrails are the hard limits an AI must never cross: no unlimited discounts, no promises it can't keep, no topics outside its job. You decide them in advance.",
-    "whyYouCare": "They're what keeps an AI assistant safe and on-brand instead of agreeing to anything a clever customer asks for."
+    "whyYouCare": "They're what keeps an AI assistant safe and on-brand instead of agreeing to anything a clever customer asks for.",
+    "keyPoints": [
+      "Guardrails are hard limits set in advance: money, promises, topics.",
+      "Above the limit, a human decides.",
+      "Test them with the tricks a pushy customer would try."
+    ],
+    "dont": [
+      "Don't trust \"I'm the manager\" from a chat message."
+    ]
   },
   {
     "id": "temperature",
     "order": 11,
     "name": "Temperature",
     "botPart": "Creativity dial",
-    "role": "You're setting up your bot: dial in its creativity so it stays rock-steady where it has to be, and gets inventive where you want it.",
+    "role": "You're the owner setting up your bot. Set how adventurous its wording is, so each job gets the right amount of surprise.",
     "about": "Temperature is one hidden setting that controls how random your bot's wording is: low keeps it safe and predictable, high makes it surprising.",
     "howToPlay": "Slide the temperature from low to high and watch the bot's next word go from predictable to wild, then pick the right setting for a series of real jobs.",
-    "role": "You're the owner setting up your bot. Set how adventurous its wording is, so each job gets the right amount of surprise.",
     "definition": "Temperature is a setting that controls how random an AI's word choice is. Low temperature makes it pick the safest, most likely word almost every time. High temperature lets less likely, more surprising words win.",
-    "whyYouCare": "It's the dial behind \"why did it answer differently this time?\" Turn it down when you need the same reliable wording. Turn it up when you want fresh ideas."
+    "whyYouCare": "It's the dial behind \"why did it answer differently this time?\" Turn it down when you need the same reliable wording. Turn it up when you want fresh ideas.",
+    "keyPoints": [
+      "Same words to choose from. Temperature only changes the odds.",
+      "Low: the safe word almost every time. High: surprises can win.",
+      "Turn it down for exact wording, up for fresh ideas."
+    ],
+    "dont": [
+      "Don't leave it high for anything that must read the same every time."
+    ]
   },
   {
     "id": "rag",
@@ -130,6 +217,14 @@
     "howToPlay": "You are the bot's search. Pick which pages it gets to read, then watch it answer using only those.",
     "role": "You're the owner setting up your bot. You're its search: pick which pages it gets to read, because it can never read the whole binder at once.",
     "definition": "RAG is when an AI searches a specific set of documents before answering, grabs the few passages that look relevant, and writes its answer from those. It doesn't know your documents. It looks them up, one question at a time, and only sees what the search found.",
-    "whyYouCare": "It's what's behind every \"ask our company AI\" tool. The answer is only as good as the pages it happened to find, and the AI can't tell a current document from an outdated one. So ask it which document the answer came from."
+    "whyYouCare": "It's what's behind every \"ask our company AI\" tool. The answer is only as good as the pages it happened to find, and the AI can't tell a current document from an outdated one. So ask it which document the answer came from.",
+    "keyPoints": [
+      "The bot doesn't know your documents. It looks them up, one question at a time.",
+      "It only sees the pages the search found. Miss the page, miss the answer.",
+      "It can't tell a current page from an outdated one. Ask which page it used."
+    ],
+    "dont": [
+      "Don't assume \"from our documents\" means \"from the right document\"."
+    ]
   }
 ]

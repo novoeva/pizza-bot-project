@@ -19,6 +19,7 @@ import {
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import TermReveal from '../../components/TermReveal.jsx'
 import Callout from '../../components/Callout.jsx'
 import ChatMessage from '../../components/ChatMessage.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
@@ -57,41 +58,18 @@ export default function ContextWindowGame({ termId, onComplete }) {
   // ---------- Reveal ----------
   if (phase === 'reveal') {
     return (
-      <div className="flex flex-col gap-3 text-center">
-        <div className="mx-auto mt-2 flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-neutral bg-success shadow-pop">
-          <span className="material-symbols-rounded fill text-5xl text-white">check</span>
-        </div>
-        <p className="font-label text-[11px] text-primary">
-          Snapped onto your bot · {term.botPart}
-        </p>
-        <h2 className="text-2xl">You just learned the term Context window</h2>
-
-        {/* What it means: the definition (the payoff) */}
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
-          <p className="font-label text-[11px] text-text-muted">What it means</p>
-          <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
-        </div>
-
-        {/* Why you care */}
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
-          <p className="font-label text-[11px] text-text-muted">Why you care</p>
-          <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
-        </div>
-
-        {/* Real talk: the honest note that owns the goldfish simplification */}
-        <Callout tone="info" title="Real talk" compact>
-          <p className="font-semibold">{honestyTitle}</p>
-          <p className="mt-1 text-text-muted">{honestyIntro}</p>
-          <p className="mt-2 text-text-muted">{honestyExample}</p>
-          <p className="mt-2">{honestyClose}</p>
-        </Callout>
-
-        <GameActions>
-          <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
-            Snap it onto your bot
-          </GameActionButton>
-        </GameActions>
-      </div>
+      <TermReveal
+        term={term}
+        onComplete={onComplete}
+        aside={
+          <Callout tone="info" title="Real talk" compact>
+            <p className="font-semibold">{honestyTitle}</p>
+            <p className="mt-1 text-text-muted">{honestyIntro}</p>
+            <p className="mt-2 text-text-muted">{honestyExample}</p>
+            <p className="mt-2">{honestyClose}</p>
+          </Callout>
+        }
+      />
     )
   }
 

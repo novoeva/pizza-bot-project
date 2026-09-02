@@ -1,0 +1,105 @@
+<meta charset="utf-8">
+<title>Phase 3 Review Kit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,1&display=swap">
+<style>
+  :root {
+    --ink: #001b3c; --ink-soft: #4b5563; --rule: #cfd3dc; --paper: #f3f4f8; --card: #ffffff;
+    --red: #b7102a; --wrong: #9c4444; --grey: #e6e7ee; --mint: #e7f4f1; --teal: #2a9d8f; --blue: #286182; --neutral: #586158;
+    --label: 'Space Grotesk', ui-monospace, monospace; --body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+  html { color-scheme: light; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); }
+  .wrap { max-width: 44rem; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
+  h1 { font-size: 1.8rem; letter-spacing: -.02em; margin: .2rem 0 .5rem; text-wrap: balance; }
+  h2 { font-size: 1.15rem; letter-spacing: -.01em; margin: 2.2rem 0 .6rem; }
+  .eyebrow { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 11px; color: var(--ink-soft); }
+  p { line-height: 1.55; font-size: 15px; max-width: 62ch; }
+  ol.steps { padding-left: 1.4rem; font-size: 15px; line-height: 1.55; }
+  ol.steps li { margin: .35rem 0; }
+  code { font-family: var(--label); font-size: 13px; background: #fff; border: 1px solid var(--rule); border-radius: 5px; padding: .05rem .35rem; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .6rem 0 .2rem; }
+  .cell { background: #f9f9ff; border: 1px solid var(--rule); border-radius: 10px; padding: .8rem; }
+  .cell .tag { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 10px; color: var(--ink-soft); display: block; margin-bottom: .5rem; }
+  .q { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .9rem 1.1rem; margin: .8rem 0; }
+  .q .n { font-family: var(--label); font-size: 11px; letter-spacing: .08em; color: var(--blue); }
+  .q .ask { font-weight: 700; font-size: 16px; margin: .25rem 0 .4rem; }
+  .q .how { font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
+  .q .ans { margin-top: .5rem; font-size: 14px; }
+  .q .ans b { display: inline-block; border: 2px solid var(--neutral); border-radius: 999px; padding: .05rem .6rem; margin-right: .3rem; font-size: 13px; }
+  .done { background: var(--mint); border: 1px solid #b9dcd5; border-radius: 10px; padding: .7rem 1rem; font-size: 14px; line-height: 1.5; }
+  .done b { color: #1f7a6f; }
+  .dont { border-left: 3px solid var(--wrong); background: #fff; padding: .6rem .9rem; font-size: 14px; line-height: 1.5; }
+  .dont ul { margin: .3rem 0 0; padding-left: 1.2rem; }
+  .card { border-radius: .9rem; border: 3px solid var(--neutral); box-shadow: 3px 3px 0 0 var(--neutral); background: #fff; padding: .6rem .8rem; font-size: 12px; text-align: left; margin-top: .4rem; }
+  .card .l { font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: 9px; color: var(--ink-soft); }
+  .ms { font-family: 'Material Symbols Rounded'; font-size: 15px; line-height: 1; vertical-align: middle; }
+  li.line { list-style: none; display: flex; gap: .3rem; align-items: flex-start; margin-top: .25rem; }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Pizza Bot · Phase 3 · the end screen</p>
+  <h1>How to review Phase 3 in 10 minutes</h1>
+  <div class="done"><b>Phase 2 approved.</b> Phase 3 is step 3 of the game framework: the recap. Klára's finding was "wall of text, nothing to remember". One shared end screen now replaces the 12 hand-made ones.</div>
+
+  <h2>1 · What changed</h2>
+  <ol class="steps">
+    <li><b>One end screen</b> for all 12 games, same order every time: success mark → definition → <b>"What matters"</b> as three check lines → <b>"Don't"</b> as one cross line → the game's aside, if it has one.</li>
+    <li><b>The "Why you care" paragraph is gone.</b> Its content moved into the three check lines. Less text, same message.</li>
+    <li><b>New copy for 12 terms:</b> 36 check lines and 12 don't lines, written for a non-native reader. This is the part that most needs your eye.</li>
+    <li>Score lines (Hallucination, Temperature, Token) and asides ("Real talk", "In the real world") stay.</li>
+  </ol>
+  <div class="pair">
+    <div class="cell"><span class="tag">Before</span>
+      <div class="card"><div class="l">What it means</div>Guardrails are the hard limits an AI must never cross…</div>
+      <div class="card"><div class="l">Why you care</div>They're what keeps an AI assistant safe and on-brand instead of agreeing to anything a clever customer asks for.</div>
+      <div class="card"><div class="l">In the real world</div>Picking safe options like this is only the start. A real bot needs much stronger guardrails…</div>
+    </div>
+    <div class="cell"><span class="tag">After</span>
+      <div class="card"><div class="l">What it means</div>Guardrails are the hard limits an AI must never cross…</div>
+      <div class="card"><div class="l">What matters</div>
+        <ul style="margin:0;padding:0"><li class="line"><span class="ms" style="color:var(--teal)">check_circle</span>Hard limits set in advance: money, promises, topics.</li><li class="line"><span class="ms" style="color:var(--teal)">check_circle</span>Above the limit, a human decides.</li><li class="line"><span class="ms" style="color:var(--teal)">check_circle</span>Test them with the tricks a pushy customer would try.</li></ul></div>
+      <div class="card"><div class="l">Don't</div><ul style="margin:0;padding:0"><li class="line"><span class="ms" style="color:var(--wrong)">cancel</span>Don't trust "I'm the manager" from a chat message.</li></ul></div>
+    </div>
+  </div>
+
+  <h2>2 · Open the app</h2>
+  <p>Reload <code>http://localhost:5180</code>. The quickest way to an end screen is <b>Hallucination</b>: 6 taps of "Made up" and "Next".</p>
+
+  <h2>3 · Four questions</h2>
+
+  <div class="q"><div class="n">Q1 · Hallucination end screen</div><div class="ask">Could you repeat the three "What matters" lines to a friend after reading them once?</div>
+    <div class="how">That is the whole test of this screen. If one line is too long or too clever, name it.</div>
+    <div class="ans"><b>yes ✓</b> <b>no ✗ → which line</b></div></div>
+
+  <div class="q"><div class="n">Q2 · Same screen</div><div class="ask">Is "Don't" useful, or does it feel like a scolding?</div>
+    <div class="ans"><b>useful ✓</b> <b>drop it ✗</b> <b>keep, reword ✗</b></div></div>
+
+  <div class="q"><div class="n">Q3 · Guardrails end screen (4 customers, set limits, 4 customers)</div><div class="ask">With "Why you care" gone, is anything missing that you would want a learner to leave with?</div>
+    <div class="ans"><b>nothing missing ✓</b> <b>missing ✗ → what</b></div></div>
+
+  <div class="q"><div class="n">Q4 · Copy pass, no app needed</div><div class="ask">Read the 12 check-line sets below. Any line you would change?</div>
+    <div class="how">
+      <b>Token</b> · chunks not words, one word can be several tokens · more tokens = slower and pricier · it never sees letters, so counting letters goes wrong · Don't ask it to count letters and trust it.<br>
+      <b>Context window</b> · only the last few messages, oldest fall out · not careless, just out of view · pin it, repeat it, or start fresh · Don't assume 20 messages ago is still in view.<br>
+      <b>Hallucination</b> · made-up sounds as confident as true · confidence is not evidence · give it real data and guessing drops · Don't trust an unverifiable detail because it sounds sure.<br>
+      <b>Prompt</b> · everything you leave out, it guesses · say what to do when info is missing · wording changes the bot, not the customer · Don't blame the customer for a vague order when instructions were vague.<br>
+      <b>Agent</b> · chatbot talks, agent acts · steps in order, order matters · more power, more guardrails · Don't let an agent act without limits.<br>
+      <b>Tool use</b> · memory is a guess, a real system is a check · give it tools · the right tool, not any tool · Don't let it answer a live question without a tool.<br>
+      <b>Skill</b> · a playbook for one recurring situation · same complaint, same right answer · steps in the order you'd handle it · Don't let it improvise the situations that matter most.<br>
+      <b>Memory</b> · working memory lasts one chat · persistent memory comes back next visit · you choose what is saved · Don't expect it to remember last week unless something was saved.<br>
+      <b>MCP</b> · one shared plug · no custom bridge per pair · strangers' tools click in on day one · Don't build a connector when the tool speaks MCP.<br>
+      <b>Guardrails</b> · hard limits: money, promises, topics · above the limit a human decides · test with a pushy customer's tricks · Don't trust "I'm the manager".<br>
+      <b>Temperature</b> · same words, only the odds change · low = safe word, high = surprises · down for exact wording, up for ideas · Don't leave it high for anything that must read the same.<br>
+      <b>RAG</b> · it looks documents up per question · only sees the pages the search found · can't tell current from outdated, ask which page · Don't assume "from our documents" means the right document.
+    </div>
+    <div class="ans"><b>all fine ✓</b> <b>change ✗ → term + line</b></div></div>
+
+  <h2>4 · Not for today</h2>
+  <div class="dont"><ul>
+      <li>The left intro panel and the single-column games (Phase 4, last one).</li>
+      <li>FR-19, FR-21, FR-22 as logged.</li>
+    </ul></div>
+
+  <h2>5 · How to answer</h2>
+  <p>Four marks, for example <code>✓ ✓ ✓ ✓</code>. Copy changes as "term: new line".</p>
+</div>

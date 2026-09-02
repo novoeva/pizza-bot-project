@@ -12,6 +12,7 @@ import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
 import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import TermReveal from '../../components/TermReveal.jsx'
 import Callout from '../../components/Callout.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
 import SelectableCard from '../../components/SelectableCard.jsx'
@@ -281,32 +282,7 @@ export default function TemperatureGame({ termId, onComplete }) {
   // ---------- Reveal ----------
   const score = results.filter(Boolean).length
   return (
-    <div className="flex flex-col gap-3 text-center">
-      <div className="mx-auto mt-2 flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-neutral bg-success shadow-pop">
-        <span className="material-symbols-rounded fill text-5xl text-white">check</span>
-      </div>
-      <p className="font-label text-[11px] text-primary">Snapped onto your bot · {term.botPart}</p>
-      <h2 className="text-2xl">You just learned the term Temperature</h2>
-      <p className="font-label text-xs text-text-muted">
-        You matched the setting on {score} of {taskRounds.length}.
-      </p>
-
-      <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
-        <p className="font-label text-[11px] text-text-muted">What it means</p>
-        <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
-      </div>
-
-      <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
-        <p className="font-label text-[11px] text-text-muted">Why you care</p>
-        <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
-      </div>
-
-      <GameActions>
-        <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
-          Snap it onto your bot
-        </GameActionButton>
-      </GameActions>
-    </div>
+    <TermReveal term={term} score={`You matched the setting on ${score} of ${taskRounds.length}.`} onComplete={onComplete} />
   )
 }
 
