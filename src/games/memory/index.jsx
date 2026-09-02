@@ -11,7 +11,7 @@ import PhaseCard from '../../components/PhaseCard.jsx'
 import PartTile from '../../components/PartTile.jsx'
 import SlotList from '../../components/SlotList.jsx'
 import { useFirstTimeHint } from '../../lib/useFirstTimeHint.js'
-import ProgressBar from '../../components/ProgressBar.jsx'
+import GameStage from '../../components/GameStage.jsx'
 
 const PRACTICAL_IDS = ['order', 'allergy', 'address']
 
@@ -72,19 +72,17 @@ export default function MemoryGame({ termId, onComplete }) {
     })
   }
 
-  const instruction = (sub) => (
-    <PhaseCard title="Welcome, stranger" heading="Memory">
-      {sub}
-    </PhaseCard>
+  const instruction = (sub) => <PhaseCard title="Welcome, stranger">{sub}</PhaseCard>
+  const stage = (main, progress) => (
+    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
   )
 
   // Progress: 1 visit one · 2 a week later · 3 install memory · 4 Anna is back.
-  function renderChatSequence(lines, onFinish, buttonLabel, header, intro = false, part = 1) {
+  function renderChatSequence(lines, onFinish, buttonLabel, header, part = 1) {
     const isLast = lineIndex >= lines.length - 1
-    return (
-      <div className="flex flex-col gap-3">
-        <ProgressBar part={part} parts={4} step={lineIndex + 1} steps={lines.length} />
-        {intro ? <GameIntro term={term} /> : instruction(header)}
+    return stage(
+      <>
+        {instruction(header)}
         {/* Standard sides: the customer (Anna) is received, on the left; your
             bot is on the right, like every other game. */}
         <div className="flex flex-col gap-2">
@@ -116,7 +114,8 @@ export default function MemoryGame({ termId, onComplete }) {
             {isLast ? buttonLabel : 'Continue'}
           </GameActionButton>
         </GameActions>
-      </div>
+      </>,
+      { part, parts: 4, step: lineIndex + 1, steps: lines.length },
     )
   }
 
@@ -142,16 +141,14 @@ export default function MemoryGame({ termId, onComplete }) {
       () => setPhase('reveal'),
       'See what this means',
       'A week later, Anna is back.',
-      false,
       4,
     )
   }
 
   if (phase === 'install') {
     const done = selected.size > 0
-    return (
-      <div className="flex flex-col gap-3">
-        <ProgressBar part={3} parts={4} step={selected.size} steps={facts.length} />
+    return stage(
+      <>
         {instruction(
           'The hard drive is empty. Drag in whatever the bot should remember. Anything you leave out is gone the moment the chat ends.',
         )}
@@ -188,14 +185,14 @@ export default function MemoryGame({ termId, onComplete }) {
             Save to the hard drive
           </GameActionButton>
         </GameActions>
-      </div>
+      </>,
+      { part: 3, parts: 4, step: selected.size, steps: facts.length },
     )
   }
 
   if (phase === 'diagnose') {
-    return (
-      <div className="flex flex-col gap-3">
-        <ProgressBar part={3} parts={4} />
+    return stage(
+      <>
         {instruction('Why it forgot, and how to fix it.')}
         <Callout tone="problem" title="The problem">
           Every visit, the bot starts from zero. Inside one chat its memory is perfect. That is
@@ -211,7 +208,8 @@ export default function MemoryGame({ termId, onComplete }) {
             Install persistent memory
           </GameActionButton>
         </GameActions>
-      </div>
+      </>,
+      { part: 3, parts: 4 },
     )
   }
 
@@ -221,15 +219,13 @@ export default function MemoryGame({ termId, onComplete }) {
       () => setPhase('diagnose'),
       'Why did it forget?',
       'Same bot, new chat, nothing saved.',
-      false,
       2,
     )
   }
 
   if (phase === 'timejump') {
-    return (
-      <div className="flex flex-col gap-3">
-        <ProgressBar part={2} parts={4} />
+    return stage(
+      <>
         {instruction('The chat is over.')}
         <div className="flex flex-col items-center justify-center gap-4 rounded-lg border-[3px] border-neutral bg-muted py-16 shadow-pop">
           <p className="font-display text-xl text-text-muted">One week later.</p>
@@ -239,7 +235,8 @@ export default function MemoryGame({ termId, onComplete }) {
             </GameActionButton>
           </GameActions>
         </div>
-      </div>
+      </>,
+      { part: 2, parts: 4 },
     )
   }
 
@@ -248,6 +245,6 @@ export default function MemoryGame({ termId, onComplete }) {
     () => setPhase('timejump'),
     'End the chat',
     'Visit 1: the bot is chatting with Anna.',
-    true,
+    1,
   )
 }

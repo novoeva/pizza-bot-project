@@ -8,6 +8,7 @@ import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import TermReveal from '../../components/TermReveal.jsx'
 import Callout from '../../components/Callout.jsx'
 import Panel from '../../components/Panel.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
 
 /**
  * Hallucination game, { termId, onComplete } interface.
@@ -56,17 +57,17 @@ export default function HallucinationGame({ termId, onComplete }) {
   }
 
   // Left column: read-once orientation only — what the term is and how to play.
-  const context = (
-    <>
-      <GameIntro term={term} />
-    </>
-  )
+  const context = <GameIntro term={term} showHowTo={false} />
 
   // Right column: everything you actually play with, together — the reference
   // menu you check claims against, the claim progress, the claim itself, the
   // choices, and the feedback that lands in place once you pick.
   const main = (
     <>
+      <PhaseCard title="Spot the fake">
+        Check each answer against the real menu and catch the ones your bot made up.
+      </PhaseCard>
+
       {/* Reference menu — a game tool (you check every claim against it), so it
           sits WITH the game, not off in the orientation column. */}
       <Panel header="brand" title="Today's real menu" icon="menu_book" shadow="none" bodyClassName="">

@@ -7,7 +7,7 @@ import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import TermReveal from '../../components/TermReveal.jsx'
 import Callout from '../../components/Callout.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
-import ProgressBar from '../../components/ProgressBar.jsx'
+import GameStage from '../../components/GameStage.jsx'
 
 /**
  * MCP game, { termId, onComplete } interface.
@@ -126,9 +126,12 @@ export default function McpGame({ termId, onComplete }) {
   // --- proof: a tool nobody planned for, clicks straight in ----------------
   if (phase === 'proof') {
     return (
-      <div className="flex flex-col gap-3">
-        <ProgressBar part={3} parts={3} />
-        <PhaseCard title="One universal port" heading="A tool nobody planned for">
+      <GameStage
+        context={<GameIntro term={term} showHowTo={false} />}
+        progress={{ part: 3, parts: 3 }}
+        main={
+          <>
+        <PhaseCard title="A tool nobody planned for">
           A stock tracker was built last month by a company that has never heard of you or your
           bot. The old way, it would sit unusable until someone found time to build it a custom
           connector.
@@ -176,16 +179,21 @@ export default function McpGame({ termId, onComplete }) {
             </GameActions>
           </>
         )}
-      </div>
+          </>
+        }
+      />
     )
   }
 
   // --- port: give the bot one universal port -------------------------------
   if (phase === 'port') {
     return (
-      <div className="flex flex-col gap-3">
-        <ProgressBar part={2} parts={3} step={portClicked.length} steps={mcpSystems.length} />
-        <PhaseCard title="One universal port" heading="One universal port">
+      <GameStage
+        context={<GameIntro term={term} showHowTo={false} />}
+        progress={{ part: 2, parts: 3, step: portClicked.length, steps: mcpSystems.length }}
+        main={
+          <>
+        <PhaseCard title="One universal port">
           Instead of a custom connector per system, give your bot a single port that any tool can
           plug into, as long as both sides speak the same standard. That standard is MCP.
         </PhaseCard>
@@ -260,15 +268,23 @@ export default function McpGame({ termId, onComplete }) {
             )}
           </>
         )}
-      </div>
+          </>
+        }
+      />
     )
   }
 
   // --- old: wire each system by hand ---------------------------------------
   return (
-    <div className="flex flex-col gap-3">
-      <ProgressBar part={1} parts={3} step={oldBuilt.length} steps={oldSystems.length} />
-      <GameIntro term={term} />
+    <GameStage
+      context={<GameIntro term={term} showHowTo={false} />}
+      progress={{ part: 1, parts: 3, step: oldBuilt.length, steps: oldSystems.length }}
+      main={
+        <>
+      <PhaseCard title="The old way">
+        Your bot needs to reach the systems your pizzeria runs on. Wire each one by hand: tap
+        Build connector.
+      </PhaseCard>
 
       <BotCard sub="needs to reach the systems your pizzeria runs on" />
 
@@ -337,6 +353,8 @@ export default function McpGame({ termId, onComplete }) {
           Tap Build connector on each system your bot needs.
         </p>
       )}
-    </div>
+        </>
+      }
+    />
   )
 }

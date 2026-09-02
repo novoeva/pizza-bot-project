@@ -23,7 +23,7 @@ import TermReveal from '../../components/TermReveal.jsx'
 import Callout from '../../components/Callout.jsx'
 import ChatMessage from '../../components/ChatMessage.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
-import ProgressBar from '../../components/ProgressBar.jsx'
+import GameStage from '../../components/GameStage.jsx'
 import Panel from '../../components/Panel.jsx'
 
 /**
@@ -49,10 +49,9 @@ export default function ContextWindowGame({ termId, onComplete }) {
   const allSent = sentCount === order.length
   const nextMessage = order[sentCount]
 
-  const instruction = (sub) => (
-    <PhaseCard title="What the bot can see" heading="Context window">
-      {sub}
-    </PhaseCard>
+  const instruction = (sub) => <PhaseCard title="What the bot can see">{sub}</PhaseCard>
+  const stage = (main, progress) => (
+    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
   )
 
   // ---------- Reveal ----------
@@ -75,9 +74,8 @@ export default function ContextWindowGame({ termId, onComplete }) {
 
   // ---------- Beat 2: new order, empty window ----------
   if (phase === 'newchat') {
-    return (
-      <div className="flex flex-col gap-3">
-        <ProgressBar part={2} parts={2} />
+    return stage(
+      <>
         {instruction('Same bot, brand new order. Watch the window.')}
         <ContextPanel sent={[]} />
 
@@ -107,15 +105,15 @@ export default function ContextWindowGame({ termId, onComplete }) {
             </GameActions>
           </>
         )}
-      </div>
+      </>,
+      { part: 2, parts: 2 },
     )
   }
 
   // ---------- Beat 1: fill the window ----------
-  return (
-    <div className="flex flex-col gap-3">
-      <ProgressBar part={1} parts={2} step={sentCount} steps={order.length} />
-      <GameIntro term={term} />
+  return stage(
+    <>
+      {instruction('Send the order line by line and watch what drops out of the window, then pin the part that matters.')}
 
       <ContextPanel sent={sent} pinned={pinned} />
 
@@ -181,7 +179,8 @@ export default function ContextWindowGame({ termId, onComplete }) {
           )}
         </>
       )}
-    </div>
+    </>,
+    { part: 1, parts: 2, step: sentCount, steps: order.length },
   )
 }
 

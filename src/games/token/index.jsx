@@ -9,7 +9,7 @@ import Callout from '../../components/Callout.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
 import SelectableCard from '../../components/SelectableCard.jsx'
 import ChoiceGroup from '../../components/ChoiceGroup.jsx'
-import ProgressBar from '../../components/ProgressBar.jsx'
+import GameStage from '../../components/GameStage.jsx'
 import Panel from '../../components/Panel.jsx'
 
 const GUESS_OPTIONS = [1, 2, 3, 4]
@@ -43,9 +43,14 @@ export default function TokenGame({ termId, onComplete }) {
     const correct = chopGuess === hookTokens.length
     const wordCount = samplePhrase.text.trim().split(/\s+/).length
     return (
-      <div className="flex flex-col gap-3">
-        <ProgressBar part={1} parts={2} />
-        <GameIntro term={term} />
+      <GameStage
+        context={<GameIntro term={term} showHowTo={false} />}
+        progress={{ part: 1, parts: 2 }}
+        main={
+          <>
+        <PhaseCard title="Chop it up">
+          Guess how many chunks your bot sees in one word, then watch a whole order get chopped.
+        </PhaseCard>
 
         <div className="rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop">
           <p className="text-center font-label text-[11px] text-text-muted">
@@ -130,7 +135,9 @@ export default function TokenGame({ termId, onComplete }) {
             </GameActions>
           </>
         )}
-      </div>
+          </>
+        }
+      />
     )
   }
 
@@ -159,9 +166,12 @@ export default function TokenGame({ termId, onComplete }) {
     }
 
     return (
-      <div className="flex flex-col gap-3">
-        <ProgressBar part={2} parts={2} step={roundIndex + 1} steps={predictionRounds.length} />
-        <PhaseCard title="Read your bot's mind" heading="Token">
+      <GameStage
+        context={<GameIntro term={term} showHowTo={false} />}
+        progress={{ part: 2, parts: 2, step: roundIndex + 1, steps: predictionRounds.length }}
+        main={
+          <>
+        <PhaseCard title="Read your bot's mind">
           Your bot (an LLM, short for large language model) never writes a whole reply at once.
           It picks one token, then the next, then the next. Every pick is a guess at what fits
           best after everything it has seen so far.
@@ -235,7 +245,9 @@ export default function TokenGame({ termId, onComplete }) {
             </GameActions>
           </>
         )}
-      </div>
+          </>
+        }
+      />
     )
   }
 

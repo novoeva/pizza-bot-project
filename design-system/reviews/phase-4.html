@@ -1,0 +1,97 @@
+<meta charset="utf-8">
+<title>Phase 4 Review Kit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+  :root {
+    --ink: #001b3c; --ink-soft: #4b5563; --rule: #cfd3dc; --paper: #f3f4f8; --card: #ffffff;
+    --red: #b7102a; --wrong: #9c4444; --grey: #e6e7ee; --mint: #e7f4f1; --blue: #286182; --blue-bg: #d9edfb; --neutral: #586158;
+    --label: 'Space Grotesk', ui-monospace, monospace; --body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+  html { color-scheme: light; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); }
+  .wrap { max-width: 44rem; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
+  h1 { font-size: 1.8rem; letter-spacing: -.02em; margin: .2rem 0 .5rem; text-wrap: balance; }
+  h2 { font-size: 1.15rem; letter-spacing: -.01em; margin: 2.2rem 0 .6rem; }
+  .eyebrow { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 11px; color: var(--ink-soft); }
+  p { line-height: 1.55; font-size: 15px; max-width: 62ch; }
+  ol.steps { padding-left: 1.4rem; font-size: 15px; line-height: 1.55; }
+  ol.steps li { margin: .35rem 0; }
+  code { font-family: var(--label); font-size: 13px; background: #fff; border: 1px solid var(--rule); border-radius: 5px; padding: .05rem .35rem; }
+  .cmd { display: block; background: var(--ink); color: #fff; border-radius: 8px; padding: .7rem .9rem; font-family: var(--label); font-size: 13px; margin: .5rem 0 1rem; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .6rem 0 .2rem; }
+  .cell { background: #f9f9ff; border: 1px solid var(--rule); border-radius: 10px; padding: .8rem; }
+  .cell .tag { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 10px; color: var(--ink-soft); display: block; margin-bottom: .5rem; }
+  .q { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .9rem 1.1rem; margin: .8rem 0; }
+  .q .n { font-family: var(--label); font-size: 11px; letter-spacing: .08em; color: var(--blue); }
+  .q .ask { font-weight: 700; font-size: 16px; margin: .25rem 0 .4rem; }
+  .q .how { font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
+  .q .ans { margin-top: .5rem; font-size: 14px; }
+  .q .ans b { display: inline-block; border: 2px solid var(--neutral); border-radius: 999px; padding: .05rem .6rem; margin-right: .3rem; font-size: 13px; }
+  .done { background: var(--mint); border: 1px solid #b9dcd5; border-radius: 10px; padding: .7rem 1rem; font-size: 14px; line-height: 1.5; }
+  .done b { color: #1f7a6f; }
+  .dont { border-left: 3px solid var(--wrong); background: #fff; padding: .6rem .9rem; font-size: 14px; line-height: 1.5; }
+  .dont ul { margin: .3rem 0 0; padding-left: 1.2rem; }
+  .card { border-radius: .9rem; border: 3px solid var(--neutral); box-shadow: 3px 3px 0 0 var(--neutral); background: #fff; padding: .6rem .8rem; font-size: 12px; }
+  .box { border-radius: .6rem; border: 2px solid var(--neutral); padding: .4rem .6rem; margin-top: .4rem; font-size: 12px; }
+  .box .l { font-family: var(--label); font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); }
+  .box.blue { background: var(--blue-bg); } .box.blue .l { color: var(--blue); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Pizza Bot · Phase 4 · the intro, and the last four games</p>
+  <h1>How to review Phase 4 in 10 minutes</h1>
+  <div class="done"><b>Last phase of the plan.</b> Step 1 of the framework: define the term before playing. Your call: show the full definition, not a teaser. Plus the four games that were still single-column now use the same two-column stage as the rest.</div>
+
+  <h2>1 · What changed</h2>
+  <ol class="steps">
+    <li><b>Definition first.</b> The intro card on the left now reads: name, <b>Definition</b>, <b>Your role</b>. The old teaser line is gone. The same definition comes back on the end screen, so the arc is define → apply → repeat.</li>
+    <li><b>Token, Context window, Memory and MCP</b> use the two-column stage on every screen: intro on the left, "Game · …" card and the play on the right, progress strip on top. Before, they dropped the intro after the first screen and stacked everything in one column on desktop (FR-20).</li>
+    <li><b>Every game now starts with a "Game · …" card</b> telling you what to do on this screen, including Hallucination and the first screens of the four games above.</li>
+    <li>No game logic changed.</li>
+  </ol>
+  <div class="pair">
+    <div class="cell"><span class="tag">Before · Memory, second screen (desktop)</span>
+      <div class="card"><div style="font-family:var(--label);font-size:9px;color:var(--red);text-transform:uppercase">Game · Welcome, stranger</div><div style="font-weight:800;font-size:16px">Memory</div><div style="color:var(--ink-soft)">Same bot, new chat, nothing saved.</div></div>
+      <p style="font-size:12px;color:var(--ink-soft);margin:.4rem 0 0">One column. The definition was gone after screen one.</p>
+    </div>
+    <div class="cell"><span class="tag">After</span>
+      <div class="grid">
+        <div class="card"><div style="font-family:var(--label);font-size:9px;color:var(--red);text-transform:uppercase">Term · Memory</div><div style="font-weight:800;font-size:16px">Memory</div><div class="box"><div class="l">Definition</div>An AI has two kinds of memory. Working memory lasts one conversation…</div><div class="box blue"><div class="l">Your role</div>You're the owner setting up your bot…</div></div>
+        <div class="card"><div style="font-family:var(--label);font-size:9px;color:var(--red);text-transform:uppercase">Game · Welcome, stranger</div><div style="color:var(--ink-soft)">Same bot, new chat, nothing saved.</div></div>
+      </div>
+      <p style="font-size:12px;color:var(--ink-soft);margin:.4rem 0 0">Two columns, definition stays.</p>
+    </div>
+  </div>
+
+  <h2>2 · Open the app</h2>
+  <p>This is in the <code>design-system</code> worktree. In a terminal:</p>
+  <code class="cmd">cd .claude/worktrees/design-system && npm run dev</code>
+  <p>Then open the address it prints. Check on a wide window first, then narrow it to phone width.</p>
+
+  <h2>3 · Four questions</h2>
+
+  <div class="q"><div class="n">Q1 · Skill, first screen</div><div class="ask">Reading the left card before playing, do you know what a skill is?</div>
+    <div class="how">This is Klára's exact complaint. The definition is now the first thing under the name.</div>
+    <div class="ans"><b>yes ✓</b> <b>no ✗ → what is missing</b></div></div>
+
+  <div class="q"><div class="n">Q2 · Memory, tap Continue a few times, then Context window, send two messages</div><div class="ask">Wide window: is it two columns with the intro staying on the left, like Prompt?</div>
+    <div class="ans"><b>yes ✓</b> <b>no ✗ → which game</b></div></div>
+
+  <div class="q"><div class="n">Q3 · Token and MCP, first screen</div><div class="ask">Is it clear what to do on the first screen without the old "How to play" box?</div>
+    <div class="how">The instruction moved into the "Game · …" card on the right ("Chop it up", "The old way").</div>
+    <div class="ans"><b>clear ✓</b> <b>unclear ✗ → which game</b></div></div>
+
+  <div class="q"><div class="n">Q4 · Phone width, any game</div><div class="ask">Order is: progress, intro card, "Game · …" card, then the play. Does that still feel right on a phone?</div>
+    <div class="how">The intro with the definition is now a bit taller. If it pushes the play too far down on a phone, say so; a collapsed "Definition" on phones is an option.</div>
+    <div class="ans"><b>fine ✓</b> <b>too tall on phone ✗</b></div></div>
+
+  <h2>4 · Not for today</h2>
+  <div class="dont"><ul>
+      <li>The wording of the 12 definitions and the end-screen recaps (FR-23, your content review).</li>
+      <li>FR-19 (context window auto-play), FR-21, FR-22 (RAG layout).</li>
+    </ul></div>
+
+  <h2>5 · How to answer</h2>
+  <p>Four marks, for example <code>✓ ✓ ✓ ✓</code>. One sentence per cross. Four ticks closes the design-system plan.</p>
+</div>
