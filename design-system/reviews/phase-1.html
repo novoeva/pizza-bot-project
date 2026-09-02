@@ -1,10 +1,10 @@
 <meta charset="utf-8">
 <title>Phase 1 Review Kit</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap">
 <style>
   :root {
     --ink: #001b3c; --ink-soft: #4b5563; --rule: #cfd3dc; --paper: #f3f4f8; --card: #ffffff;
-    --red: #b7102a; --wrong: #9c4444; --wrong-bg: #f2e2e0; --grey: #e6e7ee; --mint: #e7f4f1; --teal: #2a9d8f; --blue: #286182; --blue-bg: #d9edfb; --neutral: #586158;
+    --red: #b7102a; --wrong: #9c4444; --grey: #e6e7ee; --mint: #e7f4f1; --blue: #286182; --neutral: #586158;
     --label: 'Space Grotesk', ui-monospace, monospace; --body: 'Plus Jakarta Sans', system-ui, sans-serif;
   }
   html { color-scheme: light; }
@@ -18,7 +18,6 @@
   ol.steps { padding-left: 1.4rem; font-size: 15px; line-height: 1.55; }
   ol.steps li { margin: .35rem 0; }
   code { font-family: var(--label); font-size: 13px; background: #fff; border: 1px solid var(--rule); border-radius: 5px; padding: .05rem .35rem; }
-  .cmd { display: block; background: var(--ink); color: #fff; border-radius: 8px; padding: .7rem .9rem; font-family: var(--label); font-size: 13px; margin: .5rem 0 1rem; }
   .pair { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .6rem 0 .2rem; }
   .cell { background: #f9f9ff; border: 1px solid var(--rule); border-radius: 10px; padding: .8rem; }
   .cell .tag { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 10px; color: var(--ink-soft); display: block; margin-bottom: .5rem; }
@@ -32,66 +31,53 @@
   .done b { color: #1f7a6f; }
   .dont { border-left: 3px solid var(--wrong); background: #fff; padding: .6rem .9rem; font-size: 14px; line-height: 1.5; }
   .dont ul { margin: .3rem 0 0; padding-left: 1.2rem; }
-  .chunk { border: 3px solid var(--neutral); box-shadow: 4px 4px 0 0 var(--neutral); border-radius: .9rem; }
-  .callout { border-radius: 1rem; padding: .6rem .8rem; font-size: 13px; border: 3px solid; }
-  .callout .t { font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: 10px; font-weight: 700; display: flex; gap: .3rem; align-items: flex-start; }
-  .ms { font-family: 'Material Symbols Rounded'; font-size: 15px; line-height: 1; vertical-align: middle; }
   .lbl { font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: 10px; color: var(--ink-soft); }
-  .pill { display: inline-block; border: 2px solid; border-radius: .5rem; padding: .05rem .45rem; font-size: 12px; font-weight: 700; }
   .card { border-radius: .9rem; border: 3px solid var(--neutral); box-shadow: 3px 3px 0 0 var(--neutral); background: #fff; padding: .6rem .8rem; }
+  .line { display: flex; align-items: center; gap: .5rem; margin-top: .25rem; } .line .lbl { width: 6rem; flex-shrink: 0; }
   .seg { display: flex; gap: 3px; flex: 1; } .seg span { height: 9px; flex: 1; border-radius: 999px; border: 2px solid var(--neutral); }
 </style>
 
 <div class="wrap">
-  <p class="eyebrow">Pizza Bot · Phase 1 · shared components · round 3</p>
-  <h1>Phase 1, third look: 4 questions, 8 minutes</h1>
-  <div class="done"><b>Round 2 result:</b> every point applied. The three findings that are not design-system work are logged as FR-19 (context window should auto-play), FR-20 (desktop layout of Context window / Memory, Phase 4) and FR-21 (round-3 result copy is long). They are not judged today.</div>
+  <p class="eyebrow">Pizza Bot · Phase 1 · shared components · round 4</p>
+  <h1>Phase 1, one thing left: the progress strip</h1>
+  <div class="done"><b>Round 3 result:</b> Q2, Q3, Q4 passed. Q1 (progress) came back with a clear spec: two levels, part of the game and step inside the part, shown from the first screen, at the top. That is the only change in this round.</div>
 
-  <h2>1 · What changed since round 2</h2>
+  <h2>1 · What changed</h2>
   <ol class="steps">
-    <li><b>Progress is a labelled bar</b> at the top of the "Game · …" card: "Progress", one segment per step, filled red. The pizza slice is gone.</li>
-    <li><b>Bot bubbles are never coloured.</b> The verdict card below says what happened, and now says for whom: "It worked for the customer. You lost $50."</li>
-    <li><b>Round 3 results:</b> a neutral card per part, your pick in a <span class="pill" style="border-color:var(--wrong);background:var(--wrong-bg);color:var(--wrong)">red pill</span>, the better one in a <span class="pill" style="border-color:var(--teal);background:var(--mint);color:#1f7a6f">green pill</span>.</li>
-    <li><b>Round 2 result:</b> the rule card is shown back exactly as it was (white with its icon), no blue fill.</li>
-    <li><b>"How to play" is white again.</b> Only "Your role" is blue in the intro card.</li>
+    <li><b>Progress moved to the very top</b> of every game screen, above the intro card. On desktop it spans both columns.</li>
+    <li><b>Two lines.</b> "Part 1 / 2" = which part of the game. "Customer 2 / 4" = how far inside that part. A part with nothing to count shows only the first line.</li>
+    <li><b>From the first screen.</b> Temperature part 1 now shows "Part 1 / 2" before you touch the dial. All 12 games, including the end-of-game screen's predecessor.</li>
+    <li>The "Game · …" card no longer carries any progress.</li>
   </ol>
   <div class="pair">
-    <div class="cell"><span class="tag">Round 2 · pizza slice</span>
-      <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><span class="lbl" style="color:var(--red)">Game · Free pizza for life · Part 1</span><svg viewBox="0 0 32 32" width="22" height="22"><circle cx="16" cy="16" r="16" fill="#586158"/><path d="M16,16 L16,0 A16,16 0 0 1 32,16 Z" fill="#b7102a" stroke="#586158" stroke-width="1.5"/><path d="M16,16 L32,16 A16,16 0 0 1 16,32 Z" fill="#e6e7ee" stroke="#586158" stroke-width="1.5"/><path d="M16,16 L16,32 A16,16 0 0 1 0,16 Z" fill="#e6e7ee" stroke="#586158" stroke-width="1.5"/><path d="M16,16 L0,16 A16,16 0 0 1 16,0 Z" fill="#e6e7ee" stroke="#586158" stroke-width="1.5"/></svg></div></div>
+    <div class="cell"><span class="tag">Round 3 · one line, inside the card, part 2 only</span>
+      <div class="card"><div class="line"><span class="lbl">Progress</span><span class="seg"><span style="background:var(--red)"></span><span style="background:var(--grey)"></span><span style="background:var(--grey)"></span></span></div><div class="lbl" style="color:var(--red);margin-top:.4rem">Game · Pick the setting</div></div>
     </div>
-    <div class="cell"><span class="tag">Round 3 · progress bar</span>
-      <div class="card"><div style="display:flex;align-items:center;gap:.5rem;border-bottom:2px dashed #a8b1a7;padding-bottom:.4rem;margin-bottom:.4rem"><span class="lbl">Progress</span><span class="seg"><span style="background:var(--red)"></span><span style="background:var(--grey)"></span><span style="background:var(--grey)"></span><span style="background:var(--grey)"></span></span><span class="lbl">1/4</span></div><span class="lbl" style="color:var(--red)">Game · Free pizza for life · Part 1</span></div>
+    <div class="cell"><span class="tag">Round 4 · two lines, top of the screen, every part</span>
+      <div class="card"><div class="lbl" style="font-weight:700">Progress</div><div class="line"><span class="lbl">Part 2 / 2</span><span class="seg"><span style="background:var(--red)"></span><span style="background:var(--red)"></span></span></div><div class="line"><span class="lbl">Job 2 / 6</span><span class="seg"><span style="background:var(--red)"></span><span style="background:var(--red)"></span><span style="background:var(--grey)"></span><span style="background:var(--grey)"></span><span style="background:var(--grey)"></span><span style="background:var(--grey)"></span></span></div></div>
     </div>
   </div>
 
   <h2>2 · Open the app</h2>
-  <p>Reload <code>http://localhost:5180</code> (or run <code>npm run dev</code> in the pizza-bot folder), phone-width window.</p>
+  <p>Reload <code>http://localhost:5180</code>, phone width.</p>
 
-  <h2>3 · Four questions</h2>
+  <h2>3 · Three questions</h2>
 
-  <div class="q"><div class="n">Q1 · Guardrails, first screen</div><div class="ask">Would you understand the "Progress" line as progress without being told?</div>
-    <div class="how">Top of the "Game · …" card. One segment per customer, red = done. Tap "See what your bot does", then "See the next customer": a second segment fills.</div>
-    <div class="ans"><b>yes ✓</b> <b>no ✗ → what would</b></div></div>
+  <div class="q"><div class="n">Q1 · Temperature, first screen, then "Roll the dice" and "Next: pick the right setting"</div><div class="ask">Do you see "Part 1 / 2" before doing anything, and does the second line appear and fill as you answer jobs?</div>
+    <div class="ans"><b>yes ✓</b> <b>no ✗ → what you saw</b></div></div>
 
-  <div class="q"><div class="n">Q2 · Same screen, after "See what your bot does"</div><div class="ask">Plain white bot bubble, then a red card that says who it worked for. Right?</div>
-    <div class="how">"It worked for the customer. You lost $50." If the wording still reads oddly, give me the sentence you would use.</div>
-    <div class="ans"><b>yes ✓</b> <b>wording ✗</b> <b>layout ✗</b></div></div>
+  <div class="q"><div class="n">Q2 · Prompt</div><div class="ask">Round 1 and 2 show only "Round n / 3"; round 3 adds "Part x / 4" that fills as you pick. Does that match how the game feels?</div>
+    <div class="ans"><b>yes ✓</b> <b>no ✗</b></div></div>
 
-  <div class="q"><div class="n">Q3 · Prompt, finish round 3 with the last option in every part</div><div class="ask">Do the red and green pills tell you "this was wrong, this is right" faster than before?</div>
-    <div class="how">The card around them is white now. Ignore how long the sentences are (FR-21).</div>
-    <div class="ans"><b>faster ✓</b> <b>no ✗</b></div></div>
-
-  <div class="q"><div class="n">Q4 · Prompt round 2, pick the rule "If size, crust…"</div><div class="ask">Card shown back in white, then a green verdict. Does it look right now?</div>
-    <div class="ans"><b>yes ✓</b> <b>no ✗ → what</b></div></div>
+  <div class="q"><div class="n">Q3 · Any game on a wide window</div><div class="ask">The strip sits above both columns. Right place?</div>
+    <div class="ans"><b>yes ✓</b> <b>no ✗ → where</b></div></div>
 
   <h2>4 · Not for today</h2>
   <div class="dont"><ul>
-      <li>Context window: the "Next message" mechanic (FR-19) and the stacked desktop layout (FR-20).</li>
-      <li>Memory's layout, same reason (FR-20, Phase 4).</li>
-      <li>Round-3 result wording (FR-21).</li>
-      <li>Choice cards / drag tiles (Phase 2), end screen (Phase 3).</li>
+      <li>Which parts each game has is my first guess (Skill has 3, Memory 4, Agent 3). If a split feels wrong, name the game; it is a one-line change.</li>
+      <li>FR-19, FR-20, FR-21 and Phases 2 to 4, as before.</li>
     </ul></div>
 
   <h2>5 · How to answer</h2>
-  <p>Four marks in chat, for example <code>✓ ✓ ✓ ✓</code>. One sentence per cross.</p>
+  <p>Three marks, for example <code>✓ ✓ ✓</code>. If all three pass, Phase 1 is closed and Phase 2 (choice cards and drag-and-drop tiles) starts.</p>
 </div>
