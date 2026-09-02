@@ -26,6 +26,7 @@ Interview #1 dalo 18 FR. Nejsilnější vzorec: **tři systémové nedostatky = 
 > ### 🎨 Design-system workstream — řeší se v samostatném chatu
 > Tolik requestů spadá do design systému, že se řeší jako **oddělený balík v jiném chatu bez tohoto kontextu** (čistší audit). Prompt: [`design-system-audit.md`](./design-system-audit.md). Výstup (`COMPONENT-AUDIT.md`) se vrátí sem a napojí se na tyto FR.
 > **Patří sem:** **FR-18** (audit) · **FR-17** (barevný jazyk) · **FR-10/16** (SelectableCard) · **FR-13** (TermReveal) · **FR-9** (definice panel) · **FR-11** (zelená na špatných volbách).
+> **Stav 2026-09-02:** audit hotový → [`COMPONENT-AUDIT.md`](./COMPONENT-AUDIT.md); vizuální galerie komponent → [`design-system/gallery.html`](./design-system/gallery.html). Rozhodnuto: 8-rolová barevná mapa (R1), hlavní tlačítko navy (R2), stavba bota = drag-and-drop „part tiles" (R3). Další krok: Fáze 0 (tokeny) podle auditu, §4.
 > **Zbytek roadmapy (mimo design systém) běží nezávisle zde:** FR-1, 2, 3, 4, 5, 6, 7, 8, 12, 14, 15.
 
 **Vlna 0 — rychlé výhry (malé, dají se pustit hned, paralelně)**
@@ -205,7 +206,7 @@ U LIMIT 1–4 Klára nepochopila, že má u každého limitu vybrat volbu.
 ---
 
 ### Otevřené / navazující
-- [ ] **Component audit (FR-18, varianta A)** — probíhá v samostatném chatu.
+- [x] **Component audit (FR-18, varianta A)** — hotovo: `COMPONENT-AUDIT.md` + `design-system/gallery.html`.
 - [x] ~~Ověřit žargon z FR-7~~ → vyjasněno: šlo o label **„Log it"** ve Skill hře (`src/games/skill/content.js:16`).
 - [ ] Priorizovaný souhrn / roadmapa (na požádání).
 - [ ] Další interview (#2+) — přidávat jako nové sekce.

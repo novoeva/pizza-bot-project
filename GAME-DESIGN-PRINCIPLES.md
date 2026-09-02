@@ -29,6 +29,15 @@ Colors currently carry conflicting meanings — e.g. **green** is used for custo
 - Tokens live in `src/theme/tokens.css` and map to Tailwind classes in `tailwind.config.js`.
 - Run a full component audit first (what each component is, where it's used, whether it makes sense, then unify).
 
+## Component gallery rule
+
+The living component gallery is [`design-system/gallery.html`](./design-system/gallery.html) (open it in a browser; no build step). It renders every shared component and every recurring per-game element with the app's real tokens, plus the "Today / Proposed" pairs for open colour decisions.
+
+- **Every new or changed shared component must be added to the gallery in the same PR.** Show each variant and state (selected, disabled, each tone) with a one-line caption saying where it is used.
+- **Before adding a new visual element to a game, check the gallery first.** If a matching component exists, use it. If it almost matches, extend the component (add a prop or tone), do not fork a local copy.
+- **New colours or tokens go into the gallery's token row** with the one meaning they carry (see the dictionary in [`COMPONENT-AUDIT.md`](./COMPONENT-AUDIT.md), section 2).
+- A component that is not in the gallery is not finished.
+
 ## Copy rules
 
 - Avoid unexplained jargon; make sure short button labels can't be misread (e.g. "Log it" was read as the nonsense word "logit").
