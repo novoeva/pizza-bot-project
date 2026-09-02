@@ -1,6 +1,6 @@
 /**
  * ProgressBar, the game's progress: one slim line labelled "Progress", split
- * into one segment per part of the game. Lives under the intro card. Parts you have finished are solid
+ * into one segment per part of the game. Sits above both columns. Parts you have finished are solid
  * marinara; the part you are in fills up as you go through its steps; parts
  * ahead are empty. No numbers (Phase 1 review, round 4: one bar, nothing to
  * read). The count is kept for screen readers.
