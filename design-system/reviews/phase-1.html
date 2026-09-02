@@ -4,7 +4,7 @@
 <style>
   :root {
     --ink: #001b3c; --ink-soft: #4b5563; --rule: #cfd3dc; --paper: #f3f4f8; --card: #ffffff;
-    --red: #b7102a; --wrong: #9c4444; --wrong-bg: #f2e2e0; --grey: #e6e7ee; --green-old: #dce5d9; --mint: #e7f4f1; --teal: #2a9d8f; --blue: #286182; --blue-bg: #d9edfb; --neutral: #586158;
+    --red: #b7102a; --wrong: #9c4444; --wrong-bg: #f2e2e0; --grey: #e6e7ee; --mint: #e7f4f1; --teal: #2a9d8f; --blue: #286182; --blue-bg: #d9edfb; --neutral: #586158;
     --label: 'Space Grotesk', ui-monospace, monospace; --body: 'Plus Jakarta Sans', system-ui, sans-serif;
   }
   html { color-scheme: light; }
@@ -34,7 +34,7 @@
   .dont ul { margin: .3rem 0 0; padding-left: 1.2rem; }
   .chunk { border: 3px solid var(--neutral); box-shadow: 4px 4px 0 0 var(--neutral); border-radius: .9rem; }
   .callout { border-radius: 1rem; padding: .6rem .8rem; font-size: 13px; border: 3px solid; }
-  .callout .t { font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: 10px; font-weight: 700; display: flex; gap: .3rem; align-items: center; }
+  .callout .t { font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: 10px; font-weight: 700; display: flex; gap: .3rem; align-items: flex-start; }
   .ms { font-family: 'Material Symbols Rounded'; font-size: 15px; line-height: 1; vertical-align: middle; }
   .stack { display: flex; flex-direction: column; gap: .5rem; }
   .row { display: flex; gap: .4rem; align-items: flex-start; }
@@ -42,47 +42,43 @@
   .av { width: 28px; height: 28px; border-radius: 999px; border: 3px solid var(--neutral); display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: #fff; color: var(--neutral); }
   .av.bot { background: var(--red); color: #fff; }
   .bub { border: 3px solid var(--neutral); box-shadow: 3px 3px 0 0 var(--neutral); border-radius: .9rem; padding: .45rem .7rem; font-weight: 700; font-size: 13px; max-width: 80%; }
-  .bub.l { border-top-left-radius: .25rem; background: var(--grey); }
-  .bub.rr { border-top-right-radius: .25rem; background: #fff; }
-  .box { border: 3px solid var(--neutral); box-shadow: 3px 3px 0 0 var(--neutral); border-radius: .9rem; padding: .45rem .7rem; font-size: 13px; max-width: 80%; }
+  .bub.rr { border-top-right-radius: .25rem; background: var(--wrong-bg); border-color: var(--wrong); }
+  .lbl { font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: 10px; color: var(--ink-soft); }
+  .pill { display: inline-block; border: 2px solid var(--neutral); border-radius: .5rem; padding: .05rem .45rem; font-size: 12px; font-weight: 700; }
+  .card { border-radius: .9rem; border: 3px solid var(--neutral); box-shadow: 3px 3px 0 0 var(--neutral); background: #fff; padding: .6rem .8rem; }
 </style>
 
 <div class="wrap">
-  <p class="eyebrow">Pizza Bot · Phase 1 · shared components</p>
-  <h1>How to review Phase 1 in 15 minutes</h1>
-  <div class="done"><b>Phase 0 approved.</b> Phase 1 builds the first four shared pieces and swaps them into all 12 games: <b>Callout</b> (the verdict card), <b>ChatMessage</b> (the speech bubble), <b>PhaseCard</b> (the "Game · …" card) and <b>Panel</b> (reference boxes like the menu and the context window). No game logic changed, no text changed except three progress labels.</div>
+  <p class="eyebrow">Pizza Bot · Phase 1 · shared components · round 2</p>
+  <h1>Phase 1, second look: 5 questions, 10 minutes</h1>
+  <div class="done"><b>Round 1 result:</b> Q2 passed (chat sides). Q1, Q3, Q4, Q5 came back with concrete fixes, all applied below. Q1's "bulk of text" point is noted as a copy problem for later; the visual part (show the option you tapped) is done.</div>
 
-  <h2>1 · What changed</h2>
+  <h2>1 · What changed since round 1</h2>
   <ol class="steps">
-    <li><b>One verdict card.</b> Every "correct" / "problem" / "Real talk" box in every game is now the same shape. Before there were four shapes.</li>
-    <li><b>One speech bubble.</b> Every message uses the same bubble and avatar. Customer on the left, your bot on the right, in all 12 games. Memory used to have it backwards.</li>
-    <li><b>Prompt results fixed (FR-11).</b> A wrong choice on the round 3 results screen is now a muted red card, and the better option is plain advice with an arrow, not green text.</li>
-    <li><b>Reference boxes share one frame.</b> "Today's real menu" (red header), "Context window" (navy header), the dial, the ranking, the to-do list.</li>
-    <li><b>MCP's cost counters are red</b>, not amber, because a cost that hurts is a "problem" (decision R3).</li>
+    <li><b>Progress is a pizza.</b> "Round 2 / 3" and "Part 1 of 2 · 2/4" are gone. The card shows a small pizza with one slice per step, eaten slices in red. The "Part" moved into the title.</li>
+    <li><b>The bubble is only the reply.</b> "It worked. -$1" and friends moved out of the bot's bubble into a verdict card directly under it. The bubble keeps its red or green tint.</li>
+    <li><b>The green result box is fixed.</b> No more centred long title with a lonely check mark. On the Prompt round 2 result you now see the rule card you tapped, then a short verdict ("One rule, different bot").</li>
+    <li><b>Result screens show what you tapped.</b> Round 3: "You picked [pill] … Better [pill] …" instead of two sentences.</li>
+    <li><b>The context window is a chat.</b> The rows inside are the same customer bubbles, smaller; dropped ones are faded and struck. The navy header is gone everywhere.</li>
   </ol>
 
   <div class="pair">
-    <div class="cell"><span class="tag">Before · Prompt round 3, a WRONG answer</span>
-      <div class="box" style="background:var(--green-old);max-width:100%"><div style="font-family:var(--label);font-size:9px;letter-spacing:.06em;color:var(--ink-soft)">WHEN INFO IS MISSING</div>You picked <b>“Guess”</b>, it invents an order.<div style="color:var(--teal)">Better: <b>“Ask”</b>, it asks for the missing part.</div></div>
+    <div class="cell"><span class="tag">Round 1 · verdict inside the bubble</span>
+      <div class="row r"><div class="bub rr">Sure! The French Revolution began in 1789 when…<div class="lbl" style="color:var(--wrong);margin-top:.3rem">⚡ It worked. -$1<br>👥 Just $1 each, but word gets out…</div></div><span class="av bot"><span class="ms">smart_toy</span></span></div>
     </div>
-    <div class="cell"><span class="tag">After</span>
-      <div class="callout chunk" style="border-color:var(--wrong);background:var(--wrong-bg)"><div class="t" style="color:var(--wrong)"><span class="ms">warning</span>When info is missing</div>You picked <b>“Guess”</b>, it invents an order.<div style="display:flex;gap:.3rem;margin-top:.3rem"><span class="ms" style="color:var(--ink-soft)">arrow_forward</span><span>Better: <b>“Ask”</b>, it asks for the missing part.</span></div></div>
+    <div class="cell"><span class="tag">Round 2 · bubble, then verdict</span>
+      <div class="stack">
+        <div class="row r"><div class="bub rr">Sure! The French Revolution began in 1789 when…</div><span class="av bot"><span class="ms">smart_toy</span></span></div>
+        <div class="callout chunk" style="border-color:var(--wrong);background:var(--wrong-bg)"><div class="t" style="color:var(--wrong)"><span class="ms">bolt</span>It worked. -$1</div>Just $1 each, but word gets out and thousands show up for free essays.</div>
+      </div>
     </div>
   </div>
   <div class="pair">
-    <div class="cell"><span class="tag">Before · Memory chat</span>
-      <div class="stack">
-        <div class="row"><div class="box" style="background:#fff">Hi! What can I get you?</div></div>
-        <div class="row r"><div class="box" style="background:var(--blue-bg)">One large pepperoni, no anchovies.</div></div>
-      </div>
-      <p class="lede" style="font-size:12px;margin:.4rem 0 0">Bot left, customer right. Every other game is the opposite.</p>
+    <div class="cell"><span class="tag">Round 1 · progress as text</span>
+      <div class="card"><div style="display:flex;justify-content:space-between"><span class="lbl" style="color:var(--red)">Game · Free pizza for life</span><span class="lbl">Part 1 of 2 · 2 / 4</span></div><div style="font-size:12px;color:var(--ink-soft);margin-top:.2rem">Your bot has no guardrails yet.</div></div>
     </div>
-    <div class="cell"><span class="tag">After</span>
-      <div class="stack">
-        <div class="row"><span class="av"><span class="ms">person</span></span><div class="bub l">One large pepperoni, no anchovies.</div></div>
-        <div class="row r"><div class="bub rr">You got it! Anything else?</div><span class="av bot"><span class="ms">smart_toy</span></span></div>
-      </div>
-      <p class="lede" style="font-size:12px;margin:.4rem 0 0">Same bubble as everywhere: customer left, bot right.</p>
+    <div class="cell"><span class="tag">Round 2 · progress as pizza</span>
+      <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><span class="lbl" style="color:var(--red)">Game · Free pizza for life · Part 1</span><svg viewBox="0 0 32 32" width="22" height="22"><circle cx="16" cy="16" r="16" fill="#586158"/><path d="M16,16 L16,0 A16,16 0 0 1 32,16 Z" fill="#b7102a" stroke="#586158" stroke-width="1.5"/><path d="M16,16 L32,16 A16,16 0 0 1 16,32 Z" fill="#b7102a" stroke="#586158" stroke-width="1.5"/><path d="M16,16 L16,32 A16,16 0 0 1 0,16 Z" fill="#e6e7ee" stroke="#586158" stroke-width="1.5"/><path d="M16,16 L0,16 A16,16 0 0 1 16,0 Z" fill="#e6e7ee" stroke="#586158" stroke-width="1.5"/></svg></div><div style="font-size:12px;color:var(--ink-soft);margin-top:.2rem">Your bot has no guardrails yet.</div></div>
     </div>
   </div>
 
@@ -91,34 +87,33 @@
   <code class="cmd">npm run dev</code>
 
   <h2>3 · Five questions</h2>
-  <p class="lede">One screen each. First impression only.</p>
 
-  <div class="q"><div class="n">Q1 · Prompt, play to the end of round 3 and pick at least one bad option</div><div class="ask">On the results screen, is it obvious which choices were wrong, and does nothing look "approved" by green?</div>
-    <div class="how">Path: tap any instruction → "Add a rule" → tap the rule that starts with "If size, crust…" → "Write the bot's full instructions" → pick the <i>last</i> option in each of the 4 parts → "Switch this bot on". Expected: muted-red cards, one per wrong part, each with a grey arrow line "Better: …".</div>
-    <div class="ans"><b>wrong is clearly wrong ✓</b> <b>still confusing ✗</b></div></div>
+  <div class="q"><div class="n">Q1 · Prompt, tap any instruction, then "Add a rule", then the rule starting "If size, crust…"</div><div class="ask">Does the result screen now read as: the card you tapped, then a short green verdict?</div>
+    <div class="how">The rule card is shown back in blue (yours), the verdict says "One rule, different bot". No centred title, no orphan check mark.</div>
+    <div class="ans"><b>yes ✓</b> <b>still odd ✗ → what</b></div></div>
 
-  <div class="q"><div class="n">Q2 · Memory, tap Continue twice</div><div class="ask">Is Anna on the left and your bot on the right, like in Prompt?</div>
-    <div class="how">Both now use the same bubble with an avatar. If it feels like the bot is the customer, that is a no.</div>
-    <div class="ans"><b>sides right ✓</b> <b>confusing ✗</b></div></div>
+  <div class="q"><div class="n">Q2 · Same game, finish round 3 with the last option in each part</div><div class="ask">Do the "You picked [pill] / Better [pill]" cards feel lighter than the sentences did?</div>
+    <div class="how">Blue pill = the one you tapped. White pill = the better one. If it is still a wall, say whether the problem is the words or the layout.</div>
+    <div class="ans"><b>lighter ✓</b> <b>still heavy, layout ✗</b> <b>still heavy, words ✗</b></div></div>
 
-  <div class="q"><div class="n">Q3 · Guardrails, "See what your bot does" on customer 1, then Hallucination, pick "Made up"</div><div class="ask">Do the bot's red reply bubble (Guardrails) and the red "Fooled you" card (Hallucination) feel like the same kind of thing: "this went wrong"?</div>
-    <div class="how">They are two components on purpose (a message vs a verdict) but share the muted red. If one of them reads as something else, say which.</div>
-    <div class="ans"><b>same meaning ✓</b> <b>no ✗</b></div></div>
-
-  <div class="q"><div class="n">Q4 · Context window, send 2 messages</div><div class="ask">Does the navy-headed "Context window" box read as "what the bot sees", separate from the white "Next message" box below it?</div>
-    <div class="how">Navy header = inside the bot's head. Red header (menu in Hallucination) = something you look things up in. White = everything else.</div>
+  <div class="q"><div class="n">Q3 · Guardrails, "See what your bot does" on customer 1</div><div class="ask">Is the bubble just the bot's words, with "It worked. -$50" as its own card underneath?</div>
+    <div class="how">Same on customer 4 (the $1 essay), where the "thousands show up" line is now the card's body.</div>
     <div class="ans"><b>yes ✓</b> <b>no ✗</b></div></div>
 
-  <div class="q"><div class="n">Q5 · Any two games of your choice</div><div class="ask">Does the "Game · …" card at the top look identical in both, including where the progress sits?</div>
-    <div class="how">Progress is always top-right ("Round 2 / 3", "Part 1 of 2 · 2 / 4"). It used to be glued into the sentence in Guardrails.</div>
-    <div class="ans"><b>identical ✓</b> <b>differs ✗ → which game</b></div></div>
+  <div class="q"><div class="n">Q4 · Context window, send all 7 messages</div><div class="ask">Does the box now look like a chat, the same bubbles as everywhere, with the dropped ones crossed out?</div>
+    <div class="how">Grey strip header, small customer bubbles, dashed "out of the context window" line between old and visible.</div>
+    <div class="ans"><b>yes ✓</b> <b>no ✗</b></div></div>
+
+  <div class="q"><div class="n">Q5 · Any two games</div><div class="ask">Does the little pizza read as progress without you having to think?</div>
+    <div class="how">Eaten slices = done. Tool use has one pizza per round (3 questions), Guardrails 4 customers, Prompt 3 rounds. If you would rather see it bigger, or somewhere else, say where.</div>
+    <div class="ans"><b>reads as progress ✓</b> <b>too small ✗</b> <b>not obvious ✗</b></div></div>
 
   <h2>4 · Not for today</h2>
   <div class="dont"><ul>
+      <li>The amount of text on the Prompt round 3 result is a copy question, logged separately.</li>
       <li>Choice cards still have no radio circles; playbook steps are not drag tiles yet (Phase 2).</li>
       <li>The end screen is unchanged (Phase 3).</li>
       <li>Token, Context window, Memory and MCP still lose the left intro panel after the first screen (Phase 4).</li>
-      <li>Bot replies are now bold everywhere; if that feels heavy in Skill or Guardrails, say so, it is one line to change.</li>
     </ul></div>
 
   <h2>5 · How to answer</h2>
