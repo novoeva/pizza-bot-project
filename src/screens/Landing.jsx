@@ -1,7 +1,15 @@
 import { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
 import pizzaGuy from '../assets/pizza-guy.jpg'
+import ownerThinking from '../assets/owner-thinking-cutout.png'
 import BottomNav from '../components/BottomNav.jsx'
+import BotCanvas from '../components/BotCanvas.jsx'
+import terms from '../content/terms.json'
+
+// Static, derived once: the term names (step-2 chips) and the full id list that
+// drives a fully-assembled BotCanvas for the step-3 illustration.
+const TERM_NAMES = [...terms].sort((a, b) => a.order - b.order).map((term) => term.name)
+const ALL_TERM_IDS = terms.map((term) => term.id)
 
 /**
  * The front door. Users used to drop straight into the Workshop with no idea
@@ -246,24 +254,67 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* How it works — the scenario, as a light 3-step flow (deliberately flat,
-            so it reads as a process and doesn't look like the Why cards below). */}
+        {/* How it works — the scenario, painted with illustrations: the owner
+            wondering how to build a bot, the pile of terms he has to learn, and
+            the robot those terms assemble into. */}
         <section className="border-t-[3px] border-neutral bg-surface">
           <div className="mx-auto w-full max-w-desktop px-4 py-12 lg:px-8 lg:py-16">
-            <div className="mb-8 flex flex-col gap-2">
+            <div className="mb-10 flex flex-col gap-2">
               <h2 className="text-2xl md:text-4xl">{t.howTitle}</h2>
-              <p className="max-w-[52ch] text-sm text-text-muted md:text-base">{t.howSub}</p>
+              <p className="max-w-[60ch] text-sm text-text-muted md:text-base">{t.howSub}</p>
             </div>
-            <ol className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-3">
+            <ol className="grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-8">
               {t.steps.map((s, i) => (
-                <li key={s.title} className="flex items-start gap-4">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary font-display text-lg font-extrabold text-white">
-                    {i + 1}
-                  </span>
-                  <div className="flex flex-col gap-1">
+                <li key={s.title} className="flex flex-col items-center gap-4 text-center">
+                  {/* the visual for this step */}
+                  <div className="flex h-52 w-full items-center justify-center">
+                    {i === 0 && (
+                      <img
+                        src={ownerThinking}
+                        alt="Luigi the pizzeria owner wondering how to build a bot"
+                        loading="lazy"
+                        className="h-full w-auto max-w-full object-contain"
+                      />
+                    )}
+                    {i === 1 && (
+                      <div className="flex max-w-[24rem] flex-wrap items-center justify-center gap-2">
+                        {TERM_NAMES.map((term, ti) => (
+                          <span
+                            key={term}
+                            style={{ boxShadow: '2px 2px 0 0 var(--color-neutral)' }}
+                            className={
+                              'rounded-full border-2 border-neutral px-3 py-1 font-label text-xs ' +
+                              (ti % 3 === 0
+                                ? 'bg-primary text-white '
+                                : ti % 3 === 1
+                                  ? 'bg-surface text-text '
+                                  : 'bg-accent-soft text-text ') +
+                              (ti % 2 === 0 ? '-rotate-2' : 'rotate-2')
+                            }
+                          >
+                            {term}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    {i === 2 && (
+                      // The same robot the app assembles in the Workshop, drawn
+                      // fully built — reuses BotCanvas (SVG) instead of a heavy
+                      // raster, so it always matches the in-app bot.
+                      <BotCanvas
+                        completedTerms={ALL_TERM_IDS}
+                        sizeClassName="mx-auto block h-full w-auto"
+                      />
+                    )}
+                  </div>
+
+                  <div className="flex flex-col items-center gap-2">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-full border-[3px] border-neutral bg-primary font-display text-sm font-extrabold text-white shadow-pop">
+                      {i + 1}
+                    </span>
                     <span className="font-label text-[10px] text-tertiary">{s.label}</span>
-                    <h3 className="text-lg leading-tight">{s.title}</h3>
-                    <p className="text-sm leading-relaxed text-text-muted">{s.text}</p>
+                    <h3 className="text-lg leading-tight md:text-xl">{s.title}</h3>
+                    <p className="max-w-[38ch] text-sm leading-relaxed text-text-muted">{s.text}</p>
                   </div>
                 </li>
               ))}

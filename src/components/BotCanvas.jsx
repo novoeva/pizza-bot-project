@@ -2,264 +2,241 @@ import terms from '../content/terms.json'
 
 /**
  * The half-built robot: the meta-game's progress bar.
- * Chassis (head + torso shells) is always visible; each completed term
- * lights up its part in full colour, missing parts stay as dashed slots.
- * When every term is in, the bot powers on, eyes and core glow, pizza appears.
+ *
+ * Design ported from the Lovable "RobotAssembly" cutout so the assembled bot
+ * matches the pizza-guy cartoon on the landing page. Each of the app's 11 terms
+ * reveals one robot part; before a term is done its part is a soft dashed
+ * blueprint outline, so the whole robot reads as a plan at 0/11 and as a
+ * finished, friendly bot at 11/11.
+ *
+ * Part → term map (keeps the app's existing part meanings where they line up):
+ *   head shell    → context-window   antenna    → skill
+ *   face / eyes   → hallucination     side dials → temperature
+ *   mouth         → token             neck       → prompt
+ *   body casing   → guardrails        chest core → memory
+ *   port panel    → mcp               arms       → tool-use
+ *   wheeled base  → agent
+ *
+ * Colours reference the app's theme tokens (not raw hex), so the robot re-skins
+ * along with the rest of the UI and works if a dark theme is added. Cheeks are
+ * a soft tint of the primary colour.
  */
-export default function BotCanvas({ completedTerms = [], className = '' }) {
+const NAVY = 'var(--color-text)'
+const SHELL = 'var(--color-surface)'
+const SAGE = 'var(--color-neutral)'
+const RED = 'var(--color-primary)'
+const SKY = 'var(--color-accent)'
+const DEEP = 'var(--color-tertiary)'
+const BLUSH = 'var(--color-primary)'
+
+const SIZE_DEFAULT =
+  'mx-auto block h-auto w-full min-h-[200px] max-h-[calc(100svh-20rem)] max-w-[280px]'
+
+/**
+ * @param sizeClassName base sizing for the <svg>; defaults to the Workshop /
+ *   Progress board size. Callers that need a different footprint (e.g. the
+ *   landing page's small step illustration) pass their own.
+ */
+export default function BotCanvas({
+  completedTerms = [],
+  className = '',
+  sizeClassName = SIZE_DEFAULT,
+}) {
   const done = new Set(completedTerms)
-  const has = (id) => done.has(id)
   const powered = done.size >= terms.length
 
-  const slot = {
-    className: 'fill-slot-fill stroke-slot-empty',
-    strokeWidth: 2.5,
-    strokeDasharray: '5 5',
-    strokeLinecap: 'round',
-  }
+  /** Finished part when its term is done, else a dashed blueprint outline. */
+  const part = (id, outline, children) =>
+    done.has(id) ? (
+      <g>{children}</g>
+    ) : (
+      <g
+        fill="none"
+        stroke={NAVY}
+        strokeWidth={3}
+        strokeDasharray="7 7"
+        strokeLinecap="round"
+        opacity={0.3}
+      >
+        {outline}
+      </g>
+    )
 
   return (
     <svg
-      viewBox="0 0 260 372"
-      className={
-        'mx-auto block h-auto w-full min-h-[200px] max-h-[calc(100svh-20rem)] max-w-[280px] select-none ' +
-        className
-      }
+      viewBox="0 0 340 520"
+      className={`${sizeClassName} select-none ${className}`}
       role="img"
       aria-label={`Pizza bot, ${done.size} of ${terms.length} parts installed`}
     >
-      <ellipse cx="130" cy="352" rx="78" ry="12" className="fill-ground" />
+      {/* soft "powered on" halo once every part is in */}
+      {powered && <ellipse cx={170} cy={300} rx={150} ry={210} fill={SKY} opacity={0.14} />}
 
-      {/* SKILL, antenna */}
-      {has('skill') ? (
-        <g>
-          <line
-            x1="130"
-            y1="46"
-            x2="130"
-            y2="20"
-            className="stroke-neutral"
-            strokeWidth="4"
-            strokeLinecap="round"
-          />
-          <circle cx="130" cy="15" r="8" className="fill-tertiary stroke-text" strokeWidth="2" />
-        </g>
-      ) : (
-        <circle cx="130" cy="18" r="9" {...slot} />
+      {/* ground shadow */}
+      <ellipse cx={170} cy={486} rx={104} ry={13} fill={NAVY} opacity={0.08} />
+
+      {/* antenna → skill */}
+      {part(
+        'skill',
+        <>
+          <path d="M170 100 C170 78 170 70 170 62" />
+          <circle cx={170} cy={50} r={14} />
+        </>,
+        <>
+          <path d="M170 104 C170 82 170 72 170 64" stroke={NAVY} strokeWidth={9} strokeLinecap="round" fill="none" />
+          <circle cx={170} cy={50} r={15} fill={RED} stroke={NAVY} strokeWidth={5} />
+          <circle cx={165} cy={45} r={4} fill={SHELL} opacity={0.85} />
+        </>,
       )}
 
-      {/* head shell */}
-      <rect
-        x="76"
-        y="42"
-        width="108"
-        height="80"
-        rx="24"
-        className="fill-surface stroke-text"
-        strokeWidth="5"
-      />
-
-      {/* CONTEXT WINDOW, head panel / short-term memory chip */}
-      {has('context-window') ? (
-        <rect
-          x="94"
-          y="52"
-          width="72"
-          height="15"
-          rx="7"
-          className="fill-accent stroke-text"
-          strokeWidth="2"
-        />
-      ) : (
-        <rect x="94" y="52" width="72" height="15" rx="7" {...slot} />
+      {/* neck → prompt */}
+      {part(
+        'prompt',
+        <rect x={150} y={212} width={40} height={48} rx={14} />,
+        <>
+          <rect x={150} y={212} width={40} height={48} rx={14} fill={SAGE} stroke={NAVY} strokeWidth={5} />
+          <line x1={152} y1={234} x2={188} y2={234} stroke={NAVY} strokeWidth={4} strokeLinecap="round" />
+        </>,
       )}
 
-      {/* HALLUCINATION, eyes / reality-check filter */}
-      {has('hallucination') ? (
-        <g>
-          {powered && <circle cx="108" cy="90" r="16" className="fill-glow" />}
-          {powered && <circle cx="152" cy="90" r="16" className="fill-glow" />}
-          <circle cx="108" cy="90" r="10" className={powered ? 'fill-success' : 'fill-text'} />
-          <circle cx="152" cy="90" r="10" className={powered ? 'fill-success' : 'fill-text'} />
-        </g>
-      ) : (
-        <g>
-          <circle cx="108" cy="90" r="10" {...slot} />
-          <circle cx="152" cy="90" r="10" {...slot} />
-        </g>
+      {/* left arm → tool-use */}
+      {part(
+        'tool-use',
+        <>
+          <path d="M64 300 C36 302 28 320 30 340" />
+          <circle cx={30} cy={356} r={19} />
+        </>,
+        <>
+          <path d="M66 300 C38 302 30 320 32 340" fill="none" stroke={NAVY} strokeWidth={16} strokeLinecap="round" />
+          <path d="M66 300 C38 302 30 320 32 340" fill="none" stroke={SAGE} strokeWidth={9} strokeLinecap="round" />
+          <circle cx={30} cy={356} r={19} fill={SHELL} stroke={NAVY} strokeWidth={5} />
+          <circle cx={30} cy={356} r={8} fill={SKY} stroke={NAVY} strokeWidth={3} />
+        </>,
       )}
 
-      {/* TOKEN, voice box */}
-      {has('token') ? (
-        <g>
-          <rect x="102" y="104" width="56" height="12" rx="6" className="fill-text" />
-          <line x1="114" y1="106" x2="114" y2="114" className="stroke-surface" strokeWidth="2" />
-          <line x1="124" y1="106" x2="124" y2="114" className="stroke-surface" strokeWidth="2" />
-          <line x1="134" y1="106" x2="134" y2="114" className="stroke-surface" strokeWidth="2" />
-          <line x1="144" y1="106" x2="144" y2="114" className="stroke-surface" strokeWidth="2" />
-        </g>
-      ) : (
-        <rect x="102" y="104" width="56" height="12" rx="6" {...slot} />
+      {/* right arm → tool-use */}
+      {part(
+        'tool-use',
+        <>
+          <path d="M276 300 C304 302 312 320 310 340" />
+          <circle cx={310} cy={356} r={19} />
+        </>,
+        <>
+          <path d="M274 300 C302 302 310 320 308 340" fill="none" stroke={NAVY} strokeWidth={16} strokeLinecap="round" />
+          <path d="M274 300 C302 302 310 320 308 340" fill="none" stroke={SAGE} strokeWidth={9} strokeLinecap="round" />
+          <circle cx={310} cy={356} r={19} fill={SHELL} stroke={NAVY} strokeWidth={5} />
+          <circle cx={310} cy={356} r={8} fill={SKY} stroke={NAVY} strokeWidth={3} />
+        </>,
       )}
 
-      {/* TEMPERATURE, creativity dial on the side of the head */}
-      {has('temperature') ? (
-        <g>
-          {powered && <circle cx="177" cy="74" r="13" className="fill-glow" />}
-          <circle cx="177" cy="74" r="10" className="fill-accent stroke-text" strokeWidth="2" />
-          <line
-            x1="177"
-            y1="74"
-            x2="183"
-            y2="68"
-            className="stroke-text"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-          />
-          <circle cx="172" cy="82" r="1.4" className="fill-text" />
-          <circle cx="182" cy="82" r="1.4" className="fill-text" />
-          <circle cx="177" cy="74" r="2" className="fill-text" />
-        </g>
-      ) : (
-        <circle cx="177" cy="74" r="10" {...slot} />
+      {/* wheeled base → agent */}
+      {part(
+        'agent',
+        <>
+          <rect x={88} y={418} width={164} height={30} rx={15} />
+          <circle cx={118} cy={458} r={22} />
+          <circle cx={222} cy={458} r={22} />
+        </>,
+        <>
+          <rect x={88} y={416} width={164} height={32} rx={16} fill={SAGE} stroke={NAVY} strokeWidth={5} />
+          <circle cx={118} cy={458} r={22} fill={SHELL} stroke={NAVY} strokeWidth={5} />
+          <circle cx={118} cy={458} r={9} fill={SKY} stroke={NAVY} strokeWidth={3} />
+          <circle cx={222} cy={458} r={22} fill={SHELL} stroke={NAVY} strokeWidth={5} />
+          <circle cx={222} cy={458} r={9} fill={SKY} stroke={NAVY} strokeWidth={3} />
+        </>,
       )}
 
-      {/* neck */}
-      <rect x="118" y="120" width="24" height="16" rx="4" className="fill-neutral" />
-
-      {/* GUARDRAILS, safety-casing bumpers (behind torso) */}
-      {has('guardrails') ? (
-        <g>
-          <rect
-            x="52"
-            y="140"
-            width="30"
-            height="26"
-            rx="12"
-            className="fill-primary stroke-text"
-            strokeWidth="2"
-          />
-          <rect
-            x="178"
-            y="140"
-            width="30"
-            height="26"
-            rx="12"
-            className="fill-primary stroke-text"
-            strokeWidth="2"
-          />
-        </g>
-      ) : (
-        <g>
-          <rect x="52" y="140" width="30" height="26" rx="12" {...slot} />
-          <rect x="178" y="140" width="30" height="26" rx="12" {...slot} />
-        </g>
+      {/* body shell + red side thrusters → guardrails (safety casing) */}
+      {part(
+        'guardrails',
+        <>
+          <rect x={64} y={252} width={212} height={172} rx={52} />
+          <path d="M64 288 q-22 -10 -22 14 q0 24 22 16 z" />
+          <path d="M276 288 q22 -10 22 14 q0 24 -22 16 z" />
+        </>,
+        <>
+          <path d="M66 288 q-24 -12 -24 14 q0 26 24 18 z" fill={RED} stroke={NAVY} strokeWidth={5} />
+          <path d="M274 288 q24 -12 24 14 q0 26 -24 18 z" fill={RED} stroke={NAVY} strokeWidth={5} />
+          <rect x={64} y={252} width={212} height={172} rx={52} fill={SHELL} stroke={NAVY} strokeWidth={7} />
+        </>,
       )}
 
-      {/* torso shell */}
-      <rect
-        x="62"
-        y="134"
-        width="136"
-        height="120"
-        rx="30"
-        className="fill-surface stroke-text"
-        strokeWidth="5"
-      />
-
-      {/* MCP, universal port pack */}
-      {has('mcp') ? (
-        <g>
-          <rect
-            x="192"
-            y="158"
-            width="26"
-            height="56"
-            rx="10"
-            className="fill-neutral stroke-text"
-            strokeWidth="2"
-          />
-          <rect x="198" y="168" width="14" height="6" rx="3" className="fill-accent" />
-          <rect x="198" y="180" width="14" height="6" rx="3" className="fill-accent" />
-          <rect x="198" y="192" width="14" height="6" rx="3" className="fill-accent" />
-        </g>
-      ) : (
-        <rect x="192" y="158" width="26" height="56" rx="10" {...slot} />
+      {/* control / port panel → mcp */}
+      {part(
+        'mcp',
+        <>
+          <rect x={196} y={294} width={54} height={92} rx={20} />
+          <circle cx={106} cy={392} r={9} />
+        </>,
+        <>
+          <rect x={196} y={294} width={54} height={92} rx={20} fill={SAGE} stroke={NAVY} strokeWidth={5} />
+          <rect x={208} y={312} width={30} height={10} rx={5} fill={SKY} stroke={NAVY} strokeWidth={3} />
+          <rect x={208} y={336} width={30} height={10} rx={5} fill={SKY} stroke={NAVY} strokeWidth={3} />
+          <circle cx={223} cy={368} r={8} fill={RED} stroke={NAVY} strokeWidth={3} />
+          <circle cx={106} cy={392} r={9} fill={SKY} stroke={NAVY} strokeWidth={3} />
+          <circle cx={132} cy={392} r={9} fill={SKY} stroke={NAVY} strokeWidth={3} />
+        </>,
       )}
 
-      {/* TOOL USE, arms */}
-      {has('tool-use') ? (
-        <g>
-          <rect x="34" y="176" width="30" height="14" rx="7" className="fill-neutral" />
-          <circle cx="34" cy="183" r="12" className="fill-neutral stroke-text" strokeWidth="2" />
-          <circle cx="34" cy="183" r="5" className="fill-accent" />
-          <rect x="196" y="176" width="30" height="14" rx="7" className="fill-neutral" />
-          <circle cx="226" cy="183" r="12" className="fill-neutral stroke-text" strokeWidth="2" />
-          <circle cx="226" cy="183" r="5" className="fill-accent" />
-        </g>
-      ) : (
-        <g>
-          <circle cx="34" cy="183" r="12" {...slot} />
-          <circle cx="226" cy="183" r="12" {...slot} />
-        </g>
+      {/* chest core → memory */}
+      {part(
+        'memory',
+        <>
+          <circle cx={128} cy={322} r={38} />
+          <circle cx={128} cy={322} r={17} />
+        </>,
+        <>
+          {powered && <circle cx={128} cy={322} r={44} fill={SKY} opacity={0.5} />}
+          <circle cx={128} cy={322} r={38} fill={RED} stroke={NAVY} strokeWidth={6} />
+          <circle cx={128} cy={322} r={22} fill={SHELL} stroke={NAVY} strokeWidth={4} />
+          <circle cx={128} cy={322} r={10} fill={SKY} stroke={NAVY} strokeWidth={3} />
+        </>,
       )}
 
-      {/* MEMORY, hard-drive core (chest) */}
-      {has('memory') ? (
-        <g>
-          {powered && <circle cx="130" cy="176" r="26" className="fill-glow" />}
-          <circle cx="130" cy="176" r="20" className="fill-primary stroke-text" strokeWidth="2" />
-          <circle cx="130" cy="176" r="9" className="fill-accent" />
-        </g>
-      ) : (
-        <circle cx="130" cy="176" r="20" {...slot} />
+      {/* side dials → temperature */}
+      {part(
+        'temperature',
+        <>
+          <rect x={56} y={140} width={22} height={44} rx={11} />
+          <rect x={262} y={140} width={22} height={44} rx={11} />
+        </>,
+        <>
+          <rect x={56} y={140} width={22} height={44} rx={11} fill={SAGE} stroke={NAVY} strokeWidth={5} />
+          <rect x={262} y={140} width={22} height={44} rx={11} fill={SAGE} stroke={NAVY} strokeWidth={5} />
+        </>,
       )}
 
-      {/* PROMPT, instruction dial */}
-      {has('prompt') ? (
-        <g>
-          <circle cx="96" cy="220" r="13" className="fill-accent stroke-text" strokeWidth="2" />
-          <line
-            x1="96"
-            y1="220"
-            x2="103"
-            y2="213"
-            className="stroke-text"
-            strokeWidth="3"
-            strokeLinecap="round"
-          />
-        </g>
-      ) : (
-        <circle cx="96" cy="220" r="13" {...slot} />
-      )}
-      <circle cx="164" cy="220" r="5" className="fill-slot-empty" />
-
-      {/* AGENT, legs / wheelbase */}
-      {has('agent') ? (
-        <g>
-          <rect x="82" y="254" width="96" height="22" rx="11" className="fill-neutral" />
-          <circle cx="100" cy="286" r="16" className="fill-neutral stroke-text" strokeWidth="2" />
-          <circle cx="100" cy="286" r="6" className="fill-accent" />
-          <circle cx="160" cy="286" r="16" className="fill-neutral stroke-text" strokeWidth="2" />
-          <circle cx="160" cy="286" r="6" className="fill-accent" />
-        </g>
-      ) : (
-        <g>
-          <rect x="82" y="254" width="96" height="22" rx="11" {...slot} />
-          <circle cx="100" cy="286" r="14" {...slot} />
-          <circle cx="160" cy="286" r="14" {...slot} />
-        </g>
+      {/* head shell → context-window */}
+      {part(
+        'context-window',
+        <rect x={76} y={104} width={188} height={140} rx={48} />,
+        <rect x={76} y={104} width={188} height={140} rx={48} fill={SHELL} stroke={NAVY} strokeWidth={7} />,
       )}
 
-      {/* pizza, only once fully powered on */}
-      {powered && (
-        <g>
-          <circle cx="226" cy="176" r="22" className="fill-accent stroke-primary" strokeWidth="3" />
-          <circle cx="220" cy="170" r="3" className="fill-primary" />
-          <circle cx="232" cy="172" r="3" className="fill-primary" />
-          <circle cx="223" cy="183" r="3" className="fill-primary" />
-          <circle cx="233" cy="182" r="2.5" className="fill-primary" />
-        </g>
+      {/* face / visor with eyes → hallucination */}
+      {part(
+        'hallucination',
+        <>
+          <rect x={98} y={128} width={144} height={78} rx={34} />
+          <circle cx={140} cy={168} r={12} />
+          <circle cx={200} cy={168} r={12} />
+        </>,
+        <>
+          <rect x={98} y={128} width={144} height={78} rx={34} fill={SKY} stroke={NAVY} strokeWidth={6} />
+          <circle cx={140} cy={168} r={14} fill={NAVY} />
+          <circle cx={200} cy={168} r={14} fill={NAVY} />
+          <circle cx={135} cy={162} r={5} fill={SHELL} />
+          <circle cx={195} cy={162} r={5} fill={SHELL} />
+          <circle cx={112} cy={192} r={8} fill={BLUSH} opacity={0.3} />
+          <circle cx={228} cy={192} r={8} fill={BLUSH} opacity={0.3} />
+        </>,
+      )}
+
+      {/* mouth / smile → token (voice box) */}
+      {part(
+        'token',
+        <path d="M144 220 q26 20 52 0" />,
+        <path d="M144 218 q26 22 52 0" fill="none" stroke={DEEP} strokeWidth={7} strokeLinecap="round" />,
       )}
     </svg>
   )
