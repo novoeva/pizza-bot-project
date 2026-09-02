@@ -6,6 +6,7 @@ import {
   recallQuestion,
   recallInWindow,
   recallDropped,
+  pinHint,
   goldfishNote,
   newChatQuestion,
   newChatReply,
@@ -23,23 +24,24 @@ import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
  * Context window game, { termId, onComplete } interface.
  * A live "Context window" panel shows exactly what the bot can see right now.
  * Beat 1: send messages until the window overflows; the earliest line ("no
- * olives!!") scrolls out of view and the bot can't recall it. Beat 2: a brand
- * new order starts with an empty window, so nothing carries over on its own.
+ * olives!!") scrolls out of view and the bot can't recall it. Beat 1b: as the
+ * owner you can't enlarge the window, but you decide what goes in it, so you
+ * pin the allergy and it stops dropping. Beat 2: a brand new order starts with
+ * an empty window, so nothing carries over on its own.
  */
 export default function ContextWindowGame({ termId, onComplete }) {
   const term = terms.find((t) => t.id === termId)
   const [phase, setPhase] = useState('fill') // 'fill' | 'newchat' | 'reveal'
   const [sentCount, setSentCount] = useState(0)
   const [recalled, setRecalled] = useState(false)
+  const [pinned, setPinned] = useState(false) // owner pinned the allergy back in
   const [newChatAsked, setNewChatAsked] = useState(false)
 
-  useGameScroll(phase)
+  useGameScroll(phase, `${recalled}:${pinned}`)
 
   const sent = order.slice(0, sentCount)
-  const inWindow = sent.slice(-WINDOW_SIZE)
   const allSent = sentCount === order.length
   const nextMessage = order[sentCount]
-  const criticalInWindow = inWindow.some((m) => m.critical)
 
   const instruction = (sub) => (
     <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
@@ -148,7 +150,7 @@ export default function ContextWindowGame({ termId, onComplete }) {
     <div className="flex flex-col gap-3">
       <GameIntro term={term} />
 
-      <ContextPanel sent={sent} />
+      <ContextPanel sent={sent} pinned={pinned} />
 
       {!allSent && (
         <div className="rounded-md border-[3px] border-neutral bg-surface p-3 shadow-pop">
@@ -184,35 +186,59 @@ export default function ContextWindowGame({ termId, onComplete }) {
 
       {allSent && recalled && (
         <>
+          {/* Ask #1 — the allergy has already scrolled out, so the bot can't answer. */}
           <div className="ml-auto max-w-[85%] self-end rounded-md border-[3px] border-neutral bg-accent-soft px-4 py-2 text-sm text-text shadow-pop">
             "{recallQuestion}"
           </div>
-          <div
-            className={
-              'max-w-[85%] self-start rounded-md border-[3px] px-4 py-3 shadow-pop ' +
-              (criticalInWindow ? 'border-success bg-success-bg' : 'border-danger bg-danger-bg')
-            }
-          >
-            <p
-              className={
-                'mb-1 flex items-center gap-1 font-label text-[11px] font-bold ' +
-                (criticalInWindow ? 'text-success' : 'text-danger')
-              }
-            >
-              <span className="material-symbols-rounded text-[15px]">
-                {criticalInWindow ? 'check_circle' : 'visibility_off'}
-              </span>
-              {criticalInWindow ? 'Still in the context window' : 'Out of the context window'}
+          <div className="max-w-[85%] self-start rounded-md border-[3px] border-danger bg-danger-bg px-4 py-3 shadow-pop">
+            <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger">
+              <span className="material-symbols-rounded text-[15px]">visibility_off</span>
+              Out of the context window
             </p>
-            <p className="text-[13px] leading-snug text-text">
-              {criticalInWindow ? recallInWindow : recallDropped}
-            </p>
+            <p className="text-[13px] leading-snug text-text">{recallDropped}</p>
           </div>
-          <GameActions>
-            <GameActionButton variant="primary" icon="arrow_forward" onClick={() => setPhase('newchat')}>
-              Start a new order
-            </GameActionButton>
-          </GameActions>
+
+          {!pinned ? (
+            <>
+              {/* Beat 1b: the owner's move — you can't grow the window, but you
+                  decide what stays in it. */}
+              <div className="rounded-md border-[3px] border-tertiary bg-surface px-3 py-2 shadow-pop">
+                <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-tertiary">
+                  <span className="material-symbols-rounded text-[15px]">push_pin</span>
+                  You're the owner. You can fix this.
+                </p>
+                <p className="text-[13px] leading-snug text-text">{pinHint}</p>
+              </div>
+              <GameActions>
+                <GameActionButton variant="primary" icon="push_pin" onClick={() => setPinned(true)}>
+                  Pin the allergy to the top
+                </GameActionButton>
+              </GameActions>
+            </>
+          ) : (
+            <>
+              {/* Ask #2 — same question, but the pinned line is still in view. */}
+              <div className="ml-auto max-w-[85%] self-end rounded-md border-[3px] border-neutral bg-accent-soft px-4 py-2 text-sm text-text shadow-pop">
+                "{recallQuestion}"
+              </div>
+              <div className="max-w-[85%] self-start rounded-md border-[3px] border-success bg-success-bg px-4 py-3 shadow-pop">
+                <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-success">
+                  <span className="material-symbols-rounded text-[15px]">push_pin</span>
+                  Pinned, so it stays in the window
+                </p>
+                <p className="text-[13px] leading-snug text-text">{recallInWindow}</p>
+              </div>
+              <GameActions>
+                <GameActionButton
+                  variant="primary"
+                  icon="arrow_forward"
+                  onClick={() => setPhase('newchat')}
+                >
+                  Start a new order
+                </GameActionButton>
+              </GameActions>
+            </>
+          )}
         </>
       )}
     </div>
@@ -224,9 +250,16 @@ export default function ContextWindowGame({ termId, onComplete }) {
  * scrolled out sit faded and struck through above a boundary line; what the
  * bot can actually see sits below it.
  */
-function ContextPanel({ sent }) {
-  const dropped = sent.slice(0, Math.max(0, sent.length - WINDOW_SIZE))
-  const inWindow = sent.slice(-WINDOW_SIZE)
+function ContextPanel({ sent, pinned = false }) {
+  const critical = sent.find((m) => m.critical)
+  const showPinned = pinned && Boolean(critical)
+  // A pinned line is reserved its own slot: it never counts toward the sliding
+  // window and never scrolls out. The rest of the messages share what's left.
+  const rest = showPinned ? sent.filter((m) => !m.critical) : sent
+  const cap = showPinned ? WINDOW_SIZE - 1 : WINDOW_SIZE
+  const dropped = rest.slice(0, Math.max(0, rest.length - cap))
+  const inWindow = rest.slice(-cap)
+  const seen = inWindow.length + (showPinned ? 1 : 0)
   return (
     <div className="overflow-hidden rounded-md border-[3px] border-neutral bg-surface shadow-card">
       <div className="flex items-center justify-between bg-text px-3 py-1.5 font-label text-[10px] text-white">
@@ -235,7 +268,7 @@ function ContextPanel({ sent }) {
           Context window · what the bot sees
         </span>
         <span>
-          {inWindow.length} / {WINDOW_SIZE}
+          {seen} / {WINDOW_SIZE}
         </span>
       </div>
 
@@ -251,6 +284,15 @@ function ContextPanel({ sent }) {
           </p>
         ) : (
           <>
+            {showPinned && (
+              <div className="flex items-center gap-2 rounded-md border-2 border-success bg-success-bg px-3 py-1.5 text-[13px] text-text">
+                <span className="material-symbols-rounded text-[14px] text-success">push_pin</span>
+                <span className="font-bold">{critical.text}</span>
+                <span className="ml-auto shrink-0 font-label text-[10px] font-bold text-success">
+                  pinned
+                </span>
+              </div>
+            )}
             {dropped.map((m) => (
               <div
                 key={m.id}

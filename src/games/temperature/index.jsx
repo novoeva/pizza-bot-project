@@ -10,6 +10,7 @@ import {
 } from './content.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 
 /**
@@ -50,9 +51,16 @@ export default function TemperatureGame({ termId, onComplete }) {
       setRolls((r) => r + 1)
     }
 
-    return (
-      <div className="flex flex-col gap-3">
-        <GameIntro term={term} />
+    const main = (
+      <>
+        {/* This beat's own instruction, at the top of the active column so it's
+            always the current step (the constant orientation stays on the left). */}
+        <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
+          <p className="font-label text-[11px] text-primary">Game · Feel the dial</p>
+          <p className="mt-1 text-[13px] leading-snug text-text-muted">
+            Drag the temperature from low to high and watch the odds shift, then roll to see which word your bot picks.
+          </p>
+        </div>
 
         {/* The sentence the bot is about to finish */}
         <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-4 text-center shadow-pop">
@@ -93,8 +101,7 @@ export default function TemperatureGame({ termId, onComplete }) {
             step={0.1}
             value={temp}
             onChange={(e) => setTemp(Number(e.target.value))}
-            className="w-full"
-            style={{ accentColor: 'var(--color-primary)' }}
+            className="range-chunky"
             aria-label="Temperature"
           />
           <div className="mt-1 flex justify-between font-label text-[10px] text-text-muted">
@@ -118,7 +125,7 @@ export default function TemperatureGame({ termId, onComplete }) {
                     className={
                       'w-24 shrink-0 rounded border-2 px-1.5 py-1 text-center font-mono text-xs ' +
                       (isTop
-                        ? 'border-neutral bg-accent-soft font-bold text-tertiary'
+                        ? 'border-neutral bg-cheese-bg font-bold text-cheese-dim'
                         : 'border-neutral bg-muted text-text-muted')
                     }
                   >
@@ -126,7 +133,7 @@ export default function TemperatureGame({ termId, onComplete }) {
                   </div>
                   <div className="h-4 flex-1 overflow-hidden rounded-full border-2 border-neutral bg-surface">
                     <div
-                      className={'h-full transition-[width] duration-150 ' + (isTop ? 'bg-success' : 'bg-tertiary')}
+                      className={'h-full transition-[width] duration-150 ' + (isTop ? 'bg-cheese' : 'bg-tertiary')}
                       style={{ width: `${o.pct}%` }}
                     />
                   </div>
@@ -152,7 +159,14 @@ export default function TemperatureGame({ termId, onComplete }) {
             Roll again
           </button>
         )}
+      </>
+    )
 
+    // Left: read-once orientation (what temperature is + Your role). Right: the
+    // live dial, the distribution and the roll — the part you actually touch.
+    return (
+      <>
+        <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} />
         <GameActions>
           {!interacted ? (
             <GameActionButton variant="accent" icon="casino" onClick={roll}>
@@ -168,7 +182,7 @@ export default function TemperatureGame({ termId, onComplete }) {
             </GameActionButton>
           )}
         </GameActions>
-      </div>
+      </>
     )
   }
 
@@ -194,8 +208,10 @@ export default function TemperatureGame({ termId, onComplete }) {
       setPick(null)
     }
 
-    return (
-      <div className="flex flex-col gap-3">
+    // Left column keeps the same orientation as beat 1 (the term + Your role),
+    // so it stays put while the right column switches from the dial to the jobs.
+    const main = (
+      <>
         <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
           <div className="flex items-center justify-between">
             <p className="font-label text-[11px] text-primary">Game · Pick the setting</p>
@@ -203,7 +219,6 @@ export default function TemperatureGame({ termId, onComplete }) {
               {roundIndex + 1} / {taskRounds.length}
             </span>
           </div>
-          <h1 className="text-2xl leading-tight">Temperature</h1>
           <p className="mt-1 text-[13px] leading-snug text-text-muted">
             Same bot, very different jobs. For each one, decide which way to turn the dial.
           </p>
@@ -237,37 +252,42 @@ export default function TemperatureGame({ termId, onComplete }) {
             </button>
           </div>
         ) : (
-          <>
-            <div
+          <div
+            className={
+              'rounded-md border-[3px] px-4 py-3 shadow-pop ' +
+              (correct ? 'border-success bg-success-bg' : 'border-danger bg-danger-bg')
+            }
+          >
+            <p
               className={
-                'rounded-md border-[3px] px-4 py-3 shadow-pop ' +
-                (correct ? 'border-success bg-success-bg' : 'border-danger bg-danger-bg')
+                'flex items-center gap-1.5 font-label text-sm font-bold ' +
+                (correct ? 'text-success' : 'text-danger')
               }
             >
-              <p
-                className={
-                  'flex items-center gap-1.5 font-label text-sm font-bold ' +
-                  (correct ? 'text-success' : 'text-danger')
-                }
-              >
-                <span className="material-symbols-rounded text-[18px]">
-                  {correct ? 'check_circle' : 'cancel'}
-                </span>
-                {correct
-                  ? `Right, turn it ${round.answer === 'low' ? 'down' : 'up'}`
-                  : `Better to turn it ${round.answer === 'low' ? 'down' : 'up'}`}
-              </p>
-              <p className="mt-1 text-[13px] leading-snug text-text">{round.why}</p>
-            </div>
-
-            <GameActions>
-              <GameActionButton variant="primary" icon="arrow_forward" onClick={next}>
-                {isLast ? 'See what this means' : 'Next job'}
-              </GameActionButton>
-            </GameActions>
-          </>
+              <span className="material-symbols-rounded text-[18px]">
+                {correct ? 'check_circle' : 'cancel'}
+              </span>
+              {correct
+                ? `Right, turn it ${round.answer === 'low' ? 'down' : 'up'}`
+                : `Better to turn it ${round.answer === 'low' ? 'down' : 'up'}`}
+            </p>
+            <p className="mt-1 text-[13px] leading-snug text-text">{round.why}</p>
+          </div>
         )}
-      </div>
+      </>
+    )
+
+    return (
+      <>
+        <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} />
+        {answered && (
+          <GameActions>
+            <GameActionButton variant="primary" icon="arrow_forward" onClick={next}>
+              {isLast ? 'See what this means' : 'Next job'}
+            </GameActionButton>
+          </GameActions>
+        )}
+      </>
     )
   }
 

@@ -11,12 +11,50 @@ import {
 } from './rounds.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 
-function CategoryPicker({ category, value, onPick }) {
+// Each pickable type gets its OWN colour + pictogram, so an "Instruction"
+// (the bot's base prompt) and a "Rule" (a constraint) read as different things
+// at a glance, not just different labels.
+const CHOICE_STYLES = {
+  Instruction: { tag: 'Instruction you give your bot', icon: 'description', panel: 'bg-accent-soft', accent: 'text-tertiary' },
+  Rule: { tag: 'Rule you add to your bot', icon: 'gavel', panel: 'bg-cheese-bg', accent: 'text-cheese-dim' },
+}
+
+// A pickable INSTRUCTION/RULE the player writes into the bot. Its own visual
+// family (colour-coded icon panel on the left + a type tag on the card),
+// deliberately NOT a chat bubble — so a "rule you give the bot" never reads as
+// a "message".
+function ChoiceCard({ type, label, onClick }) {
+  const s = CHOICE_STYLES[type]
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="press flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-surface text-left shadow-pop"
+    >
+      <span
+        className={'flex w-11 shrink-0 items-center justify-center border-r-[3px] border-neutral ' + s.panel + ' ' + s.accent}
+        aria-hidden="true"
+      >
+        <span className="material-symbols-rounded text-[20px]">{s.icon}</span>
+      </span>
+      <span className="flex-1 px-3 py-3">
+        <span className={'block font-label text-[10px] ' + s.accent}>{s.tag}</span>
+        <span className="mt-0.5 block font-bold leading-snug text-text">{label}</span>
+      </span>
+    </button>
+  )
+}
+
+function CategoryPicker({ index, category, value, onPick }) {
   return (
     <div>
-      <p className="mb-1 font-label text-[11px] text-text-muted">{category.name}</p>
+      <p className="mb-1 font-label text-[11px] text-text-muted">
+        {index != null && <span className="text-tertiary">Part {index} · </span>}
+        {category.name}
+      </p>
       <div className="flex flex-wrap gap-2">
         {category.options.map((opt) => (
           <button
@@ -47,6 +85,7 @@ function CategoryPicker({ category, value, onPick }) {
  */
 export default function PromptGame({ termId, onComplete }) {
   const [phase, setPhase] = useState('round1')
+  const [round1Pick, setRound1Pick] = useState(null)
   const [round2Pick, setRound2Pick] = useState(null)
   const [round3Picks, setRound3Picks] = useState({})
 
@@ -60,20 +99,53 @@ export default function PromptGame({ termId, onComplete }) {
 
   const round3Complete = round3Categories.every((c) => round3Picks[c.name])
 
+  // A received chat MESSAGE: avatar beside a rounded speech bubble (tail on the
+  // top-left), constrained width. Deliberately a different visual family from
+  // the instruction/rule cards, so "a message" never reads as "a rule".
   const customerBanner = (
-    <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-3 text-sm shadow-pop">
-      <span className="font-label text-[11px] text-text-muted">Customer says </span>
-      <span className="font-bold text-text">{customerRequest}</span>
+    <div className="flex items-start gap-2">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-surface">
+        <span className="material-symbols-rounded text-[20px] text-text-muted">person</span>
+      </span>
+      <div className="max-w-[85%]">
+        <p className="mb-1 font-label text-[10px] text-text-muted">Customer</p>
+        <div className="rounded-2xl rounded-tl-sm border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop">
+          <p className="font-bold leading-snug text-text">{customerRequest}</p>
+        </div>
+      </div>
     </div>
   )
 
+  // The bot's reply — a sent MESSAGE (robot avatar, right-aligned), the mirror
+  // of the customer bubble, so you literally see what your instruction produced.
+  const botReplyBubble = (text) => (
+    <div className="flex items-start justify-end gap-2">
+      <div className="max-w-[85%]">
+        <p className="mb-1 text-right font-label text-[10px] text-text-muted">Your bot</p>
+        <div className="rounded-2xl rounded-tr-sm border-[3px] border-neutral bg-surface px-4 py-3 shadow-pop">
+          <p className="font-bold leading-snug text-text">{text}</p>
+        </div>
+      </div>
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary">
+        <span className="material-symbols-rounded text-[20px] text-white">smart_toy</span>
+      </span>
+    </div>
+  )
+
+  // Left column: constant orientation (what a prompt is + Your role).
+  const stage = (main) => (
+    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} />
+  )
+
+  // Per-phase instruction, at the top of the right column so it's always the
+  // current step. The term name/role live on the left, so this stays slim.
   const instruction = (round, sub) => (
     <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-      <p className="font-label text-[11px] text-primary">Game · You build the bot</p>
-      <h1 className="text-2xl leading-tight">Prompt</h1>
-      <p className="mt-1 font-label text-[11px] text-text-muted">
-        Round {round} / 3, {sub}
-      </p>
+      <div className="flex items-center justify-between">
+        <p className="font-label text-[11px] text-primary">Game · You build the bot</p>
+        <span className="font-label text-[11px] text-text-muted">Round {round} / 3</span>
+      </div>
+      <p className="mt-1 text-[13px] leading-snug text-text-muted">{sub}</p>
     </div>
   )
 
@@ -110,7 +182,7 @@ export default function PromptGame({ termId, onComplete }) {
   if (phase === 'round3-result') {
     const wrongRows = round3Categories.filter((c) => round3Picks[c.name] !== c.correct)
     const allRight = wrongRows.length === 0
-    return (
+    return stage(
       <div className="flex flex-col gap-3">
         {customerBanner}
         {allRight ? (
@@ -157,14 +229,17 @@ export default function PromptGame({ termId, onComplete }) {
   }
 
   if (phase === 'round3') {
-    return (
+    return stage(
       <div className="flex flex-col gap-3">
-        {instruction(3, 'assemble your bot’s full instructions.')}
-        {customerBanner}
+        {instruction(
+          3,
+          `Now put it all together. Your bot’s instructions come in ${round3Categories.length} parts — pick the best option in each, and together they’re the complete prompt your bot runs on.`,
+        )}
         <div className="flex flex-col gap-4">
-          {round3Categories.map((c) => (
+          {round3Categories.map((c, i) => (
             <CategoryPicker
               key={c.name}
+              index={i + 1}
               category={c}
               value={round3Picks[c.name]}
               onPick={pickRound3}
@@ -186,7 +261,7 @@ export default function PromptGame({ termId, onComplete }) {
   }
 
   if (phase === 'round2-result') {
-    return (
+    return stage(
       <div className="flex flex-col gap-3">
         {customerBanner}
         <div
@@ -235,23 +310,21 @@ export default function PromptGame({ termId, onComplete }) {
   }
 
   if (phase === 'round2') {
-    return (
+    return stage(
       <div className="flex flex-col gap-3">
-        {instruction(2, 'your bot invents things. Add one rule to stop it.')}
+        {instruction(2, 'Your bot invents things. Add one rule to stop it — tap one.')}
         {customerBanner}
         <div className="flex flex-col gap-2">
           {round2Options.map((opt) => (
-            <button
+            <ChoiceCard
               key={opt.label}
-              type="button"
+              type="Rule"
+              label={opt.label}
               onClick={() => {
                 setRound2Pick(opt)
                 setPhase('round2-result')
               }}
-              className="press rounded-md border-[3px] border-neutral bg-surface px-3 py-4 text-left font-bold text-text shadow-pop"
-            >
-              {opt.label}
-            </button>
+            />
           ))}
         </div>
       </div>
@@ -259,18 +332,18 @@ export default function PromptGame({ termId, onComplete }) {
   }
 
   if (phase === 'round1-result') {
-    return (
+    return stage(
       <div className="flex flex-col gap-3">
+        {instruction(1, 'Here’s what your bot actually does with that instruction.')}
         {customerBanner}
-        <div className="rounded-lg border-[3px] border-neutral bg-danger-bg p-4 text-center shadow-card">
-          <p className="mb-2 font-label text-[11px] font-bold text-danger">
-            Your bot's instructions were missing too much
+        {round1Pick && botReplyBubble(round1Pick.reply)}
+        <div className="rounded-lg border-[3px] border-danger bg-danger-bg p-4 shadow-card">
+          <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger">
+            <span className="material-symbols-rounded text-[15px]">warning</span>
+            The problem
           </p>
           <p className="text-[15px] leading-snug text-text">{round1Result}</p>
         </div>
-        <p className="text-center font-label text-[11px] text-text-muted">
-          You never told it what to do when the order is incomplete, so it decided for you.
-        </p>
         <GameActions>
           <GameActionButton variant="primary" icon="arrow_forward" onClick={() => setPhase('round2')}>
             Add a rule to your bot
@@ -280,23 +353,21 @@ export default function PromptGame({ termId, onComplete }) {
     )
   }
 
-  return (
+  return stage(
     <div className="flex flex-col gap-3">
-      <GameIntro term={term} />
+      {instruction(1, 'Which instruction do you give your bot? Tap one.')}
       {customerBanner}
-      <p className="font-label text-[11px] text-text-muted">
-        Pick the instruction you’ll give your bot:
-      </p>
       <div className="flex flex-col gap-2">
         {round1Options.map((opt) => (
-          <button
+          <ChoiceCard
             key={opt.label}
-            type="button"
-            onClick={() => setPhase('round1-result')}
-            className="press rounded-md border-[3px] border-neutral bg-surface px-3 py-4 text-left font-bold text-text shadow-pop"
-          >
-            {opt.label}
-          </button>
+            type="Instruction"
+            label={opt.label}
+            onClick={() => {
+              setRound1Pick(opt)
+              setPhase('round1-result')
+            }}
+          />
         ))}
       </div>
     </div>

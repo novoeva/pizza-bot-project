@@ -3,6 +3,7 @@ import { useGameScroll } from '../../lib/useGameScroll.js'
 import { menu, rounds } from './content.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 
 /**
@@ -19,7 +20,10 @@ export default function HallucinationGame({ termId, onComplete }) {
   const [pick, setPick] = useState(null) // null | 'trust' | 'fake'
   const [done, setDone] = useState(false)
 
-  useGameScroll(`${index}:${done}`)
+  // `pick` as the in-page `within` key: choosing Trust/Made up appends the
+  // feedback + Next button below the choices, so reveal it instead of leaving
+  // it stranded below the fold on taller (desktop/web) viewports.
+  useGameScroll(`${index}:${done}`, pick || '')
 
   const round = rounds[index]
   const isLast = index === rounds.length - 1
@@ -75,11 +79,20 @@ export default function HallucinationGame({ termId, onComplete }) {
     )
   }
 
-  return (
-    <div className="flex flex-col gap-2">
+  // Left column: read-once orientation only — what the term is and how to play.
+  const context = (
+    <>
       <GameIntro term={term} />
+    </>
+  )
 
-      {/* Reference menu */}
+  // Right column: everything you actually play with, together — the reference
+  // menu you check claims against, the claim progress, the claim itself, the
+  // choices, and the feedback that lands in place once you pick.
+  const main = (
+    <>
+      {/* Reference menu — a game tool (you check every claim against it), so it
+          sits WITH the game, not off in the orientation column. */}
       <div className="overflow-hidden rounded-md border-[3px] border-neutral bg-surface">
         <div className="flex items-center gap-1.5 border-b-[3px] border-neutral bg-muted px-3 py-1.5 font-label text-[11px] text-text-muted">
           <span className="material-symbols-rounded text-[15px]">menu_book</span>
@@ -98,26 +111,32 @@ export default function HallucinationGame({ termId, onComplete }) {
         </ul>
       </div>
 
-      {/* Round tracker */}
-      <div className="flex justify-center gap-1.5">
-        {rounds.map((_, i) => {
-          const r = results[i]
-          return (
-            <span
-              key={i}
-              className={
-                'h-2.5 w-2.5 rounded-full border-2 border-neutral ' +
-                (r === 'correct'
-                  ? 'bg-success'
-                  : r === 'wrong'
-                    ? 'bg-primary'
-                    : i === index
-                      ? 'bg-accent'
-                      : 'bg-transparent')
-              }
-            />
-          )
-        })}
+      {/* Claim progress — labeled so it clearly reads as "which claim am I on",
+          not as something attached to the menu above it. */}
+      <div className="flex items-center justify-between px-1">
+        <p className="font-label text-[11px] text-text-muted">
+          Claim {index + 1} / {rounds.length}
+        </p>
+        <div className="flex gap-1.5">
+          {rounds.map((_, i) => {
+            const r = results[i]
+            return (
+              <span
+                key={i}
+                className={
+                  'h-2.5 w-2.5 rounded-full border-2 border-neutral ' +
+                  (r === 'correct'
+                    ? 'bg-success'
+                    : r === 'wrong'
+                      ? 'bg-primary'
+                      : i === index
+                        ? 'bg-accent'
+                        : 'bg-transparent')
+                }
+              />
+            )
+          })}
+        </div>
       </div>
 
       {/* The claim, fixed height so it never resizes */}
@@ -157,18 +176,22 @@ export default function HallucinationGame({ termId, onComplete }) {
         </button>
       </div>
 
-      {/* Feedback + advance */}
+      {/* Feedback lands here, in place */}
+      {pick && <Feedback correct={results[index] === 'correct'} round={round} />}
+    </>
+  )
+
+  return (
+    <>
+      <GameStage context={context} main={main} />
       {pick && (
-        <>
-          <Feedback correct={results[index] === 'correct'} round={round} />
-          <GameActions>
-            <GameActionButton variant="primary" onClick={next}>
-              {isLast ? 'See result' : 'Next question'}
-            </GameActionButton>
-          </GameActions>
-        </>
+        <GameActions>
+          <GameActionButton variant="primary" onClick={next}>
+            {isLast ? 'See result' : 'Next question'}
+          </GameActionButton>
+        </GameActions>
       )}
-    </div>
+    </>
   )
 }
 

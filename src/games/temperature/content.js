@@ -43,7 +43,7 @@ export const zones = [
     id: 'wild',
     max: Infinity,
     label: 'Wild',
-    note: 'High temperature: the long-shot words get a real chance to win. Creative and fun, but you never quite know what you\'ll get.',
+    note: 'High temperature: the long-shot words get a real chance to win. Great for fresh ideas, but the output changes every time, so whenever you turn it up, cross-check what comes back before you trust it.',
   },
 ]
 

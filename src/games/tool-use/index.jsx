@@ -3,6 +3,7 @@ import { useGameScroll } from '../../lib/useGameScroll.js'
 import { questions, tools } from './questions.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 
 /**
@@ -27,11 +28,7 @@ export default function ToolUseGame({ termId, onComplete }) {
 
   function nextQuestion() {
     if (isLastQuestion) {
-      if (round === 1) {
-        setPhase('transition')
-      } else {
-        setPhase('reveal')
-      }
+      setPhase(round === 1 ? 'transition' : 'reveal')
       return
     }
     setQIndex((i) => i + 1)
@@ -58,6 +55,91 @@ export default function ToolUseGame({ termId, onComplete }) {
       setWrongToolTap(true)
     }
   }
+
+  // Left column: constant orientation (what tool use is + Your role).
+  const stage = (main) => (
+    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} />
+  )
+
+  // Per-phase instruction at the top of the right column.
+  const instruction = (sub) => (
+    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
+      <div className="flex items-center justify-between">
+        <p className="font-label text-[11px] text-primary">Game · Guess or check</p>
+        <span className="font-label text-[11px] text-text-muted">
+          Round {round} / 2 · Q{qIndex + 1}/{questions.length}
+        </span>
+      </div>
+      <p className="mt-1 text-[13px] leading-snug text-text-muted">{sub}</p>
+    </div>
+  )
+
+  // Message archetype — customer question as a received bubble.
+  const customerBubble = (text) => (
+    <div className="flex items-start gap-2">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-surface">
+        <span className="material-symbols-rounded text-[20px] text-text-muted">person</span>
+      </span>
+      <div className="max-w-[85%]">
+        <p className="mb-1 font-label text-[10px] text-text-muted">Customer</p>
+        <div className="rounded-2xl rounded-tl-sm border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop">
+          <p className="font-bold leading-snug text-text">{text}</p>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Bot's reply as a sent bubble; tone 'good' (backed by data) / 'bad' (a guess).
+  const botBubble = (text, tone, note) => (
+    <div className="flex items-start justify-end gap-2">
+      <div className="max-w-[85%]">
+        <p className="mb-1 text-right font-label text-[10px] text-text-muted">Your bot</p>
+        <div
+          className={
+            'rounded-2xl rounded-tr-sm border-[3px] px-4 py-3 shadow-pop ' +
+            (tone === 'good' ? 'border-success bg-success-bg' : 'border-danger bg-danger-bg')
+          }
+        >
+          <p className="leading-snug text-text">{text}</p>
+          <p
+            className={
+              'mt-1 flex items-center gap-1 font-label text-[11px] font-bold ' +
+              (tone === 'good' ? 'text-success' : 'text-danger')
+            }
+          >
+            <span className="material-symbols-rounded text-[15px]">
+              {tone === 'good' ? 'check_circle' : 'error'}
+            </span>
+            {note}
+          </p>
+        </div>
+      </div>
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary">
+        <span className="material-symbols-rounded text-[20px] text-white">smart_toy</span>
+      </span>
+    </div>
+  )
+
+  // Choice archetype — a tool the player hands the bot to check with.
+  const toolCard = (tool) => (
+    <button
+      key={tool.id}
+      type="button"
+      onClick={() => tapTool(tool.id)}
+      className="press flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-surface text-left shadow-pop"
+    >
+      <span
+        className="flex w-11 shrink-0 items-center justify-center border-r-[3px] border-neutral bg-accent-soft text-tertiary"
+        aria-hidden="true"
+      >
+        <span className="material-symbols-rounded text-[20px]">build</span>
+      </span>
+      <span className="flex-1 px-3 py-3">
+        <span className="block font-label text-[10px] text-tertiary">Tool your bot can check</span>
+        <span className="mt-0.5 block font-bold leading-snug text-text">{tool.label}</span>
+      </span>
+    </button>
+  )
 
   if (phase === 'reveal') {
     return (
@@ -90,11 +172,16 @@ export default function ToolUseGame({ termId, onComplete }) {
   }
 
   if (phase === 'transition') {
-    return (
+    return stage(
       <div className="flex flex-col gap-3">
-        <div className="rounded-lg border-[3px] border-danger bg-danger-bg p-4 text-center shadow-card">
-          <p className="text-sm font-semibold text-danger">
-            Annoying, right? The bot feels this on every question it can't actually check.
+        <div className="rounded-lg border-[3px] border-danger bg-danger-bg p-4 shadow-card">
+          <p className="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger">
+            <span className="material-symbols-rounded text-[15px]">error</span>
+            Guessing every time
+          </p>
+          <p className="text-[15px] leading-snug text-text">
+            Annoying, right? Your bot feels this on every question it can&rsquo;t actually check.
+            Time to give it real tools.
           </p>
         </div>
         <GameActions>
@@ -106,29 +193,21 @@ export default function ToolUseGame({ termId, onComplete }) {
     )
   }
 
-  return (
+  return stage(
     <div className="flex flex-col gap-3">
-      {/* Standard intro on the opening screen, light header with counter after */}
-      {round === 1 && qIndex === 0 ? (
-        <GameIntro term={term} />
-      ) : (
-        <div className="flex items-center justify-between rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-          <p className="font-label text-[11px] text-primary">Tool use</p>
-          <span className="font-label text-[11px] text-text-muted">
-            Round {round} / 2 · Q{qIndex + 1}/{questions.length}
-          </span>
-        </div>
+      {instruction(
+        round === 1
+          ? 'Answer blind — your bot has no real data, all it can do is guess.'
+          : 'Now your bot has tools. Check the answer instead of guessing.',
       )}
 
-      <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-5 text-center shadow-pop">
-        <p className="text-lg font-extrabold leading-snug">A customer asks: "{current.question}"</p>
-      </div>
+      {customerBubble(current.question)}
 
       {round === 1 ? (
         !guessed ? (
           <div className="rounded-md border-[3px] border-neutral bg-surface px-4 py-4 text-center shadow-pop">
             <p className="mb-3 font-label text-[11px] text-text-muted">
-              There's no way to check. What do you say?
+              There&rsquo;s no way to check. All your bot can do is guess.
             </p>
             <GameActions>
               <GameActionButton variant="soft" onClick={() => setGuessed(true)}>
@@ -138,13 +217,7 @@ export default function ToolUseGame({ termId, onComplete }) {
           </div>
         ) : (
           <div className="flex flex-col gap-3">
-            <div className="rounded-md border-[3px] border-danger bg-danger-bg px-4 py-3 shadow-pop">
-              <p className="text-text">{current.guessAnswer}</p>
-              <p className="mt-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger">
-                <span className="material-symbols-rounded text-[15px]">error</span>
-                that's just a guess
-              </p>
-            </div>
+            {botBubble(current.guessAnswer, 'bad', "That's just a guess")}
             <GameActions>
               <GameActionButton variant="accent" icon="arrow_forward" onClick={nextQuestion}>
                 Next question
@@ -154,36 +227,19 @@ export default function ToolUseGame({ termId, onComplete }) {
         )
       ) : !checked ? (
         <div className="flex flex-col gap-2">
-          <p className="text-center font-label text-[11px] text-text-muted">
-            Tap the right tool to check.
+          <p className="font-label text-[11px] text-text-muted">
+            Tap the right tool for your bot to check:
           </p>
-          <div className="flex flex-col gap-2">
-            {tools.map((tool) => (
-              <button
-                key={tool.id}
-                type="button"
-                onClick={() => tapTool(tool.id)}
-                className="press rounded-md border-[3px] border-neutral bg-surface px-4 py-3 text-left font-bold text-text shadow-pop"
-              >
-                {tool.label}
-              </button>
-            ))}
-          </div>
+          <div className="flex flex-col gap-2">{tools.map((tool) => toolCard(tool))}</div>
           {wrongToolTap && (
-            <p className="text-center font-label text-[11px] italic text-text-muted">
-              That tool doesn't have this answer, try another.
+            <p className="font-label text-[11px] italic text-text-muted">
+              That tool doesn&rsquo;t have this answer, try another.
             </p>
           )}
         </div>
       ) : (
         <div className="flex flex-col gap-3">
-          <div className="rounded-md border-[3px] border-success bg-success-bg px-4 py-3 shadow-pop">
-            <p className="text-text">{current.realAnswer}</p>
-            <p className="mt-1 flex items-center gap-1 font-label text-[11px] font-bold text-success">
-              <span className="material-symbols-rounded text-[15px]">check_circle</span>
-              Correct answer, backed by real data.
-            </p>
-          </div>
+          {botBubble(current.realAnswer, 'good', 'Correct, backed by real data')}
           <GameActions>
             <GameActionButton variant="primary" icon="arrow_forward" onClick={nextQuestion}>
               Next question

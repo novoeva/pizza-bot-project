@@ -1,7 +1,8 @@
 // Self-contained content for the Hallucination game.
+// Role frame: you're the owner giving your bot a last check before it goes live.
 // The bot makes confident claims about the pizzeria; some are grounded in the
 // real menu below, some are invented, but stated with identical confidence.
-// The player checks each claim against the menu and flags the fakes.
+// You check each claim against the menu and catch the ones it made up.
 
 export const menu = [
   ['Margherita', '$9'],
@@ -22,22 +23,28 @@ export const rounds = [
     whyWrong: 'That one was actually true, $9 is the real Margherita price.',
   },
   {
+    say: 'Our bestseller? The vegan halal pizza with fresh basil, obviously!',
+    real: false,
+    whyRight: 'Nailed it. There is no such pizza anywhere on the menu, the bot invented a whole product out of thin air.',
+    whyWrong: 'Pure invention. No vegan halal basil pizza exists on this menu at all, it made the whole thing up.',
+  },
+  {
     say: 'Sure, we do a 20-inch party size for $30!',
     real: false,
     whyRight: 'Nice catch. The biggest we make is 14 inches, the 20-inch is invented.',
     whyWrong: 'Made up. The menu tops out at 14 inches; there is no 20-inch.',
   },
   {
-    say: 'Absolutely, we deliver anywhere in the city, no distance limit.',
-    real: false,
-    whyRight: 'Right. Delivery stops at 5 miles, the bot over-promised.',
-    whyWrong: 'Hallucinated. Delivery is capped at 5 miles, not unlimited.',
-  },
-  {
     say: 'Gluten-free crust is an extra $3.',
     real: true,
     whyRight: 'Correct, that matches the menu exactly.',
     whyWrong: 'That was true, gluten-free really is +$3.',
+  },
+  {
+    say: 'Absolutely, we deliver anywhere in the city, no distance limit.',
+    real: false,
+    whyRight: 'Right. Delivery stops at 5 miles, the bot over-promised.',
+    whyWrong: 'Hallucinated. Delivery is capped at 5 miles, not unlimited.',
   },
   {
     say: 'Of course, the kitchen is open 24 hours on weekends.',

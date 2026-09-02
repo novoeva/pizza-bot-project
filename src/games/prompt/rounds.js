@@ -8,15 +8,28 @@
 export const customerRequest = "Ugh, I'm starving. Just get me a pizza, something good."
 
 // Round 1: every instruction is missing the one thing that matters: what to do
-// when the order is incomplete, so any pick lands on the same disaster.
+// when the order is incomplete. Each pick fails the same way (the bot invents
+// and commits) but with its own flavour, shown as the bot's actual reply.
 export const round1Options = [
-  { label: '"You take pizza orders."' },
-  { label: '"You take pizza orders. Be friendly and fast."' },
-  { label: '"You take pizza orders. The customer is always right."' },
+  {
+    label: '"You take pizza orders."',
+    reply:
+      'Order in! One large pineapple-anchovy, extra jalapeños — heading to the oven. $24, ready in 30.',
+  },
+  {
+    label: '"You take pizza orders. Be friendly and fast."',
+    reply:
+      "You got it, superstar! 🍕 Rushing a large meat-lovers to the kitchen right now — 15 minutes!",
+  },
+  {
+    label: '"You take pizza orders. The customer is always right."',
+    reply:
+      'Absolutely, great choice! Confirming a large Hawaiian with double cheese. Coming right up!',
+  },
 ]
 
 export const round1Result =
-  "Your bot doesn't know anything's missing, so it fills every blank itself and commits. One large pineapple-anchovy pizza, extra jalapeños, fires off to the kitchen. The customer never asked for any of that."
+  "None of these told your bot what to do when the order is incomplete. So it filled the blanks itself and committed — a pizza the customer never actually chose."
 
 // Round 2: add a single rule. Only one turns "invent" into "ask".
 export const round2Options = [

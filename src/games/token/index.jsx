@@ -16,8 +16,9 @@ function bestOf(options) {
  * Two beats that build the concept in order:
  *   1. Chop it up, a token is a chunk of text. Guess how many tokens
  *      "Pepperoni" is (four), then see the chunks and a whole order tokenized.
- *   2. Guess what's next, the model writes one token at a time, predicting
- *      the next from a ranked list. Guess the next token, then see the ranking.
+ *   2. Read your bot's mind, your bot writes one token at a time, predicting
+ *      the next from a ranked list. Call the next token before it does, then
+ *      see the ranking. You stay the owner watching your bot, never the model.
  */
 export default function TokenGame({ termId, onComplete }) {
   const term = terms.find((t) => t.id === termId)
@@ -151,16 +152,16 @@ export default function TokenGame({ termId, onComplete }) {
       <div className="flex flex-col gap-3">
         <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
           <div className="flex items-center justify-between">
-            <p className="font-label text-[11px] text-primary">Game · Guess what's next</p>
+            <p className="font-label text-[11px] text-primary">Game · Read your bot's mind</p>
             <span className="font-label text-[11px] text-text-muted">
               {roundIndex + 1} / {predictionRounds.length}
             </span>
           </div>
           <h1 className="text-2xl leading-tight">Token</h1>
           <p className="mt-1 text-[13px] leading-snug text-text-muted">
-            The model (an LLM, short for large language model) never writes a whole reply at
-            once. It picks one token, then the next, then the next. Every pick is a guess at what
-            fits best after everything it has seen so far.
+            Your bot (an LLM, short for large language model) never writes a whole reply at once.
+            It picks one token, then the next, then the next. Every pick is a guess at what fits
+            best after everything it has seen so far.
           </p>
         </div>
 
@@ -173,7 +174,7 @@ export default function TokenGame({ termId, onComplete }) {
         {!answered ? (
           <div className="flex flex-col gap-2">
             <p className="text-center font-label text-[11px] text-text-muted">
-              You're the model now. Which token is most likely to come next?
+              Which token does your bot pick next?
             </p>
             {round.options.map((o) => (
               <button
@@ -203,14 +204,14 @@ export default function TokenGame({ termId, onComplete }) {
                 <span className="material-symbols-rounded text-[18px]">
                   {correct ? 'check_circle' : 'cancel'}
                 </span>
-                {correct ? 'You matched the model' : `Model picked "${best.word}"`}
+                {correct ? 'You called it' : `Your bot picked "${best.word}"`}
               </p>
               <p className="mt-1 text-[13px] leading-snug text-text">{round.why}</p>
             </div>
 
             <div className="rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop">
               <div className="mb-3 flex items-baseline justify-between gap-2">
-                <p className="font-label text-[11px] text-text-muted">The model's ranking</p>
+                <p className="font-label text-[11px] text-text-muted">Your bot's ranking</p>
                 <p className="font-label text-[11px] text-text-muted">% = probability</p>
               </div>
               <div className="flex flex-col gap-2">
@@ -265,7 +266,7 @@ export default function TokenGame({ termId, onComplete }) {
       <p className="font-label text-[11px] text-primary">Snapped onto your bot · {term.botPart}</p>
       <h2 className="text-2xl">You just learned the term Token</h2>
       <p className="font-label text-xs text-text-muted">
-        You matched the model on {score} of {predictionRounds.length}.
+        You called your bot's next chunk on {score} of {predictionRounds.length}.
       </p>
 
       <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
