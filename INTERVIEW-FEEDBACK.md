@@ -220,6 +220,11 @@ Tyhle dvě hry (a Token, MCP) nepoužívají `GameStage`, takže na desktopu je 
 Vizuálně vyřešeno (pilulky „You picked / Better"), ale 4 karty × 2 věty je pořád zeď. Zkrátit `round3Effects` na max ~6 slov.
 - **📍 Kde:** `src/games/prompt/rounds.js` — `round3Effects`.
 
+**FR-22 — RAG: rozložení „pracovního stolu" a obsah hry projít znovu**
+Po Fázi 2 (drag-and-drop) je slot „Handed to the bot" v levém sloupci (u intra) a pořadač s dlaždicemi vpravo — na desktopu se táhne přes celou obrazovku a část hry působí, že je „vlevo". Eva: RAG potřebuje review obsahu i layoutu.
+- **📍 Kde:** `src/games/rag/index.jsx` — `workbench` (levý slot) vs. `binder` (pravý slot) ve fázi `pick`.
+- **✅ Hotovo když:** cíl přetažení je vedle dlaždic (stejný sloupec nebo hned nad nimi) a texty kol 1–3 jsou po review.
+
 ### Otevřené / navazující
 - [x] **Component audit (FR-18, varianta A)** — hotovo: `COMPONENT-AUDIT.md` + `design-system/gallery.html`.
 - [x] ~~Ověřit žargon z FR-7~~ → vyjasněno: šlo o label **„Log it"** ve Skill hře (`src/games/skill/content.js:16`).
