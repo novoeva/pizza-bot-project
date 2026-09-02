@@ -14,9 +14,6 @@
   h2 { font-size: 1.15rem; letter-spacing: -.01em; margin: 2.2rem 0 .6rem; }
   .eyebrow { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 11px; color: var(--ink-soft); }
   p { line-height: 1.55; font-size: 15px; max-width: 62ch; }
-  .lede { color: var(--ink-soft); }
-  ol.steps { padding-left: 1.4rem; font-size: 15px; line-height: 1.55; }
-  ol.steps li { margin: .35rem 0; }
   code { font-family: var(--label); font-size: 13px; background: #fff; border: 1px solid var(--rule); border-radius: 5px; padding: .05rem .35rem; }
   .pair { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .6rem 0 .2rem; }
   .cell { background: #f9f9ff; border: 1px solid var(--rule); border-radius: 10px; padding: .8rem; }
@@ -29,55 +26,28 @@
   .q .ans b { display: inline-block; border: 2px solid var(--neutral); border-radius: 999px; padding: .05rem .6rem; margin-right: .3rem; font-size: 13px; }
   .done { background: var(--mint); border: 1px solid #b9dcd5; border-radius: 10px; padding: .7rem 1rem; font-size: 14px; line-height: 1.5; }
   .done b { color: #1f7a6f; }
-  .dont { border-left: 3px solid var(--wrong); background: #fff; padding: .6rem .9rem; font-size: 14px; line-height: 1.5; }
-  .dont ul { margin: .3rem 0 0; padding-left: 1.2rem; }
-  .lbl { font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: 10px; color: var(--ink-soft); }
-  .card { border-radius: .9rem; border: 3px solid var(--neutral); box-shadow: 3px 3px 0 0 var(--neutral); background: #fff; padding: .6rem .8rem; }
-  .line { display: flex; align-items: center; gap: .5rem; margin-top: .25rem; } .line .lbl { width: 6rem; flex-shrink: 0; }
-  .seg { display: flex; gap: 3px; flex: 1; } .seg span { height: 9px; flex: 1; border-radius: 999px; border: 2px solid var(--neutral); }
+  .lbl { font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: 10px; color: var(--ink-soft); font-weight: 700; }
+  .strip { display: flex; align-items: center; gap: .6rem; border-radius: .7rem; border: 3px solid var(--neutral); box-shadow: 3px 3px 0 0 var(--neutral); background: #fff; padding: .45rem .7rem; }
+  .seg { display: flex; gap: 4px; flex: 1; } .seg span { height: 10px; flex: 1; border-radius: 999px; border: 2px solid var(--neutral); background: var(--grey); overflow: hidden; } .seg span i { display: block; height: 100%; background: var(--red); }
 </style>
 
 <div class="wrap">
-  <p class="eyebrow">Pizza Bot · Phase 1 · shared components · round 4</p>
-  <h1>Phase 1, one thing left: the progress strip</h1>
-  <div class="done"><b>Round 3 result:</b> Q2, Q3, Q4 passed. Q1 (progress) came back with a clear spec: two levels, part of the game and step inside the part, shown from the first screen, at the top. That is the only change in this round.</div>
+  <p class="eyebrow">Pizza Bot · Phase 1 · round 5</p>
+  <h1>One bar. Last check.</h1>
+  <div class="done"><b>Round 4 result:</b> too dominant, two lines is one too many, the numbers are useless. Applied: one line, label "Progress", one segment per part of the game; the part you are in fills up with its steps.</div>
 
-  <h2>1 · What changed</h2>
-  <ol class="steps">
-    <li><b>Progress moved to the very top</b> of every game screen, above the intro card. On desktop it spans both columns.</li>
-    <li><b>Two lines.</b> "Part 1 / 2" = which part of the game. "Customer 2 / 4" = how far inside that part. A part with nothing to count shows only the first line.</li>
-    <li><b>From the first screen.</b> Temperature part 1 now shows "Part 1 / 2" before you touch the dial. All 12 games, including the end-of-game screen's predecessor.</li>
-    <li>The "Game · …" card no longer carries any progress.</li>
-  </ol>
   <div class="pair">
-    <div class="cell"><span class="tag">Round 3 · one line, inside the card, part 2 only</span>
-      <div class="card"><div class="line"><span class="lbl">Progress</span><span class="seg"><span style="background:var(--red)"></span><span style="background:var(--grey)"></span><span style="background:var(--grey)"></span></span></div><div class="lbl" style="color:var(--red);margin-top:.4rem">Game · Pick the setting</div></div>
+    <div class="cell"><span class="tag">Round 4</span>
+      <div class="strip" style="flex-direction:column;align-items:stretch;gap:.3rem"><span class="lbl">Progress</span><div style="display:flex;gap:.5rem;align-items:center"><span class="lbl" style="font-weight:400;width:5rem">Part 2 / 2</span><span class="seg"><span><i style="width:100%"></i></span><span><i style="width:100%"></i></span></span></div><div style="display:flex;gap:.5rem;align-items:center"><span class="lbl" style="font-weight:400;width:5rem">Job 2 / 6</span><span class="seg"><span><i style="width:100%"></i></span><span><i style="width:100%"></i></span><span></span><span></span><span></span><span></span></span></div></div>
     </div>
-    <div class="cell"><span class="tag">Round 4 · two lines, top of the screen, every part</span>
-      <div class="card"><div class="lbl" style="font-weight:700">Progress</div><div class="line"><span class="lbl">Part 2 / 2</span><span class="seg"><span style="background:var(--red)"></span><span style="background:var(--red)"></span></span></div><div class="line"><span class="lbl">Job 2 / 6</span><span class="seg"><span style="background:var(--red)"></span><span style="background:var(--red)"></span><span style="background:var(--grey)"></span><span style="background:var(--grey)"></span><span style="background:var(--grey)"></span><span style="background:var(--grey)"></span></span></div></div>
+    <div class="cell"><span class="tag">Round 5 · now</span>
+      <div class="strip"><span class="lbl">Progress</span><span class="seg"><span><i style="width:100%"></i></span><span><i style="width:33%"></i></span></span></div>
+      <p style="font-size:12px;color:var(--ink-soft);margin:.5rem 0 0">Temperature, part 2, job 2 of 6: first segment solid, second a third full.</p>
     </div>
   </div>
 
-  <h2>2 · Open the app</h2>
-  <p>Reload <code>http://localhost:5180</code>, phone width.</p>
-
-  <h2>3 · Three questions</h2>
-
-  <div class="q"><div class="n">Q1 · Temperature, first screen, then "Roll the dice" and "Next: pick the right setting"</div><div class="ask">Do you see "Part 1 / 2" before doing anything, and does the second line appear and fill as you answer jobs?</div>
-    <div class="ans"><b>yes ✓</b> <b>no ✗ → what you saw</b></div></div>
-
-  <div class="q"><div class="n">Q2 · Prompt</div><div class="ask">Round 1 and 2 show only "Round n / 3"; round 3 adds "Part x / 4" that fills as you pick. Does that match how the game feels?</div>
-    <div class="ans"><b>yes ✓</b> <b>no ✗</b></div></div>
-
-  <div class="q"><div class="n">Q3 · Any game on a wide window</div><div class="ask">The strip sits above both columns. Right place?</div>
-    <div class="ans"><b>yes ✓</b> <b>no ✗ → where</b></div></div>
-
-  <h2>4 · Not for today</h2>
-  <div class="dont"><ul>
-      <li>Which parts each game has is my first guess (Skill has 3, Memory 4, Agent 3). If a split feels wrong, name the game; it is a one-line change.</li>
-      <li>FR-19, FR-20, FR-21 and Phases 2 to 4, as before.</li>
-    </ul></div>
-
-  <h2>5 · How to answer</h2>
-  <p>Three marks, for example <code>✓ ✓ ✓</code>. If all three pass, Phase 1 is closed and Phase 2 (choice cards and drag-and-drop tiles) starts.</p>
+  <h2>One question</h2>
+  <div class="q"><div class="n">Temperature, then Prompt · reload localhost:5180</div><div class="ask">Is this the bar you meant?</div>
+    <div class="how">Watch the second segment grow as you answer jobs in Temperature. In Prompt the third segment grows as you pick the four parts of round 3.</div>
+    <div class="ans"><b>yes ✓ → Phase 1 closed, Phase 2 starts</b> <b>no ✗ → one sentence</b></div></div>
 </div>
