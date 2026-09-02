@@ -5,6 +5,7 @@ import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
 import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import Callout from '../../components/Callout.jsx'
 import ChatMessage from '../../components/ChatMessage.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
 
@@ -58,7 +59,7 @@ export default function SkillGame({ termId, onComplete }) {
   // tint is the verdict: 'good' (on-script) / 'bad' (improvised).
   const customerBubble = (text) => <ChatMessage from="customer">{text}</ChatMessage>
   const botBubble = (key, text, tone, note) => (
-    <ChatMessage key={key} from="bot" tone={tone} label={`Your bot · ${note}`}>
+    <ChatMessage key={key} from="bot" label={`Your bot · ${note}`}>
       {text}
     </ChatMessage>
   )
@@ -158,10 +159,11 @@ export default function SkillGame({ termId, onComplete }) {
         {playbookPanel(builtPlaybook, true)}
         {customerBubble(complaint)}
         <div className="flex flex-col gap-2">
-          {[0, 1, 2].map((i) =>
-            botBubble(i, script, 'good', `Customer ${i + 1} · same script every time`),
-          )}
+          {[0, 1, 2].map((i) => botBubble(i, script, 'good', `Customer ${i + 1}`))}
         </div>
+        <Callout tone="success" title="Same answer, three times" compact>
+          Your playbook, not the bot's mood, decided what happened.
+        </Callout>
         <GameActions>
           <GameActionButton variant="primary" icon="arrow_forward" onClick={() => setPhase('reveal')}>
             See what this means
@@ -194,8 +196,13 @@ export default function SkillGame({ termId, onComplete }) {
       <div className="flex flex-col gap-2">
         {improvisedReplies
           .slice(0, replyIndex + 1)
-          .map((reply, i) => botBubble(i, reply, 'bad', `Customer ${i + 1} · improvised, no process`))}
+          .map((reply, i) => botBubble(i, reply, 'bad', `Customer ${i + 1}`))}
       </div>
+      {isLastReply && (
+        <Callout tone="problem" title="Three customers, three different answers" compact>
+          No process, so the bot improvised every time.
+        </Callout>
+      )}
       {!isLastReply ? (
         <GameActions>
           <GameActionButton

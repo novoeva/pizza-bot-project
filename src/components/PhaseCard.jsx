@@ -5,28 +5,32 @@
  * player is acting.
  *
  *   title     the game's name for this beat, rendered as "Game · {title}"
- *   progress  where you are: { current, total, unit } draws a pizza with
- *             `total` slices, `current` of them done (ProgressPie); a plain
- *             string is shown as text, for counts that are not rounds
+ *   progress  where you are: { current, total, unit } draws a labelled,
+ *             segmented "Progress" line across the top of the card
+ *             (ProgressBar); a plain string is shown as small text on the
+ *             title row, for counts that are not rounds
  *   heading   optional big term name, used only by the single-column games
  *             until Phase 4 gives them the left intro panel on every screen
  *   children  the instruction sentence(s)
  */
-import ProgressPie from './ProgressPie.jsx'
+import ProgressBar from './ProgressBar.jsx'
 
 export default function PhaseCard({ title, progress, heading, children }) {
   // An object ({ current, total, unit }) is real progress through the game
-  // and is drawn as a pizza. A string is a plain count ("2/4 added") and is
-  // shown as text.
-  const pie = progress && typeof progress === 'object'
+  // and gets the labelled bar on top. A string is a plain count ("2/4
+  // added") and is shown as small text on the title row.
+  const bar = progress && typeof progress === 'object'
   return (
     <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
+      {bar && (
+        <div className="mb-2 border-b-2 border-dashed border-slot-empty pb-2">
+          <ProgressBar {...progress} />
+        </div>
+      )}
       <div className="flex items-center justify-between gap-2">
         <p className="font-label text-[11px] text-primary">Game · {title}</p>
-        {pie ? (
-          <ProgressPie {...progress} />
-        ) : (
-          progress && <span className="shrink-0 font-label text-[11px] text-text-muted">{progress}</span>
+        {!bar && progress && (
+          <span className="shrink-0 font-label text-[11px] text-text-muted">{progress}</span>
         )}
       </div>
       {heading && <h1 className="text-2xl leading-tight">{heading}</h1>}

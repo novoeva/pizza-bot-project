@@ -39,8 +39,8 @@ function ChoiceCard({ type, label, onClick, picked = false }) {
       onClick={onClick}
       disabled={picked}
       className={
-        'flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral text-left shadow-pop ' +
-        (picked ? 'bg-accent-soft' : 'press bg-surface')
+        'flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-surface text-left shadow-pop ' +
+        (picked ? '' : 'press')
       }
     >
       <span
@@ -57,14 +57,17 @@ function ChoiceCard({ type, label, onClick, picked = false }) {
   )
 }
 
-// A round-3 option drawn as the pill you tapped (blue when it was your pick),
-// used inert on the result screen so the pick is recognisable at a glance.
-function optionPill(label, picked) {
+// A round-3 option shown back on the result screen as the pill you tapped.
+// The pill carries the verdict: your wrong pick is muted red, the better one
+// is green, and the card around them stays neutral.
+function optionPill(label, tone) {
   return (
     <span
       className={
-        'inline-block rounded-md border-2 border-neutral px-2 py-0.5 text-[12px] font-bold ' +
-        (picked ? 'bg-accent-soft text-tertiary' : 'bg-surface text-text')
+        'inline-block rounded-md border-2 px-2 py-0.5 text-[12px] font-bold ' +
+        (tone === 'bad'
+          ? 'border-danger bg-danger-bg text-danger'
+          : 'border-success bg-success-bg text-success')
       }
     >
       {label}
@@ -189,19 +192,18 @@ export default function PromptGame({ termId, onComplete }) {
                 option is plain text with an arrow, so it reads as advice, not as
                 "you got it right". (FR-11) */}
             {wrongRows.map((c) => (
-              <Callout key={c.name} tone="problem" compact title={c.name}>
-                {/* The option as you tapped it (the round-3 pill), then the
-                    consequence; the better option is the same pill, unpicked. */}
+              <Callout key={c.name} tone="info" compact title={c.name} icon={null}>
+                {/* Neutral card; the pills carry the verdict: your pick red,
+                    the better option green. */}
                 <span className="flex flex-col gap-1.5">
                   <span className="flex flex-wrap items-center gap-1.5">
                     <span className="font-label text-[10px] text-text-muted">You picked</span>
-                    {optionPill(round3Picks[c.name], true)}
+                    {optionPill(round3Picks[c.name], 'bad')}
                     <span>it {round3Effects[round3Picks[c.name]]}.</span>
                   </span>
                   <span className="flex flex-wrap items-center gap-1.5">
-                    <span className="material-symbols-rounded text-[16px] text-text-muted">arrow_forward</span>
                     <span className="font-label text-[10px] text-text-muted">Better</span>
-                    {optionPill(c.correct, false)}
+                    {optionPill(c.correct, 'good')}
                     <span>it {round3Effects[c.correct]}.</span>
                   </span>
                 </span>

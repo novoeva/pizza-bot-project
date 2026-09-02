@@ -83,23 +83,24 @@ export default function GuardrailsGame({ termId, onComplete }) {
     </ChatMessage>
   )
 
-  // Bot's reply as a sent MESSAGE holding only the words; the verdict is the
-  // Callout right under it (held = success, caved = problem).
+  // Bot's reply as a plain sent MESSAGE; the verdict is the Callout right
+  // under it (held = success, caved = problem) and says who it worked for.
   const botBubble = (text, tone) =>
     tone === 'held' ? (
       <>
-        <ChatMessage from="bot" tone="good">
-          {text}
-        </ChatMessage>
-        <Callout tone="success" title="Blocked by your guardrail, no damage." icon="shield" compact />
+        <ChatMessage from="bot">{text}</ChatMessage>
+        <Callout tone="success" title="Blocked by your guardrail. You lost nothing." icon="shield" compact />
       </>
     ) : (
       <>
-        <ChatMessage from="bot" tone="bad">
-          {text}
-        </ChatMessage>
-        <Callout tone="problem" title={`It worked. -$${current.damage}`} icon="bolt" compact>
-          {current.scaleNote ?? 'Your bot gave the customer exactly what they asked for.'}
+        <ChatMessage from="bot">{text}</ChatMessage>
+        <Callout
+          tone="problem"
+          title={`It worked for the customer. You lost $${current.damage}.`}
+          icon="bolt"
+          compact
+        >
+          {current.scaleNote ?? 'Your bot gave away exactly what they asked for.'}
         </Callout>
       </>
     )

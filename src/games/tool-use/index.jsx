@@ -79,9 +79,7 @@ export default function ToolUseGame({ termId, onComplete }) {
   const customerBubble = (text) => <ChatMessage from="customer">{text}</ChatMessage>
   const botBubble = (text, tone, note) => (
     <>
-      <ChatMessage from="bot" tone={tone}>
-        {text}
-      </ChatMessage>
+      <ChatMessage from="bot">{text}</ChatMessage>
       <Callout tone={tone === 'good' ? 'success' : 'problem'} title={note} compact />
     </>
   )

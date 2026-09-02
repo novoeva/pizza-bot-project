@@ -205,6 +205,21 @@ U LIMIT 1–4 Klára nepochopila, že má u každého limitu vybrat volbu.
 
 ---
 
+### Nálezy z review fází design systému (Eva, 2026-09-02)
+
+**FR-19 — Context window: mechanika „Next message from the customer" je divná** 🔴
+Modrý box s další zprávou + tlačítko „Send to the bot" nedává smysl vedle chatových bublin. Návrh: zprávy od zákazníka přicházejí **samy, animovaně** (bez klikání), a hráč sleduje, jak nejstarší vypadne z okna; klik až u „Ask" / „Pin".
+- **📍 Kde:** `src/games/context-window/index.jsx` — beat 1 (`sentCount`, `nextMessage`, „Send to the bot").
+- **✅ Hotovo když:** zprávy se do okna přidávají samy v čase (s možností přeskočit), první vypadnutí je vidět jako událost; žádný „next message" box.
+
+**FR-20 — Context window a Memory: desktop layout je naskládaný pod sebou, ne vedle sebe**
+Tyhle dvě hry (a Token, MCP) nepoužívají `GameStage`, takže na desktopu je vše v jednom sloupci. Řeší **Fáze 4** design-system plánu (`COMPONENT-AUDIT.md` §4): misfity dostanou `GameStage` a levý panel na každé obrazovce.
+- **📍 Kde:** `src/games/context-window/index.jsx`, `src/games/memory/index.jsx`, `src/games/token/index.jsx`, `src/games/mcp/index.jsx`.
+
+**FR-21 — Prompt, výsledkovka kola 3: moc textu** *(copy, ne design)*
+Vizuálně vyřešeno (pilulky „You picked / Better"), ale 4 karty × 2 věty je pořád zeď. Zkrátit `round3Effects` na max ~6 slov.
+- **📍 Kde:** `src/games/prompt/rounds.js` — `round3Effects`.
+
 ### Otevřené / navazující
 - [x] **Component audit (FR-18, varianta A)** — hotovo: `COMPONENT-AUDIT.md` + `design-system/gallery.html`.
 - [x] ~~Ověřit žargon z FR-7~~ → vyjasněno: šlo o label **„Log it"** ve Skill hře (`src/games/skill/content.js:16`).

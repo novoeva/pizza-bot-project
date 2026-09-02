@@ -115,9 +115,7 @@ export default function ContextWindowGame({ termId, onComplete }) {
         ) : (
           <>
             <ChatMessage from="you">{newChatQuestion}</ChatMessage>
-            <ChatMessage from="bot" tone="bad">
-              {newChatReply}
-            </ChatMessage>
+            <ChatMessage from="bot">{newChatReply}</ChatMessage>
             <Callout tone="problem" title="Empty window" icon="visibility_off" compact />
             <Callout tone="info" title="Where this hands off" icon="arrow_forward" compact>
               {bridgeToMemory}
@@ -167,9 +165,7 @@ export default function ContextWindowGame({ termId, onComplete }) {
         <>
           {/* Ask #1 — the allergy has already scrolled out, so the bot can't answer. */}
           <ChatMessage from="you">{recallQuestion}</ChatMessage>
-          <ChatMessage from="bot" tone="bad">
-            {recallDropped}
-          </ChatMessage>
+          <ChatMessage from="bot">{recallDropped}</ChatMessage>
           <Callout tone="problem" title="Out of the context window" icon="visibility_off" compact />
 
           {!pinned ? (
@@ -189,9 +185,7 @@ export default function ContextWindowGame({ termId, onComplete }) {
             <>
               {/* Ask #2 — same question, but the pinned line is still in view. */}
               <ChatMessage from="you">{recallQuestion}</ChatMessage>
-              <ChatMessage from="bot" tone="good">
-                {recallInWindow}
-              </ChatMessage>
+              <ChatMessage from="bot">{recallInWindow}</ChatMessage>
               <Callout tone="success" title="Pinned, so it stays in the window" icon="push_pin" compact />
               <GameActions>
                 <GameActionButton
@@ -249,7 +243,7 @@ function ContextPanel({ sent, pinned = false }) {
         ) : (
           <>
             {showPinned && (
-              <ChatMessage from="customer" size="sm" tone="good" label={null}>
+              <ChatMessage from="customer" size="sm" label={null}>
                 <span className="material-symbols-rounded mr-1 align-middle text-[14px] text-success">push_pin</span>
                 {critical.text}
               </ChatMessage>

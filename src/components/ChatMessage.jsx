@@ -8,10 +8,9 @@
  *   from="bot"       your bot, RIGHT, marinara robot avatar, white bubble
  *   from="you"       you the owner typing to your bot, RIGHT, blue bubble
  *
- * The bubble holds the words that were said and nothing else (Phase 1
- * review, Q3). `tone` may tint it when the reply itself is the verdict
- * ("good" = green, "bad" = muted red); the explanation of that verdict goes in
- * a Callout under the bubble, never inside it.
+ * The bubble holds the words that were said and nothing else, and it is
+ * never tinted (Phase 1 review, rounds 1 and 2): whether the reply was good
+ * or bad is said by a Callout under the bubble, not by the bubble.
  *
  * `size="sm"` is the compact transcript row (context window). `label={null}`
  * hides the name line.
@@ -20,11 +19,6 @@ const SIDE = {
   customer: { right: false, corner: 'rounded-tl-sm', fill: 'border-neutral bg-muted', label: 'Customer' },
   bot: { right: true, corner: 'rounded-tr-sm', fill: 'border-neutral bg-surface', label: 'Your bot' },
   you: { right: true, corner: 'rounded-tr-sm', fill: 'border-neutral bg-accent-soft', label: 'You' },
-}
-
-const TONE = {
-  good: 'border-success bg-success-bg',
-  bad: 'border-danger bg-danger-bg',
 }
 
 /** Person or robot avatar. `who`: 'customer' | 'bot'. */
@@ -52,14 +46,14 @@ export function Avatar({ who = 'customer', size = 'md', className = '' }) {
   )
 }
 
-export default function ChatMessage({ from = 'customer', label, tone, size = 'md', className = '', children }) {
+export default function ChatMessage({ from = 'customer', label, size = 'md', className = '', children }) {
   const side = SIDE[from] || SIDE.customer
   const sm = size === 'sm'
   const bubble =
     'rounded-2xl ' +
     side.corner +
     (sm ? ' border-2 px-3 py-1.5 ' : ' border-[3px] px-4 py-3 shadow-pop ') +
-    (tone ? TONE[tone] : side.fill)
+    side.fill
   const avatar = <Avatar who={from === 'bot' ? 'bot' : 'customer'} size={size} />
   const body = (
     <div className="max-w-[85%]">
