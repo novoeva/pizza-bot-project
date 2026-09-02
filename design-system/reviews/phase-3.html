@@ -12,14 +12,12 @@
   .wrap { max-width: 44rem; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
   h1 { font-size: 1.8rem; letter-spacing: -.02em; margin: .2rem 0 .5rem; text-wrap: balance; }
   h2 { font-size: 1.15rem; letter-spacing: -.01em; margin: 2.2rem 0 .6rem; }
+  h3 { font-size: .95rem; margin: 1.2rem 0 .3rem; }
   .eyebrow { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 11px; color: var(--ink-soft); }
   p { line-height: 1.55; font-size: 15px; max-width: 62ch; }
   ol.steps { padding-left: 1.4rem; font-size: 15px; line-height: 1.55; }
   ol.steps li { margin: .35rem 0; }
   code { font-family: var(--label); font-size: 13px; background: #fff; border: 1px solid var(--rule); border-radius: 5px; padding: .05rem .35rem; }
-  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .6rem 0 .2rem; }
-  .cell { background: #f9f9ff; border: 1px solid var(--rule); border-radius: 10px; padding: .8rem; }
-  .cell .tag { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 10px; color: var(--ink-soft); display: block; margin-bottom: .5rem; }
   .q { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .9rem 1.1rem; margin: .8rem 0; }
   .q .n { font-family: var(--label); font-size: 11px; letter-spacing: .08em; color: var(--blue); }
   .q .ask { font-weight: 700; font-size: 16px; margin: .25rem 0 .4rem; }
@@ -29,77 +27,112 @@
   .done { background: var(--mint); border: 1px solid #b9dcd5; border-radius: 10px; padding: .7rem 1rem; font-size: 14px; line-height: 1.5; }
   .done b { color: #1f7a6f; }
   .dont { border-left: 3px solid var(--wrong); background: #fff; padding: .6rem .9rem; font-size: 14px; line-height: 1.5; }
-  .dont ul { margin: .3rem 0 0; padding-left: 1.2rem; }
-  .card { border-radius: .9rem; border: 3px solid var(--neutral); box-shadow: 3px 3px 0 0 var(--neutral); background: #fff; padding: .6rem .8rem; font-size: 12px; text-align: left; margin-top: .4rem; }
-  .card .l { font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: 9px; color: var(--ink-soft); }
-  .ms { font-family: 'Material Symbols Rounded'; font-size: 15px; line-height: 1; vertical-align: middle; }
-  li.line { list-style: none; display: flex; gap: .3rem; align-items: flex-start; margin-top: .25rem; }
+  .term { background: #fff; border: 1px solid var(--rule); border-radius: 10px; padding: .7rem .9rem; margin: .5rem 0; font-size: 14px; line-height: 1.5; }
+  .term b { display: block; font-family: var(--label); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: .2rem; }
+  .term .l { display: flex; gap: .4rem; align-items: flex-start; margin: .2rem 0; }
+  .ms { font-family: 'Material Symbols Rounded'; font-size: 16px; line-height: 1.3; flex-shrink: 0; }
 </style>
 
 <div class="wrap">
-  <p class="eyebrow">Pizza Bot · Phase 3 · the end screen</p>
-  <h1>How to review Phase 3 in 10 minutes</h1>
-  <div class="done"><b>Phase 2 approved.</b> Phase 3 is step 3 of the game framework: the recap. Klára's finding was "wall of text, nothing to remember". One shared end screen now replaces the 12 hand-made ones.</div>
+  <p class="eyebrow">Pizza Bot · Phase 3 · the end screen · round 2</p>
+  <h1>Phase 3, second look: the words</h1>
+  <div class="done"><b>Round 1 result:</b> design fine, "Don't" useful, words rejected: lecture notes, not sentences, and not tied to the game. Applied: the section is now <b>"What happened in the game"</b>, the definition card is labelled <b>"Definition"</b>, and all 48 lines are rewritten as full sentences about what the player just did in that game. Nothing appears that the game did not show.</div>
 
   <h2>1 · What changed</h2>
   <ol class="steps">
-    <li><b>One end screen</b> for all 12 games, same order every time: success mark → definition → <b>"What matters"</b> as three check lines → <b>"Don't"</b> as one cross line → the game's aside, if it has one.</li>
-    <li><b>The "Why you care" paragraph is gone.</b> Its content moved into the three check lines. Less text, same message.</li>
-    <li><b>New copy for 12 terms:</b> 36 check lines and 12 don't lines, written for a non-native reader. This is the part that most needs your eye.</li>
-    <li>Score lines (Hallucination, Temperature, Token) and asides ("Real talk", "In the real world") stay.</li>
+    <li><b>Section names:</b> "Definition" → "What happened in the game" → "Don't".</li>
+    <li><b>Every line is a sentence</b> a person would say, about a concrete moment in the game: the pineapple-anchovy pizza, the "store manager", Anna's allergy, the two-year-old price list.</li>
+    <li><b>Nothing from outside the game.</b> "Counting letters" is gone; it was never in the Token game.</li>
+    <li>Design is unchanged.</li>
   </ol>
-  <div class="pair">
-    <div class="cell"><span class="tag">Before</span>
-      <div class="card"><div class="l">What it means</div>Guardrails are the hard limits an AI must never cross…</div>
-      <div class="card"><div class="l">Why you care</div>They're what keeps an AI assistant safe and on-brand instead of agreeing to anything a clever customer asks for.</div>
-      <div class="card"><div class="l">In the real world</div>Picking safe options like this is only the start. A real bot needs much stronger guardrails…</div>
-    </div>
-    <div class="cell"><span class="tag">After</span>
-      <div class="card"><div class="l">What it means</div>Guardrails are the hard limits an AI must never cross…</div>
-      <div class="card"><div class="l">What matters</div>
-        <ul style="margin:0;padding:0"><li class="line"><span class="ms" style="color:var(--teal)">check_circle</span>Hard limits set in advance: money, promises, topics.</li><li class="line"><span class="ms" style="color:var(--teal)">check_circle</span>Above the limit, a human decides.</li><li class="line"><span class="ms" style="color:var(--teal)">check_circle</span>Test them with the tricks a pushy customer would try.</li></ul></div>
-      <div class="card"><div class="l">Don't</div><ul style="margin:0;padding:0"><li class="line"><span class="ms" style="color:var(--wrong)">cancel</span>Don't trust "I'm the manager" from a chat message.</li></ul></div>
-    </div>
-  </div>
 
-  <h2>2 · Open the app</h2>
-  <p>Reload <code>http://localhost:5180</code>. The quickest way to an end screen is <b>Hallucination</b>: 6 taps of "Made up" and "Next".</p>
+  <h2>2 · The 12 recaps, read them here</h2>
+  <p>Read as the player would, once, after finishing the game. Mark any line that makes you think twice.</p>
 
-  <h2>3 · Four questions</h2>
+  <div class="term"><b>Token</b>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>You guessed how many chunks are in “Pepperoni”. The bot saw four, not one word.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>The whole order was chopped the same way: short words stayed whole, long ones were split.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>Then you watched the bot pick the next chunk from a ranked list. It writes one chunk at a time.</div>
+    <div class="l"><span class="ms" style="color:var(--wrong)">cancel</span>Don't judge an answer by its length. The bot pays for every chunk, so a long chat gets slower and more expensive.</div></div>
 
-  <div class="q"><div class="n">Q1 · Hallucination end screen</div><div class="ask">Could you repeat the three "What matters" lines to a friend after reading them once?</div>
-    <div class="how">That is the whole test of this screen. If one line is too long or too clever, name it.</div>
-    <div class="ans"><b>yes ✓</b> <b>no ✗ → which line</b></div></div>
+  <div class="term"><b>Context window</b>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>The customer's first line, “No olives!!”, fell out of the window once five newer messages arrived.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>The bot then answered as if the allergy had never been mentioned. It wasn't careless. The line was gone.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>When you pinned that line to the top, it stayed in view and the bot got it right.</div>
+    <div class="l"><span class="ms" style="color:var(--wrong)">cancel</span>Don't assume the bot still sees something a customer said a while ago. Keep the important line where it can see it.</div></div>
 
-  <div class="q"><div class="n">Q2 · Same screen</div><div class="ask">Is "Don't" useful, or does it feel like a scolding?</div>
-    <div class="ans"><b>useful ✓</b> <b>drop it ✗</b> <b>keep, reword ✗</b></div></div>
+  <div class="term"><b>Hallucination</b>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>Every claim came with the same 100% confidence bar, whether it was on the menu or invented.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>The only way to tell that the vegan halal pizza was made up was to check the real menu yourself.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>Sounding sure told you nothing. Checking did.</div>
+    <div class="l"><span class="ms" style="color:var(--wrong)">cancel</span>Don't trust a price or a dish just because the bot sounds sure. Check it against something real.</div></div>
 
-  <div class="q"><div class="n">Q3 · Guardrails end screen (4 customers, set limits, 4 customers)</div><div class="ask">With "Why you care" gone, is anything missing that you would want a learner to leave with?</div>
-    <div class="ans"><b>nothing missing ✓</b> <b>missing ✗ → what</b></div></div>
+  <div class="term"><b>Prompt</b>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>With “You take pizza orders” as its only instruction, your bot invented a pineapple-anchovy pizza for a customer who said nothing about toppings.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>One added rule, “if size, crust or toppings are missing, ask”, made the same bot ask a question instead.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>The customer never changed. Only your instructions did.</div>
+    <div class="l"><span class="ms" style="color:var(--wrong)">cancel</span>Don't leave out what the bot should do when a customer is vague. It will fill the gap with a guess.</div></div>
 
-  <div class="q"><div class="n">Q4 · Copy pass, no app needed</div><div class="ask">Read the 12 check-line sets below. Any line you would change?</div>
-    <div class="how">
-      <b>Token</b> · chunks not words, one word can be several tokens · more tokens = slower and pricier · it never sees letters, so counting letters goes wrong · Don't ask it to count letters and trust it.<br>
-      <b>Context window</b> · only the last few messages, oldest fall out · not careless, just out of view · pin it, repeat it, or start fresh · Don't assume 20 messages ago is still in view.<br>
-      <b>Hallucination</b> · made-up sounds as confident as true · confidence is not evidence · give it real data and guessing drops · Don't trust an unverifiable detail because it sounds sure.<br>
-      <b>Prompt</b> · everything you leave out, it guesses · say what to do when info is missing · wording changes the bot, not the customer · Don't blame the customer for a vague order when instructions were vague.<br>
-      <b>Agent</b> · chatbot talks, agent acts · steps in order, order matters · more power, more guardrails · Don't let an agent act without limits.<br>
-      <b>Tool use</b> · memory is a guess, a real system is a check · give it tools · the right tool, not any tool · Don't let it answer a live question without a tool.<br>
-      <b>Skill</b> · a playbook for one recurring situation · same complaint, same right answer · steps in the order you'd handle it · Don't let it improvise the situations that matter most.<br>
-      <b>Memory</b> · working memory lasts one chat · persistent memory comes back next visit · you choose what is saved · Don't expect it to remember last week unless something was saved.<br>
-      <b>MCP</b> · one shared plug · no custom bridge per pair · strangers' tools click in on day one · Don't build a connector when the tool speaks MCP.<br>
-      <b>Guardrails</b> · hard limits: money, promises, topics · above the limit a human decides · test with a pushy customer's tricks · Don't trust "I'm the manager".<br>
-      <b>Temperature</b> · same words, only the odds change · low = safe word, high = surprises · down for exact wording, up for ideas · Don't leave it high for anything that must read the same.<br>
-      <b>RAG</b> · it looks documents up per question · only sees the pages the search found · can't tell current from outdated, ask which page · Don't assume "from our documents" means the right document.
-    </div>
+  <div class="term"><b>Agent</b>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>The chatbot told Marco his pizza was coming, and nothing happened. Payment, kitchen and delivery all stayed asleep.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>Once you handed the bot real actions, each one woke up a real system.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>Sending the driver before the kitchen had cooked failed. In the real world, the order of actions matters.</div>
+    <div class="l"><span class="ms" style="color:var(--wrong)">cancel</span>Don't give a bot the power to act without deciding what it may do, and in which order.</div></div>
+
+  <div class="term"><b>Tool use</b>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>Asked when the pizza arrives, your bot guessed “around 6:45” because it had no way to check.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>With the delivery tracker in its hands, the same question got a real answer: 7:10, delayed by traffic.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>Each question needed one specific tool. The stock list can't answer a delivery question.</div>
+    <div class="l"><span class="ms" style="color:var(--wrong)">cancel</span>Don't let a bot answer a live question, like stock or delivery time, from memory. Give it the tool that knows.</div></div>
+
+  <div class="term"><b>Skill</b>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>The same cold-pizza complaint got three different answers: a brush-off, a panic, and free pizza for life.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>You wrote a four-step playbook: apologize, verify the order, offer a voucher, record it.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>After that, all three customers got the same calm answer. The playbook decided, not the bot's mood.</div>
+    <div class="l"><span class="ms" style="color:var(--wrong)">cancel</span>Don't leave the situations that cost you money, like complaints, to improvisation.</div></div>
+
+  <div class="term"><b>Memory</b>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>Inside one chat, the bot knew Anna's order and her anchovy allergy perfectly.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>A week later it greeted her like a stranger. Nothing had been written down, so nothing survived.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>Once you saved her facts to the hard drive, she was recognised on the next visit.</div>
+    <div class="l"><span class="ms" style="color:var(--wrong)">cancel</span>Don't count on a bot remembering last week's customer unless something was saved on purpose.</div></div>
+
+  <div class="term"><b>MCP</b>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>Each system needed its own custom connector, three weeks apiece, and you were never done.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>With one universal port, the same systems clicked in with no building at all.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>A stock tracker built by people who had never heard of your bot plugged in on day one.</div>
+    <div class="l"><span class="ms" style="color:var(--wrong)">cancel</span>Don't build a custom bridge for a tool that already speaks MCP.</div></div>
+
+  <div class="term"><b>Guardrails</b>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>A “store manager” talked your bot into a 100% discount, and a stranger got a free essay.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>Each trick cost real money, because there was no limit the bot was allowed to refuse with.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>After you set four limits, the same four tricks bounced off.</div>
+    <div class="l"><span class="ms" style="color:var(--wrong)">cancel</span>Don't trust “I'm the manager” from a chat window. Above your limit, a real person decides.</div></div>
+
+  <div class="term"><b>Temperature</b>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>At low temperature the bot picked “classic” almost every roll. At high temperature almost any word could win.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>The words to choose from never changed. Only the odds did.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>The allergy disclaimer needed the dial turned down. The mystery-pizza names needed it turned up.</div>
+    <div class="l"><span class="ms" style="color:var(--wrong)">cancel</span>Don't leave the dial high for anything that must read exactly the same every time.</div></div>
+
+  <div class="term"><b>RAG</b>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>Your bot could read only two pages at a time, so you chose which pages it saw.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>When you handed it the two-year-old price list, it quoted the old price with full confidence. It couldn't tell the pages apart.</div>
+    <div class="l"><span class="ms" style="color:var(--teal)">check_circle</span>With no page about weddings, it invented a wedding package. With nothing handed over, it honestly said it didn't know.</div>
+    <div class="l"><span class="ms" style="color:var(--wrong)">cancel</span>Don't assume an answer “from our documents” came from the right document. Ask which page it used.</div></div>
+
+  <h2>3 · Two questions</h2>
+  <div class="q"><div class="n">Q1 · The words</div><div class="ask">Do these read like something a person would say to you after the game?</div>
+    <div class="how">Mark any line you had to read twice, as "Term: line number".</div>
     <div class="ans"><b>all fine ✓</b> <b>change ✗ → term + line</b></div></div>
+  <div class="q"><div class="n">Q2 · The section name</div><div class="ask">"What happened in the game", or would you name it differently?</div>
+    <div class="ans"><b>keep ✓</b> <b>rename ✗ → your name</b></div></div>
 
-  <h2>4 · Not for today</h2>
-  <div class="dont"><ul>
-      <li>The left intro panel and the single-column games (Phase 4, last one).</li>
-      <li>FR-19, FR-21, FR-22 as logged.</li>
-    </ul></div>
+  <h2>4 · Where to see it live</h2>
+  <p>This round's changes live in the <code>design-system</code> worktree, not on localhost:5180 yet. To see them, in a terminal:</p>
+  <code style="display:block;background:var(--ink);color:#fff;border-radius:8px;padding:.7rem .9rem;margin:.5rem 0 1rem">cd ".claude/worktrees/design-system" && npm run dev</code>
+  <p>Or reply on the words alone. The design has not changed since round 1.</p>
 
   <h2>5 · How to answer</h2>
-  <p>Four marks, for example <code>✓ ✓ ✓ ✓</code>. Copy changes as "term: new line".</p>
+  <p>Two marks, for example <code>✓ ✓</code>, plus any line changes.</p>
 </div>
