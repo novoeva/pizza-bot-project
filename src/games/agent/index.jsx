@@ -52,7 +52,7 @@ export default function AgentGame({ termId, onComplete }) {
     return () => clearTimeout(t)
   }, [phase, runIdx, seq.length])
 
-  const hint = useFirstTimeHint()
+  const hint = useFirstTimeHint(phase === 'build')
 
   function add(id) {
     if (seq.length < actions.length && !seq.includes(id)) setSeq([...seq, id])
@@ -222,6 +222,7 @@ export default function AgentGame({ termId, onComplete }) {
       icon="checklist"
       capacity={actions.length}
       items={seq.map((id) => actions.find((a) => a.id === id))}
+      accepts={actions.map((a) => a.id)}
       onDrop={add}
       onRemove={removeAt}
       onClear={() => setSeq([])}

@@ -59,7 +59,7 @@ export default function MemoryGame({ termId, onComplete }) {
 
   const term = terms.find((t) => t.id === termId)
 
-  const hint = useFirstTimeHint()
+  const hint = useFirstTimeHint(phase === 'install')
 
   function saveFact(id) {
     setSelected((prev) => (prev.has(id) ? prev : new Set([...prev, id])))
@@ -157,6 +157,7 @@ export default function MemoryGame({ termId, onComplete }) {
           icon="database"
           capacity={facts.length}
           items={[...selected].map((id) => ({ id, label: facts.find((f) => f.id === id).label }))}
+          accepts={facts.map((f) => f.id)}
           onDrop={saveFact}
           onRemove={forgetFact}
           emptyLabel="drag a fact here…"
@@ -209,7 +210,7 @@ export default function MemoryGame({ termId, onComplete }) {
           </GameActionButton>
         </GameActions>
       </>,
-      { part: 3, parts: 4 },
+      { part: 3, parts: 4, step: 0, steps: facts.length },
     )
   }
 

@@ -33,7 +33,7 @@ export default function SkillGame({ termId, onComplete }) {
   const term = terms.find((t) => t.id === termId)
   const isLastReply = replyIndex === improvisedReplies.length - 1
 
-  const hint = useFirstTimeHint()
+  const hint = useFirstTimeHint(phase === 'build')
 
   function tapStep(id) {
     if (builtSteps.includes(id)) return
@@ -119,6 +119,7 @@ export default function SkillGame({ termId, onComplete }) {
           title="Your playbook"
           capacity={playbookSteps.length}
           items={playbookItems}
+          accepts={playbookSteps.map((s) => s.id)}
           onDrop={tapStep}
           onRemove={removeStep}
           pulse={hint}

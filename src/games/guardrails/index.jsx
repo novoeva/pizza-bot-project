@@ -65,12 +65,12 @@ export default function GuardrailsGame({ termId, onComplete }) {
     setTried(false)
   }
 
-  // Progress: part 1 attacks / part 2 your limits, and the customer (or limit)
-  // you are on inside it.
+  // Progress: 1 attacks land · 2 you set the limits · 3 the same attacks
+  // bounce off. Three parts so the bar never moves backwards between them.
   const progress =
     phase === 'configure'
-      ? { part: 2, parts: 2, step: Object.keys(picks).length, steps: guardrailCategories.length }
-      : { part: phase === 'defend' ? 2 : 1, parts: 2, step: attackIndex + 1, steps: attacks.length }
+      ? { part: 2, parts: 3, step: Object.keys(picks).length, steps: guardrailCategories.length }
+      : { part: phase === 'defend' ? 3 : 1, parts: 3, step: attackIndex + 1, steps: attacks.length }
 
   // Left column: constant orientation (what guardrails are + Your role).
   const stage = (main) => (
@@ -131,7 +131,7 @@ export default function GuardrailsGame({ termId, onComplete }) {
   if (phase === 'defend') {
     return stage(
       <div className="flex flex-col gap-3">
-        {instruction(2, 'Your guardrails, under attack.')}
+        {instruction(3, 'Your guardrails, under attack.')}
 
         <p className="rounded-md border-[3px] border-success bg-success-bg px-3 py-2 text-center font-label text-sm font-bold text-success shadow-pop">
           Damage: $0

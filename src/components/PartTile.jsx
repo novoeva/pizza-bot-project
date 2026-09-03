@@ -13,6 +13,10 @@
  * `used`: already in the bot, shown faded on the shelf. `onAdd` is the tap
  * fallback; drag carries `id` to the SlotList via dataTransfer.
  */
+/** The drag payload type PartTile writes and SlotList reads. Page text
+ * dragged by accident is text/plain and is ignored. */
+export const PART_MIME = 'application/x-pizzabot-part'
+
 export default function PartTile({ id, icon, label, detail, foot, used = false, usedLabel = 'in the bot', onAdd, wiggle = false }) {
   return (
     <div
@@ -28,7 +32,7 @@ export default function PartTile({ id, icon, label, detail, foot, used = false, 
         }
       }}
       onDragStart={(e) => {
-        e.dataTransfer.setData('text/plain', id)
+        e.dataTransfer.setData(PART_MIME, id)
         e.dataTransfer.effectAllowed = 'move'
         e.currentTarget.classList.add('part-dragging')
       }}

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Panel from './Panel.jsx'
+import { PART_MIME } from './PartTile.jsx'
 
 /**
  * SlotList, the place inside your bot where PartTiles land (role 5, R3).
@@ -12,6 +13,9 @@ import Panel from './Panel.jsx'
  * paired with the first tile's wiggle, so a first-time player sees the move.
  *
  *   items      [{ id, icon, label }] in order
+ *   accepts    optional list of part ids this list may take; anything else
+ *              dropped on it (a tile from another list, stray page text) is
+ *              ignored instead of reaching game state
  *   onDrop(id) called with the dragged tile's id
  *   onRemove(index)
  *   emptyLabel what an empty slot says ("drag a step here…")
@@ -22,6 +26,7 @@ export default function SlotList({
   meta,
   capacity,
   items,
+  accepts,
   onDrop,
   onRemove,
   onClear,
@@ -36,7 +41,7 @@ export default function SlotList({
   return (
     <div
       onDragOver={(e) => {
-        if (full) return
+        if (full || !e.dataTransfer.types.includes(PART_MIME)) return
         e.preventDefault()
         e.dataTransfer.dropEffect = 'move'
         if (!over) setOver(true)
@@ -47,8 +52,11 @@ export default function SlotList({
       onDrop={(e) => {
         e.preventDefault()
         setOver(false)
-        const id = e.dataTransfer.getData('text/plain')
-        if (id && !full) onDrop?.(id)
+        const id = e.dataTransfer.getData(PART_MIME)
+        if (!id || full) return
+        if (accepts && !accepts.includes(id)) return
+        if (items.some((it) => it.id === id)) return
+        onDrop?.(id)
       }}
     >
       <Panel compact title={title} icon={icon} meta={meta ?? `${items.length}/${capacity}`}>

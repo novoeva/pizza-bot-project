@@ -44,7 +44,7 @@ export default function RagGame({ termId, onComplete }) {
   const round = rounds[roundIdx]
   useGameScroll(phase === 'reveal' ? 'reveal' : `${round.n}-${phase}`)
 
-  const hint = useFirstTimeHint()
+  const hint = useFirstTimeHint(phase === 'pick')
 
   function toggle(id) {
     setPicked((cur) =>
@@ -192,6 +192,7 @@ export default function RagGame({ termId, onComplete }) {
           const p = pages.find((x) => x.id === id)
           return { id, icon: p.icon, label: p.title }
         })}
+        accepts={pages.map((p) => p.id)}
         onDrop={handOver}
         onRemove={(i) => toggle(picked[i])}
         emptyLabel="drag a page here…"

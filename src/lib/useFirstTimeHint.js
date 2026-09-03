@@ -3,25 +3,39 @@ import { useEffect, useState } from 'react'
 const KEY = 'pizzabot-drag-hint-seen'
 
 /**
- * True for ~2 s on the first build screen of a session, false ever after:
- * drives the one-time "the tile moves" hint (PartTile wiggle + SlotList
- * pulse, decision R3). Reads/writes sessionStorage; if storage is blocked
- * there is simply no hint.
+ * True for ~2 s the first time a build screen is on screen in this session,
+ * false otherwise: drives the one-time "the tile moves" hint (PartTile wiggle
+ * + SlotList pulse, decision R3).
+ *
+ * Pass `active` = "the build screen is showing now". The hint starts when
+ * `active` turns true, and the sessionStorage key is written only when the
+ * hint has run to its end, so StrictMode's mount/unmount/mount in dev and a
+ * quick navigation away do not burn it. If storage is blocked there is simply
+ * no hint.
  */
-export function useFirstTimeHint() {
-  const [hint, setHint] = useState(() => {
-    try {
-      if (sessionStorage.getItem(KEY)) return false
-      sessionStorage.setItem(KEY, '1')
-      return true
-    } catch {
-      return false
-    }
-  })
+export function useFirstTimeHint(active = true) {
+  const [hint, setHint] = useState(false)
   useEffect(() => {
-    if (!hint) return
-    const t = setTimeout(() => setHint(false), 2200)
-    return () => clearTimeout(t)
-  }, [hint])
+    if (!active) return
+    try {
+      if (sessionStorage.getItem(KEY)) return
+    } catch {
+      return
+    }
+    const start = setTimeout(() => setHint(true), 0)
+    const stop = setTimeout(() => {
+      setHint(false)
+      try {
+        sessionStorage.setItem(KEY, '1')
+      } catch {
+        /* storage blocked */
+      }
+    }, 2200)
+    return () => {
+      clearTimeout(start)
+      clearTimeout(stop)
+      setHint(false)
+    }
+  }, [active])
   return hint
 }
