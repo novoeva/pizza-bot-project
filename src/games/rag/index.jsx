@@ -131,7 +131,7 @@ export default function RagGame({ termId, onComplete }) {
     const tone = outcome.tone === 'bad' ? 'problem' : outcome.tone === 'good' ? 'success' : 'info'
 
     return stage(
-      <GameIntro term={term} showHowTo={false} />,
+      <GameIntro term={term} />,
       <div className="flex flex-col gap-3">
         {instruction(
           'It answered',
@@ -196,6 +196,7 @@ export default function RagGame({ termId, onComplete }) {
         onDrop={handOver}
         onRemove={(i) => toggle(picked[i])}
         emptyLabel="drag a page here…"
+        emptyTapLabel="tap a page to hand it over…"
         numbered={false}
         pulse={hint}
       />
@@ -211,7 +212,7 @@ export default function RagGame({ termId, onComplete }) {
       {instruction(round.instruction ? `Round ${round.n}` : 'Round', round.instruction)}
       <p className="flex items-center gap-1 pl-1 font-label text-[10px] text-text-muted">
         <span className="material-symbols-rounded text-[15px]">menu_book</span>
-        The binder · the bot reads at most {MAX_PAGES} · drag pages over
+        The binder · the bot reads at most {MAX_PAGES} · drag or tap pages over
       </p>
       <div className="flex flex-col gap-2">
         {pages.map((page, i) => {
@@ -240,7 +241,7 @@ export default function RagGame({ termId, onComplete }) {
     <>
       {stage(
         <>
-          <GameIntro term={term} showHowTo={false} />
+          <GameIntro term={term} />
           {workbench}
         </>,
         binder,

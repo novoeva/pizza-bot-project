@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useGameScroll } from '../../lib/useGameScroll.js'
 import { questions, tools } from './questions.js'
 import terms from '../../content/terms.json'
-import GameIntro from '../../components/GameIntro.jsx'
 import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import TermReveal from '../../components/TermReveal.jsx'
@@ -66,13 +65,13 @@ export default function ToolUseGame({ termId, onComplete }) {
   const progress = {
     part: round,
     parts: 2,
-    step: phase === 'transition' ? questions.length : qIndex + 1,
+    step: phase === 'transition' ? questions.length : qIndex + ((round === 1 ? guessed : checked) ? 1 : 0),
     steps: questions.length,
   }
 
   // Left column: constant orientation (what tool use is + Your role).
   const stage = (main) => (
-    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
+    <GameStage term={term} main={main} progress={progress} />
   )
 
   // Per-phase instruction at the top of the right column.

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useGameScroll } from '../../lib/useGameScroll.js'
 import { hookWord, hookTokens, samplePhrase, predictionRounds } from './content.js'
 import terms from '../../content/terms.json'
-import GameIntro from '../../components/GameIntro.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import TermReveal from '../../components/TermReveal.jsx'
 import Callout from '../../components/Callout.jsx'
@@ -44,7 +43,7 @@ export default function TokenGame({ termId, onComplete }) {
     const wordCount = samplePhrase.text.trim().split(/\s+/).length
     return (
       <GameStage
-        context={<GameIntro term={term} showHowTo={false} />}
+        term={term}
         progress={{ part: 1, parts: 2 }}
         main={
           <>
@@ -167,8 +166,8 @@ export default function TokenGame({ termId, onComplete }) {
 
     return (
       <GameStage
-        context={<GameIntro term={term} showHowTo={false} />}
-        progress={{ part: 2, parts: 2, step: roundIndex + 1, steps: predictionRounds.length }}
+        term={term}
+        progress={{ part: 2, parts: 2, step: roundIndex + (answered ? 1 : 0), steps: predictionRounds.length }}
         main={
           <>
         <PhaseCard title="Read your bot's mind">

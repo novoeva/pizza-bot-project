@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Panel from './Panel.jsx'
 import { PART_MIME } from './PartTile.jsx'
 
@@ -18,7 +18,8 @@ import { PART_MIME } from './PartTile.jsx'
  *              ignored instead of reaching game state
  *   onDrop(id) called with the dragged tile's id
  *   onRemove(index)
- *   emptyLabel what an empty slot says ("drag a step here…")
+ *   emptyLabel what an empty slot says ("drag a step here…"); on touch
+ *              screens `emptyTapLabel` is shown instead ("tap a step to add it…")
  */
 export default function SlotList({
   title,
@@ -31,26 +32,36 @@ export default function SlotList({
   onRemove,
   onClear,
   emptyLabel = 'drag a step here…',
+  emptyTapLabel = 'tap a part to add it…',
   numbered = true,
   pulse = false,
 }) {
   const [over, setOver] = useState(false)
+  // dragenter/dragleave fire for every child boundary (and Safari leaves
+  // relatedTarget null), so count depth instead of trusting one leave event.
+  const depth = useRef(0)
   const nextEmpty = items.length
   const full = items.length >= capacity
 
   return (
     <div
+      onDragEnter={(e) => {
+        if (full || !e.dataTransfer.types.includes(PART_MIME)) return
+        depth.current += 1
+        if (!over) setOver(true)
+      }}
       onDragOver={(e) => {
         if (full || !e.dataTransfer.types.includes(PART_MIME)) return
         e.preventDefault()
         e.dataTransfer.dropEffect = 'move'
-        if (!over) setOver(true)
       }}
-      onDragLeave={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget)) setOver(false)
+      onDragLeave={() => {
+        depth.current = Math.max(0, depth.current - 1)
+        if (depth.current === 0) setOver(false)
       }}
       onDrop={(e) => {
         e.preventDefault()
+        depth.current = 0
         setOver(false)
         const id = e.dataTransfer.getData(PART_MIME)
         if (!id || full) return
@@ -83,7 +94,10 @@ export default function SlotList({
                       Drop here
                     </>
                   ) : (
-                    emptyLabel
+                    <>
+                      <span className="touch:hidden">{emptyLabel}</span>
+                      <span className="hidden touch:inline">{emptyTapLabel}</span>
+                    </>
                   )}
                 </div>
               )

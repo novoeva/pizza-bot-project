@@ -2,13 +2,13 @@ import { useState } from 'react'
 import { useGameScroll } from '../../lib/useGameScroll.js'
 import { attacks, guardrailCategories } from './content.js'
 import terms from '../../content/terms.json'
-import GameIntro from '../../components/GameIntro.jsx'
 import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import TermReveal from '../../components/TermReveal.jsx'
 import Callout from '../../components/Callout.jsx'
 import ChatMessage from '../../components/ChatMessage.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
+import StatusStrip from '../../components/StatusStrip.jsx'
 import SelectableCard from '../../components/SelectableCard.jsx'
 import ChoiceGroup from '../../components/ChoiceGroup.jsx'
 
@@ -70,11 +70,11 @@ export default function GuardrailsGame({ termId, onComplete }) {
   const progress =
     phase === 'configure'
       ? { part: 2, parts: 3, step: Object.keys(picks).length, steps: guardrailCategories.length }
-      : { part: phase === 'defend' ? 3 : 1, parts: 3, step: attackIndex + 1, steps: attacks.length }
+      : { part: phase === 'defend' ? 3 : 1, parts: 3, step: attackIndex + (tried ? 1 : 0), steps: attacks.length }
 
   // Left column: constant orientation (what guardrails are + Your role).
   const stage = (main) => (
-    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
+    <GameStage term={term} main={main} progress={progress} />
   )
 
   // Per-phase instruction, at the top of the right column so it's always the
@@ -133,9 +133,7 @@ export default function GuardrailsGame({ termId, onComplete }) {
       <div className="flex flex-col gap-3">
         {instruction(3, 'Your guardrails, under attack.')}
 
-        <p className="rounded-md border-[3px] border-success bg-success-bg px-3 py-2 text-center font-label text-sm font-bold text-success shadow-pop">
-          Damage: $0
-        </p>
+        <StatusStrip tone="success" icon="shield">Damage: $0</StatusStrip>
 
         {customerBubble('Same customer, same trick')}
 
@@ -191,10 +189,7 @@ export default function GuardrailsGame({ termId, onComplete }) {
     <div className="flex flex-col gap-3">
       {instruction(1, 'Your bot has no guardrails yet. Watch pushy customers talk it into anything.')}
 
-      <p className="flex items-center justify-center gap-2 rounded-md border-[3px] border-danger bg-danger-bg px-3 py-2 text-center font-label text-sm font-bold text-danger shadow-pop">
-        <span className="material-symbols-rounded text-[18px]">gpp_bad</span>
-        No guardrails · Damage ${damage}
-      </p>
+      <StatusStrip tone="problem" icon="gpp_bad">No guardrails · Damage ${damage}</StatusStrip>
 
       {customerBubble('Customer')}
 

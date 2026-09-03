@@ -17,7 +17,6 @@ import {
   honestyClose,
 } from './messages.js'
 import terms from '../../content/terms.json'
-import GameIntro from '../../components/GameIntro.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import TermReveal from '../../components/TermReveal.jsx'
 import Callout from '../../components/Callout.jsx'
@@ -51,7 +50,7 @@ export default function ContextWindowGame({ termId, onComplete }) {
 
   const instruction = (sub) => <PhaseCard title="What the bot can see">{sub}</PhaseCard>
   const stage = (main, progress) => (
-    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
+    <GameStage term={term} main={main} progress={progress} />
   )
 
   // ---------- Reveal ----------

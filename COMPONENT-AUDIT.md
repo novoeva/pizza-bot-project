@@ -149,7 +149,7 @@ Core five first (they close the three FRs), then supporting primitives. All in `
 
 **9. `DistributionBars`** — `rows=[{ id, label, pct }]`, `highlight={{ id, tone }}`, `marker={{ id, label }}`. Replaces G14; gives FR-14/15 the "highlight the rolled word" hook for free.
 
-**10. `Tag`, `StatusStrip`, `Hint`, `GameActionButton inline/size`** — small presets replacing G15, G17, G19, G20.
+**10. `StatusStrip` and `GameActionButton inline`** — ✅ built (FR-25): the shared status strip (Guardrails damage, MCP counters) on Callout's exported `TONES`, and the small in-card button (`inline`, `ghost` variant) used by MCP's row actions, Temperature's Roll again and Hallucination's Trust / Made up. `Tag`/`Hint` presets not built (no need found).
 
 Keep local (one-off, fine as is): agent `SystemsPanel`, context-window `ContextPanel` internals, temperature slider (`range-chunky`), hallucination confidence bar, mcp `SystemRow` (or fold into `Panel` later).
 
@@ -178,6 +178,8 @@ Dependencies in one line: **0 → 1 → {2, 3, 4} → 5**, with the `terms.json`
 ---
 
 ## 5. Decisions log
+
+> FR-25 (2026-09-03): the seven remaining code-review findings are applied: progress counts answered steps; `PartTile` keeps `dragging` in state; `SlotList` counts dragenter/dragleave depth; touch screens read "tap …" via one `touch:` Tailwind variant; Skill shows its verdict from the first reply; dead data (`about`, `whyYouCare`, `howToPlay`) and dead props (`showHowTo`, `heading`, `children`, `align`) removed; `GameStage` takes `term` and renders the intro itself; `StatusStrip`, `GameActionButton inline`, shared `Avatar` replace the hand-rolled copies.
 
 Reviewed visually in `design-system/gallery.html` on 2026-09-02.
 

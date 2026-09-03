@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useGameScroll } from '../../lib/useGameScroll.js'
 import { order, chatbotReply, actions, systems, fired, validateSequence } from './script.js'
 import terms from '../../content/terms.json'
-import GameIntro from '../../components/GameIntro.jsx'
 import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import TermReveal from '../../components/TermReveal.jsx'
@@ -82,7 +81,7 @@ export default function AgentGame({ termId, onComplete }) {
 
   // Left column: constant orientation (what an agent is + Your role).
   const stage = (main) => (
-    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
+    <GameStage term={term} main={main} progress={progress} />
   )
 
   // Per-phase instruction, at the top of the right column so it's always the
@@ -227,6 +226,7 @@ export default function AgentGame({ termId, onComplete }) {
       onRemove={removeAt}
       onClear={() => setSeq([])}
       emptyLabel="drag an action here…"
+      emptyTapLabel="tap an action to add it…"
       pulse={hint}
     />
   )
@@ -255,7 +255,7 @@ export default function AgentGame({ termId, onComplete }) {
     <div className="flex flex-col gap-3">
       {instruction(
         'Build the agent',
-        'A chatbot only talks. Hand your bot the real actions to take, in the order that makes sense — drag them onto the list.',
+        'A chatbot only talks. Hand your bot the real actions to take, in the order that makes sense: drag or tap them onto the list.',
         `${seq.length}/${actions.length}`,
       )}
       {customerBubble}
@@ -278,7 +278,7 @@ export default function AgentGame({ termId, onComplete }) {
 
   return (
     <>
-      <GameStage wide context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
+      <GameStage wide term={term} main={main} progress={progress} />
       <GameActions>
         <GameActionButton variant="primary" icon="play_arrow" iconFill disabled={!full} onClick={runAgent}>
           Run the agent

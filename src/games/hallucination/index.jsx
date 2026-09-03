@@ -8,6 +8,7 @@ import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import TermReveal from '../../components/TermReveal.jsx'
 import Callout from '../../components/Callout.jsx'
 import Panel from '../../components/Panel.jsx'
+import { Avatar } from '../../components/ChatMessage.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
 
 /**
@@ -57,7 +58,7 @@ export default function HallucinationGame({ termId, onComplete }) {
   }
 
   // Left column: read-once orientation only — what the term is and how to play.
-  const context = <GameIntro term={term} showHowTo={false} />
+  const context = <GameIntro term={term} />
 
   // Right column: everything you actually play with, together — the reference
   // menu you check claims against, the claim progress, the claim itself, the
@@ -127,28 +128,18 @@ export default function HallucinationGame({ termId, onComplete }) {
           </>
         }
       >
-        <BotAvatar />
+        <Avatar who="bot" />
         <p className="text-[1.05rem] font-extrabold leading-snug">&ldquo;{round.say}&rdquo;</p>
       </Panel>
 
       {/* Choices */}
       <div className={'flex gap-2 ' + (pick ? 'pointer-events-none opacity-50' : '')}>
-        <button
-          type="button"
-          onClick={() => choose('trust')}
-          className="press flex flex-1 items-center justify-center gap-1.5 rounded-md border-[3px] border-neutral bg-tertiary py-3 font-label text-sm font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded text-[18px]">check</span>
+        <GameActionButton variant="accent" icon="check" className="flex-1" onClick={() => choose('trust')}>
           Trust it
-        </button>
-        <button
-          type="button"
-          onClick={() => choose('fake')}
-          className="press flex flex-1 items-center justify-center gap-1.5 rounded-md border-[3px] border-neutral bg-primary py-3 font-label text-sm font-bold text-white shadow-pop"
-        >
-          <span className="material-symbols-rounded text-[18px]">flag</span>
+        </GameActionButton>
+        <GameActionButton variant="primary" icon="flag" className="flex-1" onClick={() => choose('fake')}>
           Made up
-        </button>
+        </GameActionButton>
       </div>
 
       {/* Feedback lands here, in place */}
@@ -170,7 +161,7 @@ export default function HallucinationGame({ termId, onComplete }) {
       <GameStage
         context={context}
         main={main}
-        progress={{ part: 1, parts: 1, step: index + 1, steps: rounds.length }}
+        progress={{ part: 1, parts: 1, step: index + (pick ? 1 : 0), steps: rounds.length }}
       />
       {pick && (
         <GameActions>
@@ -180,19 +171,5 @@ export default function HallucinationGame({ termId, onComplete }) {
         </GameActions>
       )}
     </>
-  )
-}
-
-function BotAvatar() {
-  return (
-    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border-[3px] border-neutral bg-primary">
-      <svg viewBox="0 0 32 32" className="h-6 w-6" aria-hidden="true">
-        <rect x="5" y="7" width="22" height="18" rx="6" fill="#fff" />
-        <circle cx="12.5" cy="16" r="2.6" fill="var(--color-primary)" />
-        <circle cx="19.5" cy="16" r="2.6" fill="var(--color-primary)" />
-        <line x1="16" y1="7" x2="16" y2="3" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
-        <circle cx="16" cy="2.5" r="2" fill="#fff" />
-      </svg>
-    </span>
   )
 }
