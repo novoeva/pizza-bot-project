@@ -235,6 +235,18 @@ Eva při review Fáze 4: „Nejsem si jistá, co mě to má naučit. Není tu ž
 - **📍 Kde:** `src/games/mcp/index.jsx` + `src/games/mcp/systems.js`.
 - **✅ Hotovo když:** hráč po hře umí říct, co MCP řeší, aniž by četl definici; ve hře je aspoň jedna akce, kde se „starý způsob" a „MCP" liší tím, co hráč musí udělat.
 
+**FR-25 — Zbylé nálezy z code review design systému (7 položek)** *(tech, ne UX)*
+Code review (2026-09-03, `/code-review master high`) našel 10 věcí; top 3 opraveny (typovaný drag payload + `accepts`, hint na build obrazovce, progress nikdy dozadu). Zbývá:
+1. Progress počítá krok, na kterém *jsi*, ne dokončený → 100 % ještě před poslední odpovědí (`step: index + (answered ? 1 : 0)` ve všech hrách).
+2. `PartTile` nastavuje třídu `part-dragging` přes `classList`, React ji při re-renderu smaže → držet `dragging` ve stavu.
+3. `SlotList` `onDragLeave` spoléhá na `relatedTarget` (v Safari `null`) → bliká „Drop here"; použít počítadlo dragenter/dragleave.
+4. Na dotykových zařízeních texty říkají jen „drag" (slot i instrukce); přidat touch variantu „tap to add".
+5. Skill kolo 1: verdikt („improvizuje") se ukáže až u třetí odpovědi; ukázat od první.
+6. Mrtvá data a props: `about`, `whyYouCare`, `howToPlay`, `showHowTo`, `PhaseCard heading`, `SelectableCard children`, `Callout align`.
+7. `stage`/`instruction` helper zkopírovaný ve 13 místech; ručně psaná tlačítka (Hallucination Trust/Made up, MCP řádky, Temperature Roll again), status stripy a `BotAvatar` mimo sdílené komponenty → `GameStage term=…`, `GameActionButton size="sm"`, sdílený `StatusStrip`, `Avatar`.
+- **📍 Kde:** `src/components/{SlotList,PartTile,GameIntro,PhaseCard,SelectableCard,Callout}.jsx`, `src/games/*/index.jsx`, `src/content/terms.json`.
+- **✅ Hotovo když:** všech 7 buď opraveno, nebo vědomě zavřeno s poznámkou.
+
 ### Otevřené / navazující
 - [x] **Component audit (FR-18, varianta A)** — hotovo: `COMPONENT-AUDIT.md` + `design-system/gallery.html`.
 - [x] ~~Ověřit žargon z FR-7~~ → vyjasněno: šlo o label **„Log it"** ve Skill hře (`src/games/skill/content.js:16`).
