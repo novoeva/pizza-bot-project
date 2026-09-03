@@ -4,6 +4,13 @@ import { hookWord, hookTokens, samplePhrase, predictionRounds } from './content.
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import TermReveal from '../../components/TermReveal.jsx'
+import Callout from '../../components/Callout.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
+import SelectableCard from '../../components/SelectableCard.jsx'
+import ChoiceGroup from '../../components/ChoiceGroup.jsx'
+import GameStage from '../../components/GameStage.jsx'
+import Panel from '../../components/Panel.jsx'
 
 const GUESS_OPTIONS = [1, 2, 3, 4]
 
@@ -16,8 +23,9 @@ function bestOf(options) {
  * Two beats that build the concept in order:
  *   1. Chop it up, a token is a chunk of text. Guess how many tokens
  *      "Pepperoni" is (four), then see the chunks and a whole order tokenized.
- *   2. Guess what's next, the model writes one token at a time, predicting
- *      the next from a ranked list. Guess the next token, then see the ranking.
+ *   2. Read your bot's mind, your bot writes one token at a time, predicting
+ *      the next from a ranked list. Call the next token before it does, then
+ *      see the ranking. You stay the owner watching your bot, never the model.
  */
 export default function TokenGame({ termId, onComplete }) {
   const term = terms.find((t) => t.id === termId)
@@ -35,10 +43,16 @@ export default function TokenGame({ termId, onComplete }) {
     const correct = chopGuess === hookTokens.length
     const wordCount = samplePhrase.text.trim().split(/\s+/).length
     return (
-      <div className="flex flex-col gap-3">
-        <GameIntro term={term} />
+      <GameStage
+        context={<GameIntro term={term} showHowTo={false} />}
+        progress={{ part: 1, parts: 2 }}
+        main={
+          <>
+        <PhaseCard title="Chop it up">
+          Guess how many chunks your bot sees in one word, then watch a whole order get chopped.
+        </PhaseCard>
 
-        <div className="rounded-md border-[3px] border-neutral bg-surface p-4 shadow-card">
+        <div className="rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop">
           <p className="text-center font-label text-[11px] text-text-muted">
             {answered ? 'It splits into' : 'How many tokens is this word?'}
           </p>
@@ -46,17 +60,19 @@ export default function TokenGame({ termId, onComplete }) {
           {!answered ? (
             <>
               <p className="mt-2 text-center text-3xl font-extrabold tracking-tight">{hookWord}</p>
-              <div className="mt-3 grid grid-cols-4 gap-2">
-                {GUESS_OPTIONS.map((n) => (
-                  <button
-                    key={n}
-                    type="button"
-                    onClick={() => setChopGuess(n)}
-                    className="press rounded-md border-[3px] border-neutral bg-surface py-3 font-label text-lg font-bold text-text shadow-pop"
-                  >
-                    {n}
-                  </button>
-                ))}
+              <div className="mt-3 text-left">
+                <ChoiceGroup mode="commit" columns={4}>
+                  {GUESS_OPTIONS.map((n) => (
+                    <SelectableCard
+                      key={n}
+                      mode="commit"
+                      variant="tile"
+                      label={String(n)}
+                      labelClassName="text-lg"
+                      onSelect={() => setChopGuess(n)}
+                    />
+                  ))}
+                </ChoiceGroup>
               </div>
             </>
           ) : (
@@ -119,7 +135,9 @@ export default function TokenGame({ termId, onComplete }) {
             </GameActions>
           </>
         )}
-      </div>
+          </>
+        }
+      />
     )
   }
 
@@ -148,71 +166,47 @@ export default function TokenGame({ termId, onComplete }) {
     }
 
     return (
-      <div className="flex flex-col gap-3">
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-          <div className="flex items-center justify-between">
-            <p className="font-label text-[11px] text-primary">Game · Guess what's next</p>
-            <span className="font-label text-[11px] text-text-muted">
-              {roundIndex + 1} / {predictionRounds.length}
-            </span>
-          </div>
-          <h1 className="text-2xl leading-tight">Token</h1>
-          <p className="mt-1 text-[13px] leading-snug text-text-muted">
-            The model (an LLM, short for large language model) never writes a whole reply at
-            once. It picks one token, then the next, then the next. Every pick is a guess at what
-            fits best after everything it has seen so far.
-          </p>
-        </div>
+      <GameStage
+        context={<GameIntro term={term} showHowTo={false} />}
+        progress={{ part: 2, parts: 2, step: roundIndex + 1, steps: predictionRounds.length }}
+        main={
+          <>
+        <PhaseCard title="Read your bot's mind">
+          Your bot (an LLM, short for large language model) never writes a whole reply at once.
+          It picks one token, then the next, then the next. Every pick is a guess at what fits
+          best after everything it has seen so far.
+        </PhaseCard>
 
         <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-4 text-center shadow-pop">
           <p className="text-lg font-extrabold leading-snug">
-            "{round.context} <span className="text-primary">___</span>"
+            "{round.context} <span className="text-tertiary">___</span>"
           </p>
         </div>
 
         {!answered ? (
-          <div className="flex flex-col gap-2">
-            <p className="text-center font-label text-[11px] text-text-muted">
-              You're the model now. Which token is most likely to come next?
-            </p>
+          <ChoiceGroup mode="commit" label="Which token does your bot pick next?">
             {round.options.map((o) => (
-              <button
+              <SelectableCard
                 key={o.word}
-                type="button"
-                onClick={() => choose(o.word)}
-                className="press rounded-md border-[3px] border-neutral bg-surface py-3 font-mono text-sm font-bold text-text shadow-pop"
-              >
-                {o.word}
-              </button>
+                mode="commit"
+                label={o.word}
+                labelClassName="font-mono text-sm"
+                onSelect={() => choose(o.word)}
+              />
             ))}
-          </div>
+          </ChoiceGroup>
         ) : (
           <>
-            <div
-              className={
-                'rounded-md border-[3px] px-4 py-3 shadow-pop ' +
-                (correct ? 'border-success bg-success-bg' : 'border-danger bg-danger-bg')
-              }
+            <Callout
+              tone={correct ? 'success' : 'problem'}
+              icon={correct ? 'check_circle' : 'cancel'}
+              title={correct ? 'You called it' : `Your bot picked "${best.word}"`}
+              compact
             >
-              <p
-                className={
-                  'flex items-center gap-1.5 font-label text-sm font-bold ' +
-                  (correct ? 'text-success' : 'text-danger')
-                }
-              >
-                <span className="material-symbols-rounded text-[18px]">
-                  {correct ? 'check_circle' : 'cancel'}
-                </span>
-                {correct ? 'You matched the model' : `Model picked "${best.word}"`}
-              </p>
-              <p className="mt-1 text-[13px] leading-snug text-text">{round.why}</p>
-            </div>
+              {round.why}
+            </Callout>
 
-            <div className="rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop">
-              <div className="mb-3 flex items-baseline justify-between gap-2">
-                <p className="font-label text-[11px] text-text-muted">The model's ranking</p>
-                <p className="font-label text-[11px] text-text-muted">% = probability</p>
-              </div>
+            <Panel title="Your bot's ranking" meta="% = probability">
               <div className="flex flex-col gap-2">
                 {sorted.map((o) => {
                   const isBest = o.word === best.word
@@ -242,7 +236,7 @@ export default function TokenGame({ termId, onComplete }) {
                   )
                 })}
               </div>
-            </div>
+            </Panel>
 
             <GameActions>
               <GameActionButton variant="primary" icon="arrow_forward" onClick={next}>
@@ -251,38 +245,15 @@ export default function TokenGame({ termId, onComplete }) {
             </GameActions>
           </>
         )}
-      </div>
+          </>
+        }
+      />
     )
   }
 
   // ---------- Reveal ----------
   const score = results.filter(Boolean).length
   return (
-    <div className="flex flex-col gap-3 text-center">
-      <div className="mx-auto mt-2 flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-neutral bg-success shadow-pop">
-        <span className="material-symbols-rounded fill text-5xl text-white">check</span>
-      </div>
-      <p className="font-label text-[11px] text-primary">Snapped onto your bot · {term.botPart}</p>
-      <h2 className="text-2xl">You just learned the term Token</h2>
-      <p className="font-label text-xs text-text-muted">
-        You matched the model on {score} of {predictionRounds.length}.
-      </p>
-
-      <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
-        <p className="font-label text-[11px] text-text-muted">What it means</p>
-        <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
-      </div>
-
-      <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
-        <p className="font-label text-[11px] text-text-muted">Why you care</p>
-        <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
-      </div>
-
-      <GameActions>
-        <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
-          Snap it onto your bot
-        </GameActionButton>
-      </GameActions>
-    </div>
+    <TermReveal term={term} score={`You called your bot's next chunk on ${score} of ${predictionRounds.length}.`} onComplete={onComplete} />
   )
 }

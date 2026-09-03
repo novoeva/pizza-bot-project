@@ -18,16 +18,17 @@ import terms from '../content/terms.json'
  *   wheeled base  → agent
  *
  * Colours reference the app's theme tokens (not raw hex), so the robot re-skins
- * along with the rest of the UI and works if a dark theme is added. Cheeks are
- * a soft tint of the primary colour.
+ * along with the rest of the UI and works if a dark theme is added. Red parts
+ * use the brand `tomato` token (as the rest of the app's bot art does); cheeks
+ * are a soft tint of it.
  */
 const NAVY = 'var(--color-text)'
 const SHELL = 'var(--color-surface)'
 const SAGE = 'var(--color-neutral)'
-const RED = 'var(--color-primary)'
+const RED = 'var(--color-tomato)'
 const SKY = 'var(--color-accent)'
 const DEEP = 'var(--color-tertiary)'
-const BLUSH = 'var(--color-primary)'
+const BLUSH = 'var(--color-tomato)'
 
 const SIZE_DEFAULT =
   'mx-auto block h-auto w-full min-h-[200px] max-h-[calc(100svh-20rem)] max-w-[280px]'

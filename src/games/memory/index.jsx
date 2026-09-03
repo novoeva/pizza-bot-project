@@ -4,6 +4,14 @@ import { sessionOneLines, resetLines, facts } from './content.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import TermReveal from '../../components/TermReveal.jsx'
+import Callout from '../../components/Callout.jsx'
+import ChatMessage from '../../components/ChatMessage.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
+import PartTile from '../../components/PartTile.jsx'
+import SlotList from '../../components/SlotList.jsx'
+import { useFirstTimeHint } from '../../lib/useFirstTimeHint.js'
+import GameStage from '../../components/GameStage.jsx'
 
 const PRACTICAL_IDS = ['order', 'allergy', 'address']
 
@@ -51,45 +59,44 @@ export default function MemoryGame({ termId, onComplete }) {
 
   const term = terms.find((t) => t.id === termId)
 
-  function toggleFact(id) {
+  const hint = useFirstTimeHint(phase === 'install')
+
+  function saveFact(id) {
+    setSelected((prev) => (prev.has(id) ? prev : new Set([...prev, id])))
+  }
+  function forgetFact(index) {
     setSelected((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) {
-        next.delete(id)
-      } else {
-        next.add(id)
-      }
-      return next
+      const next = [...prev]
+      next.splice(index, 1)
+      return new Set(next)
     })
   }
 
-  const instruction = (sub) => (
-    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-      <p className="font-label text-[11px] text-primary">Game · Welcome, stranger</p>
-      <h1 className="text-2xl leading-tight">Memory</h1>
-      <p className="mt-1 font-label text-[11px] text-text-muted">{sub}</p>
-    </div>
+  const instruction = (sub) => <PhaseCard title="Welcome, stranger">{sub}</PhaseCard>
+  const stage = (main, progress) => (
+    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
   )
 
-  function renderChatSequence(lines, onFinish, buttonLabel, header, intro = false) {
+  // Progress: 1 visit one · 2 a week later · 3 install memory · 4 Anna is back.
+  function renderChatSequence(lines, onFinish, buttonLabel, header, part = 1) {
     const isLast = lineIndex >= lines.length - 1
-    return (
-      <div className="flex flex-col gap-3">
-        {intro ? <GameIntro term={term} /> : instruction(header)}
+    return stage(
+      <>
+        {instruction(header)}
+        {/* Standard sides: the customer (Anna) is received, on the left; your
+            bot is on the right, like every other game. */}
         <div className="flex flex-col gap-2">
-          {lines.slice(0, lineIndex + 1).map((line, i) => (
-            <div
-              key={i}
-              className={
-                'max-w-[85%] rounded-md border-[3px] border-neutral px-4 py-3 text-sm shadow-pop ' +
-                (line.speaker === 'bot'
-                  ? 'self-start bg-surface text-text'
-                  : 'ml-auto self-end bg-accent-soft text-text')
-              }
-            >
-              {line.text}
-            </div>
-          ))}
+          {lines.slice(0, lineIndex + 1).map((line, i) =>
+            line.speaker === 'bot' ? (
+              <ChatMessage key={i} from="bot">
+                {line.text}
+              </ChatMessage>
+            ) : (
+              <ChatMessage key={i} from="customer" label="Customer · Anna">
+                {line.text}
+              </ChatMessage>
+            ),
+          )}
         </div>
         <GameActions>
           <GameActionButton
@@ -107,48 +114,23 @@ export default function MemoryGame({ termId, onComplete }) {
             {isLast ? buttonLabel : 'Continue'}
           </GameActionButton>
         </GameActions>
-      </div>
+      </>,
+      { part, parts: 4, step: lineIndex + 1, steps: lines.length },
     )
   }
 
   if (phase === 'reveal') {
     return (
-      <div className="flex flex-col gap-3 text-center">
-        <div className="mx-auto mt-2 flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-neutral bg-success shadow-pop">
-          <span className="material-symbols-rounded fill text-5xl text-white">check</span>
-        </div>
-        <p className="font-label text-[11px] text-primary">
-          Snapped onto your bot · {term.botPart}
-        </p>
-        <h2 className="text-2xl">You just learned the term Memory</h2>
-
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
-          <p className="font-label text-[11px] text-text-muted">What it means</p>
-          <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
-        </div>
-
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
-          <p className="font-label text-[11px] text-text-muted">Why you care</p>
-          <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
-        </div>
-
-        <div className="rounded-lg border-[3px] border-tertiary bg-surface p-3 text-left shadow-pop">
-          <p className="flex items-center gap-1 font-label text-[11px] font-bold text-tertiary">
-            <span className="material-symbols-rounded text-[15px]">info</span>
-            Real talk
-          </p>
-          <p className="mt-1 text-[13px] leading-snug text-text">
+      <TermReveal
+        term={term}
+        onComplete={onComplete}
+        aside={
+          <Callout tone="info" title="Real talk" compact>
             This app remembers your finished games the exact same way, saved in your browser. That's
             why your bot is still half-built when you come back tomorrow.
-          </p>
-        </div>
-
-        <GameActions>
-          <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
-            Snap it onto your bot
-          </GameActionButton>
-        </GameActions>
-      </div>
+          </Callout>
+        }
+      />
     )
   }
 
@@ -159,76 +141,76 @@ export default function MemoryGame({ termId, onComplete }) {
       () => setPhase('reveal'),
       'See what this means',
       'A week later, Anna is back.',
+      4,
     )
   }
 
   if (phase === 'install') {
     const done = selected.size > 0
-    return (
-      <div className="flex flex-col gap-3">
+    return stage(
+      <>
         {instruction(
-          'The hard drive is empty. Tick whatever the bot should remember. Anything you skip is gone the moment the chat ends.',
+          'The hard drive is empty. Drag in whatever the bot should remember. Anything you leave out is gone the moment the chat ends.',
         )}
-        <div className="flex flex-col gap-2">
-          {facts.map((fact) => {
-            const isSelected = selected.has(fact.id)
-            return (
-              <button
-                key={fact.id}
-                type="button"
-                onClick={() => toggleFact(fact.id)}
-                className={
-                  'press rounded-md border-[3px] px-4 py-3 text-left font-bold shadow-pop transition-all ' +
-                  (isSelected
-                    ? 'border-cheese-dim bg-cheese-bg text-cheese-dim'
-                    : 'border-neutral bg-surface text-text-muted')
-                }
-              >
-                {isSelected ? '✓ ' : ''}
-                {fact.label}
-              </button>
-            )
-          })}
-        </div>
-        <p className="text-center font-label text-[11px] text-text-muted">
-          {selected.size === 0
-            ? 'Nothing saved yet'
-            : `${selected.size} fact${selected.size === 1 ? '' : 's'} saved to memory`}
+        <SlotList
+          title="The hard drive"
+          icon="database"
+          capacity={facts.length}
+          items={[...selected].map((id) => ({ id, label: facts.find((f) => f.id === id).label }))}
+          accepts={facts.map((f) => f.id)}
+          onDrop={saveFact}
+          onRemove={forgetFact}
+          emptyLabel="drag a fact here…"
+          numbered={false}
+          pulse={hint}
+        />
+        <p className="flex items-center gap-1 pl-1 font-label text-[10px] text-text-muted">
+          <span className="material-symbols-rounded text-[15px]">handyman</span>
+          What the bot heard today · drag what it should keep
         </p>
+        <div className="flex flex-col gap-2">
+          {facts.map((fact, i) => (
+            <PartTile
+              key={fact.id}
+              id={fact.id}
+              label={fact.label}
+              used={selected.has(fact.id)}
+              usedLabel="saved"
+              onAdd={() => saveFact(fact.id)}
+              wiggle={hint && i === facts.findIndex((f) => !selected.has(f.id))}
+            />
+          ))}
+        </div>
         <GameActions>
           <GameActionButton variant="primary" icon="save" disabled={!done} onClick={() => setPhase('revisit')}>
             Save to the hard drive
           </GameActionButton>
         </GameActions>
-      </div>
+      </>,
+      { part: 3, parts: 4, step: selected.size, steps: facts.length },
     )
   }
 
   if (phase === 'diagnose') {
-    return (
-      <div className="flex flex-col gap-3">
+    return stage(
+      <>
         {instruction('Why it forgot, and how to fix it.')}
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 shadow-pop">
-          <p className="font-label text-[11px] text-primary">The problem</p>
-          <p className="mt-1 text-[15px] leading-snug">
-            Every visit, the bot starts from zero. Inside one chat its memory is perfect. That is
-            working memory. But nothing survives once the chat ends, so it cannot recognise Anna at
-            all.
-          </p>
-        </div>
-        <div className="rounded-lg border-[3px] border-tertiary bg-surface p-4 shadow-pop">
-          <p className="font-label text-[11px] text-tertiary">The fix</p>
-          <p className="mt-1 text-[15px] leading-snug">
-            Give it a hard drive: a place to write facts down and read them back at the start of
-            every visit. That's persistent memory.
-          </p>
-        </div>
+        <Callout tone="problem" title="The problem">
+          Every visit, the bot starts from zero. Inside one chat its memory is perfect. That is
+          working memory. But nothing survives once the chat ends, so it cannot recognise Anna at
+          all.
+        </Callout>
+        <Callout tone="info" title="The fix" icon="build">
+          Give it a hard drive: a place to write facts down and read them back at the start of
+          every visit. That's persistent memory.
+        </Callout>
         <GameActions>
           <GameActionButton variant="primary" icon="database" onClick={() => setPhase('install')}>
             Install persistent memory
           </GameActionButton>
         </GameActions>
-      </div>
+      </>,
+      { part: 3, parts: 4, step: 0, steps: facts.length },
     )
   }
 
@@ -238,14 +220,15 @@ export default function MemoryGame({ termId, onComplete }) {
       () => setPhase('diagnose'),
       'Why did it forget?',
       'Same bot, new chat, nothing saved.',
+      2,
     )
   }
 
   if (phase === 'timejump') {
-    return (
-      <div className="flex flex-col gap-3">
+    return stage(
+      <>
         {instruction('The chat is over.')}
-        <div className="flex flex-col items-center justify-center gap-4 rounded-lg border-[3px] border-neutral bg-muted py-16 shadow-card">
+        <div className="flex flex-col items-center justify-center gap-4 rounded-lg border-[3px] border-neutral bg-muted py-16 shadow-pop">
           <p className="font-display text-xl text-text-muted">One week later.</p>
           <GameActions>
             <GameActionButton variant="accent" icon="arrow_forward" onClick={() => setPhase('reset')}>
@@ -253,7 +236,8 @@ export default function MemoryGame({ termId, onComplete }) {
             </GameActionButton>
           </GameActions>
         </div>
-      </div>
+      </>,
+      { part: 2, parts: 4 },
     )
   }
 
@@ -262,6 +246,6 @@ export default function MemoryGame({ termId, onComplete }) {
     () => setPhase('timejump'),
     'End the chat',
     'Visit 1: the bot is chatting with Anna.',
-    true,
+    1,
   )
 }

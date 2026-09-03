@@ -10,7 +10,14 @@ import {
 } from './content.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import TermReveal from '../../components/TermReveal.jsx'
+import Callout from '../../components/Callout.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
+import SelectableCard from '../../components/SelectableCard.jsx'
+import ChoiceGroup from '../../components/ChoiceGroup.jsx'
+import Panel from '../../components/Panel.jsx'
 
 /**
  * Temperature game, { termId, onComplete } interface.
@@ -50,18 +57,22 @@ export default function TemperatureGame({ termId, onComplete }) {
       setRolls((r) => r + 1)
     }
 
-    return (
-      <div className="flex flex-col gap-3">
-        <GameIntro term={term} />
+    const main = (
+      <>
+        {/* This beat's own instruction, at the top of the active column so it's
+            always the current step (the constant orientation stays on the left). */}
+        <PhaseCard title="Feel the dial">
+          Drag the temperature from low to high and watch the odds shift, then roll to see which word your bot picks.
+        </PhaseCard>
 
         {/* The sentence the bot is about to finish */}
         <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-4 text-center shadow-pop">
           <p className="text-lg font-extrabold leading-snug">
             "{sliderContext}{' '}
             {sampled ? (
-              <span className="text-primary">{sampled}</span>
+              <span className="text-tertiary">{sampled}</span>
             ) : (
-              <span className="text-primary">___</span>
+              <span className="text-tertiary">___</span>
             )}
             {sampled ? '.' : ''}"
           </p>
@@ -73,19 +84,18 @@ export default function TemperatureGame({ termId, onComplete }) {
         </div>
 
         {/* The temperature dial */}
-        <div className="rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop">
-          <div className="mb-2 flex items-center justify-between">
-            <p className="flex items-center gap-1 font-label text-[11px] text-text-muted">
-              <span className="material-symbols-rounded text-[15px]">thermostat</span>
-              Temperature
-            </p>
-            <span className="flex items-center gap-2">
+        <Panel
+          title="Temperature"
+          icon="thermostat"
+          meta={
+            <>
               <span className="rounded-full border-2 border-neutral bg-accent-soft px-2 py-0.5 font-label text-[11px] font-bold text-tertiary">
                 {zone.label}
               </span>
               <span className="font-mono text-sm font-bold text-text">{temp.toFixed(1)}</span>
-            </span>
-          </div>
+            </>
+          }
+        >
           <input
             type="range"
             min={TEMP_MIN}
@@ -93,22 +103,17 @@ export default function TemperatureGame({ termId, onComplete }) {
             step={0.1}
             value={temp}
             onChange={(e) => setTemp(Number(e.target.value))}
-            className="w-full"
-            style={{ accentColor: 'var(--color-primary)' }}
+            className="range-chunky"
             aria-label="Temperature"
           />
           <div className="mt-1 flex justify-between font-label text-[10px] text-text-muted">
             <span>Low · predictable</span>
             <span>High · wild</span>
           </div>
-        </div>
+        </Panel>
 
         {/* Live distribution */}
-        <div className="rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop">
-          <div className="mb-3 flex items-baseline justify-between gap-2">
-            <p className="font-label text-[11px] text-text-muted">Chance of each next word</p>
-            <p className="font-label text-[11px] text-text-muted">% = probability</p>
-          </div>
+        <Panel title="Chance of each next word" meta="% = probability">
           <div className="flex flex-col gap-2">
             {ranked.map((o) => {
               const isTop = o.word === top.word
@@ -118,7 +123,7 @@ export default function TemperatureGame({ termId, onComplete }) {
                     className={
                       'w-24 shrink-0 rounded border-2 px-1.5 py-1 text-center font-mono text-xs ' +
                       (isTop
-                        ? 'border-neutral bg-accent-soft font-bold text-tertiary'
+                        ? 'border-neutral bg-cheese-bg font-bold text-cheese-dim'
                         : 'border-neutral bg-muted text-text-muted')
                     }
                   >
@@ -126,7 +131,7 @@ export default function TemperatureGame({ termId, onComplete }) {
                   </div>
                   <div className="h-4 flex-1 overflow-hidden rounded-full border-2 border-neutral bg-surface">
                     <div
-                      className={'h-full transition-[width] duration-150 ' + (isTop ? 'bg-success' : 'bg-tertiary')}
+                      className={'h-full transition-[width] duration-150 ' + (isTop ? 'bg-cheese' : 'bg-tertiary')}
                       style={{ width: `${o.pct}%` }}
                     />
                   </div>
@@ -138,7 +143,7 @@ export default function TemperatureGame({ termId, onComplete }) {
             })}
           </div>
           <p className="mt-3 text-[13px] leading-snug text-text-muted">{zone.note}</p>
-        </div>
+        </Panel>
 
         {/* Re-roll stays inline as a secondary; the pinned bar carries the
             forward action so it's always on screen. */}
@@ -152,7 +157,18 @@ export default function TemperatureGame({ termId, onComplete }) {
             Roll again
           </button>
         )}
+      </>
+    )
 
+    // Left: read-once orientation (what temperature is + Your role). Right: the
+    // live dial, the distribution and the roll — the part you actually touch.
+    return (
+      <>
+        <GameStage
+          context={<GameIntro term={term} showHowTo={false} />}
+          main={main}
+          progress={{ part: 1, parts: 2 }}
+        />
         <GameActions>
           {!interacted ? (
             <GameActionButton variant="accent" icon="casino" onClick={roll}>
@@ -168,7 +184,7 @@ export default function TemperatureGame({ termId, onComplete }) {
             </GameActionButton>
           )}
         </GameActions>
-      </div>
+      </>
     )
   }
 
@@ -194,20 +210,13 @@ export default function TemperatureGame({ termId, onComplete }) {
       setPick(null)
     }
 
-    return (
-      <div className="flex flex-col gap-3">
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-          <div className="flex items-center justify-between">
-            <p className="font-label text-[11px] text-primary">Game · Pick the setting</p>
-            <span className="font-label text-[11px] text-text-muted">
-              {roundIndex + 1} / {taskRounds.length}
-            </span>
-          </div>
-          <h1 className="text-2xl leading-tight">Temperature</h1>
-          <p className="mt-1 text-[13px] leading-snug text-text-muted">
-            Same bot, very different jobs. For each one, decide which way to turn the dial.
-          </p>
-        </div>
+    // Left column keeps the same orientation as beat 1 (the term + Your role),
+    // so it stays put while the right column switches from the dial to the jobs.
+    const main = (
+      <>
+        <PhaseCard title="Pick the setting">
+          Same bot, very different jobs. For each one, decide which way to turn the dial.
+        </PhaseCard>
 
         <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-4 shadow-pop">
           <p className="font-label text-[11px] text-text-muted">The job</p>
@@ -216,90 +225,64 @@ export default function TemperatureGame({ termId, onComplete }) {
         </div>
 
         {!answered ? (
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => choose('low')}
-              className="press flex flex-col items-center gap-1 rounded-md border-[3px] border-neutral bg-surface py-4 shadow-pop"
-            >
-              <span className="material-symbols-rounded text-2xl text-tertiary">ac_unit</span>
-              <span className="font-label text-sm font-bold text-text">Turn it down</span>
-              <span className="font-label text-[10px] text-text-muted">Low · consistent</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => choose('high')}
-              className="press flex flex-col items-center gap-1 rounded-md border-[3px] border-neutral bg-surface py-4 shadow-pop"
-            >
-              <span className="material-symbols-rounded text-2xl text-primary">local_fire_department</span>
-              <span className="font-label text-sm font-bold text-text">Turn it up</span>
-              <span className="font-label text-[10px] text-text-muted">High · creative</span>
-            </button>
-          </div>
+          <ChoiceGroup mode="commit" columns={2} label="Which way do you turn the dial?">
+            <SelectableCard
+              mode="commit"
+              variant="tile"
+              icon="ac_unit"
+              label="Turn it down"
+              detail="Low · consistent"
+              onSelect={() => choose('low')}
+            />
+            <SelectableCard
+              mode="commit"
+              variant="tile"
+              icon="local_fire_department"
+              iconClassName="text-tomato"
+              label="Turn it up"
+              detail="High · creative"
+              onSelect={() => choose('high')}
+            />
+          </ChoiceGroup>
         ) : (
-          <>
-            <div
-              className={
-                'rounded-md border-[3px] px-4 py-3 shadow-pop ' +
-                (correct ? 'border-success bg-success-bg' : 'border-danger bg-danger-bg')
-              }
-            >
-              <p
-                className={
-                  'flex items-center gap-1.5 font-label text-sm font-bold ' +
-                  (correct ? 'text-success' : 'text-danger')
-                }
-              >
-                <span className="material-symbols-rounded text-[18px]">
-                  {correct ? 'check_circle' : 'cancel'}
-                </span>
-                {correct
-                  ? `Right, turn it ${round.answer === 'low' ? 'down' : 'up'}`
-                  : `Better to turn it ${round.answer === 'low' ? 'down' : 'up'}`}
-              </p>
-              <p className="mt-1 text-[13px] leading-snug text-text">{round.why}</p>
-            </div>
-
-            <GameActions>
-              <GameActionButton variant="primary" icon="arrow_forward" onClick={next}>
-                {isLast ? 'See what this means' : 'Next job'}
-              </GameActionButton>
-            </GameActions>
-          </>
+          <Callout
+            tone={correct ? 'success' : 'problem'}
+            icon={correct ? 'check_circle' : 'cancel'}
+            title={
+              correct
+                ? `Right, turn it ${round.answer === 'low' ? 'down' : 'up'}`
+                : `Better to turn it ${round.answer === 'low' ? 'down' : 'up'}`
+            }
+            compact
+          >
+            {round.why}
+          </Callout>
         )}
-      </div>
+      </>
+    )
+
+    return (
+      <>
+        <GameStage
+          context={<GameIntro term={term} showHowTo={false} />}
+          main={main}
+          progress={{ part: 2, parts: 2, step: roundIndex + 1, steps: taskRounds.length }}
+        />
+        {answered && (
+          <GameActions>
+            <GameActionButton variant="primary" icon="arrow_forward" onClick={next}>
+              {isLast ? 'See what this means' : 'Next job'}
+            </GameActionButton>
+          </GameActions>
+        )}
+      </>
     )
   }
 
   // ---------- Reveal ----------
   const score = results.filter(Boolean).length
   return (
-    <div className="flex flex-col gap-3 text-center">
-      <div className="mx-auto mt-2 flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-neutral bg-success shadow-pop">
-        <span className="material-symbols-rounded fill text-5xl text-white">check</span>
-      </div>
-      <p className="font-label text-[11px] text-primary">Snapped onto your bot · {term.botPart}</p>
-      <h2 className="text-2xl">You just learned the term Temperature</h2>
-      <p className="font-label text-xs text-text-muted">
-        You matched the setting on {score} of {taskRounds.length}.
-      </p>
-
-      <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
-        <p className="font-label text-[11px] text-text-muted">What it means</p>
-        <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
-      </div>
-
-      <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
-        <p className="font-label text-[11px] text-text-muted">Why you care</p>
-        <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
-      </div>
-
-      <GameActions>
-        <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
-          Snap it onto your bot
-        </GameActionButton>
-      </GameActions>
-    </div>
+    <TermReveal term={term} score={`You matched the setting on ${score} of ${taskRounds.length}.`} onComplete={onComplete} />
   )
 }
 

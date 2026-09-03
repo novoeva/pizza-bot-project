@@ -74,7 +74,7 @@ export default function ProgressScreen() {
           <section
             className="relative mt-6 overflow-hidden rounded-sm border-[6px] border-neutral bg-surface text-center"
             style={{
-              backgroundImage: 'radial-gradient(var(--color-primary) 1px, transparent 1px)',
+              backgroundImage: 'radial-gradient(var(--color-tomato) 1px, transparent 1px)',
               backgroundSize: '16px 16px',
             }}
           >
@@ -91,7 +91,7 @@ export default function ProgressScreen() {
                 <br />
                 AI AGENT
               </h2>
-              <div className="mx-auto my-4 h-1 w-16 bg-primary" />
+              <div className="mx-auto my-4 h-1 w-16 bg-tomato" />
               <p className="font-label text-xs tracking-[0.2em] text-text-muted">Awarded to</p>
               <input
                 value={name}
@@ -105,7 +105,7 @@ export default function ProgressScreen() {
                   <p className="font-label text-[10px] text-text-muted">Date issued</p>
                   <p className="font-label text-sm text-text">{dateLabel}</p>
                 </div>
-                <div className="flex h-[88px] w-[88px] -rotate-12 flex-col items-center justify-center rounded-full border-4 border-double border-primary text-primary">
+                <div className="flex h-[88px] w-[88px] -rotate-12 flex-col items-center justify-center rounded-full border-4 border-double border-tomato text-tomato">
                   <span className="text-center font-label text-[10px] leading-tight">
                     PIZZA BOT
                     <br />

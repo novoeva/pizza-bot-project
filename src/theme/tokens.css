@@ -4,16 +4,17 @@
  * reference raw hex codes, only these variables (via Tailwind classes).
  *
  * Direction: v0 + Loveable mixed prototype, light, bold, "chunky"
- * (3px borders + hard offset shadows), navy text on off-white, red
- * primary with blue accents. See design-mix/index.html.
+ * (3px borders + hard offset shadows), navy text on off-white.
+ * TWO reds: the bright marinara red is the signature (logo, tabs, labels,
+ * buttons, reference headers); a duller muted red means "wrong / it hurts". Colour roles are defined in COMPONENT-AUDIT.md §2 and
+ * shown in design-system/gallery.html.
  */
 
 :root {
   /* ---- Color: surfaces ---- */
   --color-bg: #f9f9ff;
-  --color-bg-raised: #eef2ef;
   --color-surface: #ffffff;
-  --color-surface-hover: #f1f4f2;
+  --color-surface-hover: #eef0f5;
   --color-border: #586158;
 
   /* ---- Color: text ---- */
@@ -26,26 +27,28 @@
   --color-tomato-dim: #8f0c20;
   --color-cheese: #d9992b;
   --color-cheese-dim: #b37d1f;
-  --color-crust: #001b3c;
-  --color-basil: #2a9d8f;
 
   /* ---- Color: new-world accents ---- */
+  /* primary = the bright marinara red: signature colour for chrome, labels
+     and the main button. Never used for "wrong" (that is --color-danger). */
   --color-primary: #b7102a;
   --color-tertiary: #286182;
   --color-accent: #98cdf2;
   --color-neutral: #586158;
-  --color-muted: #dce5d9;
+  /* muted = the one grey surface: received messages, inert/reference boxes.
+     Deliberately NOT green, so green is left to success-bg alone. */
+  --color-muted: #e6e7ee;
 
   /* ---- Color: feedback ---- */
   --color-success: #2a9d8f;
   --color-success-bg: #e7f4f1;
-  --color-danger: #b7102a;
-  --color-danger-bg: #fbe7ea;
+  /* danger = a muted brick red, deliberately duller than primary so a wrong
+     answer never looks like the brand. */
+  --color-danger: #9c4444;
+  --color-danger-bg: #f2e2e0;
   --color-info: #286182;
 
   /* ---- Color: robot / meta-game ---- */
-  --color-metal: #586158;
-  --color-metal-dim: #dce5d9;
   --color-slot-empty: #a8b1a7;
   --color-slot-fill: #e7ece5;
   --color-glow: #bfe6df;

@@ -3,7 +3,12 @@ import { useGameScroll } from '../../lib/useGameScroll.js'
 import { menu, rounds } from './content.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import TermReveal from '../../components/TermReveal.jsx'
+import Callout from '../../components/Callout.jsx'
+import Panel from '../../components/Panel.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
 
 /**
  * Hallucination game, { termId, onComplete } interface.
@@ -19,7 +24,10 @@ export default function HallucinationGame({ termId, onComplete }) {
   const [pick, setPick] = useState(null) // null | 'trust' | 'fake'
   const [done, setDone] = useState(false)
 
-  useGameScroll(`${index}:${done}`)
+  // `pick` as the in-page `within` key: choosing Trust/Made up appends the
+  // feedback + Next button below the choices, so reveal it instead of leaving
+  // it stranded below the fold on taller (desktop/web) viewports.
+  useGameScroll(`${index}:${done}`, pick || '')
 
   const round = rounds[index]
   const isLast = index === rounds.length - 1
@@ -44,47 +52,25 @@ export default function HallucinationGame({ termId, onComplete }) {
   if (done) {
     const score = results.filter((r) => r === 'correct').length
     return (
-      <div className="flex flex-col gap-3 text-center">
-        <div className="mx-auto mt-2 flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-neutral bg-success shadow-pop">
-          <span className="material-symbols-rounded fill text-5xl text-white">check</span>
-        </div>
-        <p className="font-label text-[11px] text-primary">
-          Snapped onto your bot · {term.botPart}
-        </p>
-        <h2 className="text-2xl">You just learned the term Hallucination</h2>
-        <p className="font-label text-xs text-text-muted">
-          You caught {score} of {rounds.length} made-up answers.
-        </p>
-
-        <div className="mt-1 rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
-          <p className="font-label text-[11px] text-text-muted">What it means</p>
-          <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
-        </div>
-
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
-          <p className="font-label text-[11px] text-text-muted">Why you care</p>
-          <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
-        </div>
-
-        <GameActions>
-          <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
-            Snap it onto your bot
-          </GameActionButton>
-        </GameActions>
-      </div>
+      <TermReveal term={term} score={`You caught ${score} of ${rounds.length} made-up answers.`} onComplete={onComplete} />
     )
   }
 
-  return (
-    <div className="flex flex-col gap-2">
-      <GameIntro term={term} />
+  // Left column: read-once orientation only — what the term is and how to play.
+  const context = <GameIntro term={term} showHowTo={false} />
 
-      {/* Reference menu */}
-      <div className="overflow-hidden rounded-md border-[3px] border-neutral bg-surface">
-        <div className="flex items-center gap-1.5 border-b-[3px] border-neutral bg-muted px-3 py-1.5 font-label text-[11px] text-text-muted">
-          <span className="material-symbols-rounded text-[15px]">menu_book</span>
-          Today's real menu
-        </div>
+  // Right column: everything you actually play with, together — the reference
+  // menu you check claims against, the claim progress, the claim itself, the
+  // choices, and the feedback that lands in place once you pick.
+  const main = (
+    <>
+      <PhaseCard title="Spot the fake">
+        Check each answer against the real menu and catch the ones your bot made up.
+      </PhaseCard>
+
+      {/* Reference menu — a game tool (you check every claim against it), so it
+          sits WITH the game, not off in the orientation column. */}
+      <Panel header="brand" title="Today's real menu" icon="menu_book" shadow="none" bodyClassName="">
         <ul className="grid grid-cols-2 gap-x-4 gap-y-1 px-3 py-2">
           {menu.map(([name, price]) => (
             <li
@@ -96,46 +82,54 @@ export default function HallucinationGame({ termId, onComplete }) {
             </li>
           ))}
         </ul>
-      </div>
+      </Panel>
 
-      {/* Round tracker */}
-      <div className="flex justify-center gap-1.5">
-        {rounds.map((_, i) => {
-          const r = results[i]
-          return (
-            <span
-              key={i}
-              className={
-                'h-2.5 w-2.5 rounded-full border-2 border-neutral ' +
-                (r === 'correct'
-                  ? 'bg-success'
-                  : r === 'wrong'
-                    ? 'bg-primary'
-                    : i === index
-                      ? 'bg-accent'
-                      : 'bg-transparent')
-              }
-            />
-          )
-        })}
+      {/* Score so far: one dot per claim, green caught / red fooled. (Progress
+          itself is the strip at the top of the screen.) */}
+      <div className="flex items-center justify-between px-1">
+        <p className="font-label text-[11px] text-text-muted">Your score so far</p>
+        <div className="flex gap-1.5">
+          {rounds.map((_, i) => {
+            const r = results[i]
+            return (
+              <span
+                key={i}
+                className={
+                  'h-2.5 w-2.5 rounded-full border-2 border-neutral ' +
+                  (r === 'correct'
+                    ? 'bg-success'
+                    : r === 'wrong'
+                      ? 'bg-danger'
+                      : i === index
+                        ? 'bg-accent'
+                        : 'bg-transparent')
+                }
+              />
+            )
+          })}
+        </div>
       </div>
 
       {/* The claim, fixed height so it never resizes */}
-      <div className="flex h-[150px] flex-col overflow-hidden rounded-md border-[3px] border-neutral bg-surface shadow-card">
-        <div className="flex items-center justify-between bg-text px-3 py-1.5 font-label text-[10px] text-white">
-          <span>Bot says</span>
-          <span className="flex items-center gap-2">
+      <Panel
+        header="label"
+        title="Bot says"
+        icon="smart_toy"
+        shadow="card"
+        className="flex h-[150px] flex-col"
+        bodyClassName="flex flex-1 items-center gap-3 px-4"
+        meta={
+          <>
             Bot confidence 100%
-            <span className="h-2 w-14 overflow-hidden rounded-full bg-white/25">
+            <span className="h-2 w-14 overflow-hidden rounded-full border border-neutral bg-surface">
               <span className="block h-full w-full bg-success" />
             </span>
-          </span>
-        </div>
-        <div className="flex flex-1 items-center gap-3 px-4">
-          <BotAvatar />
-          <p className="text-[1.05rem] font-extrabold leading-snug">&ldquo;{round.say}&rdquo;</p>
-        </div>
-      </div>
+          </>
+        }
+      >
+        <BotAvatar />
+        <p className="text-[1.05rem] font-extrabold leading-snug">&ldquo;{round.say}&rdquo;</p>
+      </Panel>
 
       {/* Choices */}
       <div className={'flex gap-2 ' + (pick ? 'pointer-events-none opacity-50' : '')}>
@@ -157,44 +151,35 @@ export default function HallucinationGame({ termId, onComplete }) {
         </button>
       </div>
 
-      {/* Feedback + advance */}
+      {/* Feedback lands here, in place */}
       {pick && (
-        <>
-          <Feedback correct={results[index] === 'correct'} round={round} />
-          <GameActions>
-            <GameActionButton variant="primary" onClick={next}>
-              {isLast ? 'See result' : 'Next question'}
-            </GameActionButton>
-          </GameActions>
-        </>
+        <Callout
+          tone={results[index] === 'correct' ? 'success' : 'problem'}
+          title={results[index] === 'correct' ? 'Caught it' : 'Fooled you'}
+          icon={results[index] === 'correct' ? 'check_circle' : 'cancel'}
+          compact
+        >
+          {results[index] === 'correct' ? round.whyRight : round.whyWrong}
+        </Callout>
       )}
-    </div>
+    </>
   )
-}
 
-function Feedback({ correct, round }) {
   return (
-    <div
-      className={
-        'rounded-md border-[3px] border-neutral p-3 shadow-pop ' +
-        (correct ? 'bg-success-bg' : 'bg-danger-bg')
-      }
-    >
-      <p
-        className={
-          'flex items-center gap-1.5 font-label text-sm font-bold ' +
-          (correct ? 'text-success' : 'text-danger')
-        }
-      >
-        <span className="material-symbols-rounded text-[18px]">
-          {correct ? 'check_circle' : 'cancel'}
-        </span>
-        {correct ? 'Caught it' : 'Fooled you'}
-      </p>
-      <p className="mt-1 text-[13px] leading-snug text-text">
-        {correct ? round.whyRight : round.whyWrong}
-      </p>
-    </div>
+    <>
+      <GameStage
+        context={context}
+        main={main}
+        progress={{ part: 1, parts: 1, step: index + 1, steps: rounds.length }}
+      />
+      {pick && (
+        <GameActions>
+          <GameActionButton variant="primary" onClick={next}>
+            {isLast ? 'See result' : 'Next question'}
+          </GameActionButton>
+        </GameActions>
+      )}
+    </>
   )
 }
 

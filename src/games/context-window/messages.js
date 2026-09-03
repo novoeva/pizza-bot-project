@@ -22,6 +22,12 @@ export const recallInWindow = "Yep, no olives. That's still inside my context wi
 export const recallDropped =
   "I don't have anything about olives in this order. Do you want them on or off?"
 
+// Beat 1b: the owner's fix. You don't get to make the window bigger, but you do
+// decide what goes in it. Pinning the allergy reserves it a slot so it never
+// scrolls out, no matter how long the order runs.
+export const pinHint =
+  'You can’t make the window bigger, but you choose what stays in it. Pin the allergy and it holds its slot while everything else keeps scrolling.'
+
 // Shown on the live panel during play so nobody mistakes this for real scale.
 export const goldfishNote = 'Goldfish memory: this bot only holds 5 things at once'
 
