@@ -1,0 +1,53 @@
+<meta charset="utf-8">
+<title>Phase 1 Review Kit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+  :root {
+    --ink: #001b3c; --ink-soft: #4b5563; --rule: #cfd3dc; --paper: #f3f4f8; --card: #ffffff;
+    --red: #b7102a; --wrong: #9c4444; --grey: #e6e7ee; --mint: #e7f4f1; --blue: #286182; --neutral: #586158;
+    --label: 'Space Grotesk', ui-monospace, monospace; --body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+  html { color-scheme: light; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); }
+  .wrap { max-width: 44rem; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
+  h1 { font-size: 1.8rem; letter-spacing: -.02em; margin: .2rem 0 .5rem; text-wrap: balance; }
+  h2 { font-size: 1.15rem; letter-spacing: -.01em; margin: 2.2rem 0 .6rem; }
+  .eyebrow { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 11px; color: var(--ink-soft); }
+  p { line-height: 1.55; font-size: 15px; max-width: 62ch; }
+  code { font-family: var(--label); font-size: 13px; background: #fff; border: 1px solid var(--rule); border-radius: 5px; padding: .05rem .35rem; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .6rem 0 .2rem; }
+  .cell { background: #f9f9ff; border: 1px solid var(--rule); border-radius: 10px; padding: .8rem; }
+  .cell .tag { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 10px; color: var(--ink-soft); display: block; margin-bottom: .5rem; }
+  .q { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .9rem 1.1rem; margin: .8rem 0; }
+  .q .n { font-family: var(--label); font-size: 11px; letter-spacing: .08em; color: var(--blue); }
+  .q .ask { font-weight: 700; font-size: 16px; margin: .25rem 0 .4rem; }
+  .q .how { font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
+  .q .ans { margin-top: .5rem; font-size: 14px; }
+  .q .ans b { display: inline-block; border: 2px solid var(--neutral); border-radius: 999px; padding: .05rem .6rem; margin-right: .3rem; font-size: 13px; }
+  .done { background: var(--mint); border: 1px solid #b9dcd5; border-radius: 10px; padding: .7rem 1rem; font-size: 14px; line-height: 1.5; }
+  .done b { color: #1f7a6f; }
+  .lbl { font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: 10px; color: var(--ink-soft); font-weight: 700; }
+  .strip { display: flex; align-items: center; gap: .6rem; border-radius: .7rem; border: 3px solid var(--neutral); box-shadow: 3px 3px 0 0 var(--neutral); background: #fff; padding: .45rem .7rem; }
+  .seg { display: flex; gap: 4px; flex: 1; } .seg span { height: 10px; flex: 1; border-radius: 999px; border: 2px solid var(--neutral); background: var(--grey); overflow: hidden; } .seg span i { display: block; height: 100%; background: var(--red); }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Pizza Bot · Phase 1 · round 5</p>
+  <h1>One bar. Last check.</h1>
+  <div class="done"><b>Round 4 result:</b> too dominant, two lines is one too many, the numbers are useless. Applied: one line, label "Progress", one segment per part of the game; the part you are in fills up with its steps.</div>
+
+  <div class="pair">
+    <div class="cell"><span class="tag">Round 4</span>
+      <div class="strip" style="flex-direction:column;align-items:stretch;gap:.3rem"><span class="lbl">Progress</span><div style="display:flex;gap:.5rem;align-items:center"><span class="lbl" style="font-weight:400;width:5rem">Part 2 / 2</span><span class="seg"><span><i style="width:100%"></i></span><span><i style="width:100%"></i></span></span></div><div style="display:flex;gap:.5rem;align-items:center"><span class="lbl" style="font-weight:400;width:5rem">Job 2 / 6</span><span class="seg"><span><i style="width:100%"></i></span><span><i style="width:100%"></i></span><span></span><span></span><span></span><span></span></span></div></div>
+    </div>
+    <div class="cell"><span class="tag">Round 5 · now</span>
+      <div class="strip"><span class="lbl">Progress</span><span class="seg"><span><i style="width:100%"></i></span><span><i style="width:33%"></i></span></span></div>
+      <p style="font-size:12px;color:var(--ink-soft);margin:.5rem 0 0">Temperature, part 2, job 2 of 6: first segment solid, second a third full.</p>
+    </div>
+  </div>
+
+  <h2>One question</h2>
+  <div class="q"><div class="n">Temperature, then Prompt · reload localhost:5180</div><div class="ask">Is this the bar you meant?</div>
+    <div class="how">Watch the second segment grow as you answer jobs in Temperature. In Prompt the third segment grows as you pick the four parts of round 3.</div>
+    <div class="ans"><b>yes ✓ → Phase 1 closed, Phase 2 starts</b> <b>no ✗ → one sentence</b></div></div>
+</div>

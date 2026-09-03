@@ -15,7 +15,7 @@ export default function StatusReadout({ line, powered = false, firstMissingId })
       <span
         className={
           'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border-[3px] border-neutral ' +
-          (powered ? 'bg-success' : 'bg-primary')
+          (powered ? 'bg-success' : 'bg-danger')
         }
         aria-hidden="true"
       >
@@ -25,13 +25,13 @@ export default function StatusReadout({ line, powered = false, firstMissingId })
             cx="12.5"
             cy="16"
             r="2.6"
-            fill={powered ? 'var(--color-success)' : 'var(--color-primary)'}
+            fill={powered ? 'var(--color-success)' : 'var(--color-danger)'}
           />
           <circle
             cx="19.5"
             cy="16"
             r="2.6"
-            fill={powered ? 'var(--color-success)' : 'var(--color-primary)'}
+            fill={powered ? 'var(--color-success)' : 'var(--color-danger)'}
           />
           <line x1="16" y1="7" x2="16" y2="3" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
           <circle cx="16" cy="2.5" r="2" fill="#fff" />
@@ -45,7 +45,7 @@ export default function StatusReadout({ line, powered = false, firstMissingId })
           </span>
           <span
             className={
-              'inline-block h-2 w-2 rounded-full ' + (powered ? 'bg-success' : 'bg-primary')
+              'inline-block h-2 w-2 rounded-full ' + (powered ? 'bg-success' : 'bg-danger')
             }
           />
         </span>

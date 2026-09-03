@@ -5,7 +5,6 @@ export default {
     extend: {
       colors: {
         bg: 'var(--color-bg)',
-        'bg-raised': 'var(--color-bg-raised)',
         surface: 'var(--color-surface)',
         'surface-hover': 'var(--color-surface-hover)',
         border: 'var(--color-border)',
@@ -18,8 +17,6 @@ export default {
         'tomato-dim': 'var(--color-tomato-dim)',
         cheese: 'var(--color-cheese)',
         'cheese-dim': 'var(--color-cheese-dim)',
-        crust: 'var(--color-crust)',
-        basil: 'var(--color-basil)',
 
         primary: 'var(--color-primary)',
         tertiary: 'var(--color-tertiary)',
@@ -33,8 +30,6 @@ export default {
         'danger-bg': 'var(--color-danger-bg)',
         info: 'var(--color-info)',
 
-        metal: 'var(--color-metal)',
-        'metal-dim': 'var(--color-metal-dim)',
         'slot-empty': 'var(--color-slot-empty)',
         'slot-fill': 'var(--color-slot-fill)',
         glow: 'var(--color-glow)',

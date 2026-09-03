@@ -33,6 +33,10 @@ export default function Workshop() {
       <h1 className="mt-1 text-center text-xl leading-tight lg:text-3xl">
         Learn AI terms and build a pizza bot
       </h1>
+      <p className="mx-auto mt-2 max-w-prose text-center text-sm leading-snug text-text-muted lg:text-base">
+        You own a pizzeria, and you&rsquo;re building an AI bot to take orders. To build it, you&rsquo;ll
+        learn one AI term at a time &mdash; and each term you learn is another part of your bot.
+      </p>
 
       {/* Below `lg` this is a single stacked column (board → status → checklist),
           identical to mobile. At `lg`+ it becomes the split screen: the board +

@@ -14,6 +14,7 @@ const TERM_ICON = {
   mcp: 'cable',
   guardrails: 'shield',
   temperature: 'thermostat',
+  rag: 'menu_book',
 }
 
 /** All terms, doubles as the game menu. Free order, no locks. */

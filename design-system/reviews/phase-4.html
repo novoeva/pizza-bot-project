@@ -1,0 +1,66 @@
+<meta charset="utf-8">
+<title>Phase 4 Review Kit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+  :root {
+    --ink: #001b3c; --ink-soft: #4b5563; --rule: #cfd3dc; --paper: #f3f4f8; --card: #ffffff;
+    --red: #b7102a; --wrong: #9c4444; --grey: #e6e7ee; --mint: #e7f4f1; --blue: #286182; --blue-bg: #d9edfb; --neutral: #586158; --slot: #a8b1a7;
+    --label: 'Space Grotesk', ui-monospace, monospace; --body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+  html { color-scheme: light; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); }
+  .wrap { max-width: 44rem; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
+  h1 { font-size: 1.8rem; letter-spacing: -.02em; margin: .2rem 0 .5rem; text-wrap: balance; }
+  h2 { font-size: 1.15rem; letter-spacing: -.01em; margin: 2.2rem 0 .6rem; }
+  .eyebrow { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 11px; color: var(--ink-soft); }
+  p { line-height: 1.55; font-size: 15px; max-width: 62ch; }
+  code { font-family: var(--label); font-size: 13px; background: #fff; border: 1px solid var(--rule); border-radius: 5px; padding: .05rem .35rem; }
+  .cmd { display: block; background: var(--ink); color: #fff; border-radius: 8px; padding: .7rem .9rem; font-family: var(--label); font-size: 13px; margin: .5rem 0 1rem; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .6rem 0 .2rem; }
+  .cell { background: #f9f9ff; border: 1px solid var(--rule); border-radius: 10px; padding: .8rem; }
+  .cell .tag { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 10px; color: var(--ink-soft); display: block; margin-bottom: .5rem; }
+  .q { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .9rem 1.1rem; margin: .8rem 0; }
+  .q .n { font-family: var(--label); font-size: 11px; letter-spacing: .08em; color: var(--blue); }
+  .q .ask { font-weight: 700; font-size: 16px; margin: .25rem 0 .4rem; }
+  .q .how { font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
+  .q .ans { margin-top: .5rem; font-size: 14px; }
+  .q .ans b { display: inline-block; border: 2px solid var(--neutral); border-radius: 999px; padding: .05rem .6rem; margin-right: .3rem; font-size: 13px; }
+  .done { background: var(--mint); border: 1px solid #b9dcd5; border-radius: 10px; padding: .7rem 1rem; font-size: 14px; line-height: 1.5; }
+  .done b { color: #1f7a6f; }
+  .lbl { font-family: var(--label); text-transform: uppercase; letter-spacing: .06em; font-size: 9px; }
+  .card { border-radius: .8rem; border: 3px solid var(--neutral); box-shadow: 3px 3px 0 0 var(--neutral); background: #fff; padding: .5rem .7rem; font-size: 11px; margin-top: .4rem; }
+  .box { border-radius: .5rem; border: 2px solid var(--neutral); padding: .3rem .5rem; margin-top: .3rem; font-size: 11px; }
+  .seg { display: flex; gap: 3px; flex: 1; } .seg span { height: 8px; flex: 1; border-radius: 999px; border: 2px solid var(--neutral); background: var(--grey); } .seg span.on { background: var(--red); }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Pizza Bot · Phase 4 · round 3</p>
+  <h1>Fewer boxes on a phone</h1>
+  <div class="done"><b>Round 2 result:</b> spacing even, but "one million boxes" on a phone. Applied: three of them are gone. The "Game · …" instruction is plain text with a hairline under it, the progress bar has no frame, and the intro card has no boxes inside it. A game screen on a phone now has one framed card at the top, then only the content: messages, choices, verdicts.</div>
+
+  <div class="pair">
+    <div class="cell"><span class="tag">Round 2 · six frames before the first message</span>
+      <div class="card"><span class="lbl">Progress</span> <span class="seg" style="display:inline-flex;width:60%"><span class="on"></span><span></span><span></span></span></div>
+      <div class="card"><span class="lbl" style="color:var(--red)">Term · Agent</span><div style="font-weight:800">Agent</div><div class="box"><span class="lbl">What it is</span><br>A chatbot talks about doing something…</div><div class="box" style="background:var(--blue-bg)"><span class="lbl" style="color:var(--blue)">Your role</span><br>You're the owner…</div></div>
+      <div class="card"><span class="lbl" style="color:var(--red)">Game · From chat to agent</span><div style="color:var(--ink-soft)">Marco messages your shop…</div></div>
+    </div>
+    <div class="cell"><span class="tag">Round 3 · one frame</span>
+      <div style="display:flex;align-items:center;gap:.5rem;margin:.4rem 0"><span class="lbl">Progress</span><span class="seg"><span class="on"></span><span></span><span></span></span></div>
+      <div class="card"><span class="lbl" style="color:var(--red)">Term · Agent</span><div style="font-weight:800">Agent</div><div style="margin-top:.3rem"><span class="lbl">What it is</span><br>A chatbot talks about doing something…</div><div style="background:var(--blue-bg);border-radius:.5rem;padding:.3rem .5rem;margin-top:.4rem"><span class="lbl" style="color:var(--blue)">Your role</span><br>You're the owner…</div></div>
+      <div style="margin-top:.6rem;padding:0 .2rem .4rem;border-bottom:2px dashed var(--slot)"><span class="lbl" style="color:var(--red)">Game · From chat to agent</span><div style="font-size:11px;color:var(--ink-soft)">Marco messages your shop…</div></div>
+    </div>
+  </div>
+
+  <h2>1 · Restart the worktree server, reload on your phone width</h2>
+  <code class="cmd">cd "/Users/admin/Documents/Claude/Projects/Agentic AI/pizza-bot/.claude/worktrees/design-system" && npm run dev</code>
+
+  <h2>2 · Two questions</h2>
+  <div class="q"><div class="n">Q1 · Agent, first screen, phone width</div><div class="ask">Better? Or still too much?</div>
+    <div class="how">If still too much, the next candidate is the intro card itself: collapse "What it is" behind a tap on phones. Say so and I do that.</div>
+    <div class="ans"><b>better ✓</b> <b>still too much ✗</b></div></div>
+  <div class="q"><div class="n">Q2 · Desktop, same screen</div><div class="ask">Still fine without the frames around the instruction and the progress bar?</div>
+    <div class="ans"><b>fine ✓</b> <b>lost something ✗ → what</b></div></div>
+
+  <h2>3 · How to answer</h2>
+  <p>Two marks, for example <code>✓ ✓</code>.</p>
+</div>

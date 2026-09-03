@@ -1,0 +1,770 @@
+<meta charset="utf-8">
+<title>Pizza Bot Component Gallery</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          bg: 'var(--color-bg)', surface: 'var(--color-surface)', border: 'var(--color-border)',
+          text: 'var(--color-text)', 'text-muted': 'var(--color-text-muted)', 'text-dim': 'var(--color-text-dim)',
+          cheese: 'var(--color-cheese)', 'cheese-dim': 'var(--color-cheese-dim)',
+          primary: 'var(--color-primary)', tertiary: 'var(--color-tertiary)', accent: 'var(--color-accent)',
+          neutral: 'var(--color-neutral)', muted: 'var(--color-muted)',
+          success: 'var(--color-success)', 'success-bg': 'var(--color-success-bg)',
+          danger: 'var(--color-danger)', 'danger-bg': 'var(--color-danger-bg)',
+          'slot-empty': 'var(--color-slot-empty)', 'accent-soft': 'var(--color-accent-soft)', 'cheese-bg': 'var(--color-cheese-bg)',
+        },
+        fontFamily: { display: 'var(--font-display)', body: 'var(--font-body)', label: 'var(--font-label)' },
+        borderRadius: { sm: '0.6rem', md: '0.9rem', lg: '1.25rem', full: '999px' },
+        boxShadow: { card: '6px 6px 0 0 var(--color-neutral)', pop: '4px 4px 0 0 var(--color-neutral)' },
+      },
+    },
+  }
+</script>
+<style>
+  /* ---- Pizza Bot tokens, copied from src/theme/tokens.css ---- */
+  :root {
+    --color-bg: #f9f9ff; --color-surface: #ffffff; --color-border: #586158;
+    --color-text: #001b3c; --color-text-muted: #586158; --color-text-dim: #8a938a;
+    --color-cheese: #d9992b; --color-cheese-dim: #b37d1f;
+    --color-primary: #b7102a; --color-tertiary: #286182; --color-accent: #98cdf2;
+    --color-neutral: #586158; --color-muted: #e6e7ee;
+    --color-success: #2a9d8f; --color-success-bg: #e7f4f1;
+    --color-danger: #9c4444; --color-danger-bg: #f2e2e0;
+    --color-slot-empty: #a8b1a7; --color-accent-soft: #d9edfb; --color-cheese-bg: #f9efd7;
+    --font-display: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-body: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-label: 'Space Grotesk', ui-monospace, monospace;
+    /* gallery chrome */
+    --g-ink: #001b3c; --g-ink-soft: #4b5563; --g-rule: #cfd3dc; --g-paper: #f3f4f8; --g-flag: #b7102a;
+  }
+  /* The gallery is single-theme on purpose: it has to show the app's true light colours. */
+  html { color-scheme: light; }
+  body { background: var(--g-paper); color: var(--g-ink); font-family: var(--font-body); margin: 0; }
+  h1, h2, h3, .font-display { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em; text-wrap: balance; }
+  .font-label { font-family: var(--font-label); text-transform: uppercase; letter-spacing: 0.06em; }
+  .material-symbols-rounded { font-family: 'Material Symbols Rounded'; font-weight: normal; font-style: normal; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+  .material-symbols-rounded.fill { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+  .press:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 0 var(--color-neutral) !important; }
+  @media (hover: hover) and (pointer: fine) { .press { transition: transform 120ms ease, box-shadow 120ms ease; } .press:hover { transform: translate(-1px, -1px); } }
+  @media (prefers-reduced-motion: reduce) { .press { transition: none; } .animate-pulse { animation: none; } }
+
+  /* ---- Gallery chrome (quiet, so the app's components carry the colour) ---- */
+  .wrap { max-width: 76rem; margin: 0 auto; padding: 2rem 1.25rem 6rem; }
+  @media (min-width: 1024px) { .wrap { display: grid; grid-template-columns: 13rem 1fr; gap: 3rem; } }
+  .toc { position: sticky; top: 1.5rem; align-self: start; font-size: 13px; display: none; }
+  @media (min-width: 1024px) { .toc { display: block; } }
+  .toc a { display: block; color: var(--g-ink-soft); text-decoration: none; padding: 0.3rem 0; border-left: 2px solid transparent; padding-left: 0.6rem; }
+  .toc a:hover, .toc a:focus-visible { color: var(--g-ink); border-left-color: var(--g-ink); outline: none; }
+  .toc .grp { font-family: var(--font-label); text-transform: uppercase; letter-spacing: .08em; font-size: 10px; color: var(--g-ink-soft); margin: 1.2rem 0 .3rem; }
+  section.block { padding: 2.5rem 0; border-top: 1px solid var(--g-rule); }
+  section.block:first-of-type { border-top: 0; padding-top: 0; }
+  .eyebrow { font-family: var(--font-label); text-transform: uppercase; letter-spacing: .08em; font-size: 11px; color: var(--g-ink-soft); }
+  .lede { max-width: 62ch; font-size: 15px; line-height: 1.55; color: var(--g-ink-soft); }
+  .lede b { color: var(--g-ink); }
+  .spec { display: grid; gap: 1.25rem; margin-top: 1.25rem; }
+  @media (min-width: 768px) { .spec { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .spec.three { grid-template-columns: 1fr; }
+  @media (min-width: 900px) { .spec.three { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .swatch-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .75rem; margin-top: 1rem; }
+  .sw { border: 1px solid var(--g-rule); border-radius: 8px; overflow: hidden; background: #fff; font-size: 12px; }
+  .sw .chip { height: 56px; }
+  .sw .meta { padding: .5rem .6rem; line-height: 1.35; }
+  .sw .meta b { display: block; font-family: var(--font-label); font-size: 11px; letter-spacing: .04em; }
+  .sw .meta code { color: var(--g-ink-soft); font-size: 11px; }
+  .stage { background: var(--color-bg); border: 1px solid var(--g-rule); border-radius: 10px; padding: 1rem; }
+  .stage.today { border-color: var(--g-rule); }
+  .stage.proposed { border-color: var(--color-tertiary); }
+  .stage > .tag { display: inline-block; font-family: var(--font-label); text-transform: uppercase; letter-spacing: .08em; font-size: 10px; padding: .15rem .5rem; border-radius: 999px; margin-bottom: .75rem; }
+  .stage.today > .tag { background: #e5e7ee; color: var(--g-ink-soft); }
+  .stage.proposed > .tag { background: var(--color-tertiary); color: #fff; }
+  .col { display: flex; flex-direction: column; gap: .5rem; max-width: 26rem; }
+  .cap { font-size: 12px; color: var(--g-ink-soft); line-height: 1.4; margin-top: .4rem; }
+  .cap b { color: var(--g-ink); }
+  .flag { color: var(--g-flag); font-weight: 700; }
+  .note { border-left: 3px solid var(--color-tertiary); padding: .5rem .9rem; background: #fff; font-size: 13.5px; line-height: 1.5; margin-top: 1rem; max-width: 62ch; }
+  .q { background: #fff; border: 1px solid var(--g-rule); border-radius: 10px; padding: 1rem 1.2rem; margin-top: 1rem; max-width: 62ch; font-size: 14px; line-height: 1.5; }
+  .q .qn { font-family: var(--font-label); font-size: 11px; letter-spacing: .08em; color: var(--color-tertiary); }
+  .q .ask { font-weight: 700; font-size: 15px; margin: .3rem 0 .5rem; }
+  .where { font-family: var(--font-label); font-size: 10px; letter-spacing: .05em; color: var(--g-ink-soft); text-transform: uppercase; margin-top: .35rem; }
+  .grid-gallery { display: grid; gap: 1.25rem; margin-top: 1.25rem; grid-template-columns: 1fr; }
+  @media (min-width: 768px) { .grid-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1200px) { .grid-gallery.four { grid-template-columns: repeat(4, minmax(0, 1fr)); } .grid-gallery.three { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .item { background: var(--color-bg); border: 1px solid var(--g-rule); border-radius: 10px; padding: 1rem; display: flex; flex-direction: column; gap: .5rem; }
+  .item h4 { margin: 0 0 .25rem; font-size: 13px; font-weight: 700; }
+  .item h4 .ref { font-family: var(--font-label); font-size: 10px; color: var(--g-ink-soft); margin-right: .4rem; }
+  .verdict { display: inline-block; font-size: 11px; padding: .1rem .45rem; border-radius: 999px; font-weight: 700; }
+  .v-ok { background: #e7f4f1; color: #1f7a6f; } .v-warn { background: #f9efd7; color: #8a5f10; } .v-bad { background: #fbe7ea; color: #9c0d24; }
+  .prop-col { --color-muted: #e6e7ee; }
+  /* "Today" columns show the app as it was before Phase 0 (green muted, red primary). */
+  .stage.today, .item.was { --color-muted: #dce5d9; --color-danger: #b7102a; --color-danger-bg: #fbe7ea; }
+</style>
+
+<div class="wrap">
+  <nav class="toc" aria-label="Sections">
+    <div class="grp">Start here</div>
+    <a href="#how">How to read this</a>
+    <a href="#colors">The colour tokens</a>
+    <div class="grp">Your 3 decisions · round 2</div>
+    <a href="#r1">R1 · One colour per role</a>
+    <a href="#r2">R2 · Two reds</a>
+    <a href="#r3">R3 · Part tiles</a>
+    <a href="#r4">R4 · After Phase 1 review</a>
+    <a href="#r5">R5 · After review round 2</a>
+    <div class="grp">What exists today</div>
+    <a href="#c-phase">Phase card</a>
+    <a href="#c-chat">Chat bubbles</a>
+    <a href="#c-choice">Choice cards</a>
+    <a href="#c-result">Result callouts</a>
+    <a href="#c-aside">"Real talk" asides</a>
+    <a href="#c-panels">Panels &amp; bars</a>
+    <a href="#c-reveal">Reveal screen</a>
+    <div class="grp">Proposed</div>
+    <a href="#p-select">SelectableCard</a>
+    <a href="#p-callout">Callout</a>
+    <a href="#p-reveal">TermReveal</a>
+    <a href="#p-intro">GameIntro v2</a>
+    <div class="grp">Finish</div>
+    <a href="#answers">Your answers</a>
+  </nav>
+
+  <main>
+    <section class="block" id="how">
+      <p class="eyebrow">Pizza Bot · design-system audit, visual companion</p>
+      <h1 style="font-size:2rem;margin:.3rem 0 .6rem">Pizza Bot Component Gallery</h1>
+      <p class="lede">Every box below is rendered with the app's <b>real tokens and real class names</b>, copied from the game files. Each "Today" column shows what a player sees now. Each "Proposed" column shows the same screen after the change. The three decisions (<b>R1, R2, R3</b>, round 2 after your feedback) each get one section, then the full component inventory, then the proposed shared components.</p>
+      <div class="note">Reading tip: the app is <b>mobile-first</b>, so every example is drawn at phone width. Colours here are exact; spacing is close.</div>
+    </section>
+
+    <!-- ============================== COLOURS ============================== -->
+    <section class="block" id="colors">
+      <p class="eyebrow">Tokens</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">The colour tokens, and what each one means today</h2>
+      <p class="lede">A token is a named colour in <code>tokens.css</code>. Components never say "green", they say <code>bg-muted</code> or <code>bg-success-bg</code>. So a colour with three jobs is a token with three jobs. Two of the four problem rows are fixed by Phase 0 (muted, primary). Blue and amber get their single meaning when the components land (Phases 1–2).</p>
+      <div class="swatch-row">
+        <div class="sw"><div class="chip" style="background:#ffffff;border-bottom:1px solid #e5e7eb"></div><div class="meta"><b>surface</b><code>#ffffff</code><br>Default card. Fine.</div></div>
+        <div class="sw"><div class="chip" style="background:#f9f9ff"></div><div class="meta"><b>bg</b><code>#f9f9ff</code><br>Page ground. Fine.</div></div>
+        <div class="sw"><div class="chip" style="background:#586158"></div><div class="meta"><b>neutral / border</b><code>#586158</code><br>All 3px outlines + shadows. Fine.</div></div>
+        <div class="sw"><div class="chip" style="background:#e6e7ee"></div><div class="meta"><b>muted</b> <span class="verdict v-ok">Phase 0 done</span><code>#e6e7ee</code><br>Was sage green #dce5d9. Now the one grey surface: received messages, inert boxes.</div></div>
+        <div class="sw"><div class="chip" style="background:#e7f4f1"></div><div class="meta"><b>success-bg</b><code>#e7f4f1</code><br>"You got it right". Mint green. Collides with muted.</div></div>
+        <div class="sw"><div class="chip" style="background:#2a9d8f"></div><div class="meta"><b>success</b><code>#2a9d8f</code><br>Teal. Correct / held / online.</div></div>
+        <div class="sw"><div class="chip" style="background:#d9edfb"></div><div class="meta"><b class="flag">accent-soft ⚑ R1</b><code>#d9edfb</code><br>Light blue. 5 meanings today.</div></div>
+        <div class="sw"><div class="chip" style="background:#286182"></div><div class="meta"><b>tertiary</b><code>#286182</code><br>Blue text/border. Pairs with accent-soft.</div></div>
+        <div class="sw"><div class="chip" style="background:#f9efd7"></div><div class="meta"><b class="flag">cheese-bg ⚑ R3</b><code>#f9efd7</code><br>Light amber. 5 meanings today.</div></div>
+        <div class="sw"><div class="chip" style="background:#d9992b"></div><div class="meta"><b>cheese / cheese-dim</b><code>#d9992b · #b37d1f</code><br>Amber text/border.</div></div>
+        <div class="sw"><div class="chip" style="background:#b7102a"></div><div class="meta"><b>primary · marinara</b> <span class="verdict v-ok">Phase 0 done</span><code>#b7102a</code><br>The signature red: logo, tabs, labels, buttons, reference headers. Never "wrong".</div></div>
+        <div class="sw"><div class="chip" style="background:#9c4444"></div><div class="meta"><b>danger · muted red</b> <span class="verdict v-ok">Phase 0 done</span><code>#9c4444</code><br>Was the same hex as primary. Now a duller brick red: "wrong / it hurts" only.</div></div>
+        <div class="sw"><div class="chip" style="background:#f2e2e0"></div><div class="meta"><b>danger-bg</b><code>#f2e2e0</code><br>Dusty rose tint under a wrong answer. Was pink #fbe7ea.</div></div>
+        <div class="sw"><div class="chip" style="background:#001b3c"></div><div class="meta"><b>text</b><code>#001b3c</code><br>Navy. Also used as a dark header.</div></div>
+      </div>
+    </section>
+
+    <!-- ============================== ROUND 2 ============================== -->
+    <section class="block" id="r1">
+      <p class="eyebrow">Round 2 · decision 1 of 3</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">R1 · One colour per role, not one grey for everything <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">approved · may be revised</span></h2>
+      <p class="lede">Your point: making everything grey loses the visual language. Agreed. So instead of "recolour one token", here is the actual map: <b>eight roles, each with its own shape and its own colour</b>. Green is used by exactly one role. Grey is used by exactly one role. Read the map, then the composed screen below it.</p>
+
+      <div class="grid-gallery four prop-col" style="margin-top:1.25rem">
+        <div class="item"><h4>1 · Message received <span class="verdict v-warn">grey bubble</span></h4>
+          <div class="flex items-start gap-2"><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-surface"><span class="material-symbols-rounded text-[20px] text-text-muted">person</span></span><div class="max-w-[85%]"><p class="mb-1 font-label text-[10px] text-text-muted">Customer</p><div class="rounded-2xl rounded-tl-sm border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop"><p class="font-bold leading-snug text-text">My pizza came cold.</p></div></div></div>
+          <p class="cap">Speech bubble + avatar. The <b>only</b> grey-tinted thing on a game screen. Someone said this.</p></div>
+        <div class="item"><h4>2 · Message from your bot <span class="verdict v-ok">white bubble</span></h4>
+          <div class="flex items-start justify-end gap-2"><div class="max-w-[85%]"><p class="mb-1 text-right font-label text-[10px] text-text-muted">Your bot</p><div class="rounded-2xl rounded-tr-sm border-[3px] border-neutral bg-surface px-4 py-3 shadow-pop"><p class="font-bold leading-snug text-text">Sorry to hear that!</p></div></div><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary"><span class="material-symbols-rounded text-[20px] text-white">smart_toy</span></span></div>
+          <p class="cap">Same bubble, other side, marinara robot. Turns green or red only when the reply <b>is</b> the result (see 6 and 7).</p></div>
+        <div class="item"><h4>3 · Teaching &amp; instructions <span class="verdict v-ok">blue</span></h4>
+          <div class="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop"><div class="flex items-center justify-between"><p class="flex items-center gap-1 font-label text-[11px] text-tertiary"><span class="material-symbols-rounded text-[14px]">school</span>Game · The complaint department</p><span class="font-label text-[11px] text-text-muted">Part 2 of 2</span></div><p class="mt-1 text-[13px] leading-snug text-text">Build the playbook: tap the steps in the order you would handle it.</p></div>
+          <div class="rounded-md border-2 border-neutral bg-accent-soft px-3 py-2"><p class="flex items-center gap-1 font-label text-[10px] text-tertiary"><span class="material-symbols-rounded text-[13px]">sports_esports</span>How to play</p><p class="mt-0.5 text-[13px] leading-snug text-text">Tap the steps in the order you would handle it.</p></div>
+          <p class="cap">Anything that <b>tells you</b> something: phase card, "How to play" (blue since Phase 0), "What you'll learn", "Your role". Blue eyebrow + icon on white, or a blue box. Never a bubble.</p></div>
+        <div class="item"><h4>4 · A question to answer <span class="verdict v-ok">white → blue when picked</span></h4>
+          <div class="flex flex-col gap-2">
+            <button type="button" class="press flex items-center gap-3 rounded-md border-[3px] border-neutral bg-surface px-3 py-2.5 text-left shadow-pop"><span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-surface"></span><span class="text-sm font-bold text-text">Offer a voucher</span></button>
+            <button type="button" aria-pressed="true" class="press flex items-center gap-3 rounded-md border-[3px] border-neutral bg-accent-soft px-3 py-2.5 text-left shadow-pop"><span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-tertiary"><span class="material-symbols-rounded text-[14px] text-white">check</span></span><span class="text-sm font-bold text-text">Apologize</span></button>
+          </div>
+          <p class="cap">Radio / checkbox on the left, lifts on hover. Picked = blue, because blue is "your side". Only for questions with an <b>answer</b> (Guardrails limits, Prompt round 3, Temperature up/down). Building the bot is role 5, not this.</p></div>
+        <div class="item"><h4>5 · A part of your bot <span class="verdict v-warn">amber, drag it in</span></h4>
+          <div class="flex flex-col gap-2">
+            <div role="button" tabindex="0" class="press flex cursor-grab items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-2.5 py-2 shadow-pop"><span class="material-symbols-rounded text-[20px] text-cheese-dim">drag_indicator</span><span class="text-sm font-bold text-text">Verify the order</span><span class="ml-auto font-label text-[10px] text-cheese-dim">drag ↑</span></div>
+            <div class="rounded-md border-[3px] border-neutral bg-surface px-3 py-2 shadow-pop"><p class="mb-1.5 flex items-center gap-1 font-label text-[10px] text-text-muted"><span class="material-symbols-rounded text-[15px]">construction</span>Your playbook</p><div class="flex flex-col gap-1.5"><div class="flex min-h-[34px] items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-2.5 py-1 text-[12px] font-bold text-text"><span class="w-4 text-center font-label text-[11px] text-cheese-dim">1</span>Apologize<span class="ml-auto font-label text-[13px] text-cheese-dim">✕</span></div><div class="flex min-h-[34px] items-center gap-2 rounded-md border-2 border-dashed border-slot-empty px-2.5 py-1 text-[12px] text-text-muted"><span class="w-4 text-center font-label text-[11px] font-bold">2</span>drag a step here…</div></div></div>
+          </div>
+          <p class="cap">Playbook steps, actions, binder pages, facts, connectors. A part is amber <b>on the shelf and in the bot</b>; you move it, it never changes colour. Details in R3.</p></div>
+        <div class="item"><h4>6 · It went right <span class="verdict v-ok">green, only here</span></h4>
+          <div class="rounded-lg border-[3px] border-success bg-success-bg p-3 shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-success"><span class="material-symbols-rounded text-[15px]">check_circle</span>Caught it</p><p class="text-[14px] leading-snug text-text">That pizza is not on the menu.</p></div>
+          <p class="cap">Correct pick, held guardrail, system fired. Nothing else is ever green.</p></div>
+        <div class="item"><h4>7 · It went wrong <span class="verdict v-bad">muted red box</span></h4>
+          <div class="rounded-lg border-[3px] border-danger bg-danger-bg p-3 shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded text-[15px]">warning</span>The problem</p><p class="text-[14px] leading-snug text-text">It invented an order.</p></div>
+          <p class="cap">Wrong pick, caved bot, dropped allergy, cost counters that hurt (damage, "12 weeks"). Dusty rose tint + brick-red border. Deliberately duller than the brand red.</p></div>
+        <div class="item"><h4>8 · The action that moves you on <span class="verdict v-ok">solid button</span></h4>
+          <button type="button" class="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"><span class="material-symbols-rounded">arrow_forward</span>Build a playbook</button>
+          <p class="cap">Solid marinara red, pinned to the bottom (R2). Bright red = signature and action; it is never the "wrong" red.</p></div>
+      </div>
+
+      <h3 style="font-size:1.1rem;margin:2rem 0 .3rem">The same map on one real screen: Skill, part 2</h3>
+      <p class="lede">Left is what the player sees today. Right applies the map. Count the greens.</p>
+      <div class="spec">
+        <div class="stage today"><span class="tag">Today</span>
+          <div class="col">
+            <div class="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop"><div class="flex items-center justify-between"><p class="font-label text-[11px] text-primary">Game · The complaint department</p><span class="font-label text-[11px] text-text-muted">Part 2 of 2</span></div><p class="mt-1 text-[13px] leading-snug text-text-muted">Build the playbook — tap the steps in the order you would handle it.</p></div>
+            <div class="rounded-md border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop"><p class="mb-1 font-label text-[10px] text-text-muted">Your playbook</p><ol class="flex list-inside list-decimal flex-col gap-0.5 text-sm text-text"><li>Apologize</li></ol></div>
+            <div class="flex items-start gap-2"><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-surface"><span class="material-symbols-rounded text-[20px] text-text-muted">person</span></span><div class="max-w-[85%]"><p class="mb-1 font-label text-[10px] text-text-muted">Customer</p><div class="rounded-2xl rounded-tl-sm border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop"><p class="font-bold leading-snug text-text">My pizza came cold.</p></div></div></div>
+            <button type="button" disabled class="flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-success-bg text-left shadow-pop"><span class="flex w-11 shrink-0 items-center justify-center border-r-[3px] border-neutral bg-success text-white"><span class="material-symbols-rounded text-[20px]">check</span></span><span class="flex-1 px-3 py-3"><span class="block font-label text-[10px] text-success">Added to playbook</span><span class="mt-0.5 block font-bold leading-snug text-text">Apologize</span></span></button>
+            <button type="button" class="press flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-surface text-left shadow-pop"><span class="flex w-11 shrink-0 items-center justify-center border-r-[3px] border-neutral bg-accent-soft text-tertiary"><span class="material-symbols-rounded text-[20px]">playlist_add</span></span><span class="flex-1 px-3 py-3"><span class="block font-label text-[10px] text-tertiary">Playbook step</span><span class="mt-0.5 block font-bold leading-snug text-text">Verify the order</span></span></button>
+            <p class="cap">Grey-green playbook, grey-green bubble, mint "added" card. Three greens, none of them means "correct".</p>
+          </div></div>
+        <div class="stage proposed prop-col"><span class="tag">Proposed · the map applied</span>
+          <div class="col">
+            <div class="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop"><div class="flex items-center justify-between"><p class="flex items-center gap-1 font-label text-[11px] text-tertiary"><span class="material-symbols-rounded text-[14px]">school</span>Game · The complaint department</p><span class="font-label text-[11px] text-text-muted">Part 2 of 2</span></div><p class="mt-1 text-[13px] leading-snug text-text">Build the playbook: tap the steps in the order you would handle it.</p></div>
+            <div class="flex items-start gap-2"><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-surface"><span class="material-symbols-rounded text-[20px] text-text-muted">person</span></span><div class="max-w-[85%]"><p class="mb-1 font-label text-[10px] text-text-muted">Customer</p><div class="rounded-2xl rounded-tl-sm border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop"><p class="font-bold leading-snug text-text">My pizza came cold.</p></div></div></div>
+            <div class="rounded-md border-[3px] border-neutral bg-surface px-3 py-2.5 shadow-pop"><p class="mb-2 flex items-center gap-1 font-label text-[10px] text-text-muted"><span class="material-symbols-rounded text-[15px]">construction</span>Your playbook · 1 / 4</p><div class="flex flex-col gap-1.5"><div class="flex min-h-[36px] items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-2.5 py-1.5 text-[12px] font-bold text-cheese-dim"><span class="w-4 text-center font-label text-[11px]">1</span>Apologize<span class="ml-auto font-label text-[13px]">✕</span></div><div class="flex min-h-[36px] items-center gap-2 rounded-md border-2 border-dashed border-slot-empty px-2.5 py-1.5 text-[12px] text-text-muted"><span class="w-4 text-center font-label text-[11px] font-bold">2</span>drag a step here…</div></div></div>
+            <p class="mb-0 flex items-center gap-1 font-label text-[10px] text-text-muted"><span class="material-symbols-rounded text-[15px]">handyman</span>Steps · drag into the playbook</p>
+            <div class="flex items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-2.5 py-2.5 opacity-40"><span class="material-symbols-rounded text-[20px] text-cheese-dim">drag_indicator</span><span class="text-sm font-bold text-text">Apologize</span><span class="ml-auto font-label text-[10px] text-cheese-dim">in playbook</span></div>
+            <div role="button" tabindex="0" class="press flex cursor-grab items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-2.5 py-2.5 shadow-pop"><span class="material-symbols-rounded text-[20px] text-cheese-dim">drag_indicator</span><span class="text-sm font-bold text-text">Verify the order</span><span class="ml-auto font-label text-[10px] text-cheese-dim">drag ↑</span></div>
+            <div role="button" tabindex="0" class="press flex cursor-grab items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-2.5 py-2.5 shadow-pop"><span class="material-symbols-rounded text-[20px] text-cheese-dim">drag_indicator</span><span class="text-sm font-bold text-text">Offer a voucher</span><span class="ml-auto font-label text-[10px] text-cheese-dim">drag ↑</span></div>
+            <p class="cap">Grey = the customer spoke. Blue = the game is telling you something. Amber = parts of your bot, on the shelf or already in it. No green, because nothing is "correct" yet.</p>
+          </div></div>
+      </div>
+
+      <div class="q"><div class="qn">Question R1, in plain words</div><div class="ask">Approve this 8-role map?</div>
+        <b>Yes</b> = this becomes the dictionary; every shared component is built to it. The grey exact value is picked during Phase 0.<br>
+        <b>Yes, except…</b> = name the role number and what you would change.<br>
+        <b>No</b> = tell me which two roles feel too similar and I redo those.</div>
+    </section>
+
+    <section class="block" id="r2">
+      <p class="eyebrow">Round 2 · decision 2 of 3 · revised after the Phase 0 review</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">R2 · Two reds: marinara for the brand, muted for "wrong" <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">decided</span></h2>
+      <p class="lede">First try was navy buttons and one red. Eva's review: overcorrected, the bright red is Pizza Bot's signature and taking it away made everything blue-grey. So the rule flipped: <b>the bright marinara red stays everywhere it was decoration or action</b>, and the <b>"wrong" red becomes a visibly duller brick red</b> so the two never get confused.</p>
+      <div class="spec">
+        <div class="stage today"><span class="tag">Before · one red for both</span>
+          <div class="col">
+            <p class="font-label text-[11px] text-primary">Game · You build the bot</p>
+            <div class="rounded-lg border-[3px] border-danger bg-danger-bg p-3 shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded text-[15px]">warning</span>The problem</p><p class="text-[14px] leading-snug text-text">It invented an order.</p></div>
+            <button type="button" class="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"><span class="material-symbols-rounded">arrow_forward</span>Add a rule to your bot</button>
+            <p class="cap">Label, problem and button: the exact same hex.</p>
+          </div></div>
+        <div class="stage proposed"><span class="tag">Now · marinara vs muted</span>
+          <div class="col">
+            <p class="font-label text-[11px] text-primary">Game · You build the bot</p>
+            <div class="rounded-lg border-[3px] border-danger bg-danger-bg p-3 shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded text-[15px]">warning</span>The problem</p><p class="text-[14px] leading-snug text-text">It invented an order.</p></div>
+            <button type="button" class="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"><span class="material-symbols-rounded">arrow_forward</span>Add a rule to your bot</button>
+            <p class="cap">Label and button keep the bright red. The problem card is a dustier brick red on a rose tint. Same screen, two clearly different reds.</p>
+          </div></div>
+      </div>
+      <div class="q"><div class="qn">R2 · decided (2026-09-02, after review)</div>
+        <b>Marinara red</b> (<code>primary</code>, #b7102a): logo, active tab, "Term ·" and "Game ·" labels, the main button, bot avatars, reference headers like "Today's real menu".<br>
+        <b>Muted red</b> (<code>danger</code>, #9c4444 on #f2e2e0): wrong answers, "The problem", damage, the broken status readout.<br>
+        Roles 7 and 8 in the R1 map are updated to match.</div>
+    </section>
+
+    <section class="block" id="r3">
+      <p class="eyebrow">Round 3 · decided</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">R3 · Building the bot is drag-and-drop with part tiles, not checkboxes <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">built · Phase 2 · PartTile.jsx, SlotList.jsx</span></h2>
+      <p class="lede">Agreed on amber = "a part inside your bot". You did not like the checkbox for getting it there. So the build mechanic gets its own component: a <b>part tile</b> that already wears the playbook's amber, with a grab handle, that you <b>drag into the slot</b> (or tap, on a phone). The tile does not change colour when it lands; it changes <b>place</b>. Checkboxes and radios stay only for questions with an answer (Guardrails limits, Prompt round 3, Temperature up/down).</p>
+
+      <div class="grid-gallery three" style="margin-top:1.25rem">
+        <div class="item"><h4>1 · Parts on the shelf</h4>
+          <div class="flex flex-col gap-2">
+            <div role="button" tabindex="0" class="press flex cursor-grab items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-2.5 py-2.5 shadow-pop"><span class="material-symbols-rounded text-[20px] text-cheese-dim">drag_indicator</span><span class="material-symbols-rounded text-[18px] text-cheese-dim">search</span><span class="text-sm font-bold text-text">Verify the order</span><span class="ml-auto font-label text-[10px] text-cheese-dim">drag ↑</span></div>
+            <div role="button" tabindex="0" class="press flex cursor-grab items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-2.5 py-2.5 shadow-pop"><span class="material-symbols-rounded text-[20px] text-cheese-dim">drag_indicator</span><span class="material-symbols-rounded text-[18px] text-cheese-dim">confirmation_number</span><span class="text-sm font-bold text-text">Offer a voucher</span><span class="ml-auto font-label text-[10px] text-cheese-dim">drag ↑</span></div>
+            <div class="flex items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-2.5 py-2.5 opacity-40"><span class="material-symbols-rounded text-[20px] text-cheese-dim">drag_indicator</span><span class="material-symbols-rounded text-[18px] text-cheese-dim">sentiment_satisfied</span><span class="text-sm font-bold text-text">Apologize</span><span class="ml-auto font-label text-[10px] text-cheese-dim">in playbook</span></div>
+          </div>
+          <p class="cap">Amber from the start: these are <b>parts</b>, the same colour as where they go. The handle says "grab me". A part already in the bot fades out on the shelf.</p></div>
+        <div class="item"><h4>2 · Mid-drag</h4>
+          <div class="relative rounded-md border-[3px] border-neutral bg-surface px-3 py-2.5 shadow-pop"><p class="mb-2 flex items-center gap-1 font-label text-[10px] text-text-muted"><span class="material-symbols-rounded text-[15px]">construction</span>Your playbook · 1 / 4</p>
+            <div class="flex flex-col gap-1.5">
+              <div class="flex min-h-[38px] items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-2.5 py-1.5 text-[12px] font-bold text-text"><span class="w-4 text-center font-label text-[11px] text-cheese-dim">1</span><span class="material-symbols-rounded text-[16px] text-cheese-dim">sentiment_satisfied</span>Apologize<span class="ml-auto font-label text-[13px] text-cheese-dim">✕</span></div>
+              <div class="flex min-h-[38px] items-center justify-center gap-2 rounded-md border-[3px] border-dashed border-cheese-dim bg-cheese-bg/40 px-2.5 py-1.5 font-label text-[11px] font-bold text-cheese-dim"><span class="material-symbols-rounded text-[16px]">south</span>Drop here</div>
+              <div class="flex min-h-[38px] items-center gap-2 rounded-md border-2 border-dashed border-slot-empty px-2.5 py-1.5 text-[12px] text-text-muted"><span class="w-4 text-center font-label text-[11px] font-bold">3</span></div>
+            </div>
+            <div class="absolute -right-3 top-12 flex rotate-3 items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-2.5 py-2 shadow-card" style="width:70%"><span class="material-symbols-rounded text-[20px] text-cheese-dim">drag_indicator</span><span class="material-symbols-rounded text-[18px] text-cheese-dim">search</span><span class="text-sm font-bold text-text">Verify the order</span></div>
+          </div>
+          <p class="cap">The next empty slot lights up amber and says "Drop here". The tile you hold tilts and gets the deep shadow. On a phone, a tap on the tile does the same move with a short slide animation.</p></div>
+        <div class="item"><h4>3 · Landed</h4>
+          <div class="rounded-md border-[3px] border-neutral bg-surface px-3 py-2.5 shadow-pop"><p class="mb-2 flex items-center gap-1 font-label text-[10px] text-text-muted"><span class="material-symbols-rounded text-[15px]">construction</span>Your playbook · 2 / 4</p>
+            <div class="flex flex-col gap-1.5">
+              <div class="flex min-h-[38px] items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-2.5 py-1.5 text-[12px] font-bold text-text"><span class="w-4 text-center font-label text-[11px] text-cheese-dim">1</span><span class="material-symbols-rounded text-[16px] text-cheese-dim">sentiment_satisfied</span>Apologize<span class="ml-auto font-label text-[13px] text-cheese-dim">✕</span></div>
+              <div class="flex min-h-[38px] items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-2.5 py-1.5 text-[12px] font-bold text-text"><span class="w-4 text-center font-label text-[11px] text-cheese-dim">2</span><span class="material-symbols-rounded text-[16px] text-cheese-dim">search</span>Verify the order<span class="ml-auto font-label text-[13px] text-cheese-dim">✕</span></div>
+              <div class="flex min-h-[38px] items-center gap-2 rounded-md border-2 border-dashed border-slot-empty px-2.5 py-1.5 text-[12px] text-text-muted"><span class="w-4 text-center font-label text-[11px] font-bold">3</span>drag a step here…</div>
+            </div></div>
+          <p class="cap">Same tile, now numbered and inside the bot. ✕ takes it back to the shelf. Nothing turned green or blue: the only thing that changed is where the part lives.</p></div>
+      </div>
+
+      <div class="note" style="max-width:100%">Where this applies: <b>Skill</b> (steps → playbook) · <b>Agent</b> (actions → to-do list, order matters) · <b>RAG</b> (pages → handed to the bot, max 2) · <b>Memory</b> (facts → hard drive) · <b>MCP</b> (systems → port; the rows already turn amber, they just gain the handle). Everything else keeps radio / tap-to-answer.</div>
+
+      <div class="q"><div class="qn">R3 · decided</div><div class="ask">Drag-and-drop, and it must be <u>obviously</u> drag-and-drop.</div>
+        Acceptance rule for <b>PartTile</b>: a first-time player must see that the tile moves before touching anything. Five signals, all required:<br>
+        1. Grab handle (⋮⋮) on every tile, cursor turns to a hand on hover.<br>
+        2. The hint text on the tile says the verb: "drag ↑" (mobile: "tap to add").<br>
+        3. The empty slot says the verb too: "drag a step here…".<br>
+        4. On the first build screen of a session, the top tile does one short wiggle and the first slot pulses amber once (skipped when reduced-motion is on).<br>
+        5. Tap still works as a fallback and animates the tile sliding into the slot, so nobody is stuck.</div>
+    </section>
+
+    <section class="block" id="r4">
+      <p class="eyebrow">Round 4 · from the Phase 1 review</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">R4 · Four rules added after seeing Phase 1 <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">applied</span></h2>
+      <div class="grid-gallery">
+        <div class="item"><h4>1 · Progress is a pizza, not a number <span class="verdict v-warn">replaced in R5</span></h4>
+          <div class="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop"><div class="flex items-center justify-between gap-2"><p class="font-label text-[11px] text-primary">Game · Free pizza for life · Part 1</p>
+            <svg viewBox="0 0 32 32" width="22" height="22" aria-label="Customer 2 of 4"><circle cx="16" cy="16" r="16" fill="#586158"/><path d="M16,16 L16,0 A16,16 0 0 1 32,16 Z" fill="#b7102a" stroke="#586158" stroke-width="1.5"/><path d="M16,16 L32,16 A16,16 0 0 1 16,32 Z" fill="#b7102a" stroke="#586158" stroke-width="1.5"/><path d="M16,16 L16,32 A16,16 0 0 1 0,16 Z" fill="#e6e7ee" stroke="#586158" stroke-width="1.5"/><path d="M16,16 L0,16 A16,16 0 0 1 16,0 Z" fill="#e6e7ee" stroke="#586158" stroke-width="1.5"/></svg></div>
+            <p class="mt-1 text-[13px] leading-snug text-text-muted">Your bot has no guardrails yet. Watch pushy customers talk it into anything.</p></div>
+          <p class="cap">"Part 1 of 2 · 2 / 4" read as a label, not as progress. Now: the part is in the title, the customers are slices. Two of four eaten.</p></div>
+        <div class="item"><h4>2 · The bubble is only the reply</h4>
+          <div class="col">
+            <div class="flex items-start justify-end gap-2"><div class="max-w-[85%]"><p class="mb-1 text-right font-label text-[10px] text-text-muted">Your bot</p><div class="rounded-2xl rounded-tr-sm border-[3px] border-danger bg-danger-bg px-4 py-3 shadow-pop"><p class="font-bold leading-snug text-text">Sure! The French Revolution began in 1789 when…</p></div></div><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary"><span class="material-symbols-rounded text-[20px] text-white">smart_toy</span></span></div>
+            <div class="rounded-lg border-[3px] border-danger bg-danger-bg p-3 shadow-pop"><p class="flex items-start gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded mt-px text-[15px]">bolt</span><span>It worked. -$1</span></p><p class="mt-1 text-[13px] leading-snug text-text">Just $1 each, but word gets out and thousands show up for free essays.</p></div>
+          </div>
+          <p class="cap">The verdict ("it worked", "-$1") used to sit inside the bubble. Now the bubble holds the words the bot said and the Callout under it holds the consequence.</p></div>
+        <div class="item"><h4>3 · What the bot sees is a chat</h4>
+          <div class="overflow-hidden rounded-md border-[3px] border-neutral bg-surface shadow-card"><div class="flex items-center justify-between gap-2 border-b-[3px] border-neutral bg-muted px-3 py-1.5 font-label text-[11px] text-text-muted"><span class="flex items-center gap-1"><span class="material-symbols-rounded text-[15px]">visibility</span>Context window · what the bot sees</span><span>5 / 5</span></div>
+            <div class="flex flex-col gap-1.5 p-3">
+              <div class="flex items-start gap-2 opacity-50 line-through"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-neutral bg-surface"><span class="material-symbols-rounded text-[16px] text-text-muted">person</span></span><div class="rounded-2xl rounded-tl-sm border-2 border-neutral bg-muted px-3 py-1.5"><p class="text-[13px] leading-snug text-text">No olives!! I really hate them.</p></div></div>
+              <div class="my-0.5 flex items-center gap-2"><span class="h-0 flex-1 border-t-2 border-dashed border-slot-empty"></span><span class="font-label text-[10px] text-text-muted">out of the context window</span><span class="h-0 flex-1 border-t-2 border-dashed border-slot-empty"></span></div>
+              <div class="flex items-start gap-2"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-neutral bg-surface"><span class="material-symbols-rounded text-[16px] text-text-muted">person</span></span><div class="rounded-2xl rounded-tl-sm border-2 border-neutral bg-muted px-3 py-1.5"><p class="text-[13px] leading-snug text-text">One large, please.</p></div></div>
+            </div></div>
+          <p class="cap">The rows inside the context window are the same customer bubbles as everywhere else, smaller. The navy "inside the bot's head" header is retired; all panels use the grey or marinara strip.</p></div>
+        <div class="item"><h4>4 · Show the option you tapped, not a sentence about it</h4>
+          <div class="rounded-lg border-[3px] border-danger bg-danger-bg p-3 shadow-pop"><p class="mb-1 flex items-start gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded mt-px text-[15px]">warning</span><span>Role</span></p>
+            <div class="flex flex-col gap-1.5 text-[13px] leading-snug text-text"><span class="flex flex-wrap items-center gap-1.5"><span class="font-label text-[10px] text-text-muted">You picked</span><span class="inline-block rounded-md border-2 border-neutral bg-accent-soft px-2 py-0.5 text-[12px] font-bold text-tertiary">Whatever the customer wants</span><span>it agrees with anything.</span></span><span class="flex flex-wrap items-center gap-1.5"><span class="material-symbols-rounded text-[16px] text-text-muted">arrow_forward</span><span class="font-label text-[10px] text-text-muted">Better</span><span class="inline-block rounded-md border-2 border-neutral bg-surface px-2 py-0.5 text-[12px] font-bold text-text">Tony, the pizza shop’s assistant</span><span>it has a clear job.</span></span></div></div>
+          <p class="cap">On a result screen, your pick is drawn as the pill you tapped (blue = yours). Less prose, and you recognise it. Same idea for the rule card in round 2.</p></div>
+      </div>
+    </section>
+
+    <section class="block" id="r5">
+      <p class="eyebrow">Round 5 · from the Phase 1 review, round 2</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">R5 · Progress bar, untinted bubbles, pills carry the verdict <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">applied</span></h2>
+      <div class="grid-gallery">
+        <div class="item"><h4>1 · Progress is one bar at the top of the screen <span class="verdict v-ok">R6</span></h4>
+          <div class="flex items-center gap-3 rounded-md border-[3px] border-neutral bg-surface px-3 py-2 shadow-pop"><span class="shrink-0 font-label text-[10px] font-bold text-text-muted">Progress</span><span class="flex flex-1 gap-1"><span class="h-2.5 flex-1 overflow-hidden rounded-full border-2 border-neutral bg-muted"><span class="block h-full rounded-full bg-primary" style="width:100%"></span></span><span class="h-2.5 flex-1 overflow-hidden rounded-full border-2 border-neutral bg-muted"><span class="block h-full rounded-full bg-primary" style="width:33%"></span></span></span></div>
+          <p class="cap">Temperature, part 2, job 2 of 6. One segment per part of the game; finished parts are solid, the part you are in fills up as you go through its steps. No numbers. First thing on every screen, from the first screen.</p></div>
+        <div class="item"><h4>2 · Bubbles are never tinted</h4>
+          <div class="col">
+            <div class="flex items-start justify-end gap-2"><div class="max-w-[85%]"><p class="mb-1 text-right font-label text-[10px] text-text-muted">Your bot</p><div class="rounded-2xl rounded-tr-sm border-[3px] border-neutral bg-surface px-4 py-3 shadow-pop"><p class="font-bold leading-snug text-text">Of course! 100% off, approved.</p></div></div><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary"><span class="material-symbols-rounded text-[20px] text-white">smart_toy</span></span></div>
+            <div class="rounded-lg border-[3px] border-danger bg-danger-bg p-3 shadow-pop"><p class="flex items-start gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded mt-px text-[15px]">bolt</span><span>It worked for the customer. You lost $50.</span></p></div>
+          </div>
+          <p class="cap">A bubble is what was said, full stop. The Callout says what it cost, and says who it worked for.</p></div>
+        <div class="item"><h4>3 · On result screens, the pills carry the verdict</h4>
+          <div class="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop"><p class="mb-1 font-label text-[11px] font-bold text-text-muted">Role</p>
+            <div class="flex flex-col gap-1.5 text-[13px] leading-snug text-text"><span class="flex flex-wrap items-center gap-1.5"><span class="font-label text-[10px] text-text-muted">You picked</span><span class="inline-block rounded-md border-2 border-danger bg-danger-bg px-2 py-0.5 text-[12px] font-bold text-danger">Whatever the customer wants</span><span>it agrees with anything.</span></span><span class="flex flex-wrap items-center gap-1.5"><span class="font-label text-[10px] text-text-muted">Better</span><span class="inline-block rounded-md border-2 border-success bg-success-bg px-2 py-0.5 text-[12px] font-bold text-success">Tony, the pizza shop’s assistant</span><span>it has a clear job.</span></span></div></div>
+          <p class="cap">Neutral card, red pill for your pick, green pill for the better one. Everything-red was too much red.</p></div>
+        <div class="item"><h4>4 · Only "Your role" is blue in the intro</h4>
+          <div class="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop" style="max-width:24rem"><p class="font-label text-[11px] text-primary">Term · Skill</p><h1 class="text-2xl leading-tight">Skill</h1><div class="mt-2 rounded-md border-2 border-neutral bg-accent-soft px-3 py-2"><p class="font-label text-[10px] text-tertiary">Your role</p><p class="mt-0.5 text-[13px] font-bold leading-snug text-text">You're the owner writing the complaint playbook.</p></div><div class="mt-2 rounded-md border-2 border-neutral bg-surface px-3 py-2"><p class="font-label text-[10px] text-text-muted">How to play</p><p class="mt-0.5 text-[13px] leading-snug text-text">Tap the steps in the order you would handle it.</p></div></div>
+          <p class="cap">"How to play" back to a plain white inset. Blue is reserved for the role. Less colour on the intro card.</p></div>
+      </div>
+      <div class="note">Logged outside the design system: <b>FR-19</b> the context window's "Next message" mechanic should auto-play; <b>FR-20</b> Context window / Memory / Token / MCP stack on desktop (Phase 4); <b>FR-21</b> Prompt round-3 result copy is too long.</div>
+    </section>
+
+    <details style="margin-top:2rem;max-width:62ch;font-size:13px;color:var(--g-ink-soft)"><summary style="cursor:pointer">Round 1 decisions (superseded, kept for reference)</summary>
+    <div style="margin-top:1rem">
+    <!-- ============================== D2 ============================== -->
+    <section class="block" id="d2">
+      <p class="eyebrow">Decision 1 of 3</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">D2 · The green box that isn't a "result"</h2>
+      <p class="lede">Left: five things from the games that all use <code>bg-muted</code>. None of them means "correct", yet they are green, and they sit next to the real "correct" card (bottom) which is also green. Right: the same five with <b>one token value changed</b> to a cool grey. Nothing else touched.</p>
+
+      <div class="spec">
+        <div class="stage today"><span class="tag">Today · muted = #dce5d9</span>
+          <div class="col">
+            <!-- customer bubble -->
+            <div class="flex items-start gap-2">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-surface"><span class="material-symbols-rounded text-[20px] text-text-muted">person</span></span>
+              <div class="max-w-[85%]"><p class="mb-1 font-label text-[10px] text-text-muted">Customer</p>
+                <div class="rounded-2xl rounded-tl-sm border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop"><p class="font-bold leading-snug text-text">Hi, I'd like a pizza please.</p></div></div>
+            </div>
+            <p class="cap"><b>Customer chat bubble</b> · Prompt, Guardrails, Skill, Tool use, Agent, RAG</p>
+            <!-- how to play -->
+            <div class="rounded-md border-2 border-neutral bg-muted px-3 py-2"><p class="font-label text-[10px] text-text-muted">How to play</p><p class="mt-0.5 text-[13px] leading-snug text-text">Check each answer against the real menu and catch the ones your bot made up.</p></div>
+            <p class="cap"><b>"How to play" box</b> in GameIntro · all 12 games</p>
+            <!-- playbook -->
+            <div class="rounded-md border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop"><p class="mb-1 font-label text-[10px] text-text-muted">Your playbook</p><ol class="flex list-inside list-decimal flex-col gap-0.5 text-sm text-text"><li>Apologize</li><li>Verify the order</li></ol></div>
+            <p class="cap"><b>"Your playbook" panel</b> · Skill part 2</p>
+            <!-- fill in -->
+            <div class="rounded-md border-[3px] border-neutral bg-muted px-4 py-4 text-center shadow-pop"><p class="text-lg font-extrabold leading-snug">"I'd like a large <span class="text-primary">___</span>"</p></div>
+            <p class="cap"><b>Fill-in sentence</b> · Token, Temperature</p>
+            <!-- wrong row -->
+            <div class="rounded-lg border-[3px] border-neutral bg-surface p-4 shadow-card"><p class="mb-3 text-center font-label text-[11px] font-bold text-primary">Your bot runs, but a few of these choices will cause problems</p>
+              <div class="rounded-md border-2 border-neutral bg-muted px-3 py-2 text-left"><p class="font-label text-[10px] text-text-muted">When info is missing</p><p class="mt-0.5 text-[14px] leading-snug text-text">You picked <span class="font-bold">“Guess”</span>, it invents an order.</p><p class="mt-1 text-[14px] leading-snug text-success">Better: <span class="font-bold">“Ask”</span>, it asks for the missing part.</p></div></div>
+            <p class="cap"><b>Prompt results, a WRONG answer</b> · this is FR-11. Green box, green text.</p>
+            <!-- real success -->
+            <div class="rounded-md border-[3px] border-neutral bg-success-bg p-3 shadow-pop"><p class="flex items-center gap-1.5 font-label text-sm font-bold text-success"><span class="material-symbols-rounded text-[18px]">check_circle</span>Caught it</p><p class="mt-1 text-[13px] leading-snug text-text">That pizza is not on the menu.</p></div>
+            <p class="cap"><b>A real "correct" card</b> (success-bg) · compare with the five above</p>
+          </div>
+        </div>
+
+        <div class="stage proposed prop-col"><span class="tag">Proposed · muted = #e6e7ee</span>
+          <div class="col">
+            <div class="flex items-start gap-2">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-surface"><span class="material-symbols-rounded text-[20px] text-text-muted">person</span></span>
+              <div class="max-w-[85%]"><p class="mb-1 font-label text-[10px] text-text-muted">Customer</p>
+                <div class="rounded-2xl rounded-tl-sm border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop"><p class="font-bold leading-snug text-text">Hi, I'd like a pizza please.</p></div></div>
+            </div>
+            <p class="cap">Still clearly a message. No longer green.</p>
+            <div class="rounded-md border-2 border-neutral bg-muted px-3 py-2"><p class="font-label text-[10px] text-text-muted">How to play</p><p class="mt-0.5 text-[13px] leading-snug text-text">Check each answer against the real menu and catch the ones your bot made up.</p></div>
+            <p class="cap">Reads as "a note", not "a result".</p>
+            <div class="rounded-md border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop"><p class="mb-1 font-label text-[10px] text-text-muted">Your playbook</p><ol class="flex list-inside list-decimal flex-col gap-0.5 text-sm text-text"><li>Apologize</li><li>Verify the order</li></ol></div>
+            <p class="cap">Same panel, neutral.</p>
+            <div class="rounded-md border-[3px] border-neutral bg-muted px-4 py-4 text-center shadow-pop"><p class="text-lg font-extrabold leading-snug">"I'd like a large <span class="text-primary">___</span>"</p></div>
+            <p class="cap">Same.</p>
+            <div class="rounded-lg border-[3px] border-neutral bg-surface p-4 shadow-card"><p class="mb-3 text-center font-label text-[11px] font-bold text-primary">Your bot runs, but a few of these choices will cause problems</p>
+              <div class="rounded-md border-2 border-neutral bg-muted px-3 py-2 text-left"><p class="font-label text-[10px] text-text-muted">When info is missing</p><p class="mt-0.5 text-[14px] leading-snug text-text">You picked <span class="font-bold">“Guess”</span>, it invents an order.</p><p class="mt-1 text-[14px] leading-snug text-success">Better: <span class="font-bold">“Ask”</span>, it asks for the missing part.</p></div></div>
+            <p class="cap">Better already, but the row still does not say "wrong". Phase 1 turns it into a red <b>Callout</b> (see <a href="#p-callout">Proposed Callout</a>).</p>
+            <div class="rounded-md border-[3px] border-neutral bg-success-bg p-3 shadow-pop"><p class="flex items-center gap-1.5 font-label text-sm font-bold text-success"><span class="material-symbols-rounded text-[18px]">check_circle</span>Caught it</p><p class="mt-1 text-[13px] leading-snug text-text">That pizza is not on the menu.</p></div>
+            <p class="cap">Now this is the <b>only</b> green box on screen.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q"><div class="qn">Question D2, in plain words</div><div class="ask">Do you like the grey version on the right?</div>
+        <b>Yes</b> = one line changes in <code>tokens.css</code>, every grey box updates at once. Half an hour.<br>
+        <b>No, keep the green</b> = then the customer bubble, "How to play" and the fill-in box must move to white instead, so green is left only for "correct". About half a day.<br>
+        <span style="color:var(--g-ink-soft)">The exact grey (cooler, warmer, lighter) can be tuned later. The question is only: green, or not green.</span></div>
+    </section>
+
+    <!-- ============================== D5 ============================== -->
+    <section class="block" id="d5">
+      <p class="eyebrow">Decision 2 of 3</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">D5 · The amber cards mean five different things</h2>
+      <p class="lede">Every card below uses the same amber (<code>cheese-bg</code>). A player learns "amber = X" in one game, then meets amber meaning something else in the next. The proposal keeps amber for <b>cost, caution, in progress</b> only, and moves "you selected this" to blue, which is already the selected colour in Prompt and Guardrails.</p>
+
+      <div class="spec">
+        <div class="stage today"><span class="tag">Today · amber means…</span>
+          <div class="col">
+            <button type="button" class="press flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-surface text-left shadow-pop"><span class="flex w-11 shrink-0 items-center justify-center border-r-[3px] border-neutral bg-cheese-bg text-cheese-dim"><span class="material-symbols-rounded text-[20px]">gavel</span></span><span class="flex-1 px-3 py-3"><span class="block font-label text-[10px] text-cheese-dim">Rule you add to your bot</span><span class="mt-0.5 block font-bold leading-snug text-text">If anything is missing, ask before ordering.</span></span></button>
+            <p class="cap"><b>1 · a TYPE of choice</b> ("Rule", vs blue "Instruction") · Prompt round 2</p>
+            <button type="button" class="press flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-surface text-left shadow-pop"><span class="flex w-10 shrink-0 items-center justify-center border-r-[3px] border-neutral bg-cheese-bg text-cheese-dim"><span class="material-symbols-rounded text-[19px]">payments</span></span><span class="flex flex-1 items-center gap-2 px-2.5 py-2"><span class="min-w-0"><span class="block font-label text-[9px] leading-none text-cheese-dim">Action you give your bot</span><span class="mt-0.5 block text-[13px] font-bold leading-tight text-text">Charge the card</span></span><span class="ml-auto shrink-0 font-label text-[10px] font-bold text-primary">+ add</span></span></button>
+            <p class="cap"><b>2 · another TYPE</b> ("Action") · Agent build step</p>
+            <button type="button" class="press flex items-stretch overflow-hidden rounded-md border-[3px] border-cheese-dim bg-cheese-bg text-left shadow-pop"><span class="flex w-11 shrink-0 items-center justify-center border-r-[3px] border-cheese-dim bg-cheese-bg text-cheese-dim"><span class="material-symbols-rounded text-[20px]">receipt_long</span></span><span class="flex flex-1 flex-col px-3 py-2.5"><span class="flex items-center justify-between gap-2"><span class="font-label text-[10px] text-tertiary">Page from the binder · Price list</span><span class="shrink-0 font-label text-[11px] font-bold text-primary">handed ✓</span></span><span class="mt-0.5 font-bold leading-snug text-text">Price list</span></span></button>
+            <p class="cap"><b>3 · SELECTED state</b> (whole card turns amber) · RAG, Memory, Agent to-do list</p>
+            <div class="flex items-center justify-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-3 py-1.5 shadow-pop text-cheese-dim"><span class="font-display text-lg font-extrabold leading-none">12 wks</span><span class="font-label text-[10px] leading-tight">the old, custom way</span></div>
+            <p class="cap"><b>4 · a COST warning</b> · MCP counters, "And you're not done"</p>
+            <div class="flex animate-pulse items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-3 py-2.5 text-[13px] font-bold text-cheese-dim shadow-pop"><span class="material-symbols-rounded text-[20px]">local_fire_department</span>Firing: Send to kitchen…</div>
+            <p class="cap"><b>5 · IN PROGRESS</b> · Agent run</p>
+          </div>
+        </div>
+
+        <div class="stage proposed"><span class="tag">Proposed · amber = cost, caution, in progress</span>
+          <div class="col">
+            <button type="button" class="press flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-surface text-left shadow-pop"><span class="flex w-11 shrink-0 items-center justify-center border-r-[3px] border-neutral bg-accent-soft text-tertiary"><span class="material-symbols-rounded text-[20px]">gavel</span></span><span class="flex-1 px-3 py-3"><span class="block font-label text-[10px] text-tertiary">Rule you add to your bot</span><span class="mt-0.5 block font-bold leading-snug text-text">If anything is missing, ask before ordering.</span></span></button>
+            <p class="cap"><b>1 · "Rule" keeps its gavel icon and tag</b>, but the panel is blue like every other "thing you give the bot". <span class="flag">This is the part to confirm:</span> is icon + tag enough to tell Rule from Instruction?</p>
+            <button type="button" class="press flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-surface text-left shadow-pop"><span class="flex w-10 shrink-0 items-center justify-center border-r-[3px] border-neutral bg-accent-soft text-tertiary"><span class="material-symbols-rounded text-[19px]">payments</span></span><span class="flex flex-1 items-center gap-2 px-2.5 py-2"><span class="min-w-0"><span class="block font-label text-[9px] leading-none text-tertiary">Action you give your bot</span><span class="mt-0.5 block text-[13px] font-bold leading-tight text-text">Charge the card</span></span><span class="ml-auto shrink-0 font-label text-[10px] font-bold text-tertiary">+ add</span></span></button>
+            <p class="cap"><b>2 · "Action" same treatment.</b> Blue = yours to give.</p>
+            <button type="button" class="press flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-accent-soft text-left shadow-pop"><span class="flex w-11 shrink-0 items-center justify-center border-r-[3px] border-neutral bg-tertiary text-white"><span class="material-symbols-rounded text-[20px]">check</span></span><span class="flex flex-1 flex-col px-3 py-2.5"><span class="flex items-center justify-between gap-2"><span class="font-label text-[10px] text-tertiary">Page from the binder · Price list</span><span class="shrink-0 font-label text-[11px] font-bold text-tertiary">handed ✓</span></span><span class="mt-0.5 font-bold leading-snug text-text">Price list</span></span></button>
+            <p class="cap"><b>3 · Selected = blue fill + solid check panel.</b> Same look in every game that has a selected state.</p>
+            <div class="flex items-center justify-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-3 py-1.5 shadow-pop text-cheese-dim"><span class="font-display text-lg font-extrabold leading-none">12 wks</span><span class="font-label text-[10px] leading-tight">the old, custom way</span></div>
+            <p class="cap"><b>4 · Unchanged.</b> Amber = this is costing you.</p>
+            <div class="flex animate-pulse items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-3 py-2.5 text-[13px] font-bold text-cheese-dim shadow-pop"><span class="material-symbols-rounded text-[20px]">local_fire_department</span>Firing: Send to kitchen…</div>
+            <p class="cap"><b>5 · Unchanged.</b> Amber = happening right now.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q"><div class="qn">Question D5, in plain words</div><div class="ask">Amber only for "cost / caution / in progress"? And is the blue "Rule" card (right, item 1) still clearly a Rule?</div>
+        <b>Yes to both</b> = one selected style everywhere; amber gets one meaning. Done inside Phase 2 (SelectableCard), no extra time.<br>
+        <b>Yes, but Rule needs its own colour</b> = fine; then Rule needs a colour that is not amber, not blue, not green, not red. Say so and I propose two.<br>
+        <b>No</b> = amber stays as it is; the selected state is unified some other way (border + check only).</div>
+    </section>
+
+    <!-- ============================== D7 ============================== -->
+    <section class="block" id="d7">
+      <p class="eyebrow">Decision 3 of 3</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">D7 · Two names, one red</h2>
+      <p class="lede"><code>primary</code> (the brand red, "press this") and <code>danger</code> ("this went wrong") are literally the same hex. On one screen a player sees red on the tiny "Game · …" label, red on the bot's face, red on the big button, and red on "The problem". The proposal keeps one red but <b>stops using it for decoration</b>, so red text means only "press" or "wrong".</p>
+
+      <div class="spec">
+        <div class="stage today"><span class="tag">Today · one Prompt screen, everything red</span>
+          <div class="col">
+            <div class="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop"><div class="flex items-center justify-between"><p class="font-label text-[11px] text-primary">Game · You build the bot</p><span class="font-label text-[11px] text-text-muted">Round 1 / 3</span></div><p class="mt-1 text-[13px] leading-snug text-text-muted">Here's what your bot actually does with that instruction.</p></div>
+            <div class="flex items-start justify-end gap-2"><div class="max-w-[85%]"><p class="mb-1 text-right font-label text-[10px] text-text-muted">Your bot</p><div class="rounded-2xl rounded-tr-sm border-[3px] border-neutral bg-surface px-4 py-3 shadow-pop"><p class="font-bold leading-snug text-text">One large pepperoni, coming up!</p></div></div><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary"><span class="material-symbols-rounded text-[20px] text-white">smart_toy</span></span></div>
+            <div class="rounded-lg border-[3px] border-danger bg-danger-bg p-4 shadow-card"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded text-[15px]">warning</span>The problem</p><p class="text-[15px] leading-snug text-text">The customer never said pepperoni. Your bot invented it.</p></div>
+            <button type="button" class="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"><span class="material-symbols-rounded">arrow_forward</span>Add a rule to your bot</button>
+            <p class="cap">Red label · red avatar · red problem · red button. Four reds, two meanings.</p>
+          </div>
+        </div>
+        <div class="stage proposed"><span class="tag">Proposed · red only where it means something</span>
+          <div class="col">
+            <div class="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop"><div class="flex items-center justify-between"><p class="font-label text-[11px] text-text-muted">Game · You build the bot</p><span class="font-label text-[11px] text-text-muted">Round 1 / 3</span></div><p class="mt-1 text-[13px] leading-snug text-text-muted">Here's what your bot actually does with that instruction.</p></div>
+            <div class="flex items-start justify-end gap-2"><div class="max-w-[85%]"><p class="mb-1 text-right font-label text-[10px] text-text-muted">Your bot</p><div class="rounded-2xl rounded-tr-sm border-[3px] border-neutral bg-surface px-4 py-3 shadow-pop"><p class="font-bold leading-snug text-text">One large pepperoni, coming up!</p></div></div><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-text"><span class="material-symbols-rounded text-[20px] text-white">smart_toy</span></span></div>
+            <div class="rounded-lg border-[3px] border-danger bg-danger-bg p-4 shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded text-[15px]">warning</span>The problem</p><p class="text-[15px] leading-snug text-text">The customer never said pepperoni. Your bot invented it.</p></div>
+            <button type="button" class="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-3 font-label font-bold text-white shadow-pop"><span class="material-symbols-rounded">arrow_forward</span>Add a rule to your bot</button>
+            <p class="cap">(Round 1 idea, superseded by R2.)</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q"><div class="qn">Question D7, in plain words</div><div class="ask">Keep one red, but remove it from labels and the bot's face (right column)?</div>
+        <b>Yes</b> = small class changes while extracting PhaseCard and Avatar in Phase 1. No new colour needed.<br>
+        <b>No, I want a separate "error" red</b> = a second red token; I propose one, you pick. Adds about an hour and one more colour to remember.<br>
+        <b>Leave as is</b> = also fine; least work.</div>
+    </section>
+
+    </div></details>
+
+    <!-- ============================== INVENTORY ============================== -->
+    <section class="block" id="c-phase">
+      <p class="eyebrow">What exists today · 1 of 7</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">Phase card ("what do I do on this screen") <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">replaced in Phase 1</span></h2>
+      <p class="lede">The same card is hand-written in all 12 games. The 8 two-column games keep it slim. The 4 single-column games (Token, Context window, Memory, MCP) lose the left intro panel after the first screen, so they stuff the term name into this card as a big heading.</p>
+      <div class="grid-gallery three">
+        <div class="item"><h4><span class="ref">G1</span>Stage games <span class="verdict v-ok">consistent</span></h4>
+          <div class="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop"><div class="flex items-center justify-between"><p class="font-label text-[11px] text-primary">Game · Free pizza for life</p><span class="font-label text-[11px] text-text-muted">Part 1 of 2</span></div><p class="mt-1 text-[13px] leading-snug text-text-muted">Your bot has no guardrails yet. Watch pushy customers talk it into anything · 1 / 4</p></div>
+          <p class="cap">Guardrails. Progress appears twice: "Part 1 of 2" top right, "1 / 4" glued to the sentence.</p></div>
+        <div class="item"><h4><span class="ref">G1</span>Single-column games <span class="verdict v-warn">drifts</span></h4>
+          <div class="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop"><div class="flex items-center justify-between"><p class="font-label text-[11px] text-primary">Game · Read your bot's mind</p><span class="font-label text-[11px] text-text-muted">1 / 3</span></div><h1 class="text-2xl leading-tight">Token</h1><p class="mt-1 text-[13px] leading-snug text-text-muted">Your bot never writes a whole reply at once. It picks one token, then the next…</p></div>
+          <p class="cap">Token, phase 2. The term name lives here because the intro panel is gone.</p></div>
+        <div class="item"><h4><span class="ref">G1</span>Memory <span class="verdict v-warn">drifts</span></h4>
+          <div class="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop"><p class="font-label text-[11px] text-primary">Game · Welcome, stranger</p><h1 class="text-2xl leading-tight">Memory</h1><p class="mt-1 font-label text-[11px] text-text-muted">A week later, Anna is back.</p></div>
+          <p class="cap">Body text set in the label font, unlike every other game. No progress.</p></div>
+      </div>
+      <div class="note">Proposal: <b>PhaseCard</b> with <code>title</code>, <code>progress</code>, body. Progress rendered one way ("Round 1 / 3"), never inside the sentence.</div>
+    </section>
+
+    <section class="block" id="c-chat">
+      <p class="eyebrow">What exists today · 2 of 7</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">Chat bubbles <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">replaced in Phase 1</span></h2>
+      <p class="lede">Six games share one bubble pair. Three of them tint the bot's bubble green or red to show the outcome. Two games (Memory, Context window) use plain boxes with no avatars, and Memory puts the customer on the <b>right</b>, where every other game puts the bot.</p>
+      <div class="grid-gallery">
+        <div class="item"><h4><span class="ref">G2 · G3</span>Standard pair <span class="verdict v-ok">shape consistent</span></h4>
+          <div class="col">
+            <div class="flex items-start gap-2"><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-surface"><span class="material-symbols-rounded text-[20px] text-text-muted">person</span></span><div class="max-w-[85%]"><p class="mb-1 font-label text-[10px] text-text-muted">Customer · Marco</p><div class="rounded-2xl rounded-tl-sm border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop"><p class="font-bold leading-snug text-text">Two margheritas to 12 Oak Street.</p></div></div></div>
+            <div class="flex items-start justify-end gap-2"><div class="max-w-[85%]"><p class="mb-1 text-right font-label text-[10px] text-text-muted">Your chatbot</p><div class="rounded-2xl rounded-tr-sm border-[3px] border-neutral bg-surface px-4 py-3 shadow-pop"><p class="font-bold leading-snug text-text">Great choice! Enjoy your pizza.</p></div></div><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary"><span class="material-symbols-rounded text-[20px] text-white">smart_toy</span></span></div>
+          </div><p class="cap">Prompt, Agent, RAG. Labels vary: "Your bot", "Your chatbot", "Pizza bot", "Your bot · out loud".</p></div>
+        <div class="item"><h4><span class="ref">G3</span>Tinted bot bubble = the result <span class="verdict v-warn">ok idea, drifting details</span></h4>
+          <div class="col">
+            <div class="flex items-start justify-end gap-2"><div class="max-w-[85%]"><p class="mb-1 text-right font-label text-[10px] text-text-muted">Pizza bot</p><div class="rounded-2xl rounded-tr-sm border-[3px] border-danger bg-danger-bg px-4 py-3 shadow-pop"><p class="leading-snug text-text">Of course! 100% off, approved.</p><p class="mt-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded text-[15px]">bolt</span>It worked. -$50</p></div></div><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary"><span class="material-symbols-rounded text-[20px] text-white">smart_toy</span></span></div>
+            <div class="flex items-start justify-end gap-2"><div class="max-w-[85%]"><p class="mb-1 text-right font-label text-[10px] text-text-muted">Your bot</p><div class="rounded-2xl rounded-tr-sm border-[3px] border-success bg-success-bg px-4 py-3 shadow-pop"><p class="text-sm leading-snug text-text">Sorry to hear that! Order #482, confirmed. 20% off your next order.</p><p class="mt-1 flex items-center gap-1 font-label text-[11px] font-bold text-success"><span class="material-symbols-rounded text-[15px]">check_circle</span>Customer 1 · same script every time</p></div></div><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-primary"><span class="material-symbols-rounded text-[20px] text-white">smart_toy</span></span></div>
+          </div><p class="cap">Guardrails (red), Skill (green). Tool use too. Text size differs per game. Keep the pattern, standardise the label and the note line.</p></div>
+        <div class="item"><h4><span class="ref">G4</span>Memory: no avatars, sides flipped <span class="verdict v-bad">conflict</span></h4>
+          <div class="col">
+            <div class="max-w-[85%] self-start rounded-md border-[3px] border-neutral bg-surface px-4 py-3 text-sm shadow-pop">Hi! What can I get you?</div>
+            <div class="ml-auto max-w-[85%] self-end rounded-md border-[3px] border-neutral bg-accent-soft px-4 py-3 text-sm shadow-pop">One large pepperoni, no anchovies.</div>
+          </div><p class="cap">Bot on the left (white), <b>customer on the right (blue)</b>. Everywhere else the customer is on the left.</p></div>
+        <div class="item"><h4><span class="ref">G4</span>Context window: you on the right, bot tinted <span class="verdict v-warn">different shape</span></h4>
+          <div class="col">
+            <div class="ml-auto max-w-[85%] self-end rounded-md border-[3px] border-neutral bg-accent-soft px-4 py-2 text-sm text-text shadow-pop">"Any allergies I should know about?"</div>
+            <div class="max-w-[85%] self-start rounded-md border-[3px] border-danger bg-danger-bg px-4 py-3 shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded text-[15px]">visibility_off</span>Out of the context window</p><p class="text-[13px] leading-snug text-text">I don't see any allergy in this order.</p></div>
+          </div><p class="cap">Here the player is the one chatting, so "you" on the right is fine. Just a different bubble shape.</p></div>
+      </div>
+      <div class="note">Proposal: <b>ChatMessage</b> with <code>from="customer | bot | you"</code> and <code>tone</code>. Rule to confirm: <b>received = left, your side (bot or you) = right</b>. Memory flips.</div>
+    </section>
+
+    <section class="block" id="c-choice">
+      <p class="eyebrow">What exists today · 3 of 7</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">Choice cards (the FR-10 / FR-16 problem) <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">replaced in Phase 2</span></h2>
+      <p class="lede">Klára did not realise these are tappable. Below: every way a "pick one" is drawn today. Notice that <b>none has a radio circle or checkbox</b>, none says "pick one", and the selected colour is blue in two games, amber in three, green in one.</p>
+      <div class="grid-gallery four">
+        <div class="item"><h4><span class="ref">G5</span>Prompt · ChoiceCard</h4>
+          <button type="button" class="press flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-surface text-left shadow-pop"><span class="flex w-11 shrink-0 items-center justify-center border-r-[3px] border-neutral bg-accent-soft text-tertiary"><span class="material-symbols-rounded text-[20px]">description</span></span><span class="flex-1 px-3 py-3"><span class="block font-label text-[10px] text-tertiary">Instruction you give your bot</span><span class="mt-0.5 block font-bold leading-snug text-text">Take the customer's order.</span></span></button>
+          <p class="cap">Tap = commits instantly. No selected state exists.</p></div>
+        <div class="item"><h4><span class="ref">G6</span>Prompt · CategoryPicker pills</h4>
+          <div class="flex flex-wrap gap-2"><button type="button" class="press rounded-md border-[3px] border-neutral bg-accent-soft px-3 py-2 text-sm font-bold text-tertiary shadow-pop">Ask first</button><button type="button" class="press rounded-md border-[3px] border-neutral bg-surface px-3 py-2 text-sm font-bold text-text-muted shadow-pop">Guess</button></div>
+          <p class="cap">Selected = blue. Unselected text is grey, so it looks disabled.</p></div>
+        <div class="item"><h4><span class="ref">G6</span>Guardrails · inline buttons</h4>
+          <div class="flex flex-col gap-2"><button type="button" class="press rounded-md border-[3px] border-neutral bg-surface px-3 py-2 text-left text-sm font-bold text-text-muted shadow-pop">No limit, whatever they ask</button><button type="button" class="press rounded-md border-[3px] border-neutral bg-accent-soft px-3 py-2 text-left text-sm font-bold text-tertiary shadow-pop">Up to 20%, human approval above</button></div>
+          <p class="cap">Selected = blue. This is FR-16.</p></div>
+        <div class="item"><h4><span class="ref">G6</span>Memory · fact toggles</h4>
+          <div class="flex flex-col gap-2"><button type="button" class="press rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-4 py-3 text-left font-bold text-cheese-dim shadow-pop">✓ Her allergy: no anchovies</button><button type="button" class="press rounded-md border-[3px] border-neutral bg-surface px-4 py-3 text-left font-bold text-text-muted shadow-pop">Her favourite joke</button></div>
+          <p class="cap">Selected = amber + a typed "✓".</p></div>
+        <div class="item"><h4><span class="ref">G5</span>Skill · step added</h4>
+          <button type="button" disabled class="flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-success-bg text-left shadow-pop"><span class="flex w-11 shrink-0 items-center justify-center border-r-[3px] border-neutral bg-success text-white"><span class="material-symbols-rounded text-[20px]">check</span></span><span class="flex-1 px-3 py-3"><span class="block font-label text-[10px] text-success">Added to playbook</span><span class="mt-0.5 block font-bold leading-snug text-text">Apologize</span></span></button>
+          <p class="cap">Selected = green. Green should mean "correct", not "added".</p></div>
+        <div class="item"><h4><span class="ref">G5</span>Tool use · tool card</h4>
+          <button type="button" class="press flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-surface text-left shadow-pop"><span class="flex w-11 shrink-0 items-center justify-center border-r-[3px] border-neutral bg-accent-soft text-tertiary"><span class="material-symbols-rounded text-[20px]">build</span></span><span class="flex-1 px-3 py-3"><span class="block font-label text-[10px] text-tertiary">Tool your bot can check</span><span class="mt-0.5 block font-bold leading-snug text-text">📍 Delivery tracker</span></span></button>
+          <p class="cap">Commit on tap. Wrong tap shows a grey italic line.</p></div>
+        <div class="item"><h4><span class="ref">G6</span>Temperature · two icon cards</h4>
+          <div class="grid grid-cols-2 gap-2"><button type="button" class="press flex flex-col items-center gap-1 rounded-md border-[3px] border-neutral bg-surface py-3 shadow-pop"><span class="material-symbols-rounded text-2xl text-tertiary">ac_unit</span><span class="font-label text-[12px] font-bold text-text">Turn it down</span></button><button type="button" class="press flex flex-col items-center gap-1 rounded-md border-[3px] border-neutral bg-surface py-3 shadow-pop"><span class="material-symbols-rounded text-2xl text-primary">local_fire_department</span><span class="font-label text-[12px] font-bold text-text">Turn it up</span></button></div>
+          <p class="cap">A judgment, commits on tap. Reads well.</p></div>
+        <div class="item"><h4><span class="ref">G6</span>Hallucination · Trust / Made up</h4>
+          <div class="flex gap-2"><button type="button" class="press flex flex-1 items-center justify-center gap-1.5 rounded-md border-[3px] border-neutral bg-tertiary py-3 font-label text-sm font-bold text-white shadow-pop"><span class="material-symbols-rounded text-[18px]">check</span>Trust it</button><button type="button" class="press flex flex-1 items-center justify-center gap-1.5 rounded-md border-[3px] border-neutral bg-primary py-3 font-label text-sm font-bold text-white shadow-pop"><span class="material-symbols-rounded text-[18px]">flag</span>Made up</button></div>
+          <p class="cap">Solid buttons. The only choices that obviously look tappable.</p></div>
+      </div>
+      <div class="note">Proposal: one <b>SelectableCard</b> in three modes (commit · radio · checkbox) inside a <b>ChoiceGroup</b> that always prints "Pick one" / "Pick any". See <a href="#p-select">the proposed version</a>.</div>
+    </section>
+
+    <section class="block" id="c-result">
+      <p class="eyebrow">What exists today · 4 of 7</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">Result callouts, four shapes for one job <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">replaced in Phase 1</span></h2>
+      <p class="lede">"You were right" / "here is the problem" is drawn ~20 times. Same job, but the corner radius, the shadow depth, the border colour, the heading size and the alignment all change from game to game.</p>
+      <div class="grid-gallery four">
+        <div class="item"><h4><span class="ref">G7</span>Prompt / Agent / RAG</h4>
+          <div class="rounded-lg border-[3px] border-danger bg-danger-bg p-4 shadow-card"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded text-[15px]">warning</span>The problem</p><p class="text-[15px] leading-snug text-text">It talked. Nothing actually happened.</p></div>
+          <p class="cap">Big radius, deep 6px shadow, red border.</p></div>
+        <div class="item"><h4><span class="ref">G7</span>Hallucination</h4>
+          <div class="rounded-md border-[3px] border-neutral bg-danger-bg p-3 shadow-pop"><p class="flex items-center gap-1.5 font-label text-sm font-bold text-danger"><span class="material-symbols-rounded text-[18px]">cancel</span>Fooled you</p><p class="mt-1 text-[13px] leading-snug text-text">That pizza is real, it's on the menu.</p></div>
+          <p class="cap">Small radius, 4px shadow, <b>grey</b> border, bigger heading.</p></div>
+        <div class="item"><h4><span class="ref">G7</span>Prompt round 2 (correct)</h4>
+          <div class="rounded-lg border-[3px] border-neutral bg-success-bg p-4 text-center shadow-card"><p class="mb-2 font-label text-[11px] font-bold text-success">You added: Ask before ordering</p><p class="text-[15px] leading-snug text-text">Your bot now asks what size.</p></div>
+          <p class="cap">Centered, grey border, no icon.</p></div>
+        <div class="item"><h4><span class="ref">G7</span>MCP</h4>
+          <div class="rounded-lg border-[3px] border-success bg-success-bg p-3 shadow-pop"><p class="text-[15px] font-bold leading-snug text-success">It just worked. You waited for no one.</p><p class="mt-1 text-[13px] leading-snug text-text">Both sides built to the same port.</p></div>
+          <p class="cap">Headline instead of eyebrow, no icon.</p></div>
+      </div>
+      <div class="item" style="margin-top:1.25rem;max-width:30rem"><h4><span class="ref">G7</span>Memory · "The problem" <span class="verdict v-bad">not tinted at all</span></h4>
+        <div class="rounded-lg border-[3px] border-neutral bg-surface p-4 shadow-pop"><p class="font-label text-[11px] text-primary">The problem</p><p class="mt-1 text-[15px] leading-snug">Every visit, the bot starts from zero.</p></div>
+        <p class="cap">Same words as the red cards above, drawn as a plain white card.</p></div>
+      <div class="note">Proposal: one <b>Callout</b> with four tones. See <a href="#p-callout">the proposed version</a>.</div>
+    </section>
+
+    <section class="block" id="c-aside">
+      <p class="eyebrow">What exists today · 5 of 7</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">"Real talk" asides, three stylings for one label <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">replaced in Phase 1</span></h2>
+      <div class="grid-gallery three">
+        <div class="item"><h4><span class="ref">G8</span>Memory, Context window</h4>
+          <div class="rounded-lg border-[3px] border-tertiary bg-surface p-3 shadow-pop"><p class="flex items-center gap-1 font-label text-[11px] font-bold text-tertiary"><span class="material-symbols-rounded text-[15px]">info</span>Real talk</p><p class="mt-1 text-[13px] leading-snug text-text">This app remembers your finished games the same way, saved in your browser.</p></div>
+          <p class="cap">Blue outline, info icon.</p></div>
+        <div class="item"><h4><span class="ref">G8</span>RAG</h4>
+          <div class="rounded-lg border-[3px] border-cheese-dim bg-cheese-bg p-4 shadow-pop"><p class="flex items-center gap-1 font-label text-[11px] font-bold text-cheese-dim"><span class="material-symbols-rounded text-[15px]">bolt</span>Real talk</p><p class="mt-1 text-[15px] leading-snug text-text">Real RAG has a search engine doing your job, and it makes the same mistakes.</p></div>
+          <p class="cap">Amber tint, bolt icon. Looks like a warning.</p></div>
+        <div class="item"><h4><span class="ref">G8</span>Guardrails ("In the real world")</h4>
+          <div class="rounded-lg border-[3px] border-neutral bg-muted p-4 shadow-pop"><p class="flex items-center gap-1 font-label text-[11px] text-text-muted"><span class="material-symbols-rounded text-[15px]">info</span>In the real world</p><p class="mt-1 text-[15px] leading-snug">A real bot needs guardrails enforced in code.</p></div>
+          <p class="cap">Green-grey tint. Looks like a "How to play" box.</p></div>
+      </div>
+      <div class="note">Proposal: all three become <b>Callout tone="info"</b>, one look.</div>
+    </section>
+
+    <section class="block" id="c-panels">
+      <p class="eyebrow">What exists today · 6 of 7</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">Panels, slot lists, bars, strips</h2>
+      <div class="grid-gallery">
+        <div class="item"><h4><span class="ref">G12</span>Panel with dark header <span class="verdict v-warn">no rule for when</span></h4>
+          <div class="overflow-hidden rounded-md border-[3px] border-neutral bg-surface shadow-card"><div class="flex items-center justify-between bg-text px-3 py-1.5 font-label text-[10px] text-white"><span>Bot says</span><span class="flex items-center gap-2">Bot confidence 100%<span class="h-2 w-14 overflow-hidden rounded-full bg-white/25"><span class="block h-full w-full bg-success"></span></span></span></div><div class="flex items-center gap-3 px-4 py-4"><span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border-[3px] border-neutral bg-primary"><span class="material-symbols-rounded text-white">smart_toy</span></span><p class="text-[1.05rem] font-extrabold leading-snug">“The Diavola is our vegan option.”</p></div></div>
+          <p class="cap">Hallucination claim, Context window. <b>Retired in R4:</b> both now use the grey label strip.</p></div>
+        <div class="item"><h4><span class="ref">G12</span>Panel with label header</h4>
+          <div class="overflow-hidden rounded-md border-[3px] border-neutral bg-surface"><div class="flex items-center gap-1.5 border-b-[3px] border-neutral bg-muted px-3 py-1.5 font-label text-[11px] text-text-muted"><span class="material-symbols-rounded text-[15px]">menu_book</span>Today's real menu</div><ul class="grid grid-cols-2 gap-x-4 gap-y-1 px-3 py-2"><li class="flex justify-between gap-2 border-b border-dotted border-slot-empty pb-0.5 text-[13px]"><span class="font-bold">Margherita</span><span class="text-text-muted">€9</span></li><li class="flex justify-between gap-2 border-b border-dotted border-slot-empty pb-0.5 text-[13px]"><span class="font-bold">Diavola</span><span class="text-text-muted">€11</span></li></ul></div>
+          <p class="cap">Hallucination reference menu. Green-grey header (D2 again).</p></div>
+        <div class="item"><h4><span class="ref">G13</span>Slot list <span class="verdict v-ok">same in Agent + RAG</span></h4>
+          <div class="rounded-md border-[3px] border-neutral bg-surface px-3 py-2.5 shadow-pop"><p class="mb-2 flex items-center gap-1 font-label text-[10px] text-text-muted"><span class="material-symbols-rounded text-[15px]">checklist</span>The agent's to-do list</p><div class="flex flex-col gap-1.5"><div class="flex min-h-[40px] items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-2.5 py-2 text-[12px] font-bold text-cheese-dim"><span class="w-4 text-center font-label text-[11px] font-bold">1</span><span class="material-symbols-rounded text-[16px]">inventory</span><span>Check stock</span><span class="ml-auto font-label text-[13px] font-bold">✕</span></div><div class="flex min-h-[40px] items-center gap-2 rounded-md border-2 border-dashed border-slot-empty px-2.5 py-2 text-[12px] text-text-muted"><span class="w-4 text-center font-label text-[11px] font-bold">2</span>tap to add…</div></div></div>
+          <p class="cap">Filled rows are amber (D5, "selected" meaning). Skill's playbook should use this too.</p></div>
+        <div class="item"><h4><span class="ref">G14</span>Probability bars <span class="verdict v-bad">highlight means different things</span></h4>
+          <div class="rounded-md border-[3px] border-neutral bg-surface p-3 shadow-pop"><p class="mb-2 font-label text-[11px] text-text-muted">Chance of each next word</p><div class="flex flex-col gap-2">
+            <div class="flex items-center gap-2"><div class="w-20 shrink-0 rounded border-2 border-neutral bg-cheese-bg px-1.5 py-1 text-center font-mono text-xs font-bold text-cheese-dim">classic</div><div class="h-4 flex-1 overflow-hidden rounded-full border-2 border-neutral bg-surface"><div class="h-full bg-cheese" style="width:62%"></div></div><div class="w-9 text-right text-xs text-text-muted">62%</div></div>
+            <div class="flex items-center gap-2"><div class="w-20 shrink-0 rounded border-2 border-neutral bg-muted px-1.5 py-1 text-center font-mono text-xs text-text-muted">spicy</div><div class="h-4 flex-1 overflow-hidden rounded-full border-2 border-neutral bg-surface"><div class="h-full bg-tertiary" style="width:23%"></div></div><div class="w-9 text-right text-xs text-text-muted">23%</div></div></div></div>
+          <p class="cap">Temperature highlights the <b>favourite</b> in amber. Token highlights the <b>correct answer</b> in green. FR-14/15 want the <b>rolled word</b> highlighted.</p></div>
+        <div class="item"><h4><span class="ref">G15</span>Status strips</h4>
+          <div class="col"><p class="flex items-center justify-center gap-2 rounded-md border-[3px] border-danger bg-danger-bg px-3 py-2 text-center font-label text-sm font-bold text-danger shadow-pop"><span class="material-symbols-rounded text-[18px]">gpp_bad</span>No guardrails · Damage $105</p><p class="rounded-md border-[3px] border-success bg-success-bg px-3 py-2 text-center font-label text-sm font-bold text-success shadow-pop">Damage: $0</p></div>
+          <p class="cap">Guardrails. Fine; MCP's counters do the same in amber.</p></div>
+        <div class="item"><h4><span class="ref">S2</span>Action button variants</h4>
+          <div class="col"><button type="button" class="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-primary py-2.5 font-label text-sm font-bold text-white shadow-pop">primary · commit / next phase</button><button type="button" class="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-tertiary py-2.5 font-label text-sm font-bold text-white shadow-pop">accent · continue in phase</button><button type="button" class="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg py-2.5 font-label text-sm font-bold text-cheese-dim shadow-pop">soft · do the uncomfortable thing</button><button type="button" class="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-surface py-2.5 font-label text-sm font-bold text-text shadow-pop">neutral · secondary</button></div>
+          <p class="cap">Already shared. The meanings are just not written down; Guardrails uses red where Skill uses blue for the same "next customer".</p></div>
+      </div>
+    </section>
+
+    <section class="block" id="c-reveal">
+      <p class="eyebrow">What exists today · 7 of 7</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">The end screen (FR-13) <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">replaced in Phase 3</span></h2>
+      <p class="lede">Copied 12 times. Two paragraphs of text and no checklist. The term name is typed by hand in each file ("Tool use", "RAG").</p>
+      <div class="stage today" style="max-width:26rem"><span class="tag">Today · every game</span>
+        <div class="flex flex-col gap-3 text-center">
+          <div class="mx-auto mt-2 flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-neutral bg-success shadow-pop"><span class="material-symbols-rounded fill text-5xl text-white">check</span></div>
+          <p class="font-label text-[11px] text-primary">Snapped onto your bot · Safety casing</p>
+          <h2 class="text-2xl">You just learned the term Guardrails</h2>
+          <div class="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop"><p class="font-label text-[11px] text-text-muted">What it means</p><p class="mt-1 text-[15px] leading-snug">Guardrails are the limits you set on what your bot may do or say, so a clever customer cannot talk it into anything.</p></div>
+          <div class="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop"><p class="font-label text-[11px] text-text-muted">Why you care</p><p class="mt-1 text-[15px] leading-snug">Without them your bot will promise discounts, delivery times and opinions you never approved, and you pay for every one.</p></div>
+          <div class="rounded-lg border-[3px] border-neutral bg-muted p-4 text-left shadow-pop"><p class="flex items-center gap-1 font-label text-[11px] text-text-muted"><span class="material-symbols-rounded text-[15px]">info</span>In the real world</p><p class="mt-1 text-[15px] leading-snug">Picking safe options like this is only the start. A real bot needs much stronger guardrails, enforced in code and tested against attackers.</p></div>
+        </div></div>
+    </section>
+
+    <!-- ============================== PROPOSED ============================== -->
+    <section class="block" id="p-select">
+      <p class="eyebrow">Built · Phase 2 · src/components/SelectableCard.jsx, ChoiceGroup.jsx</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">SelectableCard + ChoiceGroup <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">built · Phase 2</span></h2>
+      <p class="lede">One card, three modes. The circle or square on the left is the affordance Klára was missing. Blue fill = "this is your pick". The group label always says how many to pick.</p>
+      <div class="grid-gallery three">
+        <div class="item"><h4>Radio mode · pick one</h4>
+          <div><p class="mb-1 font-label text-[11px] text-text-muted"><span class="text-tertiary">Limit 1 · </span>Max discount the bot may approve</p><p class="mb-2 text-[12px] text-text-muted">Pick one</p>
+          <div class="flex flex-col gap-2">
+            <button type="button" class="press flex items-center gap-3 rounded-md border-[3px] border-neutral bg-surface px-3 py-2.5 text-left shadow-pop"><span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-surface"></span><span class="text-sm font-bold text-text">No limit, whatever they ask</span></button>
+            <button type="button" aria-pressed="true" class="press flex items-center gap-3 rounded-md border-[3px] border-neutral bg-accent-soft px-3 py-2.5 text-left shadow-pop"><span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-[3px] border-neutral bg-tertiary"><span class="material-symbols-rounded text-[14px] text-white">check</span></span><span class="text-sm font-bold text-text">Up to 20%, human approval above</span></button>
+          </div></div>
+          <p class="cap">Replaces Guardrails rows and Prompt pills. Unselected text is dark, not grey, so it does not look disabled.</p></div>
+        <div class="item"><h4>Checkbox mode · pick any</h4>
+          <div><p class="mb-1 font-label text-[11px] text-text-muted">What the bot should remember</p><p class="mb-2 text-[12px] text-text-muted">Pick any, tap again to remove</p>
+          <div class="flex flex-col gap-2">
+            <button type="button" aria-pressed="true" class="press flex items-center gap-3 rounded-md border-[3px] border-neutral bg-accent-soft px-3 py-2.5 text-left shadow-pop"><span class="flex h-5 w-5 shrink-0 items-center justify-center rounded border-[3px] border-neutral bg-tertiary"><span class="material-symbols-rounded text-[14px] text-white">check</span></span><span class="text-sm font-bold text-text">Her allergy: no anchovies</span></button>
+            <button type="button" class="press flex items-center gap-3 rounded-md border-[3px] border-neutral bg-surface px-3 py-2.5 text-left shadow-pop"><span class="flex h-5 w-5 shrink-0 items-center justify-center rounded border-[3px] border-neutral bg-surface"></span><span class="text-sm font-bold text-text">Her favourite joke</span></button>
+          </div></div>
+          <p class="cap">Replaces Memory facts, RAG pages, Agent actions.</p></div>
+        <div class="item"><h4>Commit mode · with icon panel</h4>
+          <div><p class="mb-2 text-[12px] text-text-muted">Tap one to give it to your bot</p>
+          <div class="flex flex-col gap-2">
+            <button type="button" class="press flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-surface text-left shadow-pop"><span class="flex w-11 shrink-0 items-center justify-center border-r-[3px] border-neutral bg-accent-soft text-tertiary"><span class="material-symbols-rounded text-[20px]">description</span></span><span class="flex flex-1 items-center gap-2 px-3 py-3"><span class="min-w-0"><span class="block font-label text-[10px] text-tertiary">Instruction</span><span class="mt-0.5 block font-bold leading-snug text-text">Take the customer's order.</span></span><span class="material-symbols-rounded ml-auto shrink-0 text-text-muted">chevron_right</span></span></button>
+            <button type="button" class="press flex items-stretch overflow-hidden rounded-md border-[3px] border-neutral bg-surface text-left shadow-pop"><span class="flex w-11 shrink-0 items-center justify-center border-r-[3px] border-neutral bg-accent-soft text-tertiary"><span class="material-symbols-rounded text-[20px]">gavel</span></span><span class="flex flex-1 items-center gap-2 px-3 py-3"><span class="min-w-0"><span class="block font-label text-[10px] text-tertiary">Rule</span><span class="mt-0.5 block font-bold leading-snug text-text">If anything is missing, ask.</span></span><span class="material-symbols-rounded ml-auto shrink-0 text-text-muted">chevron_right</span></span></button>
+          </div></div>
+          <p class="cap">Replaces Prompt ChoiceCard, Tool card. The chevron says "tapping this moves you on".</p></div>
+      </div>
+    </section>
+
+    <section class="block" id="p-callout">
+      <p class="eyebrow">Built · Phase 1 · src/components/Callout.jsx</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">Callout, one shape, three tones <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">built · Phase 1</span></h2>
+      <p class="lede">Same radius, same 4px shadow, border always matches the tint, eyebrow with icon, body text. The only thing that changes is the tone.</p>
+      <div class="grid-gallery four">
+        <div class="item"><h4>problem</h4><div class="rounded-lg border-[3px] border-danger bg-danger-bg p-4 shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded text-[15px]">warning</span>The problem</p><p class="text-[15px] leading-snug text-text">It talked. Nothing actually happened.</p></div></div>
+        <div class="item"><h4>success</h4><div class="rounded-lg border-[3px] border-success bg-success-bg p-4 shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-success"><span class="material-symbols-rounded text-[15px]">check_circle</span>Caught it</p><p class="text-[15px] leading-snug text-text">That pizza is not on the menu.</p></div></div>
+        <div class="item"><h4>info</h4><div class="rounded-lg border-[3px] border-neutral bg-surface p-4 shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-text-muted"><span class="material-symbols-rounded text-[15px]">info</span>Real talk</p><p class="text-[15px] leading-snug text-text">A real bot needs guardrails enforced in code.</p></div></div>
+        <div class="item"><h4>problem · a cost that hurts</h4><div class="rounded-lg border-[3px] border-danger bg-danger-bg p-4 shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded text-[15px]">schedule</span>Four custom connectors. 12 weeks of work.</p><p class="text-[15px] leading-snug text-text">And it never ends. Every new tool is another bridge.</p></div><p class="cap">Costs use the problem tone (R3): amber is only for parts of the bot.</p></div>
+      </div>
+      <div class="item" style="margin-top:1.25rem;max-width:30rem"><h4>FR-11 fixed by the same component</h4>
+        <div class="rounded-lg border-[3px] border-danger bg-danger-bg p-4 shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger"><span class="material-symbols-rounded text-[15px]">warning</span>When info is missing · you picked “Guess”</p><p class="text-[15px] leading-snug text-text">It invents an order.</p><p class="mt-2 flex items-start gap-1 text-[14px] leading-snug text-text"><span class="material-symbols-rounded text-[16px] text-text-muted">arrow_forward</span><span>Better: <b>“Ask”</b>, it asks for the missing part.</span></p></div>
+        <p class="cap">A wrong pick is red. The better option is plain text with an arrow, not green.</p></div>
+    </section>
+
+    <section class="block" id="p-reveal">
+      <p class="eyebrow">Built · Phase 3 · src/components/TermReveal.jsx</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">TermReveal, definition + checklist <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">built · Phase 3</span></h2>
+      <p class="lede">Same top, then three sections (Phase 3 review): the <b>definition</b>; <b>"What you learned in the game"</b>, three sentences about what the player just did; and <b>"Do and don't"</b>, the takeaways for real life. Every line is a sentence a person would say, never a lecture note. The name comes from the data file, never typed by hand.</p>
+      <div class="stage proposed" style="max-width:26rem"><span class="tag">Proposed · every game</span>
+        <div class="flex flex-col gap-3 text-center">
+          <div class="mx-auto mt-2 flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-neutral bg-success shadow-pop"><span class="material-symbols-rounded fill text-5xl text-white">check</span></div>
+          <p class="font-label text-[11px] text-text-muted">Snapped onto your bot · Safety casing</p>
+          <h2 class="text-2xl">You just learned the term Guardrails</h2>
+          <div class="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop"><p class="font-label text-[11px] text-text-muted">In other words</p><p class="mt-1 text-[15px] leading-snug">Guardrails are the limits you set in advance: the discounts, promises and topics the bot may never go past, no matter how a customer pushes.</p></div>
+          <div class="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop"><p class="font-label text-[11px] text-text-muted">What you learned in the game</p>
+            <ul class="mt-2 flex flex-col gap-2 text-[14px] leading-snug">
+              <li class="flex items-start gap-2"><span class="material-symbols-rounded fill text-[18px] text-success">check_circle</span>A “store manager” talked your bot into a 100% discount, and a stranger got a free essay.</li>
+              <li class="flex items-start gap-2"><span class="material-symbols-rounded fill text-[18px] text-success">check_circle</span>Each trick cost real money, because there was no limit the bot was allowed to refuse with.</li>
+              <li class="flex items-start gap-2"><span class="material-symbols-rounded fill text-[18px] text-success">check_circle</span>After you set four limits, the same four tricks bounced off.</li>
+            </ul></div>
+          <div class="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop"><p class="font-label text-[11px] text-text-muted">Do and don't</p>
+            <ul class="mt-2 flex flex-col gap-2 text-[14px] leading-snug">
+              <li class="flex items-start gap-2"><span class="material-symbols-rounded fill text-[18px] text-success">check_circle</span>Set hard limits in advance: money, promises, topics.</li>
+              <li class="flex items-start gap-2"><span class="material-symbols-rounded fill text-[18px] text-success">check_circle</span>Test your limits with the tricks a pushy customer would try.</li>
+              <li class="flex items-start gap-2"><span class="material-symbols-rounded fill text-[18px] text-danger">cancel</span>Don't trust “I'm the manager” from a chat window. Above your limit, a real person decides.</li>
+            </ul></div>
+          <div class="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop"><p class="mb-1 flex items-center gap-1 font-label text-[11px] font-bold text-text-muted"><span class="material-symbols-rounded text-[15px]">info</span>Real talk</p><p class="text-[14px] leading-snug text-text">A real bot needs guardrails enforced in code, not just written as instructions.</p></div>
+        </div></div>
+      <p class="cap" style="max-width:62ch">Copy rule (Phase 3 review): every line is a sentence a person would say out loud, about something that happened in this game. No note-style fragments, nothing the game did not show.</p>
+    </section>
+
+    <section class="block" id="p-intro">
+      <p class="eyebrow">Built · Phase 4 · src/components/GameIntro.jsx</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">GameIntro v2, the definition panel (FR-9) <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">built · Phase 4</span></h2>
+      <p class="lede">Eva's call in Phase 4: <b>spoil it</b>. The panel shows the full <b>Definition</b> before play, the game applies it, and the end screen repeats it. The old teaser line is gone. The panel stays on the left of every screen in all 12 games, including Token, Context window, Memory and MCP, which now use the two-column stage too.</p>
+      <div class="spec">
+        <div class="stage today"><span class="tag">Today</span>
+          <div class="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop" style="max-width:24rem"><p class="font-label text-[11px] text-primary">Term · Skill</p><h1 class="text-2xl leading-tight">Skill</h1><p class="mt-1 text-[13px] leading-snug text-text">Your bot improvises every complaint differently. A skill makes it handle them the same way, every time.</p><div class="mt-2 rounded-md border-2 border-neutral bg-accent-soft px-3 py-2"><p class="font-label text-[10px] text-tertiary">Your role</p><p class="mt-0.5 text-[13px] font-bold leading-snug text-text">You're the owner writing the complaint playbook your bot follows.</p></div></div>
+          <p class="cap">Klára did not know what a "skill" was before the game started.</p></div>
+        <div class="stage proposed"><span class="tag">Proposed</span>
+          <div class="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop" style="max-width:24rem"><p class="font-label text-[11px] text-text-muted">Term · Skill</p><h1 class="text-2xl leading-tight">Skill</h1>
+            <div class="mt-2 rounded-md border-2 border-neutral bg-surface px-3 py-2"><p class="font-label text-[10px] text-text-muted">What it is</p><p class="mt-0.5 text-[13px] leading-snug text-text">A skill is a written playbook you hand an AI for one situation that keeps coming back, so it handles that situation the same, right way every time.</p></div>
+            <div class="mt-2 rounded-md border-2 border-neutral bg-accent-soft px-3 py-2"><p class="font-label text-[10px] text-tertiary">Your role</p><p class="mt-0.5 text-[13px] font-bold leading-snug text-text">You're the owner writing the complaint playbook your bot follows.</p></div></div>
+          <p class="cap">"What it is" first, then the role. The end screen says the same thing again in other words ("In other words"), so the idea lands twice without repeating itself.</p></div>
+      </div>
+    </section>
+
+    <!-- ============================== ANSWERS ============================== -->
+    <section class="block" id="answers">
+      <p class="eyebrow">Finish</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">Where we are</h2>
+      <div class="q"><div class="qn">R1 · approved</div>8-role colour map. Becomes the dictionary; can still be revised per role.</div>
+      <div class="q"><div class="qn">R2 · decided, revised</div>Two reds: marinara (#b7102a) for brand, labels and buttons; muted brick (#9c4444) for "wrong".</div>
+      <div class="q"><div class="qn">R3 · decided</div>Part tiles, real drag-and-drop, with the five "obviously draggable" signals listed in <a href="#r3">R3</a>. Tap stays as the fallback.</div>
+      <div class="q"><div class="qn">R4 · applied</div>Bubble = only the reply, verdict in a Callout below · context window rows are small chat bubbles, dark header retired · result screens show the option you tapped. (Pizza-slice progress replaced in R5.)</div>
+      <div class="q"><div class="qn">R6 · applied</div>One "Progress" bar at the top of every game screen: a segment per part, the current part filling with its steps, no numbers. Unboxed in Phase 4 round 2; round 3 kept it above both columns, slimmer.</div>
+      <div class="q"><div class="qn">R7 · applied (Phase 4 review)</div>Fewer boxes on a phone: the "Game · …" instruction and the progress bar are plain, not framed; the intro card has no boxes inside it. Frames are for content (messages, choices, parts, verdicts, panels), not for chrome.</div>
+      <div class="q"><div class="qn">R5 · applied</div>Bubbles never tinted · red/green pills carry the verdict · "How to play" white, only "Your role" blue · verdict copy names who it worked for.</div>
+      <p class="lede" style="margin-top:1.25rem">All three decided. Next step is Phase 0 in <b>COMPONENT-AUDIT.md</b> (tokens), then Phase 1 (Callout, ChatMessage, PhaseCard, Panel).</p>
+    </section>
+  </main>
+</div>

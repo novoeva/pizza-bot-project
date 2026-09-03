@@ -43,6 +43,10 @@
     "temperature": [
       "Your bot rewrites the allergy disclaimer a little differently every time. Legal is calling. Turn the temperature down.",
       "Asked for one pizza name, your bot gives the same boring one every time. Nudge the temperature up."
+    ],
+    "rag": [
+      "Your bot quoted a price from the 2019 menu. Confidently. The customer has a screenshot.",
+      "A customer asked about allergens. Your bot answered from the staff Christmas party memo."
     ]
   },
   "combo": [

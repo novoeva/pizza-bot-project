@@ -3,7 +3,14 @@ import { useGameScroll } from '../../lib/useGameScroll.js'
 import { questions, tools } from './questions.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import TermReveal from '../../components/TermReveal.jsx'
+import Callout from '../../components/Callout.jsx'
+import ChatMessage from '../../components/ChatMessage.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
+import SelectableCard from '../../components/SelectableCard.jsx'
+import ChoiceGroup from '../../components/ChoiceGroup.jsx'
 
 /**
  * Tool use game, { termId, onComplete } interface.
@@ -27,11 +34,7 @@ export default function ToolUseGame({ termId, onComplete }) {
 
   function nextQuestion() {
     if (isLastQuestion) {
-      if (round === 1) {
-        setPhase('transition')
-      } else {
-        setPhase('reveal')
-      }
+      setPhase(round === 1 ? 'transition' : 'reveal')
       return
     }
     setQIndex((i) => i + 1)
@@ -59,44 +62,61 @@ export default function ToolUseGame({ termId, onComplete }) {
     }
   }
 
+  // Progress: the round (guess / check) and the question inside it.
+  const progress = {
+    part: round,
+    parts: 2,
+    step: phase === 'transition' ? questions.length : qIndex + 1,
+    steps: questions.length,
+  }
+
+  // Left column: constant orientation (what tool use is + Your role).
+  const stage = (main) => (
+    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
+  )
+
+  // Per-phase instruction at the top of the right column.
+  const instruction = (sub) => (
+    <PhaseCard title={`Guess or check · Round ${round}`}>
+      {sub}
+    </PhaseCard>
+  )
+
+  // The customer's question as a received MESSAGE; the bot's reply as a sent
+  // one whose tint is the verdict: 'good' (backed by data) / 'bad' (a guess).
+  const customerBubble = (text) => <ChatMessage from="customer">{text}</ChatMessage>
+  const botBubble = (text, tone, note) => (
+    <>
+      <ChatMessage from="bot">{text}</ChatMessage>
+      <Callout tone={tone === 'good' ? 'success' : 'problem'} title={note} compact />
+    </>
+  )
+
+  // A tool the player hands the bot to check with: a commit choice.
+  const toolCard = (tool) => (
+    <SelectableCard
+      key={tool.id}
+      mode="commit"
+      icon="build"
+      tag="Tool your bot can check"
+      label={tool.label}
+      onSelect={() => tapTool(tool.id)}
+    />
+  )
+
   if (phase === 'reveal') {
     return (
-      <div className="flex flex-col gap-3 text-center">
-        <div className="mx-auto mt-2 flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-neutral bg-success shadow-pop">
-          <span className="material-symbols-rounded fill text-5xl text-white">check</span>
-        </div>
-        <p className="font-label text-[11px] text-primary">
-          Snapped onto your bot · {term.botPart}
-        </p>
-        <h2 className="text-2xl">You just learned the term Tool use</h2>
-
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
-          <p className="font-label text-[11px] text-text-muted">What it means</p>
-          <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
-        </div>
-
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
-          <p className="font-label text-[11px] text-text-muted">Why you care</p>
-          <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
-        </div>
-
-        <GameActions>
-          <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
-            Snap it onto your bot
-          </GameActionButton>
-        </GameActions>
-      </div>
+      <TermReveal term={term} onComplete={onComplete} />
     )
   }
 
   if (phase === 'transition') {
-    return (
+    return stage(
       <div className="flex flex-col gap-3">
-        <div className="rounded-lg border-[3px] border-danger bg-danger-bg p-4 text-center shadow-card">
-          <p className="text-sm font-semibold text-danger">
-            Annoying, right? The bot feels this on every question it can't actually check.
-          </p>
-        </div>
+        <Callout tone="problem" title="Guessing every time" icon="error">
+          Annoying, right? Your bot feels this on every question it can&rsquo;t actually check.
+          Time to give it real tools.
+        </Callout>
         <GameActions>
           <GameActionButton variant="primary" icon="arrow_forward" onClick={startRound2}>
             Give the bot some tools
@@ -106,29 +126,21 @@ export default function ToolUseGame({ termId, onComplete }) {
     )
   }
 
-  return (
+  return stage(
     <div className="flex flex-col gap-3">
-      {/* Standard intro on the opening screen, light header with counter after */}
-      {round === 1 && qIndex === 0 ? (
-        <GameIntro term={term} />
-      ) : (
-        <div className="flex items-center justify-between rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-          <p className="font-label text-[11px] text-primary">Tool use</p>
-          <span className="font-label text-[11px] text-text-muted">
-            Round {round} / 2 · Q{qIndex + 1}/{questions.length}
-          </span>
-        </div>
+      {instruction(
+        round === 1
+          ? 'Answer blind — your bot has no real data, all it can do is guess.'
+          : 'Now your bot has tools. Check the answer instead of guessing.',
       )}
 
-      <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-5 text-center shadow-pop">
-        <p className="text-lg font-extrabold leading-snug">A customer asks: "{current.question}"</p>
-      </div>
+      {customerBubble(current.question)}
 
       {round === 1 ? (
         !guessed ? (
           <div className="rounded-md border-[3px] border-neutral bg-surface px-4 py-4 text-center shadow-pop">
             <p className="mb-3 font-label text-[11px] text-text-muted">
-              There's no way to check. What do you say?
+              There&rsquo;s no way to check. All your bot can do is guess.
             </p>
             <GameActions>
               <GameActionButton variant="soft" onClick={() => setGuessed(true)}>
@@ -138,13 +150,7 @@ export default function ToolUseGame({ termId, onComplete }) {
           </div>
         ) : (
           <div className="flex flex-col gap-3">
-            <div className="rounded-md border-[3px] border-danger bg-danger-bg px-4 py-3 shadow-pop">
-              <p className="text-text">{current.guessAnswer}</p>
-              <p className="mt-1 flex items-center gap-1 font-label text-[11px] font-bold text-danger">
-                <span className="material-symbols-rounded text-[15px]">error</span>
-                that's just a guess
-              </p>
-            </div>
+            {botBubble(current.guessAnswer, 'bad', "That's just a guess")}
             <GameActions>
               <GameActionButton variant="accent" icon="arrow_forward" onClick={nextQuestion}>
                 Next question
@@ -154,36 +160,18 @@ export default function ToolUseGame({ termId, onComplete }) {
         )
       ) : !checked ? (
         <div className="flex flex-col gap-2">
-          <p className="text-center font-label text-[11px] text-text-muted">
-            Tap the right tool to check.
-          </p>
-          <div className="flex flex-col gap-2">
-            {tools.map((tool) => (
-              <button
-                key={tool.id}
-                type="button"
-                onClick={() => tapTool(tool.id)}
-                className="press rounded-md border-[3px] border-neutral bg-surface px-4 py-3 text-left font-bold text-text shadow-pop"
-              >
-                {tool.label}
-              </button>
-            ))}
-          </div>
+          <ChoiceGroup mode="commit" label="Which tool has the answer?">
+            {tools.map((tool) => toolCard(tool))}
+          </ChoiceGroup>
           {wrongToolTap && (
-            <p className="text-center font-label text-[11px] italic text-text-muted">
-              That tool doesn't have this answer, try another.
+            <p className="font-label text-[11px] italic text-text-muted">
+              That tool doesn&rsquo;t have this answer, try another.
             </p>
           )}
         </div>
       ) : (
         <div className="flex flex-col gap-3">
-          <div className="rounded-md border-[3px] border-success bg-success-bg px-4 py-3 shadow-pop">
-            <p className="text-text">{current.realAnswer}</p>
-            <p className="mt-1 flex items-center gap-1 font-label text-[11px] font-bold text-success">
-              <span className="material-symbols-rounded text-[15px]">check_circle</span>
-              Correct answer, backed by real data.
-            </p>
-          </div>
+          {botBubble(current.realAnswer, 'good', 'Correct, backed by real data')}
           <GameActions>
             <GameActionButton variant="primary" icon="arrow_forward" onClick={nextQuestion}>
               Next question

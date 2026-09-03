@@ -3,7 +3,14 @@ import { useGameScroll } from '../../lib/useGameScroll.js'
 import { attacks, guardrailCategories } from './content.js'
 import terms from '../../content/terms.json'
 import GameIntro from '../../components/GameIntro.jsx'
+import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
+import TermReveal from '../../components/TermReveal.jsx'
+import Callout from '../../components/Callout.jsx'
+import ChatMessage from '../../components/ChatMessage.jsx'
+import PhaseCard from '../../components/PhaseCard.jsx'
+import SelectableCard from '../../components/SelectableCard.jsx'
+import ChoiceGroup from '../../components/ChoiceGroup.jsx'
 
 /**
  * Guardrails game, { termId, onComplete } interface.
@@ -58,98 +65,73 @@ export default function GuardrailsGame({ termId, onComplete }) {
     setTried(false)
   }
 
-  const instruction = (sub) => (
-    <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-      <p className="font-label text-[11px] text-primary">Game · Free pizza for life</p>
-      <h1 className="text-2xl leading-tight">Guardrails</h1>
-      <p className="mt-1 font-label text-[11px] text-text-muted">{sub}</p>
-    </div>
+  // Progress: 1 attacks land · 2 you set the limits · 3 the same attacks
+  // bounce off. Three parts so the bar never moves backwards between them.
+  const progress =
+    phase === 'configure'
+      ? { part: 2, parts: 3, step: Object.keys(picks).length, steps: guardrailCategories.length }
+      : { part: phase === 'defend' ? 3 : 1, parts: 3, step: attackIndex + 1, steps: attacks.length }
+
+  // Left column: constant orientation (what guardrails are + Your role).
+  const stage = (main) => (
+    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
   )
 
+  // Per-phase instruction, at the top of the right column so it's always the
+  // current step. The term name/role live on the left, so this stays slim.
+  const instruction = (part, sub) => (
+    <PhaseCard title={`Free pizza for life · Part ${part}`}>{sub}</PhaseCard>
+  )
+
+  // The customer's trick as a received MESSAGE.
   const customerBubble = (whoLabel) => (
-    <div className="flex flex-col gap-1">
-      <p className="flex items-center gap-1 font-label text-[11px] text-text-muted">
-        <span className="material-symbols-rounded text-[15px]">person</span>
-        {whoLabel}
-      </p>
-      <div className="rounded-md rounded-tl-none border-[3px] border-neutral bg-muted px-4 py-3 shadow-pop">
-        <p className="font-bold leading-snug">{current.customer}</p>
-      </div>
-    </div>
+    <ChatMessage from="customer" label={whoLabel}>
+      {current.customer}
+    </ChatMessage>
   )
 
-  const botBubble = (text, tone) => (
-    <div className="flex flex-col items-end gap-1">
-      <p className="flex items-center gap-1 font-label text-[11px] text-text-muted">
-        <span className="material-symbols-rounded text-[15px]">smart_toy</span>
-        Pizza bot
-      </p>
-      <div
-        className={
-          'rounded-md rounded-tr-none border-[3px] px-4 py-3 shadow-pop ' +
-          (tone === 'held' ? 'border-success bg-success-bg' : 'border-danger bg-danger-bg')
-        }
-      >
-        <p className="leading-snug text-text">{text}</p>
-        {tone === 'held' ? (
-          <p className="mt-1 flex items-center gap-1 font-label text-[11px] font-bold text-success">
-            <span className="material-symbols-rounded text-[15px]">shield</span>
-            Blocked by your guardrail, no damage.
-          </p>
-        ) : (
-          <div>
-            <p className="flex items-center gap-1 font-label text-[11px] font-bold text-danger">
-              <span className="material-symbols-rounded text-[15px]">bolt</span>
-              It worked. -${current.damage}
-            </p>
-            {current.scaleNote && (
-              <p className="mt-1 flex items-start gap-1 font-label text-[11px] text-danger">
-                <span className="material-symbols-rounded text-[15px]">groups</span>
-                {current.scaleNote}
-              </p>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  )
+  // Bot's reply as a plain sent MESSAGE; the verdict is the Callout right
+  // under it (held = success, caved = problem) and says who it worked for.
+  const botBubble = (text, tone) =>
+    tone === 'held' ? (
+      <>
+        <ChatMessage from="bot">{text}</ChatMessage>
+        <Callout tone="success" title="Blocked by your guardrail. You lost nothing." icon="shield" compact />
+      </>
+    ) : (
+      <>
+        <ChatMessage from="bot">{text}</ChatMessage>
+        <Callout
+          tone="problem"
+          title={`It worked for the customer. You lost $${current.damage}.`}
+          icon="bolt"
+          compact
+        >
+          {current.scaleNote ?? 'Your bot gave away exactly what they asked for.'}
+        </Callout>
+      </>
+    )
 
   if (phase === 'reveal') {
     return (
-      <div className="flex flex-col gap-3 text-center">
-        <div className="mx-auto mt-2 flex h-20 w-20 items-center justify-center rounded-full border-[3px] border-neutral bg-success shadow-pop">
-          <span className="material-symbols-rounded fill text-5xl text-white">check</span>
-        </div>
-        <p className="font-label text-[11px] text-primary">
-          Snapped onto your bot · {term.botPart}
-        </p>
-        <h2 className="text-2xl">You just learned the term Guardrails</h2>
-
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
-          <p className="font-label text-[11px] text-text-muted">What it means</p>
-          <p className="mt-1 text-[15px] leading-snug">{term.definition}</p>
-        </div>
-
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-4 text-left shadow-pop">
-          <p className="font-label text-[11px] text-text-muted">Why you care</p>
-          <p className="mt-1 text-[15px] leading-snug">{term.whyYouCare}</p>
-        </div>
-
-        <GameActions>
-          <GameActionButton variant="primary" icon="arrow_forward" onClick={onComplete}>
-            Snap it onto your bot
-          </GameActionButton>
-        </GameActions>
-      </div>
+      <TermReveal
+        term={term}
+        onComplete={onComplete}
+        aside={
+          <Callout tone="info" title="In the real world">
+            Picking safe options like this is only the start. A real bot needs much stronger
+            guardrails, enforced in code and tested against attackers, not just written as
+            instructions a clever customer can talk it out of.
+          </Callout>
+        }
+      />
     )
   }
 
   if (phase === 'defend') {
-    return (
+    return stage(
       <div className="flex flex-col gap-3">
-        {instruction(
-          `Round 2, your guardrails, under attack · ${attackIndex + 1} / ${attacks.length}`,
-        )}
+        {instruction(3, 'Your guardrails, under attack.')}
 
         <p className="rounded-md border-[3px] border-success bg-success-bg px-3 py-2 text-center font-label text-sm font-bold text-success shadow-pop">
           Damage: $0
@@ -178,40 +160,22 @@ export default function GuardrailsGame({ termId, onComplete }) {
   }
 
   if (phase === 'configure') {
-    return (
+    return stage(
       <div className="flex flex-col gap-3">
-        <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-          <p className="font-label text-[11px] text-primary">Game · Free pizza for life</p>
-          <h1 className="text-2xl leading-tight">Guardrails</h1>
-          <div className="mt-2 rounded-md border-2 border-neutral bg-muted px-3 py-2">
-            <p className="font-label text-[10px] text-text-muted">How to play</p>
-            <p className="mt-0.5 text-[13px] leading-snug text-text">
-              Now switch sides. Set the limits so the same tricks can't break your bot again.
-            </p>
-          </div>
-        </div>
+        {instruction(2, "Now switch sides. Set the limits so the same tricks can't break your bot again.")}
         <div className="flex flex-col gap-4">
-          {guardrailCategories.map((c) => (
-            <div key={c.id}>
-              <p className="mb-1 font-label text-[11px] text-text-muted">{c.name}</p>
-              <div className="flex flex-col gap-2">
-                {c.options.map((opt) => (
-                  <button
-                    key={opt}
-                    type="button"
-                    onClick={() => pickCategory(c.id, opt)}
-                    className={
-                      'press rounded-md border-[3px] px-3 py-2 text-left text-sm font-bold shadow-pop ' +
-                      (picks[c.id] === opt
-                        ? 'border-neutral bg-accent-soft text-tertiary'
-                        : 'border-neutral bg-surface text-text-muted')
-                    }
-                  >
-                    {opt}
-                  </button>
-                ))}
-              </div>
-            </div>
+          {guardrailCategories.map((c, i) => (
+            <ChoiceGroup key={c.id} mode="radio" label={`Limit ${i + 1} · ${c.name}`}>
+              {c.options.map((opt) => (
+                <SelectableCard
+                  key={opt}
+                  mode="radio"
+                  label={opt}
+                  selected={picks[c.id] === opt}
+                  onSelect={() => pickCategory(c.id, opt)}
+                />
+              ))}
+            </ChoiceGroup>
           ))}
         </div>
         <GameActions>
@@ -223,26 +187,21 @@ export default function GuardrailsGame({ termId, onComplete }) {
     )
   }
 
-  return (
+  return stage(
     <div className="flex flex-col gap-3">
-      {attackIndex === 0 ? (
-        <GameIntro term={term} />
-      ) : (
-        instruction(
-          `Round 1, no guardrails, you're the attacker · ${attackIndex + 1} / ${attacks.length}`,
-        )
-      )}
+      {instruction(1, 'Your bot has no guardrails yet. Watch pushy customers talk it into anything.')}
 
-      <p className="rounded-md border-[3px] border-danger bg-danger-bg px-3 py-2 text-center font-label text-sm font-bold text-danger shadow-pop">
-        Damage: ${damage}
+      <p className="flex items-center justify-center gap-2 rounded-md border-[3px] border-danger bg-danger-bg px-3 py-2 text-center font-label text-sm font-bold text-danger shadow-pop">
+        <span className="material-symbols-rounded text-[18px]">gpp_bad</span>
+        No guardrails · Damage ${damage}
       </p>
 
-      {customerBubble('You, playing the customer')}
+      {customerBubble('Customer')}
 
       {!tried ? (
         <GameActions>
-          <GameActionButton variant="primary" icon="send" onClick={tryAttack}>
-            Send it to the bot
+          <GameActionButton variant="primary" icon="visibility" onClick={tryAttack}>
+            See what your bot does with no guardrails
           </GameActionButton>
         </GameActions>
       ) : (
@@ -250,7 +209,7 @@ export default function GuardrailsGame({ termId, onComplete }) {
           {botBubble(current.noGuardrailReply, 'caved')}
           <GameActions>
             <GameActionButton variant="accent" icon="arrow_forward" onClick={nextAttack}>
-              {isLastAttack ? 'Okay, that has to stop' : 'Try another trick'}
+              {isLastAttack ? 'Okay, that has to stop' : 'See the next customer'}
             </GameActionButton>
           </GameActions>
         </div>
