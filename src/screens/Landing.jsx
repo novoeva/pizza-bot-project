@@ -41,17 +41,17 @@ const COPY = {
     nav: 'Pizza Bot',
     eyebrow: "For pizzeria owners who don't know AI (yet)",
     title: ['Build your own pizza agent', 'and learn AI at the same time.'],
-    sub: 'You run a pizzeria and you want a bot that takes pizza orders straight from a chat — like a WhatsApp message. To set one up, you first learn how it works: 11 AI terms, one small game each. As you go, a robot — your bot — gets built on screen.',
+    sub: 'You run a pizzeria and you want a bot that takes pizza orders straight from a chat, like a WhatsApp message. To set one up, you first learn how it works: 11 AI terms, one small game each. As you go, a robot gets built on screen. That robot is your bot.',
     cta: 'Learn with me',
     ctaNote: '11 terms · one game each · no maths',
-    buddy: "Meet your bot — you'll build me",
+    buddy: "Meet your bot. You'll build me.",
     howTitle: 'How it works',
     howSub: "You learn beside an owner who doesn't know AI either. No experience needed.",
     steps: [
       {
         label: 'Your role',
         title: "You're the owner",
-        text: "You want a bot for your pizzeria. You've never done AI — that's fine.",
+        text: "You want a bot for your pizzeria. You've never done AI, and that's fine.",
       },
       {
         label: 'The lessons',
@@ -80,7 +80,7 @@ const COPY = {
       {
         icon: 'sentiment_very_satisfied',
         title: 'No maths, no code',
-        text: "You're the owner, not a programmer. Just play — no setup, no equations.",
+        text: "You're the owner, not a programmer. Just play, with no setup and no equations.",
       },
     ],
     footer: 'Learn AI the pizza way',
@@ -89,17 +89,17 @@ const COPY = {
     nav: 'Pizza Bot',
     eyebrow: 'Pro majitele pizzerie, co ještě neznají AI',
     title: ['Postav si vlastního pizza agenta', 'a nauč se u toho AI.'],
-    sub: 'Vedeš pizzerii a chceš bota, který bere objednávky na pizzu rovnou z chatu — třeba jako zpráva na WhatsAppu. Než ho nastavíš, nejdřív pochopíš, jak funguje: 11 pojmů z AI, ke každému jedna malá hra. Jak postupuješ, na obrazovce se staví robot — tvůj bot.',
+    sub: 'Vedeš pizzerii a chceš bota, který bere objednávky na pizzu rovnou z chatu, třeba jako zpráva na WhatsAppu. Než ho nastavíš, nejdřív pochopíš, jak funguje: 11 pojmů z AI, ke každému jedna malá hra. Jak postupuješ, na obrazovce se staví robot. Ten robot je tvůj bot.',
     cta: 'Pojď se mnou učit',
     ctaNote: '11 pojmů · ke každému hra · žádná matematika',
-    buddy: 'Tohle je tvůj bot — mě postavíš',
+    buddy: 'Tohle je tvůj bot. Mě postavíš.',
     howTitle: 'Jak to funguje',
     howSub: 'Učíš se po boku majitele, který AI taky neumí. Nic neumět je v pohodě.',
     steps: [
       {
         label: 'Tvoje role',
         title: 'Jsi majitel',
-        text: 'Chceš bota do pizzerie. AI jsi nikdy nedělal — to nevadí.',
+        text: 'Chceš bota do pizzerie. AI jsi nikdy nedělal, a to nevadí.',
       },
       {
         label: 'Lekce',
@@ -128,7 +128,7 @@ const COPY = {
       {
         icon: 'sentiment_very_satisfied',
         title: 'Žádná matematika, žádný kód',
-        text: 'Jsi majitel, ne programátor. Prostě si hraješ — žádné nastavování, žádné rovnice.',
+        text: 'Jsi majitel, ne programátor. Prostě si hraješ, bez nastavování a rovnic.',
       },
     ],
     footer: 'Uč se AI vařením pizzy',
