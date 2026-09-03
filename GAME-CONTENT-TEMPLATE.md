@@ -31,8 +31,9 @@ Three balanced boxes, each its own card:
 
 1. **What it means** — the definition (`term.definition`). Shown **once**. No
    other block on the screen may restate it.
-2. **Why you care** — `term.whyYouCare`, in its own box (not crammed under the
-   definition).
+2. **Why you care** — retired as a reveal box. `term.whyYouCare` was rewritten
+   for FR-26 and now holds the one-sentence reason to play, shown on the term's
+   card in the workshop, before the game. Do not render it here.
 3. **Real talk** — optional. Only when a game needs an honest caveat (e.g.
    context window: "we shrank the scale for the demo"). Most games have only the
    first two boxes.
