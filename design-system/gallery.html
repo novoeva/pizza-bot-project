@@ -126,6 +126,7 @@
     <a href="#p-callout">Callout</a>
     <a href="#p-reveal">TermReveal</a>
     <a href="#p-intro">GameIntro v2</a>
+    <a href="#p-termcard">Workshop term card</a>
     <div class="grp">Finish</div>
     <a href="#answers">Your answers</a>
   </nav>
@@ -750,6 +751,24 @@
             <div class="mt-2 rounded-md border-2 border-neutral bg-surface px-3 py-2"><p class="font-label text-[10px] text-text-muted">What it is</p><p class="mt-0.5 text-[13px] leading-snug text-text">A skill is a written playbook you hand an AI for one situation that keeps coming back, so it handles that situation the same, right way every time.</p></div>
             <div class="mt-2 rounded-md border-2 border-neutral bg-accent-soft px-3 py-2"><p class="font-label text-[10px] text-tertiary">Your role</p><p class="mt-0.5 text-[13px] font-bold leading-snug text-text">You're the owner writing the complaint playbook your bot follows.</p></div></div>
           <p class="cap">"What it is" first, then the role. The end screen says the same thing again in other words ("In other words"), so the idea lands twice without repeating itself.</p></div>
+      </div>
+    </section>
+
+    <section class="block" id="p-termcard">
+      <p class="eyebrow">Built &middot; FR-26 &middot; src/components/TermChecklist.jsx</p>
+      <h2 style="font-size:1.5rem;margin:.2rem 0 .4rem">Workshop term card, the &ldquo;why you care&rdquo; line (FR-26) <span class="verdict v-ok" style="vertical-align:middle;font-size:12px">built &middot; FR-26</span></h2>
+      <p class="lede">From interview #2 (Lada): <i>&ldquo;the definition doesn&rsquo;t interest me if I don&rsquo;t get what it does to the result&rdquo;</i>. He asked for one sentence per term saying <b>why you&rsquo;d want to know it</b>. The second line of the card was the bot part: decoration for the meta-game, already visible on the robot next to the list. It is now the reason to tap the card. The sentence lives in <code>terms.json</code> as <code>whyYouCare</code>; <code>botPart</code> stays in the data (<code>BotCanvas</code>, <code>TermReveal</code>) but is no longer shown here.</p>
+      <div class="spec">
+        <div class="stage today"><span class="tag">Today</span>
+          <div class="press flex items-center gap-3 rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop" style="max-width:21.5rem"><span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-neutral bg-accent-soft"><span class="material-symbols-rounded text-tertiary">graphic_eq</span></span><span class="min-w-0 flex-1"><span class="block font-label text-[15px] font-semibold text-text">Token</span><span class="mt-0.5 block text-[13px] leading-snug text-text-muted">Voice box</span></span><span class="material-symbols-rounded text-text-muted">play_arrow</span></div>
+          <div class="press flex items-center gap-3 rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop" style="max-width:21.5rem"><span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-neutral bg-accent-soft"><span class="material-symbols-rounded text-tertiary">menu_book</span></span><span class="min-w-0 flex-1"><span class="block font-label text-[15px] font-semibold text-text">RAG</span><span class="mt-0.5 block text-[13px] leading-snug text-text-muted">Recipe binder</span></span><span class="material-symbols-rounded text-text-muted">play_arrow</span></div>
+          <div class="press flex items-center gap-3 rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop" style="max-width:21.5rem"><span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-neutral bg-accent-soft"><span class="material-symbols-rounded text-tertiary">shield</span></span><span class="min-w-0 flex-1"><span class="block font-label text-[15px] font-semibold text-text">Guardrails</span><span class="mt-0.5 block text-[13px] leading-snug text-text-muted">Safety casing</span></span><span class="material-symbols-rounded text-text-muted">play_arrow</span></div>
+          <p class="cap">The name of a robot part. It says nothing about the term, so there is no reason to tap.</p></div>
+        <div class="stage proposed"><span class="tag">Proposed</span>
+          <div class="press flex items-center gap-3 rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop" style="max-width:21.5rem"><span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-neutral bg-accent-soft"><span class="material-symbols-rounded text-tertiary">graphic_eq</span></span><span class="min-w-0 flex-1"><span class="block font-label text-[15px] font-semibold text-text">Token</span><span class="mt-0.5 block text-[13px] leading-snug text-text-muted">Your bot writes in small chunks, and you pay for each one.</span></span><span class="material-symbols-rounded text-text-muted">play_arrow</span></div>
+          <div class="press flex items-center gap-3 rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop" style="max-width:21.5rem"><span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-neutral bg-accent-soft"><span class="material-symbols-rounded text-tertiary">menu_book</span></span><span class="min-w-0 flex-1"><span class="block font-label text-[15px] font-semibold text-text">RAG</span><span class="mt-0.5 block text-[13px] leading-snug text-text-muted">Your bot reads your own files and still quotes the old price.</span></span><span class="material-symbols-rounded text-text-muted">play_arrow</span></div>
+          <div class="press flex items-center gap-3 rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop" style="max-width:21.5rem"><span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-neutral bg-accent-soft"><span class="material-symbols-rounded text-tertiary">shield</span></span><span class="min-w-0 flex-1"><span class="block font-label text-[15px] font-semibold text-text">Guardrails</span><span class="mt-0.5 block text-[13px] leading-snug text-text-muted">A customer who says &ldquo;I&rsquo;m the manager&rdquo; can get a free pizza.</span></span><span class="material-symbols-rounded text-text-muted">play_arrow</span></div>
+          <p class="cap">One sentence, 8&ndash;12 words, a concrete consequence for the owner. Wraps to exactly two lines at 375px. Copy rule: it may give away a piece of the definition, because on this card persuading beats withholding.</p></div>
       </div>
     </section>
 

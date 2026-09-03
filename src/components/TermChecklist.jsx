@@ -60,7 +60,12 @@ export default function TermChecklist({ completedTerms = [] }) {
                 >
                   {term.name}
                 </span>
-                <span className="mt-0.5 block text-[13px] text-text-muted">{term.botPart}</span>
+                {/* The reason to tap this card, not a label for the bot part:
+                    one sentence saying what goes wrong (or what you get) if you
+                    don't know the term. Wraps to two lines at phone width. */}
+                <span className="mt-0.5 block text-[13px] leading-snug text-text-muted">
+                  {term.whyYouCare}
+                </span>
               </span>
 
               <span className="material-symbols-rounded text-text-muted">
