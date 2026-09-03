@@ -235,7 +235,7 @@ Eva při review Fáze 4: „Nejsem si jistá, co mě to má naučit. Není tu ž
 - **📍 Kde:** `src/games/mcp/index.jsx` + `src/games/mcp/systems.js`.
 - **✅ Hotovo když:** hráč po hře umí říct, co MCP řeší, aniž by četl definici; ve hře je aspoň jedna akce, kde se „starý způsob" a „MCP" liší tím, co hráč musí udělat.
 
-**FR-25 — Zbylé nálezy z code review design systému (7 položek)** *(tech, ne UX)*
+**FR-25 — Zbylé nálezy z code review design systému (7 položek)** *(tech, ne UX)* — ✅ **hotovo 2026-09-03** (všech 7 opraveno, viz commit Fix FR-25)
 Code review (2026-09-03, `/code-review master high`) našel 10 věcí; top 3 opraveny (typovaný drag payload + `accepts`, hint na build obrazovce, progress nikdy dozadu). Zbývá:
 1. Progress počítá krok, na kterém *jsi*, ne dokončený → 100 % ještě před poslední odpovědí (`step: index + (answered ? 1 : 0)` ve všech hrách).
 2. `PartTile` nastavuje třídu `part-dragging` přes `classList`, React ji při re-renderu smaže → držet `dragging` ve stavu.

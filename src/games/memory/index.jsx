@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useGameScroll } from '../../lib/useGameScroll.js'
 import { sessionOneLines, resetLines, facts } from './content.js'
 import terms from '../../content/terms.json'
-import GameIntro from '../../components/GameIntro.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import TermReveal from '../../components/TermReveal.jsx'
 import Callout from '../../components/Callout.jsx'
@@ -74,7 +73,7 @@ export default function MemoryGame({ termId, onComplete }) {
 
   const instruction = (sub) => <PhaseCard title="Welcome, stranger">{sub}</PhaseCard>
   const stage = (main, progress) => (
-    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
+    <GameStage term={term} main={main} progress={progress} />
   )
 
   // Progress: 1 visit one · 2 a week later · 3 install memory · 4 Anna is back.
@@ -150,7 +149,7 @@ export default function MemoryGame({ termId, onComplete }) {
     return stage(
       <>
         {instruction(
-          'The hard drive is empty. Drag in whatever the bot should remember. Anything you leave out is gone the moment the chat ends.',
+          'The hard drive is empty. Drag or tap in whatever the bot should remember. Anything you leave out is gone the moment the chat ends.',
         )}
         <SlotList
           title="The hard drive"
@@ -161,6 +160,7 @@ export default function MemoryGame({ termId, onComplete }) {
           onDrop={saveFact}
           onRemove={forgetFact}
           emptyLabel="drag a fact here…"
+          emptyTapLabel="tap a fact to save it…"
           numbered={false}
           pulse={hint}
         />

@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 /**
  * PartTile, a part you can put into your bot (role 5 in COMPONENT-AUDIT.md
  * §2, decision R3). Amber from the start, the same colour as the slot it
@@ -18,6 +20,7 @@
 export const PART_MIME = 'application/x-pizzabot-part'
 
 export default function PartTile({ id, icon, label, detail, foot, used = false, usedLabel = 'in the bot', onAdd, wiggle = false }) {
+  const [dragging, setDragging] = useState(false)
   return (
     <div
       role="button"
@@ -34,13 +37,14 @@ export default function PartTile({ id, icon, label, detail, foot, used = false, 
       onDragStart={(e) => {
         e.dataTransfer.setData(PART_MIME, id)
         e.dataTransfer.effectAllowed = 'move'
-        e.currentTarget.classList.add('part-dragging')
+        setDragging(true)
       }}
-      onDragEnd={(e) => e.currentTarget.classList.remove('part-dragging')}
+      onDragEnd={() => setDragging(false)}
       className={
         'flex items-center gap-2 rounded-md border-[3px] border-cheese-dim bg-cheese-bg px-2.5 py-2.5 ' +
         (used ? 'opacity-40' : 'press cursor-grab shadow-pop active:cursor-grabbing ') +
-        (wiggle && !used ? 'part-wiggle' : '')
+        (wiggle && !used ? 'part-wiggle ' : '') +
+        (dragging ? 'part-dragging' : '')
       }
     >
       <span className="material-symbols-rounded shrink-0 text-[20px] text-cheese-dim" aria-hidden="true">
@@ -57,8 +61,8 @@ export default function PartTile({ id, icon, label, detail, foot, used = false, 
           usedLabel
         ) : (
           <>
-            <span className="[@media(hover:none)]:hidden">drag ↑</span>
-            <span className="hidden [@media(hover:none)]:inline">tap to add</span>
+            <span className="touch:hidden">drag ↑</span>
+            <span className="hidden touch:inline">tap to add</span>
           </>
         )}
       </span>

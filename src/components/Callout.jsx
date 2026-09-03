@@ -10,21 +10,16 @@
  *   info     an aside: "Real talk", "The fix", "In the real world" (neutral)
  *
  * `compact` is for feedback that lands in place under a choice (less padding,
- * 13px body). `align="center"` for the few centred result cards.
+ * 13px body).
  * `icon={null}` suppresses the icon; a string picks a Material Symbol.
  */
-const TONES = {
-  problem: { box: 'border-danger bg-danger-bg', label: 'text-danger', icon: 'warning' },
-  success: { box: 'border-success bg-success-bg', label: 'text-success', icon: 'check_circle' },
-  info: { box: 'border-neutral bg-surface', label: 'text-text-muted', icon: 'info' },
-}
+import { TONES } from './tones.js'
 
 export default function Callout({
   tone = 'info',
   title,
   icon,
   compact = false,
-  align = 'left',
   className = '',
   children,
 }) {
@@ -35,7 +30,7 @@ export default function Callout({
       className={
         'rounded-lg border-[3px] shadow-pop ' +
         (compact ? 'p-3 ' : 'p-4 ') +
-        (align === 'center' ? 'text-center ' : 'text-left ') +
+        'text-left ' +
         t.box +
         (className ? ' ' + className : '')
       }
@@ -45,7 +40,6 @@ export default function Callout({
           className={
             (children ? 'mb-1 ' : '') +
             'flex items-start gap-1 font-label text-[11px] font-bold leading-snug ' +
-            (align === 'center' ? 'justify-center ' : '') +
             t.label
           }
         >

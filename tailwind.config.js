@@ -52,6 +52,11 @@ export default {
         card: 'var(--shadow-card)',
         pop: 'var(--shadow-pop)',
       },
+      // `touch:` = no hover pointer (phones, tablets). One predicate for every
+      // "say tap instead of drag" decision.
+      screens: {
+        touch: { raw: '(hover: none)' },
+      },
       maxWidth: {
         // Mobile column width (single source for every screen's narrow layout).
         game: '28rem',

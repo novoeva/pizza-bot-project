@@ -35,17 +35,22 @@ const BUTTON_VARIANTS = {
   accent: 'border-neutral bg-tertiary text-white',
   neutral: 'border-neutral bg-surface text-text',
   soft: 'border-cheese-dim bg-cheese-bg text-cheese-dim',
+  ghost: 'border-neutral bg-surface text-primary',
 }
 
 /**
  * The one true action button. Owns the shared styling so no game repeats it;
  * `variant` picks the colour, `icon` is an optional leading material symbol.
- * Full-width by design, since it lives in the pinned bar.
+ * Full-width by default, since it usually lives in the pinned bar; `inline`
+ * makes the small in-card version (a row action, a secondary control).
+ * `className` adds layout classes only (w-full, flex-1), never colours.
  */
 export function GameActionButton({
   variant = 'primary',
   icon,
   iconFill = false,
+  inline = false,
+  className = '',
   onClick,
   disabled = false,
   children,
@@ -56,8 +61,10 @@ export function GameActionButton({
       onClick={onClick}
       disabled={disabled}
       className={
-        'press flex w-full items-center justify-center gap-2 rounded-md border-[3px] py-3 font-label font-bold shadow-pop disabled:opacity-40 ' +
-        BUTTON_VARIANTS[variant]
+        'press flex items-center justify-center gap-2 rounded-md border-[3px] font-label font-bold shadow-pop disabled:opacity-40 ' +
+        (inline ? 'px-3 py-1.5 text-[12px] ' : 'w-full py-3 ') +
+        BUTTON_VARIANTS[variant] +
+        (className ? ' ' + className : '')
       }
     >
       {icon && (

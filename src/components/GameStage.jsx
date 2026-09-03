@@ -17,13 +17,20 @@
  * instead of pushing the page down.
  */
 import ProgressBar from './ProgressBar.jsx'
+import GameIntro from './GameIntro.jsx'
 
 /**
  * `progress` ({ part, parts, step, steps }, see ProgressBar) is drawn as a
  * slim line above both columns, first thing on the screen (Phase 4 review:
  * unboxed and slim, but on top, not under the intro card).
  */
-export default function GameStage({ context, main, wide = false, progress }) {
+/**
+ * `term`: the usual left column is just the GameIntro for this term, so games
+ * pass `term` and skip `context`. A game with more in the left column (RAG's
+ * workbench) passes `context` explicitly.
+ */
+export default function GameStage({ term, context, main, wide = false, progress }) {
+  const left = context ?? (term ? <GameIntro term={term} /> : null)
   // `wide`: a phase whose `main` itself holds two side-by-side panels needs more
   // room, so it opts into a wider stage and gives the right column the larger
   // share. The default keeps the standard balanced two-column reading width.
@@ -51,7 +58,7 @@ export default function GameStage({ context, main, wide = false, progress }) {
           <ProgressBar {...progress} />
         </div>
       )}
-      <div className="flex flex-col gap-3">{context}</div>
+      <div className="flex flex-col gap-3">{left}</div>
       <div className="flex flex-col gap-3">{main}</div>
     </div>
   )

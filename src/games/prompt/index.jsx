@@ -10,7 +10,6 @@ import {
   round3Effects,
 } from './rounds.js'
 import terms from '../../content/terms.json'
-import GameIntro from '../../components/GameIntro.jsx'
 import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import TermReveal from '../../components/TermReveal.jsx'
@@ -105,7 +104,7 @@ export default function PromptGame({ termId, onComplete }) {
 
   // Left column: constant orientation (what a prompt is + Your role).
   const stage = (main) => (
-    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
+    <GameStage term={term} main={main} progress={progress} />
   )
 
   // Per-phase instruction, at the top of the right column so it's always the

@@ -32,7 +32,6 @@ export default function SelectableCard({
   onSelect,
   labelClassName = '',
   iconClassName = '',
-  children,
 }) {
   const commit = mode === 'commit'
   const tile = variant === 'tile'
@@ -74,7 +73,6 @@ export default function SelectableCard({
         {icon && (
           <span className={'material-symbols-rounded text-2xl ' + (iconClassName || 'text-tertiary')}>{icon}</span>
         )}
-        {children}
         <span className={'font-label text-sm font-bold text-text ' + labelClassName}>{label}</span>
         {detail && <span className="font-label text-[10px] text-text-muted">{detail}</span>}
       </button>
@@ -91,7 +89,6 @@ export default function SelectableCard({
           <span className={'block font-bold leading-snug text-text ' + labelClassName}>{label}</span>
           {detail && <span className="mt-0.5 block text-[12px] leading-snug text-text-muted">{detail}</span>}
           {foot && <span className="mt-1 block font-label text-[9px] text-text-muted">{foot}</span>}
-          {children}
         </span>
         {commit && !inert && (
           <span className="material-symbols-rounded shrink-0 text-text-muted" aria-hidden="true">

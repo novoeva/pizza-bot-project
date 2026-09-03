@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { useGameScroll } from '../../lib/useGameScroll.js'
 import { BOT, NEEDED, EXTRA, STRANGER, WEEKS_PER_CONNECTOR } from './systems.js'
 import terms from '../../content/terms.json'
-import GameIntro from '../../components/GameIntro.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import TermReveal from '../../components/TermReveal.jsx'
 import Callout from '../../components/Callout.jsx'
 import PhaseCard from '../../components/PhaseCard.jsx'
+import StatusStrip from '../../components/StatusStrip.jsx'
 import GameStage from '../../components/GameStage.jsx'
 
 /**
@@ -72,21 +72,13 @@ function SystemRow({ sys, tone = 'todo', note, right }) {
   )
 }
 
+// A cost counter: the shared status strip with a big figure.
 function Counter({ n, label, tone = 'neutral' }) {
+  const t = tone === 'good' ? 'success' : tone === 'bad' ? 'problem' : 'info'
   return (
-    <div
-      className={
-        'flex items-center justify-center gap-2 rounded-md border-[3px] px-3 py-1.5 shadow-pop ' +
-        (tone === 'good'
-          ? 'border-success bg-success-bg text-success'
-          : tone === 'bad'
-            ? 'border-danger bg-danger-bg text-danger'
-            : 'border-neutral bg-surface text-text')
-      }
-    >
-      <span className="font-display text-lg font-extrabold leading-none">{n}</span>
-      <span className="font-label text-[10px] leading-tight">{label}</span>
-    </div>
+    <StatusStrip tone={t} big={n}>
+      {label}
+    </StatusStrip>
   )
 }
 
@@ -127,7 +119,7 @@ export default function McpGame({ termId, onComplete }) {
   if (phase === 'proof') {
     return (
       <GameStage
-        context={<GameIntro term={term} showHowTo={false} />}
+        term={term}
         progress={{ part: 3, parts: 3 }}
         main={
           <>
@@ -151,13 +143,9 @@ export default function McpGame({ termId, onComplete }) {
                 In
               </span>
             ) : (
-              <button
-                type="button"
-                onClick={() => setStrangerIn(true)}
-                className="press rounded-md border-[3px] border-neutral bg-primary px-3 py-1.5 font-label text-[12px] font-bold text-white shadow-pop"
-              >
+              <GameActionButton inline variant="primary" onClick={() => setStrangerIn(true)}>
                 Plug it in
-              </button>
+              </GameActionButton>
             )
           }
         />
@@ -189,7 +177,7 @@ export default function McpGame({ termId, onComplete }) {
   if (phase === 'port') {
     return (
       <GameStage
-        context={<GameIntro term={term} showHowTo={false} />}
+        term={term}
         progress={{ part: 2, parts: 3, step: portClicked.length, steps: mcpSystems.length }}
         main={
           <>
@@ -230,13 +218,9 @@ export default function McpGame({ termId, onComplete }) {
                           In
                         </span>
                       ) : (
-                        <button
-                          type="button"
-                          onClick={() => clickIn(s.id)}
-                          className="press rounded-md border-[3px] border-neutral bg-primary px-3 py-1.5 font-label text-[12px] font-bold text-white shadow-pop"
-                        >
+                        <GameActionButton inline variant="primary" onClick={() => clickIn(s.id)}>
                           Click in
-                        </button>
+                        </GameActionButton>
                       )
                     }
                   />
@@ -251,7 +235,7 @@ export default function McpGame({ termId, onComplete }) {
 
             {allClicked && (
               <>
-                <Callout tone="success" title="Same systems. Zero custom bridges." align="center">
+                <Callout tone="success" title="Same systems. Zero custom bridges.">
                   No side has to know anything about the other any more. Each one only has to know
                   the port.
                 </Callout>
@@ -277,7 +261,7 @@ export default function McpGame({ termId, onComplete }) {
   // --- old: wire each system by hand ---------------------------------------
   return (
     <GameStage
-      context={<GameIntro term={term} showHowTo={false} />}
+      term={term}
       progress={{ part: 1, parts: 3, step: oldBuilt.length, steps: oldSystems.length }}
       main={
         <>
@@ -304,13 +288,9 @@ export default function McpGame({ termId, onComplete }) {
                     Wired
                   </span>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={() => build(s.id)}
-                    className="press rounded-md border-[3px] border-neutral bg-surface px-3 py-1.5 font-label text-[12px] font-bold text-primary shadow-pop"
-                  >
+                  <GameActionButton inline variant="ghost" onClick={() => build(s.id)}>
                     Build connector
-                  </button>
+                  </GameActionButton>
                 )
               }
             />

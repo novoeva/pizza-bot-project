@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useGameScroll } from '../../lib/useGameScroll.js'
 import { complaint, improvisedReplies, playbookSteps } from './content.js'
 import terms from '../../content/terms.json'
-import GameIntro from '../../components/GameIntro.jsx'
 import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import TermReveal from '../../components/TermReveal.jsx'
@@ -61,7 +60,7 @@ export default function SkillGame({ termId, onComplete }) {
 
   // Left column: constant orientation (what a skill is + Your role).
   const stage = (main) => (
-    <GameStage context={<GameIntro term={term} showHowTo={false} />} main={main} progress={progress} />
+    <GameStage term={term} main={main} progress={progress} />
   )
 
   const instruction = (part, sub) => (
@@ -114,7 +113,7 @@ export default function SkillGame({ termId, onComplete }) {
   if (phase === 'build') {
     return stage(
       <div className="flex flex-col gap-3">
-        {instruction(2, 'Build the playbook. Drag the steps into it in the order you would handle a complaint.')}
+        {instruction(2, 'Build the playbook. Drag or tap the steps into it in the order you would handle a complaint.')}
         <SlotList
           title="Your playbook"
           capacity={playbookSteps.length}
@@ -122,6 +121,7 @@ export default function SkillGame({ termId, onComplete }) {
           accepts={playbookSteps.map((s) => s.id)}
           onDrop={tapStep}
           onRemove={removeStep}
+          emptyTapLabel="tap a step to add it…"
           pulse={hint}
         />
         <p className="flex items-center gap-1 pl-1 font-label text-[10px] text-text-muted">
@@ -157,11 +157,17 @@ export default function SkillGame({ termId, onComplete }) {
           .slice(0, replyIndex + 1)
           .map((reply, i) => botBubble(i, reply, 'bad', `Customer ${i + 1}`))}
       </div>
-      {isLastReply && (
-        <Callout tone="problem" title="Three customers, three different answers" compact>
-          No process, so the bot improvised every time.
-        </Callout>
-      )}
+      <Callout
+        tone="problem"
+        title={
+          replyIndex === 0
+            ? 'One customer, one improvised answer'
+            : `${replyIndex + 1} customers, ${replyIndex + 1} different answers`
+        }
+        compact
+      >
+        No process, so the bot improvises every time.
+      </Callout>
       {!isLastReply ? (
         <GameActions>
           <GameActionButton

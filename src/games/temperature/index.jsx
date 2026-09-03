@@ -9,7 +9,6 @@ import {
   taskRounds,
 } from './content.js'
 import terms from '../../content/terms.json'
-import GameIntro from '../../components/GameIntro.jsx'
 import GameStage from '../../components/GameStage.jsx'
 import GameActions, { GameActionButton } from '../../components/GameActions.jsx'
 import TermReveal from '../../components/TermReveal.jsx'
@@ -148,14 +147,9 @@ export default function TemperatureGame({ termId, onComplete }) {
         {/* Re-roll stays inline as a secondary; the pinned bar carries the
             forward action so it's always on screen. */}
         {interacted && (
-          <button
-            type="button"
-            onClick={roll}
-            className="press flex w-full items-center justify-center gap-2 rounded-md border-[3px] border-neutral bg-surface py-2.5 font-label text-sm font-bold text-tertiary shadow-pop"
-          >
-            <span className="material-symbols-rounded text-[18px]">casino</span>
+          <GameActionButton variant="neutral" icon="casino" onClick={roll}>
             Roll again
-          </button>
+          </GameActionButton>
         )}
       </>
     )
@@ -165,7 +159,7 @@ export default function TemperatureGame({ termId, onComplete }) {
     return (
       <>
         <GameStage
-          context={<GameIntro term={term} showHowTo={false} />}
+          term={term}
           main={main}
           progress={{ part: 1, parts: 2 }}
         />
@@ -264,9 +258,9 @@ export default function TemperatureGame({ termId, onComplete }) {
     return (
       <>
         <GameStage
-          context={<GameIntro term={term} showHowTo={false} />}
+          term={term}
           main={main}
-          progress={{ part: 2, parts: 2, step: roundIndex + 1, steps: taskRounds.length }}
+          progress={{ part: 2, parts: 2, step: roundIndex + (answered ? 1 : 0), steps: taskRounds.length }}
         />
         {answered && (
           <GameActions>
