@@ -13,5 +13,5 @@ export const playbookSteps = [
   { id: 'apologize', label: 'Apologize', scripted: 'Sorry to hear that!' },
   { id: 'verify', label: 'Verify the order', scripted: 'Order #482, confirmed cold on arrival.' },
   { id: 'voucher', label: 'Offer a voucher (up to 20% off)', scripted: '20% off your next order.' },
-  { id: 'log', label: 'Log it', scripted: 'Logged for the kitchen team.' },
+  { id: 'log', label: 'Log the complaint', scripted: 'Logged for the kitchen team.' },
 ]
