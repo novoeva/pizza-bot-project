@@ -10,6 +10,11 @@ import terms from '../content/terms.json'
 // drives a fully-assembled BotCanvas for the step-3 illustration.
 const TERM_NAMES = [...terms].sort((a, b) => a.order - b.order).map((term) => term.name)
 const ALL_TERM_IDS = terms.map((term) => term.id)
+// The number of terms is never typed into copy: it is read from terms.json so
+// the landing page always promises exactly what the Workshop delivers.
+const TERM_COUNT = terms.length
+// Czech counts 2-4 differently from 5+: '2 pojmy' vs '12 pojmů'.
+const csPlural = (n, few, many) => (n >= 2 && n <= 4 ? few : many)
 
 /**
  * The front door. Users used to drop straight into the Workshop with no idea
@@ -17,7 +22,7 @@ const ALL_TERM_IDS = terms.map((term) => term.id)
  *
  *   You run a pizzeria. You want a bot that takes customers' pizza orders
  *   straight from a chat (like WhatsApp). To set it up properly you first have
- *   to understand how it works — so you learn the 11 AI terms one at a time,
+ *   to understand how it works — so you learn the AI terms one at a time,
  *   each a small game/scenario, and each one adds a part to the robot on
  *   screen (your bot, visualized).
  *
@@ -36,14 +41,14 @@ const ALL_TERM_IDS = terms.map((term) => term.id)
 
 const LANG_KEY = 'pb-lang'
 
-const COPY = {
+const copyFor = (n) => ({
   en: {
     nav: 'Pizza Bot',
     eyebrow: "For pizzeria owners who don't know AI (yet)",
     title: ['Build your own pizza agent', 'and learn AI at the same time.'],
-    sub: 'You run a pizzeria and you want a bot that takes pizza orders straight from a chat, like a WhatsApp message. To set one up, you first learn how it works: 11 AI terms, one small game each. As you go, a robot gets built on screen. That robot is your bot.',
-    cta: 'Learn with me',
-    ctaNote: '11 terms · one game each · no maths',
+    sub: `You run a pizzeria and you want a bot that takes pizza orders straight from a chat, like a WhatsApp message. To set one up, you first learn how it works: ${n} AI terms, one small game each. As you go, a robot gets built on screen. That robot is your bot.`,
+    cta: 'Play the game',
+    ctaNote: `${n} terms · one game each`,
     buddy: "Meet your bot. You'll build me.",
     howTitle: 'How it works',
     howSub: "You learn beside an owner who doesn't know AI either. No experience needed.",
@@ -55,7 +60,7 @@ const COPY = {
       },
       {
         label: 'The lessons',
-        title: '11 terms, 11 scenarios',
+        title: `${n} terms, ${n} scenarios`,
         text: 'Each term is a small game set in your shop.',
       },
       {
@@ -89,9 +94,9 @@ const COPY = {
     nav: 'Pizza Bot',
     eyebrow: 'Pro majitele pizzerie, co ještě neznají AI',
     title: ['Postav si vlastního pizza agenta', 'a nauč se u toho AI.'],
-    sub: 'Vedeš pizzerii a chceš bota, který bere objednávky na pizzu rovnou z chatu, třeba jako zpráva na WhatsAppu. Než ho nastavíš, nejdřív pochopíš, jak funguje: 11 pojmů z AI, ke každému jedna malá hra. Jak postupuješ, na obrazovce se staví robot. Ten robot je tvůj bot.',
-    cta: 'Pojď se mnou učit',
-    ctaNote: '11 pojmů · ke každému hra · žádná matematika',
+    sub: `Vedeš pizzerii a chceš bota, který bere objednávky na pizzu rovnou z chatu, třeba jako zpráva na WhatsAppu. Než ho nastavíš, nejdřív pochopíš, jak funguje: ${n} ${csPlural(n, 'pojmy', 'pojmů')} z AI, ke každému jedna malá hra. Jak postupuješ, na obrazovce se staví robot. Ten robot je tvůj bot.`,
+    cta: 'Zahraj si hru',
+    ctaNote: `${n} ${csPlural(n, 'pojmy', 'pojmů')} · ke každému hra`,
     buddy: 'Tohle je tvůj bot. Mě postavíš.',
     howTitle: 'Jak to funguje',
     howSub: 'Učíš se po boku majitele, který AI taky neumí. Nic neumět je v pohodě.',
@@ -103,7 +108,7 @@ const COPY = {
       },
       {
         label: 'Lekce',
-        title: '11 pojmů, 11 scénářů',
+        title: `${n} ${csPlural(n, 'pojmy', 'pojmů')}, ${n} ${csPlural(n, 'scénáře', 'scénářů')}`,
         text: 'Každý pojem je malá hra ze tvé pizzerie.',
       },
       {
@@ -133,7 +138,9 @@ const COPY = {
     ],
     footer: 'Uč se AI vařením pizzy',
   },
-}
+})
+
+const COPY = copyFor(TERM_COUNT)
 
 function readLang() {
   try {
@@ -215,16 +222,21 @@ export default function Landing() {
             <p className="max-w-[52ch] text-base leading-relaxed text-text-muted md:text-lg">
               {t.sub}
             </p>
-            <Link
-              to="/workshop"
-              className="press inline-flex items-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label text-sm text-white shadow-pop"
-            >
-              <span className="material-symbols-rounded" aria-hidden="true">
-                rocket_launch
-              </span>
-              {t.cta}
-            </Link>
-            <p className="font-label text-[10px] text-text-dim">{t.ctaNote}</p>
+            {/* 1.1 (Nina): the page read as a presentation, not a game; she
+                scrolled instead of clicking. So the CTA is a start button:
+                big, full-width on phones, a play icon, and it says "Play". */}
+            <div className="flex w-full flex-col items-start gap-2 sm:w-auto">
+              <Link
+                to="/workshop"
+                className="press inline-flex w-full items-center justify-center gap-3 rounded-lg border-[3px] border-neutral bg-primary px-8 py-4 font-label text-lg text-white shadow-card sm:w-auto"
+              >
+                <span className="material-symbols-rounded fill text-3xl" aria-hidden="true">
+                  play_arrow
+                </span>
+                {t.cta}
+              </Link>
+              <p className="font-label text-[10px] text-text-dim">{t.ctaNote}</p>
+            </div>
           </div>
 
           {/* the pizza guy cartoon */}
@@ -349,12 +361,12 @@ export default function Landing() {
             <div className="mt-10 flex justify-center">
               <Link
                 to="/workshop"
-                className="press inline-flex items-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label text-sm text-white shadow-pop"
+                className="press inline-flex w-full items-center justify-center gap-3 rounded-lg border-[3px] border-neutral bg-primary px-8 py-4 font-label text-lg text-white shadow-card sm:w-auto"
               >
-                {t.cta}
-                <span className="material-symbols-rounded" aria-hidden="true">
-                  arrow_forward
+                <span className="material-symbols-rounded fill text-3xl" aria-hidden="true">
+                  play_arrow
                 </span>
+                {t.cta}
               </Link>
             </div>
           </div>
