@@ -46,7 +46,9 @@ const copyFor = (n) => ({
     nav: 'Pizza Bot',
     eyebrow: "For pizzeria owners who don't know AI (yet)",
     title: ['Build your own pizza agent', 'and learn AI at the same time.'],
-    sub: `You run a pizzeria and you want a bot that takes pizza orders straight from a chat, like a WhatsApp message. To set one up, you first learn how it works: ${n} AI terms, one small game each. As you go, a robot gets built on screen. That robot is your bot.`,
+    // 1.3 (Nina): say why you learn the terms, and whether you must. Short
+    // sentences, one idea each.
+    sub: `You run a pizzeria. You want a bot that takes pizza orders in chat, like on WhatsApp. For the bot to work, you should learn ${n} AI terms. Each term is a small scenario-based game. Each game adds a part of your bot to the screen.`,
     cta: 'Play the game',
     ctaNote: `${n} terms · one game each`,
     buddy: "Meet your bot. You'll build me.",
@@ -94,7 +96,7 @@ const copyFor = (n) => ({
     nav: 'Pizza Bot',
     eyebrow: 'Pro majitele pizzerie, co ještě neznají AI',
     title: ['Postav si vlastního pizza agenta', 'a nauč se u toho AI.'],
-    sub: `Vedeš pizzerii a chceš bota, který bere objednávky na pizzu rovnou z chatu, třeba jako zpráva na WhatsAppu. Než ho nastavíš, nejdřív pochopíš, jak funguje: ${n} ${csPlural(n, 'pojmy', 'pojmů')} z AI, ke každému jedna malá hra. Jak postupuješ, na obrazovce se staví robot. Ten robot je tvůj bot.`,
+    sub: `Vedeš pizzerii. Chceš bota, který bere objednávky na pizzu v chatu, třeba na WhatsAppu. Aby bot fungoval, je potřeba se naučit ${n} ${csPlural(n, 'pojmy', 'pojmů')} z AI. Každý pojem je malá hra se scénářem. Každá hra přidá na obrazovku jeden díl tvého bota.`,
     cta: 'Zahraj si hru',
     ctaNote: `${n} ${csPlural(n, 'pojmy', 'pojmů')} · ke každému hra`,
     buddy: 'Tohle je tvůj bot. Mě postavíš.',
