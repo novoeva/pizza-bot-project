@@ -5,8 +5,8 @@
     "name": "Token",
     "botPart": "Mouth",
     "whyYouCare": "You pay per token: every one you send and every one your bot writes. Not per word.",
-    "role": "You're the owner. This game shows you how an LLM thinks in small pieces, and how you pay for every piece.",
-    "definition": "A token is a small chunk of text, often part of a word, and it is the unit an AI actually reads and writes in. \"Pepperoni\" alone breaks into four of them.",
+    "role": "You're the owner. This game shows you how an LLM thinks in small pieces.",
+    "definition": "A token is a small chunk of text, often part of a word. It is the unit an AI actually reads and writes in.",
     "dont": [
       "Don't judge an answer by its length. A long chat gets slower and more expensive."
     ],
