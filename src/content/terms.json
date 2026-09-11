@@ -4,7 +4,7 @@
     "order": 1,
     "name": "Token",
     "botPart": "Voice box",
-    "whyYouCare": "Your bot writes in small chunks, and you pay for each one.",
+    "whyYouCare": "You pay per token: every one you send and every one your bot writes. Not per word.",
     "role": "You're the owner getting to know your bot. Peek inside its voice box: it reads and writes in chunks, not whole words, and that's what drives its cost and its quirks.",
     "definition": "A token is a small chunk of text, often part of a word, and it is the unit an AI actually reads and writes in. \"Pepperoni\" alone breaks into four of them.",
     "dont": [

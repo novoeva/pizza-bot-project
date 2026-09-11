@@ -34,6 +34,15 @@ export default function GameIntro({ term }) {
         <p className="font-label text-[10px] text-text-muted">What it is</p>
         <p className="mt-0.5 text-[13px] leading-snug text-text">{term.definition}</p>
       </div>
+      {/* 3.1 (Nina): say why the owner should care BEFORE the game starts.
+          Same sentence as on the Workshop card, so the promise there is kept
+          here. Cheese tint, because this is about money and consequences. */}
+      {term.whyYouCare && (
+        <div className="mt-3 rounded-md bg-cheese-bg px-3 py-2">
+          <p className="font-label text-[10px] text-cheese-dim">Why you care</p>
+          <p className="mt-0.5 text-[13px] font-bold leading-snug text-text">{term.whyYouCare}</p>
+        </div>
+      )}
       {term.role && (
         <div className="mt-3 rounded-md bg-accent-soft px-3 py-2">
           <p className="font-label text-[10px] text-tertiary">Your role</p>
