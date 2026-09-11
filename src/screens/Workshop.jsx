@@ -69,11 +69,17 @@ export default function Workshop() {
           </div>
         </div>
 
-        {/* Right: the components checklist. */}
+        {/* Right: the list of terms, which doubles as the game menu.
+            2.1 / 2.5 (Nina): "System components" read as chapters of a bot,
+            not as the things you learn. Say plainly what the list is and what
+            to do with it. */}
         <div>
-          <h2 className="mb-3 mt-7 font-label text-sm text-text-muted lg:mt-0">
-            {powered ? 'Replay any game' : 'System components'}
+          <h2 className="mt-7 text-lg leading-tight lg:mt-0 lg:text-xl">
+            {powered ? 'Replay any game' : `The ${total} AI terms you'll learn`}
           </h2>
+          <p className="mb-3 mt-1 text-sm text-text-muted">
+            {powered ? 'Every term is done. Tap one to play it again.' : 'One game each. Tap a term to play.'}
+          </p>
           <TermChecklist completedTerms={completedTerms} />
         </div>
       </div>
