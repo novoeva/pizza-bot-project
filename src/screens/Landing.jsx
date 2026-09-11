@@ -56,17 +56,14 @@ const copyFor = (n) => ({
     howSub: "You learn beside an owner who doesn't know AI either. No experience needed.",
     steps: [
       {
-        label: 'Your role',
         title: "You're the owner",
         text: "You want a bot for your pizzeria. You've never done AI, and that's fine.",
       },
       {
-        label: 'The lessons',
         title: `${n} terms, ${n} scenarios`,
         text: 'Each term is a small game set in your shop.',
       },
       {
-        label: 'On screen',
         title: 'Build the bot',
         text: 'Every term adds a part to the robot you see.',
       },
@@ -104,17 +101,14 @@ const copyFor = (n) => ({
     howSub: 'Učíš se po boku majitele, který AI taky neumí. Nic neumět je v pohodě.',
     steps: [
       {
-        label: 'Tvoje role',
         title: 'Jsi majitel',
         text: 'Chceš bota do pizzerie. AI jsi nikdy nedělal, a to nevadí.',
       },
       {
-        label: 'Lekce',
         title: `${n} ${csPlural(n, 'pojmy', 'pojmů')}, ${n} ${csPlural(n, 'scénáře', 'scénářů')}`,
         text: 'Každý pojem je malá hra ze tvé pizzerie.',
       },
       {
-        label: 'Na obrazovce',
         title: 'Postav bota',
         text: 'Každý pojem přidá díl robotovi, kterého vidíš.',
       },
@@ -326,7 +320,9 @@ export default function Landing() {
                     <span className="flex h-9 w-9 items-center justify-center rounded-full border-[3px] border-neutral bg-primary font-display text-sm font-extrabold text-white shadow-pop">
                       {i + 1}
                     </span>
-                    <span className="font-label text-[10px] text-tertiary">{s.label}</span>
+                    {/* 1.5 (Nina/Eva): the tiny eyebrow labels ("Your role",
+                        "The lessons", "On screen") meant nothing to her; the
+                        numbered titles carry the step on their own. */}
                     <h3 className="text-lg leading-tight md:text-xl">{s.title}</h3>
                     <p className="max-w-[38ch] text-sm leading-relaxed text-text-muted">{s.text}</p>
                   </div>
