@@ -1,3 +1,5 @@
+import terms from '../content/terms.json'
+
 /**
  * Standard game intro card, shared across all games: step 1 of the game
  * framework, "explain what we're teaching BEFORE playing" (FR-9).
@@ -15,10 +17,18 @@
  * column, never here. GameStage renders this card in the left column on
  * every screen of every game, so the definition never leaves view.
  */
+const SORTED = [...terms].sort((a, b) => a.order - b.order)
+
 export default function GameIntro({ term }) {
+  // 2.4 (Nina): carry the same number through the whole flow. The landing
+  // page promises N terms, the Workshop lists 1..N, so each game says which
+  // one of the N you are on.
+  const position = SORTED.findIndex((t) => t.id === term.id) + 1
   return (
     <div className="rounded-lg border-[3px] border-neutral bg-surface p-3 shadow-pop">
-      <p className="font-label text-[11px] text-primary">Term · {term.name}</p>
+      <p className="font-label text-[11px] text-primary">
+        Term {position} of {SORTED.length}
+      </p>
       <h1 className="text-2xl leading-tight">{term.name}</h1>
       <div className="mt-2">
         <p className="font-label text-[10px] text-text-muted">What it is</p>
