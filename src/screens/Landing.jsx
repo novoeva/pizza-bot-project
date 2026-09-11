@@ -68,25 +68,6 @@ const copyFor = (n) => ({
         text: 'Every term adds a part to the robot you see.',
       },
     ],
-    whyTitle: 'Why this one',
-    whySub: 'These concepts are hard for everyone. Here they finally click.',
-    cards: [
-      {
-        icon: 'local_pizza',
-        title: 'One idea at a time',
-        text: 'Each term is its own small game. Play one, get it, move on. Nothing piles up.',
-      },
-      {
-        icon: 'science',
-        title: 'Learn it, then try it',
-        text: 'First the plain-words definition, then you use it in a real pizzeria scenario. That is what makes it stick.',
-      },
-      {
-        icon: 'sentiment_very_satisfied',
-        title: 'No maths, no code',
-        text: "You're the owner, not a programmer. Just play, with no setup and no equations.",
-      },
-    ],
     footer: 'Learn AI the pizza way',
   },
   cs: {
@@ -111,25 +92,6 @@ const copyFor = (n) => ({
       {
         title: 'Postav bota',
         text: 'Každý pojem přidá díl robotovi, kterého vidíš.',
-      },
-    ],
-    whyTitle: 'Proč právě tohle',
-    whySub: 'Tyhle pojmy jsou těžké pro každého. Tady ti konečně zapadnou.',
-    cards: [
-      {
-        icon: 'local_pizza',
-        title: 'Jeden pojem po druhém',
-        text: 'Každý pojem je malá hra. Zahraješ si, pochopíš, jdeš dál. Nic se nehromadí.',
-      },
-      {
-        icon: 'science',
-        title: 'Nauč se ho a hned vyzkoušej',
-        text: 'Nejdřív definice srozumitelně, pak ho použiješ v reálné situaci z pizzerie. Díky tomu ti zůstane.',
-      },
-      {
-        icon: 'sentiment_very_satisfied',
-        title: 'Žádná matematika, žádný kód',
-        text: 'Jsi majitel, ne programátor. Prostě si hraješ, bez nastavování a rovnic.',
       },
     ],
     footer: 'Uč se AI vařením pizzy',
@@ -332,41 +294,20 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* Why this one */}
+        {/* Bottom of the page: one more "Play the game", nothing else. The
+            three "Why this one" cards were cut after Nina's interview (1.6):
+            the simpler the page, the better; keep only what has a function. */}
         <section className="border-t-[3px] border-neutral bg-muted/50">
-          <div className="mx-auto w-full max-w-desktop px-4 py-12 lg:px-8 lg:py-16">
-            <div className="mb-8 flex flex-col gap-2">
-              <h2 className="text-2xl md:text-4xl">{t.whyTitle}</h2>
-              <p className="max-w-[52ch] text-sm text-text-muted md:text-base">{t.whySub}</p>
-            </div>
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-              {t.cards.map((c) => (
-                <article
-                  key={c.title}
-                  className="press flex flex-col gap-3 rounded-lg border-[3px] border-neutral bg-surface p-5 shadow-card"
-                >
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full border-[3px] border-neutral bg-primary text-white">
-                    <span className="material-symbols-rounded" aria-hidden="true">
-                      {c.icon}
-                    </span>
-                  </span>
-                  <h3 className="text-lg">{c.title}</h3>
-                  <p className="text-sm leading-relaxed text-text-muted">{c.text}</p>
-                </article>
-              ))}
-            </div>
-
-            <div className="mt-10 flex justify-center">
-              <Link
-                to="/workshop"
-                className="press inline-flex w-full items-center justify-center gap-3 rounded-lg border-[3px] border-neutral bg-primary px-8 py-4 font-label text-lg text-white shadow-card sm:w-auto"
-              >
-                <span className="material-symbols-rounded fill text-3xl" aria-hidden="true">
-                  play_arrow
-                </span>
-                {t.cta}
-              </Link>
-            </div>
+          <div className="mx-auto flex w-full max-w-desktop justify-center px-4 py-12 lg:px-8 lg:py-16">
+            <Link
+              to="/workshop"
+              className="press inline-flex w-full items-center justify-center gap-3 rounded-lg border-[3px] border-neutral bg-primary px-8 py-4 font-label text-lg text-white shadow-card sm:w-auto"
+            >
+              <span className="material-symbols-rounded fill text-3xl" aria-hidden="true">
+                play_arrow
+              </span>
+              {t.cta}
+            </Link>
           </div>
         </section>
 
