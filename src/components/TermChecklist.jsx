@@ -19,7 +19,10 @@ export default function TermChecklist({ completedTerms = [] }) {
         const done = completed.has(term.id)
         const isNext = next?.id === term.id
         return (
-          <li key={term.id} className={isNext ? 'relative pt-4' : undefined}>
+          <li key={term.id}>
+            {/* The sticker is positioned against this wrapper, not the <li>, so
+                anything rendered above the card inside the <li> stays uncovered. */}
+            <div className={isNext ? 'relative pt-4' : undefined}>
             {isNext && (
               <span
                 className="absolute left-3 top-0 z-10 inline-flex -rotate-2 items-center gap-1 rounded-md border-[3px] border-neutral bg-primary px-2.5 py-1 font-label text-[11px] text-white shadow-pop"
@@ -76,6 +79,7 @@ export default function TermChecklist({ completedTerms = [] }) {
                 {done ? 'chevron_right' : 'play_arrow'}
               </span>
             </Link>
+            </div>
           </li>
         )
       })}
