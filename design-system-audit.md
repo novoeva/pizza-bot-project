@@ -18,7 +18,7 @@ usage is consistent and sensible, and propose a unified shared-component set +
 a codified visual language.
 
 ## Context files (read these first)
-- INTERVIEW-FEEDBACK.md (repo root) — usability findings; see FR-9, FR-10/16,
+- Linear, team Pizza Bot (https://linear.app/genaiacademy/team/PIZZA/all) — usability findings (formerly INTERVIEW-FEEDBACK.md); see FR-9, FR-10/16,
   FR-13, FR-17, FR-18 especially.
 - GAME-DESIGN-PRINCIPLES.md (repo root) — the design rules the audit should
   serve (games follow definition → simulation → recap; fix things systemically).
