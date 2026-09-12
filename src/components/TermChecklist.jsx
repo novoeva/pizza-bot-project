@@ -1,54 +1,60 @@
 import { Link } from 'react-router-dom'
-import terms from '../content/terms.json'
+import { sortedTerms, firstIncomplete } from '../lib/terms.js'
 
-/** Material icon per term, shown in the to-do badge. */
-const TERM_ICON = {
-  token: 'graphic_eq',
-  'context-window': 'history',
-  hallucination: 'blur_on',
-  prompt: 'edit_note',
-  agent: 'directions_run',
-  'tool-use': 'build',
-  skill: 'school',
-  memory: 'database',
-  mcp: 'cable',
-  guardrails: 'shield',
-  temperature: 'thermostat',
-  rag: 'menu_book',
-}
-
-/** All terms, doubles as the game menu. Free order, no locks. */
+/**
+ * All terms, doubles as the game menu. Free order, no locks, but the list
+ * leads: cards are numbered 1..N, done ones get a tick, and the first card
+ * not yet done carries a "Start here" / "Next up" sticker (Nina 2.3: people
+ * did not know where to begin, so number it and point at the first one).
+ */
 export default function TermChecklist({ completedTerms = [] }) {
   const completed = new Set(completedTerms)
-  const sorted = [...terms].sort((a, b) => a.order - b.order)
+  const sorted = sortedTerms
+  const next = firstIncomplete(completedTerms)
+  const stickerText = completed.size === 0 ? 'Start here' : 'Next up'
 
   return (
     <ul className="flex flex-col gap-3">
-      {sorted.map((term) => {
+      {sorted.map((term, i) => {
         const done = completed.has(term.id)
+        const isNext = next?.id === term.id
         return (
           <li key={term.id}>
+            {/* The sticker is positioned against this wrapper, not the <li>, so
+                anything rendered above the card inside the <li> stays uncovered. */}
+            <div className={isNext ? 'relative pt-4' : undefined}>
+            {isNext && (
+              <span
+                className="absolute left-3 top-0 z-10 inline-flex -rotate-2 items-center gap-1 rounded-md border-[3px] border-neutral bg-primary px-2.5 py-1 font-label text-[11px] text-white shadow-pop"
+                aria-hidden="true"
+              >
+                <span className="material-symbols-rounded text-base">arrow_downward</span>
+                {stickerText}
+              </span>
+            )}
             <Link
               to={`/game/${term.id}`}
               className={
-                'press flex items-center gap-3 rounded-md border-[3px] border-neutral p-4 ' +
-                (done ? 'bg-muted opacity-75' : 'bg-surface shadow-pop')
+                'press flex items-center gap-3 rounded-md border-[3px] p-4 ' +
+                (done
+                  ? 'border-neutral bg-muted opacity-75'
+                  : isNext
+                    ? 'border-primary bg-surface shadow-card'
+                    : 'border-neutral bg-surface shadow-pop')
               }
             >
               <span
                 className={
-                  'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-neutral ' +
-                  (done ? 'bg-primary' : 'bg-accent-soft')
+                  'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-neutral font-label text-base font-bold ' +
+                  (done ? 'bg-success text-white' : isNext ? 'bg-primary text-white' : 'bg-accent-soft text-text')
                 }
                 aria-hidden="true"
               >
-                <span
-                  className={
-                    'material-symbols-rounded ' + (done ? 'fill text-white' : 'text-tertiary')
-                  }
-                >
-                  {done ? 'check_circle' : TERM_ICON[term.id] || 'extension'}
-                </span>
+                {done ? (
+                  <span className="material-symbols-rounded fill">check</span>
+                ) : (
+                  i + 1
+                )}
               </span>
 
               <span className="min-w-0 flex-1">
@@ -58,7 +64,14 @@ export default function TermChecklist({ completedTerms = [] }) {
                     (done ? 'text-text-muted' : 'text-text')
                   }
                 >
+                  {/* Number and status for screen readers; the badge and the
+                      sticker are aria-hidden pictures of the same facts. Kept
+                      inline (not aria-label) so the sentence below is still
+                      part of the link's name. */}
+                  <span className="sr-only">{i + 1}. </span>
                   {term.name}
+                  {done && <span className="sr-only">, done</span>}
+                  {isNext && <span className="sr-only">, {stickerText.toLowerCase()}</span>}
                 </span>
                 {/* The reason to tap this card, not a label for the bot part:
                     one sentence saying what goes wrong (or what you get) if you
@@ -72,6 +85,7 @@ export default function TermChecklist({ completedTerms = [] }) {
                 {done ? 'chevron_right' : 'play_arrow'}
               </span>
             </Link>
+            </div>
           </li>
         )
       })}

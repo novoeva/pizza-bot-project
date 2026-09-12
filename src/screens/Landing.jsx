@@ -4,12 +4,17 @@ import pizzaGuy from '../assets/pizza-guy.jpg'
 import ownerThinking from '../assets/owner-thinking-cutout.png'
 import BottomNav from '../components/BottomNav.jsx'
 import BotCanvas from '../components/BotCanvas.jsx'
-import terms from '../content/terms.json'
+import { sortedTerms, termCount } from '../lib/terms.js'
 
 // Static, derived once: the term names (step-2 chips) and the full id list that
 // drives a fully-assembled BotCanvas for the step-3 illustration.
-const TERM_NAMES = [...terms].sort((a, b) => a.order - b.order).map((term) => term.name)
-const ALL_TERM_IDS = terms.map((term) => term.id)
+const TERM_NAMES = sortedTerms.map((term) => term.name)
+const ALL_TERM_IDS = sortedTerms.map((term) => term.id)
+// The number of terms is never typed into copy: it is read from terms.json so
+// the landing page always promises exactly what the Workshop delivers.
+const TERM_COUNT = termCount
+// Czech counts 2-4 differently from 5+: '2 pojmy' vs '12 pojmů'.
+const csPlural = (n, few, many) => (n >= 2 && n <= 4 ? few : many)
 
 /**
  * The front door. Users used to drop straight into the Workshop with no idea
@@ -17,7 +22,7 @@ const ALL_TERM_IDS = terms.map((term) => term.id)
  *
  *   You run a pizzeria. You want a bot that takes customers' pizza orders
  *   straight from a chat (like WhatsApp). To set it up properly you first have
- *   to understand how it works — so you learn the 11 AI terms one at a time,
+ *   to understand how it works — so you learn the AI terms one at a time,
  *   each a small game/scenario, and each one adds a part to the robot on
  *   screen (your bot, visualized).
  *
@@ -36,51 +41,31 @@ const ALL_TERM_IDS = terms.map((term) => term.id)
 
 const LANG_KEY = 'pb-lang'
 
-const COPY = {
+const copyFor = (n) => ({
   en: {
     nav: 'Pizza Bot',
     eyebrow: "For pizzeria owners who don't know AI (yet)",
     title: ['Build your own pizza agent', 'and learn AI at the same time.'],
-    sub: 'You run a pizzeria and you want a bot that takes pizza orders straight from a chat, like a WhatsApp message. To set one up, you first learn how it works: 11 AI terms, one small game each. As you go, a robot gets built on screen. That robot is your bot.',
-    cta: 'Learn with me',
-    ctaNote: '11 terms · one game each · no maths',
+    // 1.3 (Nina): say why you learn the terms, and whether you must. Short
+    // sentences, one idea each.
+    sub: `You run a pizzeria. You want a bot that takes pizza orders in chat, like on WhatsApp. For the bot to work, you should learn ${n} AI terms. Each term is a small scenario-based game. Each game adds a part of your bot to the screen.`,
+    cta: 'Play the game',
+    ctaNote: `${n} terms · one game each`,
     buddy: "Meet your bot. You'll build me.",
     howTitle: 'How it works',
     howSub: "You learn beside an owner who doesn't know AI either. No experience needed.",
     steps: [
       {
-        label: 'Your role',
         title: "You're the owner",
         text: "You want a bot for your pizzeria. You've never done AI, and that's fine.",
       },
       {
-        label: 'The lessons',
-        title: '11 terms, 11 scenarios',
+        title: `${n} terms, ${n} scenarios`,
         text: 'Each term is a small game set in your shop.',
       },
       {
-        label: 'On screen',
         title: 'Build the bot',
         text: 'Every term adds a part to the robot you see.',
-      },
-    ],
-    whyTitle: 'Why this one',
-    whySub: 'These concepts are hard for everyone. Here they finally click.',
-    cards: [
-      {
-        icon: 'local_pizza',
-        title: 'One idea at a time',
-        text: 'Each term is its own small game. Play one, get it, move on. Nothing piles up.',
-      },
-      {
-        icon: 'science',
-        title: 'Learn it, then try it',
-        text: 'First the plain-words definition, then you use it in a real pizzeria scenario. That is what makes it stick.',
-      },
-      {
-        icon: 'sentiment_very_satisfied',
-        title: 'No maths, no code',
-        text: "You're the owner, not a programmer. Just play, with no setup and no equations.",
       },
     ],
     footer: 'Learn AI the pizza way',
@@ -89,51 +74,31 @@ const COPY = {
     nav: 'Pizza Bot',
     eyebrow: 'Pro majitele pizzerie, co ještě neznají AI',
     title: ['Postav si vlastního pizza agenta', 'a nauč se u toho AI.'],
-    sub: 'Vedeš pizzerii a chceš bota, který bere objednávky na pizzu rovnou z chatu, třeba jako zpráva na WhatsAppu. Než ho nastavíš, nejdřív pochopíš, jak funguje: 11 pojmů z AI, ke každému jedna malá hra. Jak postupuješ, na obrazovce se staví robot. Ten robot je tvůj bot.',
-    cta: 'Pojď se mnou učit',
-    ctaNote: '11 pojmů · ke každému hra · žádná matematika',
+    sub: `Vedeš pizzerii. Chceš bota, který bere objednávky na pizzu v chatu, třeba na WhatsAppu. Aby bot fungoval, je potřeba se naučit ${n} ${csPlural(n, 'pojmy', 'pojmů')} z AI. Každý pojem je malá hra se scénářem. Každá hra přidá na obrazovku jeden díl tvého bota.`,
+    cta: 'Zahraj si hru',
+    ctaNote: `${n} ${csPlural(n, 'pojmy', 'pojmů')} · ke každému hra`,
     buddy: 'Tohle je tvůj bot. Mě postavíš.',
     howTitle: 'Jak to funguje',
     howSub: 'Učíš se po boku majitele, který AI taky neumí. Nic neumět je v pohodě.',
     steps: [
       {
-        label: 'Tvoje role',
         title: 'Jsi majitel',
         text: 'Chceš bota do pizzerie. AI jsi nikdy nedělal, a to nevadí.',
       },
       {
-        label: 'Lekce',
-        title: '11 pojmů, 11 scénářů',
+        title: `${n} ${csPlural(n, 'pojmy', 'pojmů')}, ${n} ${csPlural(n, 'scénáře', 'scénářů')}`,
         text: 'Každý pojem je malá hra ze tvé pizzerie.',
       },
       {
-        label: 'Na obrazovce',
         title: 'Postav bota',
         text: 'Každý pojem přidá díl robotovi, kterého vidíš.',
       },
     ],
-    whyTitle: 'Proč právě tohle',
-    whySub: 'Tyhle pojmy jsou těžké pro každého. Tady ti konečně zapadnou.',
-    cards: [
-      {
-        icon: 'local_pizza',
-        title: 'Jeden pojem po druhém',
-        text: 'Každý pojem je malá hra. Zahraješ si, pochopíš, jdeš dál. Nic se nehromadí.',
-      },
-      {
-        icon: 'science',
-        title: 'Nauč se ho a hned vyzkoušej',
-        text: 'Nejdřív definice srozumitelně, pak ho použiješ v reálné situaci z pizzerie. Díky tomu ti zůstane.',
-      },
-      {
-        icon: 'sentiment_very_satisfied',
-        title: 'Žádná matematika, žádný kód',
-        text: 'Jsi majitel, ne programátor. Prostě si hraješ, bez nastavování a rovnic.',
-      },
-    ],
     footer: 'Uč se AI vařením pizzy',
   },
-}
+})
+
+const COPY = copyFor(TERM_COUNT)
 
 function readLang() {
   try {
@@ -215,16 +180,21 @@ export default function Landing() {
             <p className="max-w-[52ch] text-base leading-relaxed text-text-muted md:text-lg">
               {t.sub}
             </p>
-            <Link
-              to="/workshop"
-              className="press inline-flex items-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label text-sm text-white shadow-pop"
-            >
-              <span className="material-symbols-rounded" aria-hidden="true">
-                rocket_launch
-              </span>
-              {t.cta}
-            </Link>
-            <p className="font-label text-[10px] text-text-dim">{t.ctaNote}</p>
+            {/* 1.1 (Nina): the page read as a presentation, not a game; she
+                scrolled instead of clicking. So the CTA is a start button:
+                big, full-width on phones, a play icon, and it says "Play". */}
+            <div className="flex w-full flex-col items-start gap-2 sm:w-auto">
+              <Link
+                to="/workshop"
+                className="press inline-flex w-full items-center justify-center gap-3 rounded-lg border-[3px] border-neutral bg-primary px-8 py-4 font-label text-lg text-white shadow-card sm:w-auto"
+              >
+                <span className="material-symbols-rounded fill text-3xl" aria-hidden="true">
+                  play_arrow
+                </span>
+                {t.cta}
+              </Link>
+              <p className="font-label text-[10px] text-text-dim">{t.ctaNote}</p>
+            </div>
           </div>
 
           {/* the pizza guy cartoon */}
@@ -312,7 +282,9 @@ export default function Landing() {
                     <span className="flex h-9 w-9 items-center justify-center rounded-full border-[3px] border-neutral bg-primary font-display text-sm font-extrabold text-white shadow-pop">
                       {i + 1}
                     </span>
-                    <span className="font-label text-[10px] text-tertiary">{s.label}</span>
+                    {/* 1.5 (Nina/Eva): the tiny eyebrow labels ("Your role",
+                        "The lessons", "On screen") meant nothing to her; the
+                        numbered titles carry the step on their own. */}
                     <h3 className="text-lg leading-tight md:text-xl">{s.title}</h3>
                     <p className="max-w-[38ch] text-sm leading-relaxed text-text-muted">{s.text}</p>
                   </div>
@@ -322,41 +294,20 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* Why this one */}
+        {/* Bottom of the page: one more "Play the game", nothing else. The
+            three "Why this one" cards were cut after Nina's interview (1.6):
+            the simpler the page, the better; keep only what has a function. */}
         <section className="border-t-[3px] border-neutral bg-muted/50">
-          <div className="mx-auto w-full max-w-desktop px-4 py-12 lg:px-8 lg:py-16">
-            <div className="mb-8 flex flex-col gap-2">
-              <h2 className="text-2xl md:text-4xl">{t.whyTitle}</h2>
-              <p className="max-w-[52ch] text-sm text-text-muted md:text-base">{t.whySub}</p>
-            </div>
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-              {t.cards.map((c) => (
-                <article
-                  key={c.title}
-                  className="press flex flex-col gap-3 rounded-lg border-[3px] border-neutral bg-surface p-5 shadow-card"
-                >
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full border-[3px] border-neutral bg-primary text-white">
-                    <span className="material-symbols-rounded" aria-hidden="true">
-                      {c.icon}
-                    </span>
-                  </span>
-                  <h3 className="text-lg">{c.title}</h3>
-                  <p className="text-sm leading-relaxed text-text-muted">{c.text}</p>
-                </article>
-              ))}
-            </div>
-
-            <div className="mt-10 flex justify-center">
-              <Link
-                to="/workshop"
-                className="press inline-flex items-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-5 py-3 font-label text-sm text-white shadow-pop"
-              >
-                {t.cta}
-                <span className="material-symbols-rounded" aria-hidden="true">
-                  arrow_forward
-                </span>
-              </Link>
-            </div>
+          <div className="mx-auto flex w-full max-w-desktop justify-center px-4 py-12 lg:px-8 lg:py-16">
+            <Link
+              to="/workshop"
+              className="press inline-flex w-full items-center justify-center gap-3 rounded-lg border-[3px] border-neutral bg-primary px-8 py-4 font-label text-lg text-white shadow-card sm:w-auto"
+            >
+              <span className="material-symbols-rounded fill text-3xl" aria-hidden="true">
+                play_arrow
+              </span>
+              {t.cta}
+            </Link>
           </div>
         </section>
 
