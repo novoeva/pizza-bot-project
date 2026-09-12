@@ -22,11 +22,15 @@ export const samplePhrase = {
 // ---- Beat 2: next-token prediction ----
 // One clear "top pick" per round; the player guesses before seeing the ranking.
 // Percentages in each round sum to 100.
+// 5.2 (Nina): the model predicts a TOKEN, never a whole word. Every option
+// here is a short, common word that is one token on its own (beat 1 already
+// showed "pizza" as a single token), and the screen says so. No word that
+// would split, like "salami" (sal + ami).
 export const predictionRounds = [
   {
     context: 'The Diavola is our spiciest',
     options: [
-      { word: 'salami', pct: 17 },
+      { word: 'salad', pct: 17 },
       { word: 'pizza', pct: 72 },
       { word: 'penguin', pct: 3 },
       { word: 'pasta', pct: 8 },

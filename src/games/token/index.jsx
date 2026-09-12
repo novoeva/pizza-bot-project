@@ -171,9 +171,9 @@ export default function TokenGame({ termId, onComplete }) {
         main={
           <>
         <PhaseCard title="Read your bot's mind">
-          Your bot (an LLM, short for large language model) never writes a whole reply at once.
-          It picks one token, then the next, then the next. Every pick is a guess at what fits
-          best after everything it has seen so far.
+          Your bot never writes a whole reply at once. It picks one token, then the next, then
+          the next. Each option below is one token: short, common words like these are a single
+          token each.
         </PhaseCard>
 
         <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-4 text-center shadow-pop">
@@ -183,7 +183,7 @@ export default function TokenGame({ termId, onComplete }) {
         </div>
 
         {!answered ? (
-          <ChoiceGroup mode="commit" label="Which token does your bot pick next?">
+          <ChoiceGroup mode="commit" label="Which token comes next? Each option is one token.">
             {round.options.map((o) => (
               <SelectableCard
                 key={o.word}
