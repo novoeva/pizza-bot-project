@@ -4,15 +4,15 @@ import pizzaGuy from '../assets/pizza-guy.jpg'
 import ownerThinking from '../assets/owner-thinking-cutout.png'
 import BottomNav from '../components/BottomNav.jsx'
 import BotCanvas from '../components/BotCanvas.jsx'
-import terms from '../content/terms.json'
+import { sortedTerms, termCount } from '../lib/terms.js'
 
 // Static, derived once: the term names (step-2 chips) and the full id list that
 // drives a fully-assembled BotCanvas for the step-3 illustration.
-const TERM_NAMES = [...terms].sort((a, b) => a.order - b.order).map((term) => term.name)
-const ALL_TERM_IDS = terms.map((term) => term.id)
+const TERM_NAMES = sortedTerms.map((term) => term.name)
+const ALL_TERM_IDS = sortedTerms.map((term) => term.id)
 // The number of terms is never typed into copy: it is read from terms.json so
 // the landing page always promises exactly what the Workshop delivers.
-const TERM_COUNT = terms.length
+const TERM_COUNT = termCount
 // Czech counts 2-4 differently from 5+: '2 pojmy' vs '12 pojmů'.
 const csPlural = (n, few, many) => (n >= 2 && n <= 4 ? few : many)
 

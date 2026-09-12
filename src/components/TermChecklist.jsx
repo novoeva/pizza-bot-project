@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import terms from '../content/terms.json'
+import { sortedTerms, firstIncomplete } from '../lib/terms.js'
 
 /**
  * All terms, doubles as the game menu. Free order, no locks, but the list
@@ -9,8 +9,8 @@ import terms from '../content/terms.json'
  */
 export default function TermChecklist({ completedTerms = [] }) {
   const completed = new Set(completedTerms)
-  const sorted = [...terms].sort((a, b) => a.order - b.order)
-  const next = sorted.find((t) => !completed.has(t.id))
+  const sorted = sortedTerms
+  const next = firstIncomplete(completedTerms)
   const stickerText = completed.size === 0 ? 'Start here' : 'Next up'
 
   return (
@@ -34,7 +34,6 @@ export default function TermChecklist({ completedTerms = [] }) {
             )}
             <Link
               to={`/game/${term.id}`}
-              aria-label={`${i + 1}. ${term.name}${done ? ', done' : isNext ? `, ${stickerText.toLowerCase()}` : ''}`}
               className={
                 'press flex items-center gap-3 rounded-md border-[3px] p-4 ' +
                 (done
@@ -65,7 +64,14 @@ export default function TermChecklist({ completedTerms = [] }) {
                     (done ? 'text-text-muted' : 'text-text')
                   }
                 >
+                  {/* Number and status for screen readers; the badge and the
+                      sticker are aria-hidden pictures of the same facts. Kept
+                      inline (not aria-label) so the sentence below is still
+                      part of the link's name. */}
+                  <span className="sr-only">{i + 1}. </span>
                   {term.name}
+                  {done && <span className="sr-only">, done</span>}
+                  {isNext && <span className="sr-only">, {stickerText.toLowerCase()}</span>}
                 </span>
                 {/* The reason to tap this card, not a label for the bot part:
                     one sentence saying what goes wrong (or what you get) if you

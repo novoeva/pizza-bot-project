@@ -4,7 +4,7 @@ import TermChecklist from '../components/TermChecklist.jsx'
 import StatusReadout from '../components/StatusReadout.jsx'
 import { useProgress } from '../lib/useProgress.js'
 import { getFailureLine } from '../lib/failureLine.js'
-import terms from '../content/terms.json'
+import { termCount, firstIncomplete } from '../lib/terms.js'
 
 const PEGBOARD = {
   backgroundImage: 'radial-gradient(var(--color-pegboard-dot) 1.3px, transparent 1.3px)',
@@ -13,15 +13,12 @@ const PEGBOARD = {
 
 export default function Workshop() {
   const completedTerms = useProgress()
-  const total = terms.length
+  const total = termCount
   const done = completedTerms.length
   const powered = done === total
 
   const failureLine = useMemo(() => getFailureLine(completedTerms), [completedTerms])
-  const firstMissing = useMemo(() => {
-    const set = new Set(completedTerms)
-    return [...terms].sort((a, b) => a.order - b.order).find((t) => !set.has(t.id))
-  }, [completedTerms])
+  const firstMissing = useMemo(() => firstIncomplete(completedTerms), [completedTerms])
 
   const line = powered
     ? "Your bot's online. It makes pizza now, and only pizza. Exactly as planned."
