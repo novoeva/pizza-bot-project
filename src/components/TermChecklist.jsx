@@ -1,29 +1,18 @@
 import { Link } from 'react-router-dom'
 import terms from '../content/terms.json'
 
-/** Material icon per term, shown in the to-do badge. */
-const TERM_ICON = {
-  token: 'graphic_eq',
-  'context-window': 'history',
-  hallucination: 'blur_on',
-  prompt: 'edit_note',
-  agent: 'directions_run',
-  'tool-use': 'build',
-  skill: 'school',
-  memory: 'database',
-  mcp: 'cable',
-  guardrails: 'shield',
-  temperature: 'thermostat',
-  rag: 'menu_book',
-}
-
-/** All terms, doubles as the game menu. Free order, no locks. */
+/**
+ * All terms, doubles as the game menu. Free order, no locks. Sorted by
+ * `order` from terms.json, which is also the numbering on the flow board.
+ * At `lg`+ the list lives in the narrow bento side column, so the cards
+ * tighten up there (padding, badge, type) via responsive classes.
+ */
 export default function TermChecklist({ completedTerms = [] }) {
   const completed = new Set(completedTerms)
   const sorted = [...terms].sort((a, b) => a.order - b.order)
 
   return (
-    <ul className="flex flex-col gap-3">
+    <ul className="flex flex-col gap-3 lg:gap-2">
       {sorted.map((term) => {
         const done = completed.has(term.id)
         return (
@@ -31,30 +20,30 @@ export default function TermChecklist({ completedTerms = [] }) {
             <Link
               to={`/game/${term.id}`}
               className={
-                'press flex items-center gap-3 rounded-md border-[3px] border-neutral p-4 ' +
+                'press flex items-center gap-3 rounded-md border-[3px] border-neutral p-4 lg:p-2.5 ' +
                 (done ? 'bg-muted opacity-75' : 'bg-surface shadow-pop')
               }
             >
               <span
                 className={
-                  'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-neutral ' +
+                  'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-neutral lg:h-8 lg:w-8 ' +
                   (done ? 'bg-primary' : 'bg-accent-soft')
                 }
                 aria-hidden="true"
               >
-                <span
-                  className={
-                    'material-symbols-rounded ' + (done ? 'fill text-white' : 'text-tertiary')
-                  }
-                >
-                  {done ? 'check_circle' : TERM_ICON[term.id] || 'extension'}
-                </span>
+                {done ? (
+                  <span className="material-symbols-rounded fill text-white">check_circle</span>
+                ) : (
+                  <span className="font-label text-[15px] font-bold text-tertiary lg:text-[13px]">
+                    {term.order}
+                  </span>
+                )}
               </span>
 
               <span className="min-w-0 flex-1">
                 <span
                   className={
-                    'block font-label text-[15px] font-semibold ' +
+                    'block font-label text-[15px] font-semibold lg:text-[14px] ' +
                     (done ? 'text-text-muted' : 'text-text')
                   }
                 >
@@ -63,7 +52,7 @@ export default function TermChecklist({ completedTerms = [] }) {
                 {/* The reason to tap this card, not a label for the bot part:
                     one sentence saying what goes wrong (or what you get) if you
                     don't know the term. Wraps to two lines at phone width. */}
-                <span className="mt-0.5 block text-[13px] leading-snug text-text-muted">
+                <span className="mt-0.5 block text-[13px] leading-snug text-text-muted lg:text-[12px]">
                   {term.whyYouCare}
                 </span>
               </span>

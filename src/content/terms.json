@@ -23,7 +23,7 @@
   },
   {
     "id": "context-window",
-    "order": 2,
+    "order": 3,
     "name": "Context window",
     "botPart": "Short-term memory chip",
     "whyYouCare": "Your bot can forget an allergy just because the chat got long.",
@@ -45,7 +45,7 @@
   },
   {
     "id": "hallucination",
-    "order": 3,
+    "order": 4,
     "name": "Hallucination",
     "botPart": "Reality-check filter",
     "whyYouCare": "Your bot will invent a pizza you don't sell, and sound sure.",
@@ -67,7 +67,7 @@
   },
   {
     "id": "prompt",
-    "order": 4,
+    "order": 5,
     "name": "Prompt",
     "botPart": "Instruction dial",
     "whyYouCare": "Whatever you leave out of the instructions, your bot invents.",
@@ -89,7 +89,7 @@
   },
   {
     "id": "agent",
-    "order": 5,
+    "order": 6,
     "name": "Agent",
     "botPart": "Legs (it can act on its own)",
     "whyYouCare": "Your bot can promise the pizza, or actually send the driver.",
@@ -111,7 +111,7 @@
   },
   {
     "id": "tool-use",
-    "order": 6,
+    "order": 9,
     "name": "Tool use",
     "botPart": "Arms",
     "whyYouCare": "With nothing real to check, your bot guesses the delivery time.",
@@ -133,7 +133,7 @@
   },
   {
     "id": "skill",
-    "order": 7,
+    "order": 8,
     "name": "Skill",
     "botPart": "Training certificate",
     "whyYouCare": "Without a playbook, one complaint can cost you free pizza forever.",
@@ -155,7 +155,7 @@
   },
   {
     "id": "memory",
-    "order": 8,
+    "order": 7,
     "name": "Memory",
     "botPart": "Hard drive (chest)",
     "whyYouCare": "Your best regular gets greeted like a stranger every visit.",
@@ -177,7 +177,7 @@
   },
   {
     "id": "mcp",
-    "order": 9,
+    "order": 10,
     "name": "MCP",
     "botPart": "Universal port",
     "whyYouCare": "Each new system takes weeks to wire in, or clicks straight in.",
@@ -198,7 +198,7 @@
   },
   {
     "id": "guardrails",
-    "order": 10,
+    "order": 12,
     "name": "Guardrails",
     "botPart": "Safety casing",
     "whyYouCare": "A customer who says “I’m the manager” can get a free pizza.",
@@ -220,7 +220,7 @@
   },
   {
     "id": "temperature",
-    "order": 11,
+    "order": 2,
     "name": "Temperature",
     "botPart": "Creativity dial",
     "whyYouCare": "One dial decides if your bot repeats prices or invents names.",
@@ -242,7 +242,7 @@
   },
   {
     "id": "rag",
-    "order": 12,
+    "order": 11,
     "name": "RAG",
     "botPart": "Recipe binder",
     "whyYouCare": "Your bot reads your own files and still quotes the old price.",

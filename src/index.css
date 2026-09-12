@@ -155,3 +155,15 @@ h3,
 @media (prefers-reduced-motion: reduce) {
   .part-wiggle, .slot-pulse, .part-land { animation: none; }
 }
+
+/* Flow board: wires "flow" once every term is wired in (FlowCanvas). */
+@keyframes wireflow {
+  to { stroke-dashoffset: -48; }
+}
+.flow-wire {
+  stroke-dasharray: 16 12;
+  animation: wireflow 1.6s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .flow-wire { animation: none; stroke-dasharray: none; }
+}
