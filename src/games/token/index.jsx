@@ -11,7 +11,9 @@ import ChoiceGroup from '../../components/ChoiceGroup.jsx'
 import GameStage from '../../components/GameStage.jsx'
 import Panel from '../../components/Panel.jsx'
 
-const GUESS_OPTIONS = [1, 2, 3, 4]
+// Always offers at least 1..4 and always includes the real count, so a new
+// hook word in content.js can never leave the right answer off the tiles.
+const GUESS_OPTIONS = Array.from({ length: Math.max(4, hookTokens.length) }, (_, i) => i + 1)
 
 function bestOf(options) {
   return options.reduce((a, b) => (b.pct > a.pct ? b : a))
@@ -47,8 +49,9 @@ export default function TokenGame({ termId, onComplete }) {
         progress={{ part: 1, parts: 2 }}
         main={
           <>
-        <PhaseCard title="Chop it up">
-          Guess how many chunks your bot sees in one word, then watch a whole order get chopped.
+        <PhaseCard title="What a token is">
+          Guess how many pieces your bot sees in one word. There is no rule you could work out,
+          so just take a guess. Then watch a whole order get chopped.
         </PhaseCard>
 
         <div className="rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop">
@@ -88,8 +91,13 @@ export default function TokenGame({ termId, onComplete }) {
               </div>
               <p className="mt-3 text-center text-[13px] leading-snug text-text">
                 <span className="font-bold">{hookTokens.length} tokens.</span>{' '}
-                {correct ? 'Nailed it.' : 'Surprising, right?'} One word to you, four chunks to the
-                model.
+                {correct ? 'Nailed it.' : 'Surprising, right?'} One word to you, {hookTokens.length} pieces to
+                the model.
+              </p>
+              <p className="mt-2 text-center text-[12px] leading-snug text-text-muted">
+                Why &ldquo;pep&rdquo; and not &ldquo;pe&rdquo;? The pieces are whatever showed up
+                most often in the text the model learned from. Nobody designed them, and you
+                can&rsquo;t work them out by hand.
               </p>
             </>
           )}
@@ -129,7 +137,7 @@ export default function TokenGame({ termId, onComplete }) {
                 icon="arrow_forward"
                 onClick={() => setPhase('predict')}
               >
-                Next: predict the next token
+                Next: how it picks the next token
               </GameActionButton>
             </GameActions>
           </>
@@ -170,10 +178,10 @@ export default function TokenGame({ termId, onComplete }) {
         progress={{ part: 2, parts: 2, step: roundIndex + (answered ? 1 : 0), steps: predictionRounds.length }}
         main={
           <>
-        <PhaseCard title="Read your bot's mind">
-          Your bot (an LLM, short for large language model) never writes a whole reply at once.
-          It picks one token, then the next, then the next. Every pick is a guess at what fits
-          best after everything it has seen so far.
+        <PhaseCard title="How it picks the next token">
+          Your bot never writes a whole reply at once. It picks one token, then the next, then
+          the next. Each option below is one token: short, everyday words like these are a single
+          token each.
         </PhaseCard>
 
         <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-4 text-center shadow-pop">
@@ -183,7 +191,7 @@ export default function TokenGame({ termId, onComplete }) {
         </div>
 
         {!answered ? (
-          <ChoiceGroup mode="commit" label="Which token does your bot pick next?">
+          <ChoiceGroup mode="commit" label="Which token comes next? Each option is one token.">
             {round.options.map((o) => (
               <SelectableCard
                 key={o.word}
