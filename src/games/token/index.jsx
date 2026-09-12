@@ -48,7 +48,8 @@ export default function TokenGame({ termId, onComplete }) {
         main={
           <>
         <PhaseCard title="Chop it up">
-          Guess how many chunks your bot sees in one word, then watch a whole order get chopped.
+          Guess how many pieces your bot sees in one word. There is no rule you could work out,
+          so just take a guess. Then watch a whole order get chopped.
         </PhaseCard>
 
         <div className="rounded-md border-[3px] border-neutral bg-surface p-4 shadow-pop">
@@ -88,8 +89,13 @@ export default function TokenGame({ termId, onComplete }) {
               </div>
               <p className="mt-3 text-center text-[13px] leading-snug text-text">
                 <span className="font-bold">{hookTokens.length} tokens.</span>{' '}
-                {correct ? 'Nailed it.' : 'Surprising, right?'} One word to you, four chunks to the
+                {correct ? 'Nailed it.' : 'Surprising, right?'} One word to you, four pieces to the
                 model.
+              </p>
+              <p className="mt-2 text-center text-[12px] leading-snug text-text-muted">
+                Why &ldquo;pep&rdquo; and not &ldquo;pe&rdquo;? The pieces are whatever showed up
+                most often in the text the model learned from. Nobody designed them, and you
+                can&rsquo;t work them out by hand.
               </p>
             </>
           )}
