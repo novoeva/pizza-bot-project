@@ -233,7 +233,7 @@ export default function BotCanvas({
         </>,
       )}
 
-      {/* mouth / smile → token (voice box) */}
+      {/* mouth / smile → token ("Mouth" in terms.json) */}
       {part(
         'token',
         <path d="M144 220 q26 20 52 0" />,

@@ -4,7 +4,7 @@ import TermChecklist from '../components/TermChecklist.jsx'
 import StatusReadout from '../components/StatusReadout.jsx'
 import { useProgress } from '../lib/useProgress.js'
 import { getFailureLine } from '../lib/failureLine.js'
-import terms from '../content/terms.json'
+import { termCount, firstIncomplete } from '../lib/terms.js'
 
 const PEGBOARD = {
   backgroundImage: 'radial-gradient(var(--color-pegboard-dot) 1.3px, transparent 1.3px)',
@@ -13,15 +13,12 @@ const PEGBOARD = {
 
 export default function Workshop() {
   const completedTerms = useProgress()
-  const total = terms.length
+  const total = termCount
   const done = completedTerms.length
   const powered = done === total
 
   const failureLine = useMemo(() => getFailureLine(completedTerms), [completedTerms])
-  const firstMissing = useMemo(() => {
-    const set = new Set(completedTerms)
-    return [...terms].sort((a, b) => a.order - b.order).find((t) => !set.has(t.id))
-  }, [completedTerms])
+  const firstMissing = useMemo(() => firstIncomplete(completedTerms), [completedTerms])
 
   const line = powered
     ? "Your bot's online. It makes pizza now, and only pizza. Exactly as planned."
@@ -68,9 +65,15 @@ export default function Workshop() {
           <div className="hidden lg:block">
             <StatusReadout line={line} powered={powered} firstMissingId={firstMissing?.id} />
           </div>
-          <h2 className="mb-3 mt-7 font-label text-sm text-text-muted lg:mt-6">
-            {powered ? 'Replay any game' : 'The 12 terms, in board order'}
+          {/* 2.1 / 2.5 (Nina): "System components" read as chapters of a bot,
+              not as the things you learn. Say plainly what the list is and what
+              to do with it. */}
+          <h2 className="mt-7 text-lg leading-tight lg:mt-5">
+            {powered ? 'Replay any game' : `The ${total} AI terms you'll learn`}
           </h2>
+          <p className="mb-3 mt-1 text-sm text-text-muted">
+            {powered ? 'Every term is done. Tap one to play it again.' : 'One game each. Tap a term to play.'}
+          </p>
           <TermChecklist completedTerms={completedTerms} />
         </div>
       </div>

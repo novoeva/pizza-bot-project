@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import BotCanvas from '../components/BotCanvas.jsx'
 import { useProgress } from '../lib/useProgress.js'
-import terms from '../content/terms.json'
+import { sortedTerms, termCount } from '../lib/terms.js'
 
 export default function ProgressScreen() {
   const completedTerms = useProgress()
-  const total = terms.length
+  const total = termCount
   const done = completedTerms.length
   const powered = done === total
   const [name, setName] = useState('')
@@ -115,6 +115,26 @@ export default function ProgressScreen() {
                 </div>
               </div>
             </div>
+          </section>
+
+          {/* 2.4 (Nina): close the loop on the number promised at the start.
+              "These are the N you learned today", every one ticked. */}
+          <section className="mt-5 rounded-lg border-[3px] border-neutral bg-surface p-4 shadow-pop">
+            <h3 className="text-lg leading-tight">The {total} AI terms you learned today</h3>
+            <ol className="mt-3 grid grid-cols-1 gap-x-4 gap-y-1.5 sm:grid-cols-2">
+              {sortedTerms.map((t, i) => (
+                  <li key={t.id} className="flex items-center gap-2 text-sm">
+                    <span
+                      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success text-white"
+                      aria-hidden="true"
+                    >
+                      <span className="material-symbols-rounded fill text-base">check</span>
+                    </span>
+                    <span className="font-label text-text-muted">{i + 1}.</span>
+                    <span className="font-semibold">{t.name}</span>
+                  </li>
+                ))}
+            </ol>
           </section>
 
           <button

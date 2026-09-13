@@ -3,10 +3,10 @@
     "id": "token",
     "order": 1,
     "name": "Token",
-    "botPart": "Voice box",
-    "whyYouCare": "Your bot writes in small chunks, and you pay for each one.",
-    "role": "You're the owner getting to know your bot. Peek inside its voice box: it reads and writes in chunks, not whole words, and that's what drives its cost and its quirks.",
-    "definition": "A token is a small chunk of text, often part of a word, and it is the unit an AI actually reads and writes in. \"Pepperoni\" alone breaks into four of them.",
+    "botPart": "Mouth",
+    "whyYouCare": "You pay per token: every one you send and every one your bot writes. Not per word.",
+    "role": "You're the owner. This game shows you how an LLM (the AI behind your bot) thinks in small pieces.",
+    "definition": "A token is a piece of a word, usually a few letters long. It is what an AI actually reads and writes in. Sometimes a whole short word, sometimes just a full stop.",
     "dont": [
       "Don't judge an answer by its length. A long chat gets slower and more expensive."
     ],
@@ -27,7 +27,7 @@
     "name": "Context window",
     "botPart": "Short-term memory chip",
     "whyYouCare": "Your bot can forget an allergy just because the chat got long.",
-    "role": "You're the owner setting up your bot. Its memory chip only holds so much at once, so learn to keep what matters, like an allergy, where the bot can still see it.",
+    "role": "You're the owner. This game shows you how much of a chat your bot can hold in its head at once.",
     "definition": "The context window is how much of the conversation an AI can still \"see\" at once. Once it fills up, the oldest parts quietly fall out.",
     "dont": [
       "Don't assume the bot still sees something a customer said a while ago."
@@ -49,7 +49,7 @@
     "name": "Hallucination",
     "botPart": "Reality-check filter",
     "whyYouCare": "Your bot will invent a pizza you don't sell, and sound sure.",
-    "role": "You're the owner giving your bot its last check before it goes live. It sounds just as sure when it's guessing, so your job is to catch what it made up.",
+    "role": "You're the owner. This game shows you how to catch your bot when it makes something up and sounds sure.",
     "definition": "A hallucination is when an AI says something false with full confidence, in the same tone it uses for things that are true.",
     "dont": [
       "Don't trust a detail because the bot sounds sure. Confidence is not evidence."
@@ -71,7 +71,7 @@
     "name": "Prompt",
     "botPart": "Instruction dial",
     "whyYouCare": "Whatever you leave out of the instructions, your bot invents.",
-    "role": "You're the owner setting up your bot. Write its instructions so it asks for what's missing instead of inventing an order.",
+    "role": "You're the owner. This game shows you how to write instructions your bot can easily follow.",
     "definition": "A prompt is the instructions you give an AI. The more your instructions cover, including what to do when something is left unsaid, the less the AI has to guess. Less guessing means the same reliable answer instead of a new surprise every time.",
     "dont": [
       "Don't leave gaps in the instructions. The bot fills them with guesses."
@@ -93,7 +93,7 @@
     "name": "Agent",
     "botPart": "Legs (it can act on its own)",
     "whyYouCare": "Your bot can promise the pizza, or actually send the driver.",
-    "role": "You're the owner setting up your bot. Hand it the actions to run the whole job on its own, not just talk about doing it.",
+    "role": "You're the owner. This game shows you the difference between a bot that talks and a bot that gets things done.",
     "definition": "A chatbot talks about doing something. An agent actually does it. It works out what needs to happen, then does it: charges the card, tells the kitchen, sends out a driver. No human in between.",
     "dont": [
       "Don't hand a bot real actions without limits."
@@ -115,7 +115,7 @@
     "name": "Tool use",
     "botPart": "Arms",
     "whyYouCare": "With nothing real to check, your bot guesses the delivery time.",
-    "role": "You're the owner setting up your bot. Give it real systems to check, so it looks answers up instead of guessing.",
+    "role": "You're the owner. This game shows you why your bot needs to be connected to your systems instead of guessing.",
     "definition": "Tool use is when an AI looks something up in a real system, like the live menu or the delivery tracker, instead of answering from memory.",
     "dont": [
       "Don't let a bot answer a live question from memory."
@@ -137,7 +137,7 @@
     "name": "Skill",
     "botPart": "Training certificate",
     "whyYouCare": "Without a playbook, one complaint can cost you free pizza forever.",
-    "role": "You're the owner setting up your bot. Give it a playbook so it handles the same situation the right way every time.",
+    "role": "You're the owner. This game shows you how to teach your bot to handle the same task the same way every time.",
     "definition": "A skill is a written playbook you hand an AI for one situation that keeps coming back, so it handles that situation the same, right way every time.",
     "dont": [
       "Don't leave complaints to improvisation."
@@ -159,7 +159,7 @@
     "name": "Memory",
     "botPart": "Hard drive (chest)",
     "whyYouCare": "Your best regular gets greeted like a stranger every visit.",
-    "role": "You're the owner setting up your bot. Decide what it should remember across visits, so your regulars don't start from zero every time.",
+    "role": "You're the owner. This game shows you what your bot remembers about a customer from one visit to the next.",
     "definition": "An AI has two kinds of memory. Working memory lasts one conversation and then it is gone. Persistent memory is written down and saved, so facts like your usual order are still there on your next visit.",
     "dont": [
       "Don't expect a bot to remember last week unless something was saved."
@@ -181,7 +181,7 @@
     "name": "MCP",
     "botPart": "Universal port",
     "whyYouCare": "Each new system takes weeks to wire in, or clicks straight in.",
-    "role": "You're the owner setting up your bot. Give it one universal port so every system it needs just clicks in, instead of wiring each one by hand.",
+    "role": "You're the owner. This game shows you the easy way to connect your bot to your other systems.",
     "definition": "MCP (short for Model Context Protocol) is one shared plug that AI assistants and outside systems both agree to use, so neither side has to know anything about the other side specifically.",
     "dont": [
       "Don't build a custom connector for a tool that already speaks MCP."
@@ -202,7 +202,7 @@
     "name": "Guardrails",
     "botPart": "Safety casing",
     "whyYouCare": "A customer who says “I’m the manager” can get a free pizza.",
-    "role": "You're the owner setting up your bot. Set the limits it must never cross, so a clever customer can't talk it into anything.",
+    "role": "You're the owner. This game shows you how to set limits your bot must never cross.",
     "definition": "Guardrails are the hard limits an AI must never cross: no unlimited discounts, no promises it can't keep, no topics outside its job. You decide them in advance.",
     "dont": [
       "Don't trust “I'm the manager” from a chat window. Above your limit, a real person decides."
@@ -224,7 +224,7 @@
     "name": "Temperature",
     "botPart": "Creativity dial",
     "whyYouCare": "One dial decides if your bot repeats prices or invents names.",
-    "role": "You're the owner setting up your bot. Set how adventurous its wording is, so each job gets the right amount of surprise.",
+    "role": "You're the owner. This game shows you the dial that makes your bot play it safe or get creative.",
     "definition": "Temperature is a setting that controls how random an AI's word choice is. Low temperature makes it pick the safest, most likely word almost every time. High temperature lets less likely, more surprising words win.",
     "dont": [
       "Don't leave it high for exact wording, like disclaimers and prices."
@@ -246,7 +246,7 @@
     "name": "RAG",
     "botPart": "Recipe binder",
     "whyYouCare": "Your bot reads your own files and still quotes the old price.",
-    "role": "You're the owner setting up your bot. You're its search: pick which pages it gets to read, because it can never read the whole binder at once.",
+    "role": "You're the owner. This game shows you how your bot finds answers in your own documents.",
     "definition": "RAG is when an AI searches a specific set of documents before answering, grabs the few passages that look relevant, and writes its answer from those. It doesn't know your documents. It looks them up, one question at a time, and only sees what the search found.",
     "dont": [
       "Don't assume “from our documents” means “from the right document”."

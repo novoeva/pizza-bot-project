@@ -6,20 +6,22 @@ and layout only; each game's mechanic stays its own.
 
 ## Before the game — the intro card
 
-Rendered by the shared `components/GameIntro.jsx`. Three parts, fixed order:
+Rendered by the shared `components/GameIntro.jsx`. Four blocks, fixed order:
 
+0. **Term N of M.** The same count the landing page promises; read from the
+   term list, never typed.
 1. **Term name.**
-2. **`about`** — one line that orients the player on what the term is about.
-   - Written as a **declarative statement, never a question**.
-   - Frames the idea to spark interest **without giving away the answer**. The
-     full definition stays the payoff, shown after play.
-   - Example (context window): "A bot can only keep so much of a conversation in
-     mind at once."
-3. **`howToPlay`** — a clearly labeled "How to play" block with the game
-   instruction. One or two short sentences.
+2. **`definition`**, labelled "What it is". Said up front (Phase 4: spoil it),
+   applied during the game, repeated at the end. It must not hint at any
+   answer the game asks for (Token: no example word, no count).
+3. **`whyYouCare`**, labelled "Why you care". One sentence, the reason to
+   learn the term, the same sentence as on the Workshop card. On screen before
+   the game starts (interview #3, Nina).
+4. **`role`**, labelled "Your role". Two short sentences: "You're the owner.
+   This game shows you ..." in everyday words, no jargon.
 
-`about` and `howToPlay` live in `content/terms.json` next to `definition` and
-`whyYouCare`, so intros are data-driven and copy edits never touch components.
+All four live in `content/terms.json`, so intros are data-driven and copy
+edits never touch components.
 
 Games with multiple beats may keep their own per-beat instruction lines mid-game.
 Those are fine — they are game instructions, not the payoff definition. Only the
@@ -31,9 +33,9 @@ Three balanced boxes, each its own card:
 
 1. **What it means** — the definition (`term.definition`). Shown **once**. No
    other block on the screen may restate it.
-2. **Why you care** — retired as a reveal box. `term.whyYouCare` was rewritten
-   for FR-26 and now holds the one-sentence reason to play, shown on the term's
-   card in the workshop, before the game. Do not render it here.
+2. **Why you care** — retired as a reveal box. `term.whyYouCare` holds the
+   one-sentence reason to play and is shown twice before play: on the term's
+   card in the workshop and in the intro card. Do not render it in the reveal.
 3. **Real talk** — optional. Only when a game needs an honest caveat (e.g.
    context window: "we shrank the scale for the demo"). Most games have only the
    first two boxes.

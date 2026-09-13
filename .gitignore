@@ -22,3 +22,9 @@ pnpm-debug.log*
 
 # Design-tool export kept locally as a reference (regenerable, ~671 MB)
 pizza-bot-design-v0/
+
+# Internal working docs — interview feedback + prompts (kept local, not in repo)
+INTERVIEW-FEEDBACK.md
+INTERVIEW-FEEDBACK-SUMMARY.md
+interviews/
+PROMPT-FR-26-WHY-YOU-CARE.md

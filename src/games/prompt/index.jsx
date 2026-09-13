@@ -157,6 +157,11 @@ export default function PromptGame({ termId, onComplete }) {
             ))}
           </div>
         )}
+        {!allRight && (
+          <p className="text-center font-label text-[11px] text-text-muted">
+            You can adjust your picks, or just carry on. The bot still runs either way.
+          </p>
+        )}
         <GameActions>
           {!allRight && (
             <GameActionButton variant="neutral" icon="tune" onClick={() => setPhase('round3')}>

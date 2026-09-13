@@ -1,17 +1,25 @@
 # Pizza Bot — Game Design Principles
 
-> Durable design rules for every game in Pizza Bot. Derived from usability interview #1.
-> For the full feedback list with per-item code anchors, see [`INTERVIEW-FEEDBACK.md`](./INTERVIEW-FEEDBACK.md).
+> Durable design rules for every game in Pizza Bot. Derived from usability interviews #1 and #2.
+> The full feedback list with per-item code anchors lives in [Linear, team Pizza Bot](https://linear.app/genaiacademy/team/PIZZA/all) (issues FR-1 to FR-49 and BUG tickets). Undecided product questions: [`OPEN-PRODUCT-QUESTIONS.md`](./OPEN-PRODUCT-QUESTIONS.md).
 
-## The framework: every game has three steps
+## The framework: define → practice → define again
 
-Each game must follow the same teaching arc, in this order:
+Every game follows the same teaching arc, in this order:
 
-1. **Explain what we're teaching** — present the concept as a *definition* up front, clearly labeled, **before** the player starts playing.
-   - Respect the existing intent: `term.about` (in `src/content/terms.json`) is deliberately a **teaser**, and the full `term.definition` is the **payoff shown after play**. So the intro should read as *"what you'll learn"*, not a full spoiler of the definition.
+**0. Make them want it** — before the game even opens, the term's card in the Workshop carries **one sentence saying why this term is worth knowing**. Not a category label, not the robot part: a reason to care.
+   - From usability interview #2: *„Mě to vlastně jako nezajímá ta definice, co to je, když nechápu, jakej to má dopad na ten výsledek."* Someone landing on the Workshop has to be **convinced** the term matters before they will spend two minutes on it.
+   - Owned by the term card (`src/components/TermChecklist.jsx`) + a field in `src/content/terms.json`.
+
+**1. Define it** — present the concept as a plain-language **definition up front**, clearly labeled, **before** the player starts playing.
    - Owned by the shared intro panel (`src/components/GameIntro.jsx`).
-2. **Simulation** — the actual hands-on exercise. Make interactive elements obviously interactive (see consistency rules below).
-3. **Recap at the end** — restate the concrete definition and give a **memorable, visual checklist** of what matters (optionally a short "what not to do"), **not a wall of text**. The recap must look the same in every game.
+
+**2. Practice it** — the hands-on exercise. Make interactive elements obviously interactive (see consistency rules below).
+
+**3. Define it again** — restate the same definition at the end, now anchored to what just happened in the game, plus a **memorable, visual checklist** of what matters (and a short "what not to do"), **not a wall of text**. The recap looks the same in every game.
+   - Owned by the shared `TermReveal` component.
+
+> **Retired rule (2026-09-03):** the definition used to be withheld as a *payoff after play*, with `term.about` acting as a teaser. That's gone — `about` was removed from `terms.json`, and the definition is now stated up front, practiced, then restated. Repetition is the mechanism; surprise is not.
 
 ## Consistency rules (fix systemically, not per game)
 

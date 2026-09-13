@@ -1,6 +1,6 @@
 # Pizza Bot — Component Audit (FR-18)
 
-> Read-only audit of every recurring UI element across the 12 games, plus a proposal for a shared component set and a codified color language. Serves [`GAME-DESIGN-PRINCIPLES.md`](./GAME-DESIGN-PRINCIPLES.md) and closes FR-18 in [`INTERVIEW-FEEDBACK.md`](./INTERVIEW-FEEDBACK.md). No code was changed.
+> Read-only audit of every recurring UI element across the 12 games, plus a proposal for a shared component set and a codified color language. Serves [`GAME-DESIGN-PRINCIPLES.md`](./GAME-DESIGN-PRINCIPLES.md) and closes FR-18 ([PIZZA-17 in Linear](https://linear.app/genaiacademy/team/PIZZA/all)). No code was changed.
 >
 > Visual companion: [`design-system/gallery.html`](./design-system/gallery.html) renders everything in this audit with the real tokens, side by side with the proposed fixes. Keep it updated (rule in `GAME-DESIGN-PRINCIPLES.md`).
 >
@@ -157,7 +157,7 @@ Keep local (one-off, fine as is): agent `SystemsPanel`, context-window `ContextP
 
 ## 4. Phased refactor plan
 
-> **Status 2026-09-02: all five phases built, reviewed and approved.** The design-system plan is closed. Open follow-ups live in `INTERVIEW-FEEDBACK.md` as FR-19 to FR-24 (context-window mechanic, RAG layout/content, MCP simulation, recap and round-3 copy). The code lives on branch `worktree-design-system` (worktree `design-system`), to be merged into `docs/interview-1-feedback`.
+> **Status 2026-09-02: all five phases built, reviewed and approved.** The design-system plan is closed. Open follow-ups live in [Linear, team Pizza Bot](https://linear.app/genaiacademy/team/PIZZA/all) as FR-19 to FR-24 (context-window mechanic, RAG layout/content, MCP simulation, recap and round-3 copy). The code lives on branch `worktree-design-system` (worktree `design-system`), to be merged into `docs/interview-1-feedback`.
 
 No behavior or game-logic changes in any phase; every phase is "same screens, fewer copies". Estimates assume one person, familiar with the repo.
 
