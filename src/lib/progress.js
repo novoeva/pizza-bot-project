@@ -48,6 +48,16 @@ export function markTermCompleted(termId) {
   return next
 }
 
+/**
+ * Dev-only helper: overwrite progress with exactly these term ids (used by the
+ * `?seed=N` URL hook in main.jsx to screenshot the Workshop in any state).
+ */
+export function seedProgress(termIds) {
+  const next = { ...defaultState(), completed: [...termIds] }
+  save(next)
+  return next
+}
+
 export function resetProgress() {
   const next = defaultState()
   save(next)

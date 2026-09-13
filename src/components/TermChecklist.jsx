@@ -6,6 +6,8 @@ import { sortedTerms, firstIncomplete } from '../lib/terms.js'
  * leads: cards are numbered 1..N, done ones get a tick, and the first card
  * not yet done carries a "Start here" / "Next up" sticker (Nina 2.3: people
  * did not know where to begin, so number it and point at the first one).
+ * At `lg`+ the list sits in the narrow side column next to the flow board,
+ * so the cards tighten up there via responsive classes.
  */
 export default function TermChecklist({ completedTerms = [] }) {
   const completed = new Set(completedTerms)
@@ -14,7 +16,7 @@ export default function TermChecklist({ completedTerms = [] }) {
   const stickerText = completed.size === 0 ? 'Start here' : 'Next up'
 
   return (
-    <ul className="flex flex-col gap-3">
+    <ul className="flex flex-col gap-3 lg:gap-2">
       {sorted.map((term, i) => {
         const done = completed.has(term.id)
         const isNext = next?.id === term.id
@@ -35,7 +37,7 @@ export default function TermChecklist({ completedTerms = [] }) {
             <Link
               to={`/game/${term.id}`}
               className={
-                'press flex items-center gap-3 rounded-md border-[3px] p-4 ' +
+                'press flex items-center gap-3 rounded-md border-[3px] p-4 lg:p-2.5 ' +
                 (done
                   ? 'border-neutral bg-muted opacity-75'
                   : isNext
@@ -45,7 +47,7 @@ export default function TermChecklist({ completedTerms = [] }) {
             >
               <span
                 className={
-                  'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-neutral font-label text-base font-bold ' +
+                  'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-neutral font-label text-base font-bold lg:h-8 lg:w-8 lg:text-sm ' +
                   (done ? 'bg-success text-white' : isNext ? 'bg-primary text-white' : 'bg-accent-soft text-text')
                 }
                 aria-hidden="true"
@@ -60,7 +62,7 @@ export default function TermChecklist({ completedTerms = [] }) {
               <span className="min-w-0 flex-1">
                 <span
                   className={
-                    'block font-label text-[15px] font-semibold ' +
+                    'block font-label text-[15px] font-semibold lg:text-[14px] ' +
                     (done ? 'text-text-muted' : 'text-text')
                   }
                 >
@@ -76,7 +78,7 @@ export default function TermChecklist({ completedTerms = [] }) {
                 {/* The reason to tap this card, not a label for the bot part:
                     one sentence saying what goes wrong (or what you get) if you
                     don't know the term. Wraps to two lines at phone width. */}
-                <span className="mt-0.5 block text-[13px] leading-snug text-text-muted">
+                <span className="mt-0.5 block text-[13px] leading-snug text-text-muted lg:text-[12px]">
                   {term.whyYouCare}
                 </span>
               </span>
