@@ -4,10 +4,10 @@ import terms from '../content/terms.json'
  * The half-built robot: the meta-game's progress bar.
  *
  * Design ported from the Lovable "RobotAssembly" cutout so the assembled bot
- * matches the pizza-guy cartoon on the landing page. Each of the app's 11 terms
+ * matches the pizza-guy cartoon on the landing page. Each term in terms.json
  * reveals one robot part; before a term is done its part is a soft dashed
- * blueprint outline, so the whole robot reads as a plan at 0/11 and as a
- * finished, friendly bot at 11/11.
+ * blueprint outline, so the whole robot reads as a plan at 0/N and as a
+ * finished, friendly bot at N/N (N = terms.length, never typed here).
  *
  * Part → term map (keeps the app's existing part meanings where they line up):
  *   head shell    → context-window   antenna    → skill

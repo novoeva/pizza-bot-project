@@ -1,0 +1,116 @@
+<title>PIZZA-40 · One count everywhere</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+  :root {
+    --ink: #001b3c; --ink-soft: #586158; --rule: #cfd3dc; --paper: #f9f9ff; --card: #ffffff;
+    --red: #b7102a; --mint: #e7f4f1; --mint-ink: #1f7a6f; --blue: #286182; --blue-bg: #d9edfb;
+    --neutral: #586158; --amber-bg: #f9efd7; --amber-ink: #8a5a0a; --wrong-bg: #f2e2e0;
+    --label: 'Space Grotesk', ui-monospace, monospace; --body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #eef0f5; --ink-soft: #b3bab3; --rule: #3a4048; --paper: #12161c; --card: #1b2028;
+      --red: #ff5c6e; --mint: #163a35; --mint-ink: #8fe0d2; --blue: #8fc6ea; --blue-bg: #1e3446;
+      --neutral: #9aa39a; --amber-bg: #3d3014; --amber-ink: #f2c46b; --wrong-bg: #3f2426;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #eef0f5; --ink-soft: #b3bab3; --rule: #3a4048; --paper: #12161c; --card: #1b2028;
+    --red: #ff5c6e; --mint: #163a35; --mint-ink: #8fe0d2; --blue: #8fc6ea; --blue-bg: #1e3446;
+    --neutral: #9aa39a; --amber-bg: #3d3014; --amber-ink: #f2c46b; --wrong-bg: #3f2426;
+  }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); }
+  .wrap { max-width: 46rem; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
+  h1 { font-size: 2rem; line-height: 1.1; letter-spacing: -.02em; margin: .3rem 0 .8rem; text-wrap: balance; }
+  h2 { font-size: 1.15rem; letter-spacing: -.01em; margin: 2.4rem 0 .7rem; }
+  .eyebrow { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 11px; color: var(--ink-soft); }
+  p { line-height: 1.55; font-size: 15px; max-width: 62ch; margin: .4rem 0; }
+  code { font-family: var(--label); font-size: 13px; background: var(--card); border: 1px solid var(--rule); border-radius: 5px; padding: .05rem .35rem; }
+  .cmd { display: block; background: var(--ink); color: var(--paper); border-radius: 8px; padding: .7rem .9rem; font-family: var(--label); font-size: 13px; margin: .5rem 0 1rem; overflow-x: auto; }
+  .quote { border-left: 4px solid var(--red); padding: .2rem 0 .2rem .9rem; margin: .8rem 0 1.2rem; font-size: 15px; line-height: 1.5; color: var(--ink-soft); }
+  .quote b { color: var(--ink); }
+  ol.changed { margin: .4rem 0 0; padding-left: 1.3rem; font-size: 15px; line-height: 1.55; }
+  ol.changed li { margin: .3rem 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; margin: .6rem 0; }
+  th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-family: var(--label); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+  td.b { color: var(--red); }
+  td.a { color: var(--mint-ink); font-weight: 700; }
+  .cell { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .6rem; }
+  .cell .tag { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 10px; color: var(--ink-soft); display: block; margin-bottom: .5rem; }
+  .cell.after .tag { color: var(--mint-ink); }
+  .cell img { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--rule); }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .6rem 0 .2rem; align-items: start; }
+  .q { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .9rem 1.1rem; margin: .8rem 0; }
+  .q .n { font-family: var(--label); font-size: 11px; letter-spacing: .08em; color: var(--blue); text-transform: uppercase; }
+  .q .ask { font-weight: 700; font-size: 17px; margin: .25rem 0 .4rem; }
+  .q .how { font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
+  .q .exp { margin-top: .5rem; font-size: 14px; }
+  .q .exp b { display: inline-block; border: 2px solid var(--neutral); border-radius: 999px; padding: .05rem .6rem; margin-right: .3rem; font-size: 13px; }
+  .not { background: var(--amber-bg); color: var(--amber-ink); border-radius: 10px; padding: .7rem 1rem; font-size: 14px; line-height: 1.55; }
+  .not ul { margin: .3rem 0 0; padding-left: 1.2rem; }
+  .answer { background: var(--blue-bg); border-radius: 10px; padding: .7rem 1rem; font-size: 15px; line-height: 1.55; }
+  .answer code { background: transparent; border-color: var(--blue); }
+  @media (max-width: 560px) { .pair { grid-template-columns: 1fr; } h1 { font-size: 1.6rem; } }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Linear · PIZZA-40 · FR-38 · the count as a promise · round 1</p>
+  <h1>One term count, kept from the landing through the Workshop to the finish</h1>
+
+  <div class="quote"><b>What Nina hit (interview #3), Eva decided 2026-09-11:</b> work with the number on purpose and the same everywhere: a promise at the start, progress in the middle, and at the end "these are the 12 you learned today". Nina also noted that a numbered column downwards means you never see the total at once; a row does.</div>
+
+  <h2>What changed (3 things)</h2>
+  <ol class="changed">
+    <li><b>A tracker row at the top of the Workshop and under the bar on the Progress screen:</b> one small numbered dot per term (green tick done, red next, white to do), so all 12 are visible at once on any width, plus the line "3 of 12 done · next: Hallucination" with the next term as a link. The checklist column stays as it was.</li>
+    <li><b>A finish:</b> once every term is done, the Workshop shows a mint card "These are the 12 AI terms you learned today" listing all 12 by name, under the green "System online" readout, with a "Get your diploma" button to the Progress screen. The Progress screen's "Not finished yet" card also got a "Next up: …" button.</li>
+    <li><b>One number, derived:</b> every count in the app comes from <code>terms.length</code> (<code>lib/terms.js</code>); the last stale "11" comments in <code>BotCanvas</code> are gone. Nothing typed as "12" anywhere in the UI code.</li>
+  </ol>
+
+  <h2>Before / after · phone · Workshop, 3 done</h2>
+  <div class="pair">
+    <div class="cell before"><span class="tag">Before</span><img src="img/pizza-40-before.png" alt="Before: Workshop top with only the intro text and the board"></div>
+    <div class="cell after"><span class="tag">After</span><img src="img/pizza-40-after.png" alt="After: Workshop top with the 12-dot tracker row saying 3 of 12 done, next: Hallucination"></div>
+  </div>
+
+  <h2>Open it</h2>
+  <p><code>?seed=N</code> marks the first N terms done (dev only). <code>?seed=99</code> (anything above the total) marks all of them, so the URL never needs to know the number.</p>
+  <code class="cmd">http://localhost:5194/workshop?seed=3</code>
+  <code class="cmd">http://localhost:5194/workshop?seed=99</code>
+  <code class="cmd">http://localhost:5194/progress?seed=3</code>
+
+  <h2>Five yes/no questions</h2>
+  <div class="q"><div class="n">Q1 · phone · /workshop?seed=3</div>
+    <div class="ask">Can you see all 12 at once, and how far you are, without scrolling the list?</div>
+    <div class="how">The dot row sits right under the intro text, above the board: 3 green ticks, dot 4 red, 5 to 12 white, "3 of 12 done · next: Hallucination".</div>
+    <div class="exp"><b>Expected</b> yes.</div></div>
+  <div class="q"><div class="n">Q2 · phone · /workshop?seed=99</div>
+    <div class="ask">Does the end feel like the promise was kept: "these are the 12 you learned today", every one named?</div>
+    <div class="how">Mint card under the green "System online" readout, 12 chips with ticks, "Get your diploma" button. The list below it is all ticked and says "Replay any game".</div>
+    <div class="exp"><b>Expected</b> yes.</div></div>
+  <div class="q"><div class="n">Q3 · laptop (window wider than 1024px) · /workshop?seed=3</div>
+    <div class="ask">Is the dot row fine above the split screen, and does the board still have enough room?</div>
+    <div class="how">The row takes about 50px from the board's height in the fixed-height layout.</div>
+    <div class="exp"><b>Expected</b> yes.</div></div>
+  <div class="q"><div class="n">Q4 · phone · /progress?seed=3</div>
+    <div class="ask">Is it the same picture as the Workshop: "3 out of 12 completed", the same dot row, and "Next up: Hallucination" as a button?</div>
+    <div class="how">Same component, same colours. The "Not finished yet" card got the button.</div>
+    <div class="exp"><b>Expected</b> yes.</div></div>
+  <div class="q"><div class="n">Q5 · the count on the board</div>
+    <div class="ask">The "3 / 12 wired in" pill on the board stays. With the tracker row above it, is it still useful, or doubled?</div>
+    <div class="how">I kept it because it labels the drawing itself. Say ❌ and I remove it.</div>
+    <div class="exp"><b>Expected</b> keep (yes).</div></div>
+
+  <h2>Not for today</h2>
+  <div class="not">Left as they were, on purpose:
+    <ul>
+      <li>E-mail collection at the finish (FR-30a).</li>
+      <li>The flow board itself draws exactly the terms in <code>terms.json</code>, but each has a hand-placed box; a new term needs a box drawn for it (a warning in dev says so). The robot mascot on the Progress screen has no RAG part yet (known, FEATURE-LOG).</li>
+      <li>The Progress screen's own "The 12 AI terms you learned today" list (from Nina 2.4) stays as it is; the Workshop card is the new moment.</li>
+      <li>The "Fix it now" link in the red status readout does not name the next term; the tracker row directly above it does.</li>
+    </ul>
+  </div>
+
+  <h2>How to answer</h2>
+  <div class="answer"><code>40: 1✅ 2✅ 3✅ 4✅ 5✅</code> (or ❌ with a word on what is off) and I commit and push all three.</div>
+</div>

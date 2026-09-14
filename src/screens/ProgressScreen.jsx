@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import BotCanvas from '../components/BotCanvas.jsx'
+import { Link } from 'react-router-dom'
+import TermTracker from '../components/TermTracker.jsx'
 import { useProgress } from '../lib/useProgress.js'
-import { sortedTerms, termCount } from '../lib/terms.js'
+import { sortedTerms, termCount, firstIncomplete } from '../lib/terms.js'
 
 export default function ProgressScreen() {
   const completedTerms = useProgress()
   const total = termCount
   const done = completedTerms.length
   const powered = done === total
+  const next = firstIncomplete(completedTerms)
   const [name, setName] = useState('')
 
   const dateLabel = new Date()
@@ -36,6 +39,9 @@ export default function ProgressScreen() {
           style={{ width: `${(done / total) * 100}%` }}
         />
       </div>
+      {/* PIZZA-40: the same dot row as the Workshop, so the count reads the
+          same on both screens. */}
+      <TermTracker completedTerms={completedTerms} className="mt-3" />
 
       {/* Below `lg`: mascot then status/certificate, stacked (mobile). At `lg`+:
           mascot sits in a sticky left column, the status card / certificate in
@@ -68,6 +74,17 @@ export default function ProgressScreen() {
             Build all {total} parts to switch your bot on and get the diploma. Nothing is locked.
             Play them in any order.
           </p>
+          {next && (
+            <Link
+              to={`/game/${next.id}`}
+              className="press mt-4 inline-flex items-center gap-2 rounded-md border-[3px] border-neutral bg-primary px-4 py-2 font-label text-sm text-white shadow-pop"
+            >
+              <span className="material-symbols-rounded fill" aria-hidden="true">
+                play_arrow
+              </span>
+              Next up: {next.name}
+            </Link>
+          )}
         </div>
       ) : (
         <>
