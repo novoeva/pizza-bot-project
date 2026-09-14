@@ -47,7 +47,7 @@ export default function TemperatureGame({ termId, onComplete }) {
   // ---------- Beat 1: slide it ----------
   if (phase === 'play') {
     const ranked = reshape(candidates, temp)
-    const top = ranked.reduce((a, b) => (b.pct > a.pct ? b : a))
+    const lead = leadReadout(ranked)
     const zone = zones.find((z) => temp <= z.max)
     const interacted = rolls > 0
 
@@ -111,37 +111,33 @@ export default function TemperatureGame({ termId, onComplete }) {
           </div>
         </Panel>
 
-        {/* Live distribution */}
+        {/* Live distribution. No word is pinned as "the right one" (PIZZA-14):
+            the favourite is only ever the tallest bar, and the bars animate
+            so the lead visibly melts as the dial goes up. */}
         <Panel title="Chance of each next word" meta="% = probability">
           <div className="flex flex-col gap-2">
-            {ranked.map((o) => {
-              const isTop = o.word === top.word
-              return (
-                <div key={o.word} className="flex items-center gap-2">
-                  <div
-                    className={
-                      'w-24 shrink-0 rounded border-2 px-1.5 py-1 text-center font-mono text-xs ' +
-                      (isTop
-                        ? 'border-neutral bg-cheese-bg font-bold text-cheese-dim'
-                        : 'border-neutral bg-muted text-text-muted')
-                    }
-                  >
-                    {o.word}
-                  </div>
-                  <div className="h-4 flex-1 overflow-hidden rounded-full border-2 border-neutral bg-surface">
-                    <div
-                      className={'h-full transition-[width] duration-150 ' + (isTop ? 'bg-cheese' : 'bg-tertiary')}
-                      style={{ width: `${o.pct}%` }}
-                    />
-                  </div>
-                  <div className="w-9 shrink-0 text-right text-xs text-text-muted">
-                    {Math.round(o.pct)}%
-                  </div>
+            {ranked.map((o) => (
+              <div key={o.word} className="flex items-center gap-2">
+                <div className="w-24 shrink-0 rounded border-2 border-neutral bg-muted px-1.5 py-1 text-center font-mono text-xs text-text">
+                  {o.word}
                 </div>
-              )
-            })}
+                <div className="h-4 flex-1 overflow-hidden rounded-full border-2 border-neutral bg-surface">
+                  <div
+                    className="h-full bg-cheese transition-[width] duration-300 ease-out motion-reduce:transition-none"
+                    style={{ width: `${o.pct}%` }}
+                  />
+                </div>
+                <div className="w-9 shrink-0 text-right text-xs text-text-muted">{Math.round(o.pct)}%</div>
+              </div>
+            ))}
           </div>
-          <p className="mt-3 text-[13px] leading-snug text-text-muted">{zone.note}</p>
+          {/* The favourite's lead, in one line, straight from the same maths
+              as the bars: ~7x at the bottom of the dial, ~1.2x at the top. */}
+          <p className="mt-3 text-[13px] leading-snug text-text">
+            <span className="font-bold">{lead.word}</span> is{' '}
+            <span className="font-mono font-bold">{lead.ratio}×</span> {lead.text}
+          </p>
+          <p className="mt-2 text-[13px] leading-snug text-text-muted">{zone.note}</p>
         </Panel>
 
         {/* Re-roll stays inline as a secondary; the pinned bar carries the
@@ -290,6 +286,25 @@ function reshape(list, temp) {
   const exps = list.map((c) => Math.pow(c.base, 1 / temp))
   const sum = exps.reduce((a, b) => a + b, 0)
   return list.map((c, i) => ({ ...c, pct: (exps[i] / sum) * 100 }))
+}
+
+/**
+ * How far ahead the favourite is, as "N× the runner-up" plus a plain sentence.
+ * Derived from the same reshaped percentages the bars show, so the readout can
+ * never disagree with the picture: with these candidates it runs from about
+ * 7× (dial at 0.2) down to about 1.2× (dial at 2.0).
+ */
+function leadReadout(ranked) {
+  const sorted = [...ranked].sort((a, b) => b.pct - a.pct)
+  const [top, second] = sorted
+  const r = top.pct / second.pct
+  const ratio = r >= 10 ? String(Math.round(r)) : r.toFixed(1)
+  let text
+  if (r >= 4) text = 'more likely than the runner-up. It wins almost every roll.'
+  else if (r >= 2) text = 'more likely than the runner-up. It usually wins, but not always.'
+  else if (r >= 1.35) text = 'more likely than the runner-up. The lead is melting.'
+  else text = 'more likely than the runner-up. Barely ahead: almost any word can win.'
+  return { word: top.word, ratio, text }
 }
 
 /** Draw one word from a reshaped distribution (percentages sum to 100). */
