@@ -1,0 +1,123 @@
+<title>PIZZA-31 · Token, not word</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+  :root {
+    --ink: #001b3c; --ink-soft: #586158; --rule: #cfd3dc; --paper: #f9f9ff; --card: #ffffff;
+    --red: #b7102a; --mint: #e7f4f1; --mint-ink: #1f7a6f; --blue: #286182; --blue-bg: #d9edfb;
+    --neutral: #586158; --amber-bg: #f9efd7; --amber-ink: #8a5a0a; --wrong-bg: #f2e2e0;
+    --label: 'Space Grotesk', ui-monospace, monospace; --body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #eef0f5; --ink-soft: #b3bab3; --rule: #3a4048; --paper: #12161c; --card: #1b2028;
+      --red: #ff5c6e; --mint: #163a35; --mint-ink: #8fe0d2; --blue: #8fc6ea; --blue-bg: #1e3446;
+      --neutral: #9aa39a; --amber-bg: #3d3014; --amber-ink: #f2c46b; --wrong-bg: #3f2426;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #eef0f5; --ink-soft: #b3bab3; --rule: #3a4048; --paper: #12161c; --card: #1b2028;
+    --red: #ff5c6e; --mint: #163a35; --mint-ink: #8fe0d2; --blue: #8fc6ea; --blue-bg: #1e3446;
+    --neutral: #9aa39a; --amber-bg: #3d3014; --amber-ink: #f2c46b; --wrong-bg: #3f2426;
+  }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); }
+  .wrap { max-width: 46rem; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
+  h1 { font-size: 2rem; line-height: 1.1; letter-spacing: -.02em; margin: .3rem 0 .8rem; text-wrap: balance; }
+  h2 { font-size: 1.15rem; letter-spacing: -.01em; margin: 2.4rem 0 .7rem; }
+  .eyebrow { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 11px; color: var(--ink-soft); }
+  p { line-height: 1.55; font-size: 15px; max-width: 62ch; margin: .4rem 0; }
+  code { font-family: var(--label); font-size: 13px; background: var(--card); border: 1px solid var(--rule); border-radius: 5px; padding: .05rem .35rem; }
+  .cmd { display: block; background: var(--ink); color: var(--paper); border-radius: 8px; padding: .7rem .9rem; font-family: var(--label); font-size: 13px; margin: .5rem 0 1rem; overflow-x: auto; }
+  .quote { border-left: 4px solid var(--red); padding: .2rem 0 .2rem .9rem; margin: .8rem 0 1.2rem; font-size: 15px; line-height: 1.5; color: var(--ink-soft); }
+  .quote b { color: var(--ink); }
+  ol.changed { margin: .4rem 0 0; padding-left: 1.3rem; font-size: 15px; line-height: 1.55; }
+  ol.changed li { margin: .3rem 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; margin: .6rem 0; }
+  th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-family: var(--label); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+  td.b { color: var(--red); }
+  td.a { color: var(--mint-ink); font-weight: 700; }
+  .cell { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .6rem; }
+  .cell .tag { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 10px; color: var(--ink-soft); display: block; margin-bottom: .5rem; }
+  .cell.after .tag { color: var(--mint-ink); }
+  .cell img { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--rule); }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .6rem 0 .2rem; align-items: start; }
+  .q { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .9rem 1.1rem; margin: .8rem 0; }
+  .q .n { font-family: var(--label); font-size: 11px; letter-spacing: .08em; color: var(--blue); text-transform: uppercase; }
+  .q .ask { font-weight: 700; font-size: 17px; margin: .25rem 0 .4rem; }
+  .q .how { font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
+  .q .exp { margin-top: .5rem; font-size: 14px; }
+  .q .exp b { display: inline-block; border: 2px solid var(--neutral); border-radius: 999px; padding: .05rem .6rem; margin-right: .3rem; font-size: 13px; }
+  .not { background: var(--amber-bg); color: var(--amber-ink); border-radius: 10px; padding: .7rem 1rem; font-size: 14px; line-height: 1.55; }
+  .not ul { margin: .3rem 0 0; padding-left: 1.2rem; }
+  .answer { background: var(--blue-bg); border-radius: 10px; padding: .7rem 1rem; font-size: 15px; line-height: 1.55; }
+  .answer code { background: transparent; border-color: var(--blue); }
+  @media (max-width: 560px) { .pair { grid-template-columns: 1fr; } h1 { font-size: 1.6rem; } }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Linear · PIZZA-31 · bug · Token game · from interview #3 (Nina, 2026-09-04)</p>
+  <h1>The Token game predicts the next token, not the next word</h1>
+
+  <div class="quote"><b>What Nina hit:</b> "pizza" is at least two tokens, so a model never predicts a whole word. But the "next token" part of the game let you guess whole words. Eva confirmed it: factually wrong for what the game teaches.</div>
+
+  <h2>What changed (3 things)</h2>
+  <ol class="changed">
+    <li><b>The bot now writes "pepperoni" piece by piece, with the exact pieces screen 1 chopped it into</b> (pep · per · on · i). Each round stops mid-word: the pieces already written are on screen as chips, then an empty slot. You call the next piece.</li>
+    <li><b>The options are pieces, not words.</b> Round 1: per · si · tide · py. Round 2: on · mint · s · ed. Round 3, once the word is done, shows that a whole short word or a comma can be one token too: pizza · and · , · s.</li>
+    <li><b>After the pick the pieces snap together</b> in a new "Snapped together" box: <code>pep + per = pepper…</code> "2 more picks (on, i) and the word is done." The ranking now also says what each piece would have made (Pepsi, peptide, peppy).</li>
+  </ol>
+  <table>
+    <tr><th>Where</th><th>Before</th><th>After</th></tr>
+    <tr><td>Sentence</td><td class="b">"The Diavola is our spiciest ___"</td><td class="a">"Great choice! One [pep][?]"</td></tr>
+    <tr><td>Options</td><td class="b">salad · pizza · soup · pasta</td><td class="a">per · si · tide · py</td></tr>
+    <tr><td>Rounds</td><td class="b">2 unrelated sentences</td><td class="a">3 picks that build one word: pep → per → on → (i) → pizza</td></tr>
+    <tr><td>After the pick</td><td class="b">verdict + ranking</td><td class="a">verdict + "Snapped together" + ranking</td></tr>
+    <tr><td>Button</td><td class="b">Next sentence</td><td class="a">Next piece</td></tr>
+    <tr><td>Recap line 3</td><td class="b">…watched the bot pick the next chunk from a ranked list.</td><td class="a">…watched the bot write "pepperoni" one chunk at a time. It never guessed the whole word.</td></tr>
+  </table>
+
+  <h2>Before / after · phone</h2>
+  <div class="pair">
+    <div class="cell"><span class="tag">Before · master</span><img src="img/pizza-31-before.png" alt="Before: the prediction screen offers whole words: salad, pizza, soup, pasta"></div>
+    <div class="cell after"><span class="tag">After · this branch</span><img src="img/pizza-31-after.png" alt="After: the sentence stops mid-word at pep, the options are pieces, and the pieces snap together after the pick"></div>
+  </div>
+
+  <h2>Open it</h2>
+  <code class="cmd">http://localhost:5193/game/token</code>
+  <p>Or: Landing → <b>Start</b> → Workshop → term 1 <b>Token</b>. On screen 1 tap any number, then <b>Next: how it picks the next token</b>. That is the changed screen; play its three rounds.</p>
+
+  <h2>Five yes/no questions</h2>
+  <div class="q"><div class="n">Q1 · screen 2, round 1, before you tap</div>
+    <div class="ask">Is it obvious the bot stopped in the middle of a word?</div>
+    <div class="how">Under "Your bot is writing" you see "Great choice! One" then a chip <code>pep</code> glued to a dashed <code>?</code> slot.</div>
+    <div class="exp"><b>Expected</b> yes, without reading the instruction line.</div></div>
+  <div class="q"><div class="n">Q2 · screen 2, round 1, the four options</div>
+    <div class="ask">Do the options read as pieces of a word, not as words?</div>
+    <div class="how">per · si · tide · py, in monospace, no hint of what they would make. The hint comes only in the ranking after you tap.</div>
+    <div class="exp"><b>Expected</b> yes. If "si" or "py" feel like nonsense before the reveal, that is intended, tell me if it is annoying rather than curious.</div></div>
+  <div class="q"><div class="n">Q3 · screen 2, round 1, after you tap</div>
+    <div class="ask">Does "Snapped together" make the point land: the bot guessed a piece, not the word?</div>
+    <div class="how">Chips <code>pep</code> + <code>per</code> (green) then faded <code>on</code> <code>i</code>, and the line "pep + per = pepper… 2 more picks (on, i) and the word is done."</div>
+    <div class="exp"><b>Expected</b> yes. It is the one new box on the screen.</div></div>
+  <div class="q"><div class="n">Q4 · screen 2, round 3</div>
+    <div class="ask">Is it clear why "pizza" (a whole word) is allowed as a token here, after two rounds of pieces?</div>
+    <div class="how">The word is finished; the options are pizza · and · , · s; the verdict says a common short word is one token on its own (screen 1 already showed "pizza" whole).</div>
+    <div class="exp"><b>Expected</b> yes. If it reads as a contradiction of rounds 1–2, say so, I would drop round 3.</div></div>
+  <div class="q"><div class="n">Q5 · screen 2, whole beat, on your phone</div>
+    <div class="ask">Three rounds instead of two: still short enough?</div>
+    <div class="how">Each round is one tap plus one "Next piece". The progress strip at the top shows 3 steps in part 2.</div>
+    <div class="exp"><b>Expected</b> yes.</div></div>
+
+  <h2>Not for today</h2>
+  <div class="not">
+    <ul>
+      <li><b>FR-28</b>, the full rework of the Token game (role, layout): untouched. This is the minimal honest fix.</li>
+      <li>The two part names stay as reviewed in 5.5 ("What a token is" / "How it picks the next token"), not the ticket's literal "What is a token" / "How next-token prediction works".</li>
+      <li>The pieces (pep · per · on · i) are illustrative, not a real tokenizer's output. Same as before, screen 1 already says so.</li>
+      <li>Spaces are still invisible on the chips (a real tokenizer keeps the space inside " pizza"). A whole-word pick is drawn with a small gap instead.</li>
+    </ul>
+  </div>
+
+  <h2>How to answer</h2>
+  <div class="answer">Reply <code>1✅ 2❌ 3✅ 4✅ 5✅</code> with a word on any ❌, and I commit the fix or the rollback.</div>
+</div>

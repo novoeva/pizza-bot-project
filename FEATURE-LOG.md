@@ -38,6 +38,9 @@ Status legend: ✅ done · 🔄 in progress · ⬜ to do · ⏸ deferred
 - ⏸ Deferred: role/game rework (one of the 4 "misfit" games that don't yet fit
   the constant owner-sets-up-the-bot role).
 - ⬜ Apply the GameStage layout pattern **after** the rework.
+- ✅ PIZZA-31: the prediction beat predicts a token, not a word. The bot writes
+  "pepperoni" with the pieces beat 1 chopped it into (pep | per | on | i); each
+  round stops mid-word, and the pieces snap together after the pick.
 
 ## 2. context-window
 `src/games/context-window/`

@@ -13,7 +13,7 @@
     "inGame": [
       "You guessed how many chunks are in “Pepperoni”. The bot saw four, not one word.",
       "The whole order was chopped the same way: short words stayed whole, long ones were split.",
-      "Then you watched the bot pick the next chunk from a ranked list. It writes one chunk at a time."
+      "Then you watched the bot write “pepperoni” one chunk at a time, picking each from a ranked list. It never guessed the whole word."
     ],
     "do": [
       "Expect the bot to read and write in chunks, not words. One word can cost several chunks.",
