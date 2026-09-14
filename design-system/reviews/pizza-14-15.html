@@ -1,0 +1,116 @@
+<title>PIZZA-14 · 15 · Temperature dial</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+  :root {
+    --ink: #001b3c; --ink-soft: #586158; --rule: #cfd3dc; --paper: #f9f9ff; --card: #ffffff;
+    --red: #b7102a; --mint: #e7f4f1; --mint-ink: #1f7a6f; --blue: #286182; --blue-bg: #d9edfb;
+    --neutral: #586158; --amber-bg: #f9efd7; --amber-ink: #8a5a0a; --wrong-bg: #f2e2e0;
+    --label: 'Space Grotesk', ui-monospace, monospace; --body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #eef0f5; --ink-soft: #b3bab3; --rule: #3a4048; --paper: #12161c; --card: #1b2028;
+      --red: #ff5c6e; --mint: #163a35; --mint-ink: #8fe0d2; --blue: #8fc6ea; --blue-bg: #1e3446;
+      --neutral: #9aa39a; --amber-bg: #3d3014; --amber-ink: #f2c46b; --wrong-bg: #3f2426;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #eef0f5; --ink-soft: #b3bab3; --rule: #3a4048; --paper: #12161c; --card: #1b2028;
+    --red: #ff5c6e; --mint: #163a35; --mint-ink: #8fe0d2; --blue: #8fc6ea; --blue-bg: #1e3446;
+    --neutral: #9aa39a; --amber-bg: #3d3014; --amber-ink: #f2c46b; --wrong-bg: #3f2426;
+  }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); }
+  .wrap { max-width: 46rem; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
+  h1 { font-size: 2rem; line-height: 1.1; letter-spacing: -.02em; margin: .3rem 0 .8rem; text-wrap: balance; }
+  h2 { font-size: 1.15rem; letter-spacing: -.01em; margin: 2.4rem 0 .7rem; }
+  .eyebrow { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 11px; color: var(--ink-soft); }
+  p { line-height: 1.55; font-size: 15px; max-width: 62ch; margin: .4rem 0; }
+  code { font-family: var(--label); font-size: 13px; background: var(--card); border: 1px solid var(--rule); border-radius: 5px; padding: .05rem .35rem; }
+  .cmd { display: block; background: var(--ink); color: var(--paper); border-radius: 8px; padding: .7rem .9rem; font-family: var(--label); font-size: 13px; margin: .5rem 0 1rem; overflow-x: auto; }
+  .quote { border-left: 4px solid var(--red); padding: .2rem 0 .2rem .9rem; margin: .8rem 0 1.2rem; font-size: 15px; line-height: 1.5; color: var(--ink-soft); }
+  .quote b { color: var(--ink); }
+  ol.changed { margin: .4rem 0 0; padding-left: 1.3rem; font-size: 15px; line-height: 1.55; }
+  ol.changed li { margin: .3rem 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; margin: .6rem 0; }
+  th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-family: var(--label); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+  td.b { color: var(--red); }
+  td.a { color: var(--mint-ink); font-weight: 700; }
+  .cell { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .6rem; }
+  .cell .tag { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 10px; color: var(--ink-soft); display: block; margin-bottom: .5rem; }
+  .cell.after .tag { color: var(--mint-ink); }
+  .cell img { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--rule); }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .6rem 0 .2rem; align-items: start; }
+  .q { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .9rem 1.1rem; margin: .8rem 0; }
+  .q .n { font-family: var(--label); font-size: 11px; letter-spacing: .08em; color: var(--blue); text-transform: uppercase; }
+  .q .ask { font-weight: 700; font-size: 17px; margin: .25rem 0 .4rem; }
+  .q .how { font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
+  .q .exp { margin-top: .5rem; font-size: 14px; }
+  .q .exp b { display: inline-block; border: 2px solid var(--neutral); border-radius: 999px; padding: .05rem .6rem; margin-right: .3rem; font-size: 13px; }
+  .not { background: var(--amber-bg); color: var(--amber-ink); border-radius: 10px; padding: .7rem 1rem; font-size: 14px; line-height: 1.55; }
+  .not ul { margin: .3rem 0 0; padding-left: 1.2rem; }
+  .answer { background: var(--blue-bg); border-radius: 10px; padding: .7rem 1rem; font-size: 15px; line-height: 1.55; }
+  .answer code { background: transparent; border-color: var(--blue); }
+  @media (max-width: 560px) { .pair { grid-template-columns: 1fr; } h1 { font-size: 1.6rem; } }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Interview #1 (Klára) · Linear PIZZA-14 + PIZZA-15 · Temperature game · round 1</p>
+  <h1>The favourite is no longer "the right answer", and rolling now proves something</h1>
+
+  <div class="quote"><b>What Klára hit (PIZZA-14):</b> the favourite ("classic") stayed highlighted wherever she dragged the slider, so the point of a high temperature never showed. The maths was right all along, classic goes from ~87 % at the bottom to ~28 % at the top, but the picture said "classic is correct" the whole time.</div>
+  <div class="quote"><b>What Klára hit (PIZZA-15):</b> "Roll again" only changed the sentence. She could not see what it was for, and the rolled word never connected back to the list of probabilities.</div>
+
+  <h2>What changed (3 things)</h2>
+  <ol class="changed">
+    <li><b>No word is pinned as the favourite.</b> All bars are the same cheese colour, the favourite is only ever the tallest bar, bar widths animate as you drag, and one line under the bars reads the lead straight off the maths: <i>"classic is 7.1× more likely than the runner-up. It wins almost every roll."</i> at 0.2, <i>"classic is 1.2× … Barely ahead: almost any word can win."</i> at 2.0.</li>
+    <li><b>The rolled word lights up in the list, not just in the sentence.</b> Blue chip + dice icon on the row the bot picked, the same blue as the word in the sentence. The sub-line under the sentence says at which dial position it was rolled. Move the dial and the row mark goes away (the odds on screen are no longer the odds it was drawn from).</li>
+    <li><b>The experiment is guided: roll low, then roll high.</b> The step instruction says so, the dial now starts low (0.4), the pinned bar always has the roll button ("Roll again at 0.4"), and a new "Your rolls so far" panel keeps a tally per setting: <i>Low: classic ×4 · pepperoni ×1 / High: dill pickle ×2 · classic ×1 …</i>. "Next" appears once you have rolled at both ends (or after six rolls anywhere).</li>
+  </ol>
+
+  <h2>Before / after · phone · dial high, after a few rolls</h2>
+  <div class="pair">
+    <div class="cell"><span class="tag">Before</span><img src="img/pizza-14-15-before.png" alt="Temperature game before: classic highlighted yellow as the favourite even at high temperature, Roll again button under the list" loading="lazy"></div>
+    <div class="cell after"><span class="tag">After</span><img src="img/pizza-14-15-after.png" alt="Temperature game after: all bars the same colour, the rolled word marked blue in the list, lead readout under the bars, tally of rolls per setting" loading="lazy"></div>
+  </div>
+
+  <h2>Open it</h2>
+  <p>Start on the Workshop, open term 2, Temperature (the "Creativity dial" card). Or go straight to the game route below. Phone width is the main view; the laptop view is the same content in the right column.</p>
+  <code class="cmd">http://localhost:5190/game/temperature</code>
+  <p>To reach the state in the screenshot: leave the dial at 0.4, tap <b>Roll the dice</b> three times, drag the dial to 2.0, tap <b>Roll again at 2.0</b> three times.</p>
+
+  <h2>Five yes/no questions</h2>
+  <div class="q"><div class="n">Q1 · game open, no roll yet, drag the dial slowly from 0.2 to 2.0</div>
+    <div class="ask">Can you see the favourite's lead collapse without reading any text?</div>
+    <div class="how">The classic bar should shrink from nearly full to about a quarter while the small words grow, and no row should look "selected" or "correct" at any point. The line under the bars goes from "7.1×" to "1.2×" as a second signal.</div>
+    <div class="exp"><b>Expected</b> yes.</div></div>
+  <div class="q"><div class="n">Q2 · dial at 0.4, tap Roll the dice once</div>
+    <div class="ask">Is it obvious which row in the list the bot picked, and that it is the same word as in the sentence?</div>
+    <div class="how">One row gets a blue chip and a dice icon; the sentence shows the same word in the same blue; the sub-line reads "Rolled at 0.4 · Predictable".</div>
+    <div class="exp"><b>Expected</b> yes.</div></div>
+  <div class="q"><div class="n">Q3 · after that first roll, without doing anything else</div>
+    <div class="ask">Do you know what you are supposed to do next?</div>
+    <div class="how">The instruction says roll low then high; the tally panel's High row reads "No rolls yet, drag the dial up and roll"; the top-right of the step line shows "Low ✓ High ·"; the pinned bar only offers Roll again, no Next yet.</div>
+    <div class="exp"><b>Expected</b> yes, drag the dial up and roll.</div></div>
+  <div class="q"><div class="n">Q4 · three rolls at 0.4, then three rolls at 2.0, look at "Your rolls so far"</div>
+    <div class="ask">Does the tally make the difference between low and high visible?</div>
+    <div class="how">Low should be nearly all classic; High should be a mix, often with a long shot in it. It is random, so once in a while High also shows classic ×2, that is honest. Roll a couple more times if it does.</div>
+    <div class="exp"><b>Expected</b> yes.</div></div>
+  <div class="q"><div class="n">Q5 · the gate</div>
+    <div class="ask">Is it fine that "Next: pick the right setting" only appears after you have rolled both low and high (or six times anywhere)?</div>
+    <div class="how">Before, one roll unlocked Next. Now the experiment is required. The six-roll escape hatch means nobody can get stuck.</div>
+    <div class="exp"><b>Expected</b> yes. If no, I make Next available after the first roll again and keep only the nudges.</div></div>
+
+  <h2>Not for today</h2>
+  <div class="not">Left as they were, on purpose:
+    <ul>
+      <li>Part 2 (pick the setting for six jobs) and the recap screen are untouched.</li>
+      <li>The candidate words and their base odds in <code>content.js</code> are unchanged; the readout is computed from them, nothing was tuned to look nicer.</li>
+      <li>Czech copy for the new lines. The game is English-only today.</li>
+      <li>The component gallery does not get a new entry: the tally row is local to this game, not a shared component.</li>
+    </ul>
+  </div>
+
+  <h2>How to answer</h2>
+  <div class="answer">One line: <code>14/15: 1✅ 2✅ 3✅ 4✅ 5✅</code> or e.g. <code>14/15: 1✅ 2✅ 3❌ (why) 4✅ 5❌</code>.<br>On ticks I merge the branch to master and close both tickets in Linear.</div>
+</div>
