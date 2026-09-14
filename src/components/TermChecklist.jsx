@@ -22,12 +22,14 @@ export default function TermChecklist({ completedTerms = [] }) {
         const isNext = next?.id === term.id
         return (
           <li key={term.id}>
-            {/* The sticker is positioned against this wrapper, not the <li>, so
-                anything rendered above the card inside the <li> stays uncovered. */}
-            <div className={isNext ? 'relative pt-4' : undefined}>
+            {/* The sticker sits in normal flow above the card, not absolutely
+                over it: an absolute sticker with a fixed top reserve used to
+                hang into the card and cover the number badge (PIZZA-52). Only
+                its bottom 8px straddle the card's border, which is thinner
+                than the card padding at every width, so nothing is covered. */}
             {isNext && (
               <span
-                className="absolute left-3 top-0 z-10 inline-flex -rotate-2 items-center gap-1 rounded-md border-[3px] border-neutral bg-primary px-2.5 py-1 font-label text-[11px] text-white shadow-pop"
+                className="relative z-10 -mb-2 ml-3 flex w-fit -rotate-2 items-center gap-1 rounded-md border-[3px] border-neutral bg-primary px-2.5 py-1 font-label text-[11px] text-white shadow-pop"
                 aria-hidden="true"
               >
                 <span className="material-symbols-rounded text-base">arrow_downward</span>
@@ -87,7 +89,6 @@ export default function TermChecklist({ completedTerms = [] }) {
                 {done ? 'chevron_right' : 'play_arrow'}
               </span>
             </Link>
-            </div>
           </li>
         )
       })}
