@@ -1,0 +1,122 @@
+<title>PIZZA-23 · MCP game simulates the pain</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+  :root {
+    --ink: #001b3c; --ink-soft: #586158; --rule: #cfd3dc; --paper: #f9f9ff; --card: #ffffff;
+    --red: #b7102a; --mint: #e7f4f1; --mint-ink: #1f7a6f; --blue: #286182; --blue-bg: #d9edfb;
+    --neutral: #586158; --amber-bg: #f9efd7; --amber-ink: #8a5a0a; --wrong-bg: #f2e2e0;
+    --label: 'Space Grotesk', ui-monospace, monospace; --body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #eef0f5; --ink-soft: #b3bab3; --rule: #3a4048; --paper: #12161c; --card: #1b2028;
+      --red: #ff5c6e; --mint: #163a35; --mint-ink: #8fe0d2; --blue: #8fc6ea; --blue-bg: #1e3446;
+      --neutral: #9aa39a; --amber-bg: #3d3014; --amber-ink: #f2c46b; --wrong-bg: #3f2426;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #eef0f5; --ink-soft: #b3bab3; --rule: #3a4048; --paper: #12161c; --card: #1b2028;
+    --red: #ff5c6e; --mint: #163a35; --mint-ink: #8fe0d2; --blue: #8fc6ea; --blue-bg: #1e3446;
+    --neutral: #9aa39a; --amber-bg: #3d3014; --amber-ink: #f2c46b; --wrong-bg: #3f2426;
+  }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); }
+  .wrap { max-width: 46rem; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
+  h1 { font-size: 2rem; line-height: 1.1; letter-spacing: -.02em; margin: .3rem 0 .8rem; text-wrap: balance; }
+  h2 { font-size: 1.15rem; letter-spacing: -.01em; margin: 2.4rem 0 .7rem; }
+  .eyebrow { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 11px; color: var(--ink-soft); }
+  p { line-height: 1.55; font-size: 15px; max-width: 62ch; margin: .4rem 0; }
+  code { font-family: var(--label); font-size: 13px; background: var(--card); border: 1px solid var(--rule); border-radius: 5px; padding: .05rem .35rem; }
+  .cmd { display: block; background: var(--ink); color: var(--paper); border-radius: 8px; padding: .7rem .9rem; font-family: var(--label); font-size: 13px; margin: .5rem 0 1rem; overflow-x: auto; }
+  .quote { border-left: 4px solid var(--red); padding: .2rem 0 .2rem .9rem; margin: .8rem 0 1.2rem; font-size: 15px; line-height: 1.5; color: var(--ink-soft); }
+  .quote b { color: var(--ink); }
+  ol.changed { margin: .4rem 0 0; padding-left: 1.3rem; font-size: 15px; line-height: 1.55; }
+  ol.changed li { margin: .3rem 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; margin: .6rem 0; }
+  th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-family: var(--label); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+  td.b { color: var(--red); }
+  td.a { color: var(--mint-ink); font-weight: 700; }
+  .cell { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .6rem; }
+  .cell .tag { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 10px; color: var(--ink-soft); display: block; margin-bottom: .5rem; }
+  .cell.after .tag { color: var(--mint-ink); }
+  .cell img { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--rule); }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .6rem 0 .2rem; align-items: start; }
+  .q { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .9rem 1.1rem; margin: .8rem 0; }
+  .q .n { font-family: var(--label); font-size: 11px; letter-spacing: .08em; color: var(--blue); text-transform: uppercase; }
+  .q .ask { font-weight: 700; font-size: 17px; margin: .25rem 0 .4rem; }
+  .q .how { font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
+  .q .exp { margin-top: .5rem; font-size: 14px; }
+  .q .exp b { display: inline-block; border: 2px solid var(--neutral); border-radius: 999px; padding: .05rem .6rem; margin-right: .3rem; font-size: 13px; }
+  .not { background: var(--amber-bg); color: var(--amber-ink); border-radius: 10px; padding: .7rem 1rem; font-size: 14px; line-height: 1.55; }
+  .not ul { margin: .3rem 0 0; padding-left: 1.2rem; }
+  .answer { background: var(--blue-bg); border-radius: 10px; padding: .7rem 1rem; font-size: 15px; line-height: 1.55; }
+  .answer code { background: transparent; border-color: var(--blue); }
+  @media (max-width: 560px) { .pair { grid-template-columns: 1fr; } h1 { font-size: 1.6rem; } }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Linear PIZZA-23 · FR-24 · MCP game · branch pizza-23-mcp</p>
+  <h1>The MCP game now makes you do the old way before it shows you the new one</h1>
+
+  <div class="quote"><b>Eva, Phase 4 review:</b> "I'm not sure what this is supposed to teach me. There is no simulation."</div>
+  <div class="quote"><b>Nina, interview #3:</b> the "universal port" sentence made no sense ("port" does not fit this world; everyone understands "integration"). "Instead of wiring each one by hand" made her try to do it by hand first, and there was nothing to do. The hard step had no "aha", because the painful version did not simulate any pain. The easy step (click, click, green) worked great.</div>
+
+  <h2>What changed (3 things)</h2>
+  <ol class="changed">
+    <li><b>The old way is now work you do, not text you read.</b> Wiring Menu is a five-step wizard: pick the data format, match three field names, copy the access key (two look-alikes next to it), run a test, fix what broke. Wrong taps stay wrong until you fix them. Then Delivery, all five steps again. Bookings is one tap that stands for all five. Then the Loyalty app arrives: "start over from step 1?" Weeks and taps pile up on screen. The MCP step stays click, click, green.</li>
+    <li><b>"Universal port" is gone.</b> The game and the term card now say "one shared standard" and "one integration instead of one per system". MCP is explained as a standard (Model Context Protocol), never as a port.</li>
+    <li><b>A closing picture.</b> After the stranger's stock tracker connects, and again on the recap: left, five custom wires criss-crossing into your bot; right, the same five systems plugged into one MCP hub. With your real numbers under each side (weeks, taps).</li>
+  </ol>
+  <table>
+    <tr><th>Where</th><th>Before</th><th>After</th></tr>
+    <tr><td>Old way, per system</td><td class="b">one button: "Build connector"</td><td class="a">5 steps, 7+ taps, wrong answers bounce</td></tr>
+    <tr><td>Part 2 title</td><td class="b">Game · One universal port</td><td class="a">Game · One shared standard</td></tr>
+    <tr><td>Bot badge</td><td class="b">MCP port</td><td class="a">speaks MCP</td></tr>
+    <tr><td>End of part 3</td><td class="b">a green callout, then the recap</td><td class="a">callout + wires-vs-hub diagram, then the recap (diagram repeated)</td></tr>
+  </table>
+
+  <h2>Before / after · phone</h2>
+  <div class="pair">
+    <div class="cell"><span class="tag">Before · old way was one button per system</span><img src="img/pizza-23-before.png" alt="Before: the old-way screen with a Build connector button per system"></div>
+    <div class="cell after"><span class="tag">After · mid-way through wiring Menu by hand</span><img src="img/pizza-23-after.png" alt="After: the five-step custom integration wizard for Menu"></div>
+  </div>
+
+  <h2>How to open</h2>
+  <code class="cmd">http://localhost:5192/game/mcp</code>
+  <p>Or: Landing → Workshop → tap the <b>MCP</b> card (term 10 of 12). Full run takes about two minutes: Menu (5 steps) → "Next: Delivery" → Delivery (5 steps) → "Next: Bookings" → one tap → Loyalty question → "There has to be a better way" → "Teach your bot the standard" → Connect ×4 → "Now the useful part" → Connect the stock tracker → the diagram → "See what this means" → recap.</p>
+
+  <h2>Five yes/no questions</h2>
+  <div class="q"><div class="n">Q1 · part 1, wiring Menu</div>
+    <div class="ask">Did the five steps feel like tedious work, and did you find yourself wanting it to stop?</div>
+    <div class="how">Tap through: format (XML), the three field names, the access key (mind the look-alikes), Run the test, the fix. Wrong taps show a red one-liner and you stay on the step.</div>
+    <div class="exp"><b>Expected</b> yes. That is the point: the pain is felt, not read.</div></div>
+  <div class="q"><div class="n">Q2 · part 1, after Delivery</div>
+    <div class="ask">When Bookings became one tap for "all five steps again", was that a relief, or did you want to skip it sooner?</div>
+    <div class="how">You do Menu and Delivery in full, Bookings is the one-tap version, then Loyalty asks "start over from step 1?"</div>
+    <div class="exp"><b>Expected</b> relief at the right moment (twice in full is enough). If you wanted out after Menu alone, say so.</div></div>
+  <div class="q"><div class="n">Q3 · part 2, the MCP step</div>
+    <div class="ask">Without reading the definition on the left, can you say in one sentence what MCP solves?</div>
+    <div class="how">Tap "Teach your bot the standard (MCP)", then Connect on each of the four systems. The two counters compare your weeks and taps with 0 wks / 5 taps.</div>
+    <div class="exp"><b>Expected</b> yes, something like "one standard so I don't build an integration per system".</div></div>
+  <div class="q"><div class="n">Q4 · the words</div>
+    <div class="ask">"One shared standard" / "speaks MCP" / "custom integration": do these words make sense, and is "port" gone everywhere you looked?</div>
+    <div class="how">Check the part 2 instruction, the blue bot card badge, the recap cards, and the Workshop card for MCP.</div>
+    <div class="exp"><b>Expected</b> yes.</div></div>
+  <div class="q"><div class="n">Q5 · end of part 3, the picture</div>
+    <div class="ask">Does the wires-vs-hub diagram say "many custom wires vs one standard" on its own, without the captions?</div>
+    <div class="how">After you Connect the stock tracker, the diagram appears under the green callout. Left: five amber wires crossing into your bot. Right: five straight green lines into an MCP hub.</div>
+    <div class="exp"><b>Expected</b> yes, and it fits on a phone in two side-by-side panels without horizontal scroll.</div></div>
+
+  <h2>Not for today</h2>
+  <div class="not">
+    <ul>
+      <li>Renaming the bot part in the flow board / BotCanvas (still keyed <code>mcp</code>, icon <code>hub</code>): the part label changed in <code>terms.json</code> only.</li>
+      <li>Adding the wizard cards and the diagram to the component gallery (<code>design-system/gallery.html</code>).</li>
+      <li>A "real" typing field for the access key: the three look-alike keys are a tap-only stand-in, on purpose (phone-first, tap-only).</li>
+      <li>Timing of the wrong-tap feedback (no shake / animation yet).</li>
+    </ul>
+  </div>
+
+  <h2>How to answer</h2>
+  <div class="answer">Reply <code>PIZZA-23: 1✅ 2✅ 3❌ 4✅ 5✅</code> (one mark per question, in order) plus a word on any ❌, and I merge or fix.</div>
+</div>

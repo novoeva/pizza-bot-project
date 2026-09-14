@@ -179,22 +179,22 @@
     "id": "mcp",
     "order": 10,
     "name": "MCP",
-    "botPart": "Universal port",
-    "whyYouCare": "Each new system takes weeks to wire in, or clicks straight in.",
-    "role": "You're the owner. This game shows you the easy way to connect your bot to your other systems.",
-    "definition": "MCP (short for Model Context Protocol) is one shared plug that AI assistants and outside systems both agree to use, so neither side has to know anything about the other side specifically.",
+    "botPart": "MCP connection (one standard)",
+    "whyYouCare": "Every new system is weeks of custom wiring, or it just connects.",
+    "role": "You're the owner. You wire your bot into your systems the hard way first, then the MCP way.",
+    "definition": "MCP (short for Model Context Protocol) is one shared standard for how AI assistants and outside systems talk to each other. Your bot learns it once, and any system that speaks it connects without a custom integration.",
     "dont": [
-      "Don't build a custom connector for a tool that already speaks MCP."
+      "Don't build a custom integration for a tool that already speaks MCP."
     ],
     "inGame": [
-      "Each system needed its own custom connector, three weeks apiece, and you were never done.",
-      "With one universal port, the same systems clicked in with no building at all.",
-      "A stock tracker built by people who had never heard of your bot plugged in on day one."
+      "Wiring Menu by hand took five steps: the format, three field names, an access key, a failed test and a fix. Then Delivery, all over again.",
+      "With MCP, the same systems connected in one tap each. No format, no field names, no key, nothing to maintain.",
+      "A stock tracker built by people who had never heard of your bot connected on day one, because both sides speak the same standard."
     ],
     "do": [
-      "Prefer tools that speak MCP. They plug in on day one, with no custom bridge."
+      "Prefer tools that speak MCP. They connect on day one, with no custom integration to build or maintain."
     ],
-    "recap": "MCP is a shared standard, one universal port, so any tool that speaks it can plug into your bot without a custom connector."
+    "recap": "MCP is a shared standard: one integration your bot speaks, instead of one custom integration per system."
   },
   {
     "id": "guardrails",
