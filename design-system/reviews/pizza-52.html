@@ -1,0 +1,109 @@
+<title>PIZZA-52 · Sticker above the card</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+  :root {
+    --ink: #001b3c; --ink-soft: #586158; --rule: #cfd3dc; --paper: #f9f9ff; --card: #ffffff;
+    --red: #b7102a; --mint: #e7f4f1; --mint-ink: #1f7a6f; --blue: #286182; --blue-bg: #d9edfb;
+    --neutral: #586158; --amber-bg: #f9efd7; --amber-ink: #8a5a0a; --wrong-bg: #f2e2e0;
+    --label: 'Space Grotesk', ui-monospace, monospace; --body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #eef0f5; --ink-soft: #b3bab3; --rule: #3a4048; --paper: #12161c; --card: #1b2028;
+      --red: #ff5c6e; --mint: #163a35; --mint-ink: #8fe0d2; --blue: #8fc6ea; --blue-bg: #1e3446;
+      --neutral: #9aa39a; --amber-bg: #3d3014; --amber-ink: #f2c46b; --wrong-bg: #3f2426;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #eef0f5; --ink-soft: #b3bab3; --rule: #3a4048; --paper: #12161c; --card: #1b2028;
+    --red: #ff5c6e; --mint: #163a35; --mint-ink: #8fe0d2; --blue: #8fc6ea; --blue-bg: #1e3446;
+    --neutral: #9aa39a; --amber-bg: #3d3014; --amber-ink: #f2c46b; --wrong-bg: #3f2426;
+  }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); }
+  .wrap { max-width: 46rem; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
+  h1 { font-size: 2rem; line-height: 1.1; letter-spacing: -.02em; margin: .3rem 0 .8rem; text-wrap: balance; }
+  h2 { font-size: 1.15rem; letter-spacing: -.01em; margin: 2.4rem 0 .7rem; }
+  .eyebrow { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 11px; color: var(--ink-soft); }
+  p { line-height: 1.55; font-size: 15px; max-width: 62ch; margin: .4rem 0; }
+  code { font-family: var(--label); font-size: 13px; background: var(--card); border: 1px solid var(--rule); border-radius: 5px; padding: .05rem .35rem; }
+  .cmd { display: block; background: var(--ink); color: var(--paper); border-radius: 8px; padding: .7rem .9rem; font-family: var(--label); font-size: 13px; margin: .5rem 0 1rem; overflow-x: auto; }
+  .quote { border-left: 4px solid var(--red); padding: .2rem 0 .2rem .9rem; margin: .8rem 0 1.2rem; font-size: 15px; line-height: 1.5; color: var(--ink-soft); }
+  .quote b { color: var(--ink); }
+  ol.changed { margin: .4rem 0 0; padding-left: 1.3rem; font-size: 15px; line-height: 1.55; }
+  ol.changed li { margin: .3rem 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; margin: .6rem 0; }
+  th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-family: var(--label); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+  td.b { color: var(--red); }
+  td.a { color: var(--mint-ink); font-weight: 700; }
+  .cell { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .6rem; }
+  .cell .tag { font-family: var(--label); text-transform: uppercase; letter-spacing: .08em; font-size: 10px; color: var(--ink-soft); display: block; margin-bottom: .5rem; }
+  .cell.after .tag { color: var(--mint-ink); }
+  .cell img { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--rule); }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .6rem 0 .2rem; align-items: start; }
+  .q { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: .9rem 1.1rem; margin: .8rem 0; }
+  .q .n { font-family: var(--label); font-size: 11px; letter-spacing: .08em; color: var(--blue); text-transform: uppercase; }
+  .q .ask { font-weight: 700; font-size: 17px; margin: .25rem 0 .4rem; }
+  .q .how { font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
+  .q .exp { margin-top: .5rem; font-size: 14px; }
+  .q .exp b { display: inline-block; border: 2px solid var(--neutral); border-radius: 999px; padding: .05rem .6rem; margin-right: .3rem; font-size: 13px; }
+  .not { background: var(--amber-bg); color: var(--amber-ink); border-radius: 10px; padding: .7rem 1rem; font-size: 14px; line-height: 1.55; }
+  .not ul { margin: .3rem 0 0; padding-left: 1.2rem; }
+  .answer { background: var(--blue-bg); border-radius: 10px; padding: .7rem 1rem; font-size: 15px; line-height: 1.55; }
+  .answer code { background: transparent; border-color: var(--blue); }
+  @media (max-width: 560px) { .pair { grid-template-columns: 1fr; } h1 { font-size: 1.6rem; } }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Linear · PIZZA-52 · bug · Workshop term list · round 1</p>
+  <h1>The "Start here" / "Next up" sticker sits above the card, not on it</h1>
+
+  <div class="quote"><b>What Eva hit:</b> on the Workshop the red "Start here" / "Next up" sticker overlaps the card it points at. It sits on the card's top-left corner and covers part of the number circle and crowds the title (seen on "2 · Temperature" with "Next up").</div>
+
+  <h2>What changed (3 things)</h2>
+  <ol class="changed">
+    <li><b>The sticker is in normal flow above the card</b> instead of floating over it. Before, it was absolutely positioned with a reserved gap smaller than the sticker itself, so it hung down into the card.</li>
+    <li><b>Only its bottom 8px straddle the card's top border.</b> That is less than the card's padding at every width (16px on the phone, 10px in the laptop side column), so the number badge and the title are never covered.</li>
+    <li><b>The gallery snippet uses the same markup</b> (<code>design-system/gallery.html</code>, "Workshop term card"), so the reference stays in step with the component.</li>
+  </ol>
+
+  <h2>Before / after · phone · card 2 with "Next up"</h2>
+  <div class="pair">
+    <div class="cell before"><span class="tag">Before</span><img src="img/pizza-52-before.png" alt="Before: the Next up sticker covers the number 2 badge on the Temperature card"></div>
+    <div class="cell after"><span class="tag">After</span><img src="img/pizza-52-after.png" alt="After: the Next up sticker sits above the Temperature card, badge and title fully visible"></div>
+  </div>
+
+  <h2>Open it</h2>
+  <p>The <code>?seed=1</code> marks game 1 done, so the sticker reads "Next up" on card 2 (Temperature), the case from the ticket. <code>?seed=0</code> resets to "Start here" on card 1.</p>
+  <code class="cmd">http://localhost:5194/workshop?seed=1</code>
+
+  <h2>Four yes/no questions</h2>
+  <div class="q"><div class="n">Q1 · phone · /workshop?seed=1</div>
+    <div class="ask">Are the "2" badge and the word "Temperature" fully visible, nothing under the sticker?</div>
+    <div class="how">The sticker sits above the card's top edge and overlaps only the red border line.</div>
+    <div class="exp"><b>Expected</b> yes.</div></div>
+  <div class="q"><div class="n">Q2 · laptop (window wider than 1024px) · same URL</div>
+    <div class="ask">In the narrow side column, is the sticker still clear of the badge and title?</div>
+    <div class="how">Cards are tighter there (smaller badge, less padding); the 8px overlap is still smaller than the padding.</div>
+    <div class="exp"><b>Expected</b> yes.</div></div>
+  <div class="q"><div class="n">Q3 · phone · /workshop?seed=0</div>
+    <div class="ask">Does "Start here" on card 1 still read as a sticker stuck onto that card (arrow down, touching the border)?</div>
+    <div class="how">It straddles the border a little on purpose, so it does not float loose above the list.</div>
+    <div class="exp"><b>Expected</b> yes.</div></div>
+  <div class="q"><div class="n">Q4 · the list as a whole</div>
+    <div class="ask">Is the extra room above the marked card (about 30px, the sticker's height) fine?</div>
+    <div class="how">The card with the sticker is now taller than the others by that much. The alternative, hanging the sticker over the card again, is what caused the bug.</div>
+    <div class="exp"><b>Expected</b> yes.</div></div>
+
+  <h2>Not for today</h2>
+  <div class="not">Left as they were, on purpose:
+    <ul>
+      <li>The sticker wording ("Start here" / "Next up"), accepted in Nina 2.3.</li>
+      <li>Showing the total count and the next term at the top of the Workshop. That is <b>PIZZA-40</b>, its own kit.</li>
+      <li>The landing copy. That is <b>PIZZA-35</b>, its own kit.</li>
+    </ul>
+  </div>
+
+  <h2>How to answer</h2>
+  <div class="answer"><code>52: 1✅ 2✅ 3✅ 4✅</code> (or ❌ with a word on what is off) and I move on to <b>PIZZA-35</b>.</div>
+</div>
