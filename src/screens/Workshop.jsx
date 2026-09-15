@@ -1,12 +1,9 @@
-import { useMemo } from 'react'
 import FlowCanvas from '../components/FlowCanvas.jsx'
 import TermChecklist from '../components/TermChecklist.jsx'
-import StatusReadout from '../components/StatusReadout.jsx'
 import TermTracker from '../components/TermTracker.jsx'
 import TermRecap from '../components/TermRecap.jsx'
 import { useProgress } from '../lib/useProgress.js'
-import { getFailureLine } from '../lib/failureLine.js'
-import { termCount, firstIncomplete } from '../lib/terms.js'
+import { termCount } from '../lib/terms.js'
 
 const PEGBOARD = {
   backgroundImage: 'radial-gradient(var(--color-pegboard-dot) 1.3px, transparent 1.3px)',
@@ -18,13 +15,6 @@ export default function Workshop() {
   const total = termCount
   const done = completedTerms.length
   const powered = done === total
-
-  const failureLine = useMemo(() => getFailureLine(completedTerms), [completedTerms])
-  const firstMissing = useMemo(() => firstIncomplete(completedTerms), [completedTerms])
-
-  const line = powered
-    ? "Your bot's online. It makes pizza now, and only pizza. Exactly as planned."
-    : failureLine
 
   return (
     <main className="mx-auto max-w-game px-4 pb-6 pt-4 lg:flex lg:h-full lg:max-w-desktop lg:flex-col lg:px-8 lg:pb-4 lg:pt-6">
@@ -40,11 +30,11 @@ export default function Workshop() {
           term is next. Same row on the Progress screen. */}
       <TermTracker completedTerms={completedTerms} className="mt-4 lg:mt-3" />
 
-      {/* Below `lg` this is a single stacked column (board → status → checklist),
+      {/* Below `lg` this is a single stacked column (board → checklist),
           identical to mobile. At `lg`+ it is a bento split that fills the app
           shell's height: the board takes two thirds and sizes itself to the
           room left under the intro (no viewport arithmetic), the right third
-          holds the status readout and the checklist, which scrolls on its own. */}
+          holds the checklist, which scrolls on its own. */}
       <div className="lg:mt-5 lg:grid lg:min-h-0 lg:flex-1 lg:grid-cols-3 lg:gap-x-8">
         {/* Left two thirds: the build board, a flex column so the canvas can
             take the remaining height. */}
@@ -58,21 +48,14 @@ export default function Workshop() {
               {done} / {total} wired in
             </div>
           </div>
-
-          <div className="mt-5 lg:hidden">
-            <StatusReadout line={line} powered={powered} firstMissingId={firstMissing?.id} />
-          </div>
         </div>
 
-        {/* Right third: status readout on top, then the checklist (scrolls inside
-            the column at lg+ so the board never has to). */}
+        {/* Right third: the checklist (scrolls inside the column at lg+ so the
+            board never has to). */}
         <div className="lg:min-h-0 lg:overflow-y-auto lg:pr-1">
-          <div className="hidden lg:block">
-            <StatusReadout line={line} powered={powered} firstMissingId={firstMissing?.id} />
-          </div>
           {/* PIZZA-40: the finish of the promise. Once every term is done,
               "these are the N you learned today" sits above the (now all
-              ticked) list, under the green "System online" readout. */}
+              ticked) list. */}
           {powered && <TermRecap className="mt-5" />}
           {/* 2.1 / 2.5 (Nina): "System components" read as chapters of a bot,
               not as the things you learn. Say plainly what the list is and what
