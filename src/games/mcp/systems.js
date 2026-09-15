@@ -1,98 +1,47 @@
 // Self-contained content for the MCP game only.
 //
-// Role frame: you're the OWNER, and you have one bot. It needs to reach the
-// systems your pizzeria runs on. The old way, each one is a custom
-// integration you build by hand, five fiddly steps a piece, and maintain
-// forever. You DO those steps (PIZZA-23): pick the format, map the field
-// names, copy the access key, run a test, fix what broke. Twice, in full.
-// Then MCP: one shared standard every system speaks, so the same systems
-// connect in one tap each, and a tool a stranger built connects too.
+// The metaphor (PIZZA-23 round 2, Eva): plugs and sockets. Your bot has one
+// plug shape. Every system your pizzeria runs on has its own socket shape, so
+// the bot only fits one of them; the rest need an adapter you build and keep
+// maintaining. Then MCP: one socket shape everybody agreed on, like USB-C.
+// Anything with that socket clicks straight in, including a tool built by
+// people who have never heard of your bot.
 
-export const BOT = { name: 'Pizza Bot', icon: 'smart_toy' }
+export const BOT = { name: 'Pizza Bot', icon: 'smart_toy', plug: 'round' }
 
-// The data formats you can pick from in step 1. Each system sends exactly one.
-export const FORMATS = ['CSV file', 'XML', 'JSON', 'Spreadsheet']
+// The shape vocabulary. `mcp` is the one shared shape.
+export const SHAPES = {
+  round: { label: 'round' },
+  square: { label: 'square' },
+  triangle: { label: 'triangle' },
+  hex: { label: 'hexagon' },
+  mcp: { label: 'MCP' },
+}
 
-// The systems your pizzeria already runs on, that your bot needs to reach.
-// `fields` are in the order the wizard asks for them ("your bot's `name` is
-// Menu's..."); `theirs` are the names the system uses, guessable but not
-// obvious, so the mapping is real work. `keys` holds the right key plus two
-// look-alikes, the way a real access key gets mistyped.
-export const NEEDED = [
-  {
-    id: 'menu',
-    name: 'Menu',
-    icon: 'menu_book',
-    desc: "today's pizzas and prices",
-    format: 'XML',
-    key: 'MN-7Q2-K',
-    keys: ['MN-7O2-K', 'MN-7Q2-K', 'NM-7Q2-K'],
-    fields: [
-      { ours: 'name', theirs: 'itm_nm', hint: 'the item name' },
-      { ours: 'price', theirs: 'prc_czk', hint: 'the price in CZK' },
-      { ours: 'in stock', theirs: 'avail_flg', hint: 'the available flag' },
-    ],
-    testFail: 'Menu sent the price as the text "129 Kč". Your bot expects a number.',
-    fixes: [
-      { label: 'Strip the "Kč" and turn it into a number', ok: true },
-      { label: 'Ask Menu to change their format', why: "They won't. It's their system, not yours." },
-      { label: 'Ignore it', why: 'Your bot would quote every pizza at 0 Kč.' },
-    ],
-  },
-  {
-    id: 'delivery',
-    name: 'Delivery',
-    icon: 'local_shipping',
-    desc: 'dispatch a driver',
-    format: 'JSON',
-    key: 'DL-4K9-Z',
-    keys: ['DL-4K9-Z', 'DL-4K9-2', 'DL-4KG-Z'],
-    fields: [
-      { ours: 'driver', theirs: 'drv_id', hint: 'the driver' },
-      { ours: 'arrival time', theirs: 'eta_min', hint: 'the arrival time in minutes' },
-      { ours: 'address', theirs: 'addr_ln1', hint: 'the address line' },
-    ],
-    testFail: 'Delivery sent the arrival time as "25-30". Your bot expects one number.',
-    fixes: [
-      { label: 'Promise the customer 25', why: 'Half the drivers arrive late. Angry customers.' },
-      { label: 'Take the larger number, 30, so the promise is safe', ok: true },
-      { label: 'Ask Delivery to change their format', why: "They won't. It's their system, not yours." },
-    ],
-  },
-  {
-    id: 'bookings',
-    name: 'Bookings',
-    icon: 'event_seat',
-    desc: 'table reservations',
-    format: 'CSV file',
-    key: 'BK-2R8-M',
-    keys: ['BK-2R8-M', 'BK-2RB-M', 'BK-2R8-N'],
-    fields: [
-      { ours: 'table', theirs: 'tbl_no', hint: 'the table number' },
-      { ours: 'time', theirs: 'slot_ts', hint: 'the time slot' },
-      { ours: 'guests', theirs: 'pax', hint: 'the number of guests' },
-    ],
-    testFail: 'Bookings sent the time as "19h". Your bot expects a clock time.',
-    fixes: [{ label: 'Turn "19h" into 19:00', ok: true }],
-  },
+// The systems your pizzeria already runs on. Only Bookings happens to share
+// the bot's plug shape; the other two need an adapter the old way.
+export const SYSTEMS = [
+  { id: 'menu', name: 'Menu', icon: 'menu_book', desc: "today's pizzas and prices", socket: 'square' },
+  { id: 'delivery', name: 'Delivery', icon: 'local_shipping', desc: 'dispatch a driver', socket: 'triangle' },
+  { id: 'bookings', name: 'Bookings', icon: 'event_seat', desc: 'table reservations', socket: 'round' },
 ]
 
-// The extra tool you decide you want partway through, still the old, custom way.
-export const EXTRA = { id: 'loyalty', name: 'Loyalty app', icon: 'loyalty', desc: 'points and rewards' }
+// The tool you want next. Yet another shape.
+export const EXTRA = { id: 'loyalty', name: 'Loyalty app', icon: 'loyalty', desc: 'points and rewards', socket: 'hex' }
 
-// The brand-new tool a stranger built last month, that already speaks MCP.
+// The brand-new tool a stranger built last month, that already has the MCP socket.
 export const STRANGER = {
   id: 'stock',
   name: 'Stock tracker',
   icon: 'inventory_2',
   desc: 'live ingredient levels, built by another company',
+  socket: 'mcp',
 }
 
-// The five manual steps every custom integration takes, in order. The wizard
-// walks step 1 to 5 for Menu and Delivery in full; Bookings is one tap that
-// stands for all five, once you have felt them twice.
-export const STEPS = ['Data format', 'Field names', 'Access key', 'Test', 'Fix']
+// What each hand-built adapter costs, so the friction is a number that climbs.
+export const WEEKS_PER_ADAPTER = 3
 
-// How long each hand-built integration costs, so the friction is a real number
-// that keeps climbing as you connect more systems.
-export const WEEKS_PER_CONNECTOR = 3
+// Reveal aside: why people call it "USB-C for AI".
+export const usbTitle = 'Why people call MCP "USB-C for AI"'
+export const usbBody =
+  'Before USB-C, every phone had its own charger and every drawer was full of adapters. One agreed shape fixed that. MCP is the same agreement for AI tools: your bot and the systems around it speak one shared standard, so they fit without a custom adapter, even when the two sides were built by people who never met.'
