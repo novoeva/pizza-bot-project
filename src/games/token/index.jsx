@@ -20,44 +20,13 @@ function bestOf(options) {
 }
 
 /**
- * One token as a chip, the same look beat 1 uses for the chopped word, so a
- * piece reads as a piece on every screen of the game.
- *   tone  'written' (default) already on screen
- *         'picked'  the token the bot just chose (green = it went right)
- *         'later'   a piece the bot still has to pick, faded
- *         'slot'    the empty next-token slot, dashed
- */
-const CHIP_TONES = {
-  written: 'border-neutral bg-accent-soft text-tertiary',
-  picked: 'border-success bg-success-bg text-success',
-  later: 'border-dashed border-slot-empty bg-surface text-text-muted opacity-70',
-  slot: 'border-dashed border-tertiary bg-surface text-tertiary',
-}
-
-function TokenChip({ tone = 'written', className = '', children }) {
-  return (
-    <span
-      className={
-        'inline-block rounded border-2 px-2 py-1 font-mono text-sm font-bold leading-none ' +
-        CHIP_TONES[tone] +
-        (className ? ' ' + className : '')
-      }
-    >
-      {children}
-    </span>
-  )
-}
-
-/**
  * Token game, { termId, onComplete } interface.
  * Two beats that build the concept in order:
  *   1. Chop it up, a token is a chunk of text. Guess how many tokens
  *      "Pepperoni" is (four), then see the chunks and a whole order tokenized.
  *   2. Read your bot's mind, your bot writes one token at a time, predicting
- *      the next from a ranked list. It writes "pepperoni" with the very pieces
- *      beat 1 chopped it into; you call each next piece before it does, then
- *      see the ranking and the pieces snap together (PIZZA-31: a token, never
- *      a whole word). You stay the owner watching your bot, never the model.
+ *      the next from a ranked list. Call the next token before it does, then
+ *      see the ranking. You stay the owner watching your bot, never the model.
  */
 export default function TokenGame({ termId, onComplete }) {
   const term = terms.find((t) => t.id === termId)
@@ -180,23 +149,18 @@ export default function TokenGame({ termId, onComplete }) {
   }
 
   // ---------- Beat 2: guess what's next ----------
-  // PIZZA-31: the bot writes "pepperoni" piece by piece, with the same pieces
-  // beat 1 chopped it into. Each round shows the pieces already written and
-  // stops mid-word, so what the player calls is visibly the next PIECE, never
-  // the whole word. After the pick the pieces snap together on screen.
   if (phase === 'predict') {
     const round = predictionRounds[roundIndex]
     const best = bestOf(round.options)
     const answered = pick !== null
-    const correct = pick === best.token
+    const correct = pick === best.word
     const isLast = roundIndex === predictionRounds.length - 1
     const sorted = [...round.options].sort((a, b) => b.pct - a.pct)
-    const wordSoFar = round.written.join('')
 
-    function choose(token) {
+    function choose(word) {
       if (pick) return
-      setPick(token)
-      setResults((r) => [...r, token === best.token])
+      setPick(word)
+      setResults((r) => [...r, word === best.word])
     }
 
     function next() {
@@ -215,46 +179,26 @@ export default function TokenGame({ termId, onComplete }) {
         main={
           <>
         <PhaseCard title="How it picks the next token">
-          Your bot never writes a whole word at once. It writes one token, then the next, then
-          the next. Below it is in the middle of a word: the pieces it has already written are on
-          screen. Call the next piece before it does.
+          Your bot never writes a whole reply at once. It picks one token, then the next, then
+          the next. Each option below is one token: a short, everyday word is a single token,
+          while a long word like &ldquo;pepperoni&rdquo; would take four picks.
         </PhaseCard>
 
-        {/* The sentence so far. Plain text for the finished words, then the
-            pieces of the word in progress as chips with no gap between them,
-            then the empty slot, so the stop lands visibly mid-word. */}
         <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-4 text-center shadow-pop">
-          <p className="font-label text-[11px] text-text-muted">Your bot is writing</p>
-          <p className="mt-2 flex flex-wrap items-center justify-center text-lg font-extrabold leading-snug">
-            <span className="mr-2">&ldquo;{round.before}</span>
-            <span className="inline-flex items-center gap-0.5">
-              {round.written.map((t, i) => (
-                <TokenChip key={i}>{t}</TokenChip>
-              ))}
-              {answered ? (
-                <TokenChip tone="picked" className={'part-land' + (best.space ? ' ml-1.5' : '')}>
-                  {best.token}
-                </TokenChip>
-              ) : (
-                <TokenChip tone="slot">?</TokenChip>
-              )}
-            </span>
-            <span className="ml-0.5">&rdquo;</span>
+          <p className="text-lg font-extrabold leading-snug">
+            "{round.context} <span className="text-tertiary">___</span>"
           </p>
-          {round.note && (
-            <p className="mt-2 text-[12px] leading-snug text-text-muted">{round.note}</p>
-          )}
         </div>
 
         {!answered ? (
-          <ChoiceGroup mode="commit" label="Which token does your bot pick next?">
+          <ChoiceGroup mode="commit" label="Which token comes next? Each option is one token.">
             {round.options.map((o) => (
               <SelectableCard
-                key={o.token}
+                key={o.word}
                 mode="commit"
-                label={o.token}
+                label={o.word}
                 labelClassName="font-mono text-sm"
-                onSelect={() => choose(o.token)}
+                onSelect={() => choose(o.word)}
               />
             ))}
           </ChoiceGroup>
@@ -263,67 +207,28 @@ export default function TokenGame({ termId, onComplete }) {
             <Callout
               tone={correct ? 'success' : 'problem'}
               icon={correct ? 'check_circle' : 'cancel'}
-              title={correct ? 'You called it' : `Your bot picked "${best.token}"`}
+              title={correct ? 'You called it' : `Your bot picked "${best.word}"`}
               compact
             >
               {round.why}
             </Callout>
 
-            {/* The pieces snap together: what was written + the bot's pick,
-                then the pieces still to come, faded. This is where the point
-                lands: the bot built the word, it never guessed it. */}
-            <Panel title="Snapped together" compact>
-              <div className="flex flex-wrap items-center gap-1">
-                {round.written.map((t, i) => (
-                  <TokenChip key={i}>{t}</TokenChip>
-                ))}
-                <span className="font-label text-sm text-text-muted">+</span>
-                <TokenChip tone="picked" className={best.space ? 'ml-1' : ''}>
-                  {best.token}
-                </TokenChip>
-                {round.after.map((t, i) => (
-                  <TokenChip key={'after' + i} tone="later">
-                    {t}
-                  </TokenChip>
-                ))}
-              </div>
-              <p className="mt-2 text-[13px] leading-snug text-text">
-                {round.after.length > 0 ? (
-                  <>
-                    <span className="font-mono font-bold">{wordSoFar}</span> +{' '}
-                    <span className="font-mono font-bold text-success">{best.token}</span> ={' '}
-                    <span className="font-mono font-bold">{wordSoFar + best.token}&hellip;</span>{' '}
-                    {round.after.length === 1
-                      ? `One more pick (${round.after[0]}) and the word is done.`
-                      : `${round.after.length} more picks (${round.after.join(', ')}) and the word is done.`}
-                  </>
-                ) : (
-                  <>
-                    <span className="font-mono font-bold">{wordSoFar}</span> is complete. Next token:{' '}
-                    <span className="font-mono font-bold text-success">{best.token}</span>, a whole
-                    short word this time. Common words like this are one token on their own.
-                  </>
-                )}
-              </p>
-            </Panel>
-
             <Panel title="Your bot's ranking" meta="% = probability">
               <div className="flex flex-col gap-2">
                 {sorted.map((o) => {
-                  const isBest = o.token === best.token
-                  const isPick = o.token === pick
+                  const isBest = o.word === best.word
+                  const isPick = o.word === pick
                   return (
-                    <div key={o.token} className="flex items-center gap-2">
+                    <div key={o.word} className="flex items-center gap-2">
                       <div
                         className={
-                          'w-24 shrink-0 rounded border-2 px-1.5 py-1 text-center ' +
+                          'w-24 shrink-0 rounded border-2 px-1.5 py-1 text-center font-mono text-xs ' +
                           (isPick
-                            ? 'border-neutral bg-accent-soft text-tertiary'
+                            ? 'border-neutral bg-accent-soft font-bold text-tertiary'
                             : 'border-neutral bg-muted text-text-muted')
                         }
                       >
-                        <span className={'block font-mono text-xs ' + (isPick ? 'font-bold' : '')}>{o.token}</span>
-                        <span className="block font-label text-[9px] leading-tight">{o.makes}</span>
+                        {o.word}
                       </div>
                       <div className="h-4 flex-1 overflow-hidden rounded-full border-2 border-neutral bg-surface">
                         <div
@@ -342,7 +247,7 @@ export default function TokenGame({ termId, onComplete }) {
 
             <GameActions>
               <GameActionButton variant="primary" icon="arrow_forward" onClick={next}>
-                {isLast ? 'See what this means' : 'Next piece'}
+                {isLast ? 'See what this means' : 'Next sentence'}
               </GameActionButton>
             </GameActions>
           </>
@@ -356,6 +261,6 @@ export default function TokenGame({ termId, onComplete }) {
   // ---------- Reveal ----------
   const score = results.filter(Boolean).length
   return (
-    <TermReveal term={term} score={`You called your bot's next token on ${score} of ${predictionRounds.length}.`} onComplete={onComplete} />
+    <TermReveal term={term} score={`You called your bot's next chunk on ${score} of ${predictionRounds.length}.`} onComplete={onComplete} />
   )
 }
