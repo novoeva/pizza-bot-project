@@ -22,8 +22,8 @@ function bestOf(options) {
 /**
  * Token game, { termId, onComplete } interface.
  * Two beats that build the concept in order:
- *   1. Chop it up, a token is a chunk of text. Guess how many tokens
- *      "Pepperoni" is (four), then see the chunks and a whole order tokenized.
+ *   1. Chop it up, a token is a piece of text. Guess how many tokens
+ *      "pepperoni" is (two), then see the pieces and a whole order tokenized.
  *   2. Read your bot's mind, your bot writes one token at a time, predicting
  *      the next from a ranked list. Call the next token before it does, then
  *      see the ranking. You stay the owner watching your bot, never the model.
@@ -95,8 +95,9 @@ export default function TokenGame({ termId, onComplete }) {
                 the model.
               </p>
               <p className="mt-2 text-center text-[12px] leading-snug text-text-muted">
-                Why &ldquo;pep&rdquo; and not &ldquo;pe&rdquo;? The pieces are whatever showed up
-                most often in the text the model learned from. Nobody designed them, and you
+                Why &ldquo;pepper&rdquo; + &ldquo;oni&rdquo; and not syllables? The pieces are
+                whatever showed up most often in the text the model learned from: &ldquo;pepper&rdquo;
+                is a common word, &ldquo;oni&rdquo; a common ending. Nobody designed them, and you
                 can&rsquo;t work them out by hand.
               </p>
             </>
@@ -107,7 +108,7 @@ export default function TokenGame({ termId, onComplete }) {
           <>
             <div className="rounded-md border-[3px] border-neutral bg-muted p-3 shadow-pop">
               <div className="mb-2 flex items-center justify-between gap-2">
-                <p className="font-label text-[11px] text-text-muted">A whole order, chunked</p>
+                <p className="font-label text-[11px] text-text-muted">A whole order, split into tokens</p>
                 <span className="shrink-0 rounded-full border-2 border-neutral bg-accent-soft px-2 py-0.5 font-label text-[11px] font-bold text-tertiary">
                   {samplePhrase.tokens.length} tokens
                 </span>
@@ -126,8 +127,9 @@ export default function TokenGame({ termId, onComplete }) {
                 <span className="font-bold text-text">
                   {wordCount} words, {samplePhrase.tokens.length} tokens.
                 </span>{' '}
-                Short, common words are usually one token. Long or unusual ones get split. Even
-                punctuation counts.
+                Short, common words are usually one token. Longer or rarer ones get split, and not
+                by syllable: a token is a chunk the model has seen a lot, so &ldquo;pepper&rdquo; +
+                &ldquo;oni&rdquo;. Even punctuation counts.
               </p>
             </div>
 
@@ -180,8 +182,8 @@ export default function TokenGame({ termId, onComplete }) {
           <>
         <PhaseCard title="How it picks the next token">
           Your bot never writes a whole reply at once. It picks one token, then the next, then
-          the next. Each option below is one token: short, everyday words like these are a single
-          token each.
+          the next. Each option below is one token: a short, everyday word is a single token,
+          while a long word like &ldquo;pepperoni&rdquo; would take four picks.
         </PhaseCard>
 
         <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-4 text-center shadow-pop">
@@ -261,6 +263,6 @@ export default function TokenGame({ termId, onComplete }) {
   // ---------- Reveal ----------
   const score = results.filter(Boolean).length
   return (
-    <TermReveal term={term} score={`You called your bot's next chunk on ${score} of ${predictionRounds.length}.`} onComplete={onComplete} />
+    <TermReveal term={term} score={`You called your bot's next token on ${score} of ${predictionRounds.length}.`} onComplete={onComplete} />
   )
 }

@@ -8,18 +8,18 @@
     "role": "You're the owner. This game shows you how an LLM (the AI behind your bot) thinks in small pieces.",
     "definition": "A token is a piece of a word, usually a few letters long. It is what an AI actually reads and writes in. Sometimes a whole short word, sometimes just a full stop.",
     "dont": [
-      "Don't judge an answer by its length. A long chat gets slower and more expensive."
+      "Don’t count words to guess the cost. A long word can be two or three tokens."
     ],
     "inGame": [
-      "You guessed how many chunks are in “Pepperoni”. The bot saw four, not one word.",
-      "The whole order was chopped the same way: short words stayed whole, long ones were split.",
-      "Then you watched the bot pick the next chunk from a ranked list. It writes one chunk at a time."
+      "You guessed how many tokens are in “pepperoni”. It’s two: pepper + oni. A token is a piece the model has seen a lot, not a syllable.",
+      "The whole order was split the same way: short words stayed whole, pepperoni split in two, and even the comma was a token.",
+      "Then you watched the bot pick the next token from a ranked list. It writes one token at a time."
     ],
     "do": [
-      "Expect the bot to read and write in chunks, not words. One word can cost several chunks.",
-      "Keep chats short when speed and cost matter. Every chunk is paid for."
+      "Think in tokens, not words. That’s how the model reads and writes.",
+      "Keep chats short when cost matters. You pay for every token, in both directions."
     ],
-    "recap": "The bot never sees whole words. It sees small chunks called tokens, and every chunk it reads or writes takes time and costs money."
+    "recap": "An AI model doesn't read words. It reads and writes in small pieces called tokens, and you pay for every token: the ones you send and the ones it writes back."
   },
   {
     "id": "context-window",
