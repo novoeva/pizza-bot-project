@@ -179,22 +179,22 @@
     "id": "mcp",
     "order": 10,
     "name": "MCP",
-    "botPart": "Universal port",
-    "whyYouCare": "Each new system takes weeks to wire in, or clicks straight in.",
-    "role": "You're the owner. This game shows you the easy way to connect your bot to your other systems.",
-    "definition": "MCP (short for Model Context Protocol) is one shared plug that AI assistants and outside systems both agree to use, so neither side has to know anything about the other side specifically.",
+    "botPart": "MCP plug (one shared shape)",
+    "whyYouCare": "Every new system is an adapter you build and maintain, or it just clicks in.",
+    "role": "You're the owner. You plug your bot into your systems: first with adapters, then with MCP.",
+    "definition": "MCP (short for Model Context Protocol) is one shared standard for how AI assistants and outside systems connect. Think of it as one plug shape everyone agreed on, like USB-C: your bot speaks it once, and any system that speaks it too fits without a custom adapter.",
     "dont": [
-      "Don't build a custom connector for a tool that already speaks MCP."
+      "Don't build a custom adapter for a tool that already speaks MCP."
     ],
     "inGame": [
-      "Each system needed its own custom connector, three weeks apiece, and you were never done.",
-      "With one universal port, the same systems clicked in with no building at all.",
-      "A stock tracker built by people who had never heard of your bot plugged in on day one."
+      "Your bot's round plug fit one socket out of three. The other two needed adapters, three weeks each, and they were yours to maintain.",
+      "With MCP every system had the same socket, so each one clicked in with one tap and no adapter.",
+      "A stock tracker built by a company that had never heard of your bot clicked in on day one, because both sides used the same shape."
     ],
     "do": [
-      "Prefer tools that speak MCP. They plug in on day one, with no custom bridge."
+      "Prefer tools that speak MCP. They click in on day one, with no adapter to build or maintain."
     ],
-    "recap": "MCP is a shared standard, one universal port, so any tool that speaks it can plug into your bot without a custom connector."
+    "recap": "MCP is a shared standard, one plug shape for AI: your bot speaks it once, and any system that speaks it connects without a custom adapter."
   },
   {
     "id": "guardrails",
