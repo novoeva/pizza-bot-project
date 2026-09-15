@@ -28,3 +28,6 @@ INTERVIEW-FEEDBACK.md
 INTERVIEW-FEEDBACK-SUMMARY.md
 interviews/
 PROMPT-FR-26-WHY-YOU-CARE.md
+
+# Vite dep cache, per checkout (see vite.config.js)
+.vite/
