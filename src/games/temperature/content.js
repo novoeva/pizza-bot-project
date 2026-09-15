@@ -10,16 +10,17 @@
 // The blank the bot is about to fill in.
 export const sliderContext = "Tonight's special is the"
 
-// Candidate next words with their base probability at temperature 1.0
-// (they sum to 1). Ordered safe -> wild so the bars keep a stable order while
-// the slider reshapes their heights.
+// Candidate next tokens with their base probability at temperature 1.0
+// (they sum to 1). Each is a short, common word that a real tokenizer keeps as
+// ONE token, so what the bot picks here is a whole token, the same picture as
+// the Token game, without the "is this a word or a piece?" confusion.
+// Ordered safe -> wild so the bars keep a stable order while the dial reshapes
+// their heights.
 export const candidates = [
-  { word: 'classic', base: 0.4 },
-  { word: 'pepperoni', base: 0.27 },
-  { word: 'four-cheese', base: 0.15 },
-  { word: 'spicy honey', base: 0.1 },
-  { word: 'dill pickle', base: 0.05 },
-  { word: 'marshmallow', base: 0.03 },
+  { word: 'classic', base: 0.55 },
+  { word: 'spicy', base: 0.25 },
+  { word: 'cheese', base: 0.14 },
+  { word: 'pickle', base: 0.06 },
 ]
 
 // Slider range for the temperature dial, and the zones we label it with.
@@ -31,7 +32,7 @@ export const zones = [
     id: 'low',
     max: 0.6,
     label: 'Predictable',
-    note: 'Low temperature: the bot plays it safe. It picks the most likely word almost every time, so it says nearly the same thing on every roll.',
+    note: 'Low temperature: the bot plays it safe. It picks the most likely token almost every time, so it says the same thing on nearly every roll.',
   },
   {
     id: 'balanced',
@@ -43,7 +44,7 @@ export const zones = [
     id: 'wild',
     max: Infinity,
     label: 'Wild',
-    note: 'High temperature: the long-shot words get a real chance to win. Great for fresh ideas, but the output changes every time, so whenever you turn it up, cross-check what comes back before you trust it.',
+    note: 'High temperature: it is close to a coin flip between all four. Great for fresh ideas, but the output changes on every roll, so whenever you turn it up, cross-check what comes back before you trust it.',
   },
 ]
 
