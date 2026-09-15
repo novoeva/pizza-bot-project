@@ -320,17 +320,21 @@ function RowButton({ icon, tone = 'primary', onClick, children }) {
  *   nofit    plug ✕ socket, different shapes, red
  *   adapter  plug → [adapter] → socket, amber
  */
-function Fit({ plug, socket, state }) {
+function Fit({ plug, socket, state, small = false }) {
+  const sz = small ? 18 : 24
   const good = state === 'fit'
   const plugColor = good ? 'text-success' : state === 'nofit' ? 'text-danger' : 'text-primary'
   const sockColor = good ? 'text-success' : state === 'nofit' ? 'text-danger' : 'text-text-muted'
   const mid =
     state === 'adapter' ? (
       <span
-        className="flex h-6 items-center rounded border-2 border-cheese-dim bg-cheese-bg px-1 font-label text-[9px] font-bold text-cheese-dim"
+        className={
+          'flex items-center rounded border-2 border-cheese-dim bg-cheese-bg font-label font-bold text-cheese-dim ' +
+          (small ? 'h-5 px-0.5 text-[8px]' : 'h-6 px-1 text-[9px]')
+        }
         aria-label="adapter"
       >
-        adapter
+        {small ? 'adpt' : 'adapter'}
       </span>
     ) : (
       <span
@@ -345,9 +349,9 @@ function Fit({ plug, socket, state }) {
     )
   return (
     <div className="flex items-center gap-1" aria-label={`${plug} plug, ${socket} socket, ${state}`}>
-      <Shape kind={plug} variant="plug" size={24} className={plugColor} />
+      <Shape kind={plug} variant="plug" size={sz} className={plugColor} />
       {mid}
-      <Shape kind={socket} variant="socket" size={24} className={sockColor} />
+      <Shape kind={socket} variant="socket" size={sz} className={sockColor} />
     </div>
   )
 }
@@ -402,8 +406,8 @@ function ShapePicture({ adapters }) {
               .filter((s) => s.id !== STRANGER.id)
               .map((s) => (
                 <div key={s.id} className="flex items-center justify-between gap-1">
-                  <span className="truncate text-[11px]">{s.name}</span>
-                  <Fit plug={BOT.plug} socket={s.socket} state={s.socket === BOT.plug ? 'fit' : 'adapter'} />
+                  <span className="min-w-0 flex-1 truncate text-[10px]">{s.name}</span>
+                  <Fit small plug={BOT.plug} socket={s.socket} state={s.socket === BOT.plug ? 'fit' : 'adapter'} />
                 </div>
               ))}
           </div>
@@ -417,8 +421,8 @@ function ShapePicture({ adapters }) {
           <div className="mt-2 flex flex-col gap-1.5">
             {all.map((s) => (
               <div key={s.id} className="flex items-center justify-between gap-1">
-                <span className="truncate text-[11px]">{s.name}</span>
-                <Fit plug="mcp" socket="mcp" state="fit" />
+                <span className="min-w-0 flex-1 truncate text-[10px]">{s.name}</span>
+                <Fit small plug="mcp" socket="mcp" state="fit" />
               </div>
             ))}
           </div>
