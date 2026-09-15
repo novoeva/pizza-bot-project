@@ -95,8 +95,9 @@ export default function TokenGame({ termId, onComplete }) {
                 the model.
               </p>
               <p className="mt-2 text-center text-[12px] leading-snug text-text-muted">
-                Why &ldquo;pep&rdquo; and not &ldquo;pe&rdquo;? The pieces are whatever showed up
-                most often in the text the model learned from. Nobody designed them, and you
+                Why &ldquo;pepper&rdquo; + &ldquo;oni&rdquo; and not syllables? The pieces are
+                whatever showed up most often in the text the model learned from: &ldquo;pepper&rdquo;
+                is a common word, &ldquo;oni&rdquo; a common ending. Nobody designed them, and you
                 can&rsquo;t work them out by hand.
               </p>
             </>
@@ -126,8 +127,9 @@ export default function TokenGame({ termId, onComplete }) {
                 <span className="font-bold text-text">
                   {wordCount} words, {samplePhrase.tokens.length} tokens.
                 </span>{' '}
-                Short, common words are usually one token. Long or unusual ones get split. Even
-                punctuation counts.
+                Short, common words are usually one token. Longer or rarer ones get split, and not
+                by syllable: a token is a chunk the model has seen a lot, so &ldquo;pepper&rdquo; +
+                &ldquo;oni&rdquo;. Even punctuation counts.
               </p>
             </div>
 
