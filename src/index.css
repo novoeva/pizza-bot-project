@@ -167,3 +167,15 @@ h3,
 @media (prefers-reduced-motion: reduce) {
   .flow-wire { animation: none; stroke-dasharray: none; }
 }
+
+/* Temperature game: the dial knob nudges right until the player drags it,
+   so it's obvious the thing is draggable (PIZZA-14/15 round 3). */
+@keyframes range-nudge {
+  0%, 60%, 100% { transform: translateX(0); }
+  30% { transform: translateX(6px); }
+}
+.range-nudge::-webkit-slider-thumb { animation: range-nudge 1.6s ease-in-out infinite; }
+.range-nudge::-moz-range-thumb { animation: range-nudge 1.6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .range-nudge::-webkit-slider-thumb, .range-nudge::-moz-range-thumb { animation: none; }
+}

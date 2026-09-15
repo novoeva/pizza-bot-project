@@ -7,20 +7,20 @@
 //   2. "Pick the setting", match a real bot job to the right temperature.
 
 // ---- Beat 1: the slider playground ----
-// The blank the bot is about to fill in.
-export const sliderContext = "Tonight's special is the"
+// The sentence the bot is finishing. The blank is one token.
+export const sliderContext = 'Your pizza will be'
 
-// Candidate next tokens with their base probability at temperature 1.0
-// (they sum to 1). Each is a short, common word that a real tokenizer keeps as
-// ONE token, so what the bot picks here is a whole token, the same picture as
-// the Token game, without the "is this a word or a piece?" confusion.
-// Ordered safe -> wild so the bars keep a stable order while the dial reshapes
-// their heights.
+// The four candidate next tokens with their base probability at temperature
+// 1.0 (they sum to 1). Each is a short, everyday word that GPT-style
+// tokenizers keep as ONE token (" ready", " hot", " late", " huge"), so what
+// the bot picks between here is a whole token, the same rule as in the Token
+// game. Ordered safe -> wild so the bars keep a stable order while the dial
+// reshapes their heights.
 export const candidates = [
-  { word: 'classic', base: 0.55 },
-  { word: 'spicy', base: 0.25 },
-  { word: 'cheese', base: 0.14 },
-  { word: 'pickle', base: 0.06 },
+  { word: 'ready', base: 0.55 },
+  { word: 'hot', base: 0.25 },
+  { word: 'late', base: 0.14 },
+  { word: 'huge', base: 0.06 },
 ]
 
 // Slider range for the temperature dial, and the zones we label it with.
@@ -32,7 +32,7 @@ export const zones = [
     id: 'low',
     max: 0.6,
     label: 'Predictable',
-    note: 'Low temperature: the bot plays it safe. It picks the most likely token almost every time, so it says the same thing on nearly every roll.',
+    note: 'Low temperature: the bot plays it safe. Nearly all the odds sit on the most likely token, so it says the same thing almost every time.',
   },
   {
     id: 'balanced',
@@ -44,7 +44,7 @@ export const zones = [
     id: 'wild',
     max: Infinity,
     label: 'Wild',
-    note: 'High temperature: it is close to a coin flip between all four. Great for fresh ideas, but the output changes on every roll, so whenever you turn it up, cross-check what comes back before you trust it.',
+    note: 'High temperature: the odds are close to even, so any of the four can come out. Great for fresh ideas, but the output changes every time, so whenever you turn it up, cross-check what comes back before you trust it.',
   },
 ]
 
