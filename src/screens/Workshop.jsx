@@ -2,6 +2,8 @@ import { useMemo } from 'react'
 import FlowCanvas from '../components/FlowCanvas.jsx'
 import TermChecklist from '../components/TermChecklist.jsx'
 import StatusReadout from '../components/StatusReadout.jsx'
+import TermTracker from '../components/TermTracker.jsx'
+import TermRecap from '../components/TermRecap.jsx'
 import { useProgress } from '../lib/useProgress.js'
 import { getFailureLine } from '../lib/failureLine.js'
 import { termCount, firstIncomplete } from '../lib/terms.js'
@@ -34,6 +36,9 @@ export default function Workshop() {
         You own a pizzeria, and you&rsquo;re building an AI bot to take orders. To build it, you&rsquo;ll
         learn one AI term at a time &mdash; and each term you learn is another box wired into your bot.
       </p>
+      {/* PIZZA-40: the promised count, all of it visible at once, and which
+          term is next. Same row on the Progress screen. */}
+      <TermTracker completedTerms={completedTerms} className="mt-4 lg:mt-3" />
 
       {/* Below `lg` this is a single stacked column (board → status → checklist),
           identical to mobile. At `lg`+ it is a bento split that fills the app
@@ -65,6 +70,10 @@ export default function Workshop() {
           <div className="hidden lg:block">
             <StatusReadout line={line} powered={powered} firstMissingId={firstMissing?.id} />
           </div>
+          {/* PIZZA-40: the finish of the promise. Once every term is done,
+              "these are the N you learned today" sits above the (now all
+              ticked) list, under the green "System online" readout. */}
+          {powered && <TermRecap className="mt-5" />}
           {/* 2.1 / 2.5 (Nina): "System components" read as chapters of a bot,
               not as the things you learn. Say plainly what the list is and what
               to do with it. */}
