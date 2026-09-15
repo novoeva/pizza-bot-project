@@ -22,10 +22,9 @@ import Panel from '../../components/Panel.jsx'
  * Temperature game, { termId, onComplete } interface.
  * Reuses the Token game's picture, the model choosing the next word from a
  * ranked list, and adds the one dial that reshapes that list.
- *   1. "Slide it", drag the temperature and watch the candidate words go from
- *      "always the safe one" (low) to "anything can win" (high). Rolling the
- *      dice samples one word so the randomness is concrete, and doubles as the
- *      obvious call-to-action that unlocks the next beat.
+ *   1. "Drag the dial", drag the temperature and watch the odds of the four
+ *      candidate tokens go from "always the safe one" (low) to "any of them"
+ *      (high). No rolling: the moving bars are the whole point (PIZZA-14/15).
  *   2. "Pick the setting", match a real bot job to the right temperature.
  */
 export default function TemperatureGame({ termId, onComplete }) {
@@ -33,9 +32,10 @@ export default function TemperatureGame({ termId, onComplete }) {
   const [phase, setPhase] = useState('play') // 'play' | 'match' | 'reveal'
 
   // ---------- Beat 1: slide it ----------
-  const [temp, setTemp] = useState(1.0)
-  const [sampled, setSampled] = useState(null)
-  const [rolls, setRolls] = useState(0)
+  // Start low so the first picture is the favourite running away with it;
+  // dragging up is the experiment. `moved` unlocks the next beat.
+  const [temp, setTemp] = useState(0.4)
+  const [moved, setMoved] = useState(false)
 
   // ---------- Beat 2: pick the setting ----------
   const [roundIndex, setRoundIndex] = useState(0)
@@ -47,42 +47,32 @@ export default function TemperatureGame({ termId, onComplete }) {
   // ---------- Beat 1: slide it ----------
   if (phase === 'play') {
     const ranked = reshape(candidates, temp)
-    const top = ranked.reduce((a, b) => (b.pct > a.pct ? b : a))
-    const zone = zones.find((z) => temp <= z.max)
-    const interacted = rolls > 0
+    const zone = zoneFor(temp)
 
-    function roll() {
-      setSampled(sampleWord(ranked))
-      setRolls((r) => r + 1)
+    function onDial(e) {
+      setTemp(Number(e.target.value))
+      setMoved(true)
     }
 
     const main = (
       <>
         {/* This beat's own instruction, at the top of the active column so it's
             always the current step (the constant orientation stays on the left). */}
-        <PhaseCard title="Feel the dial">
-          Drag the temperature from low to high and watch the odds shift, then roll to see which word your bot picks.
+        <PhaseCard title="Drag the dial">
+          Drag the temperature from low to high and watch the odds of each next token change.
         </PhaseCard>
 
-        {/* The sentence the bot is about to finish */}
+        {/* The sentence the bot is about to finish: the blank is one token. */}
         <div className="rounded-md border-[3px] border-neutral bg-muted px-4 py-4 text-center shadow-pop">
           <p className="text-lg font-extrabold leading-snug">
-            "{sliderContext}{' '}
-            {sampled ? (
-              <span className="text-tertiary">{sampled}</span>
-            ) : (
-              <span className="text-tertiary">___</span>
-            )}
-            {sampled ? '.' : ''}"
+            "{sliderContext} <span className="text-tertiary">___</span>"
           </p>
           <p className="mt-1 font-label text-[11px] text-text-muted">
-            {sampled
-              ? 'One roll at this setting'
-              : 'Same words to choose from every time. Only the odds change.'}
+            Four tokens can fill the blank. The dial only changes their odds.
           </p>
         </div>
 
-        {/* The temperature dial */}
+        {/* The temperature dial, with an unmissable "drag me" until it has moved. */}
         <Panel
           title="Temperature"
           icon="thermostat"
@@ -101,61 +91,50 @@ export default function TemperatureGame({ termId, onComplete }) {
             max={TEMP_MAX}
             step={0.1}
             value={temp}
-            onChange={(e) => setTemp(Number(e.target.value))}
-            className="range-chunky"
+            onChange={onDial}
+            className={'range-chunky ' + (moved ? '' : 'range-nudge')}
             aria-label="Temperature"
           />
           <div className="mt-1 flex justify-between font-label text-[10px] text-text-muted">
             <span>Low · predictable</span>
             <span>High · wild</span>
           </div>
+          {!moved && (
+            <p className="mt-2 flex items-center justify-center gap-1 font-label text-[11px] font-bold text-tertiary">
+              <span className="material-symbols-rounded text-[16px]">swipe</span>
+              Drag the knob to the right
+              <span className="material-symbols-rounded text-[16px]">arrow_forward</span>
+            </p>
+          )}
         </Panel>
 
-        {/* Live distribution */}
-        <Panel title="Chance of each next word" meta="% = probability">
+        {/* Live odds. Nothing is pinned as "the right one" (PIZZA-14): the
+            favourite is only ever the tallest bar, and the bars animate so the
+            lead visibly melts as the dial goes up. */}
+        <Panel title="Chance of each next token" meta="each option = one token">
           <div className="flex flex-col gap-2">
-            {ranked.map((o) => {
-              const isTop = o.word === top.word
-              return (
-                <div key={o.word} className="flex items-center gap-2">
-                  <div
-                    className={
-                      'w-24 shrink-0 rounded border-2 px-1.5 py-1 text-center font-mono text-xs ' +
-                      (isTop
-                        ? 'border-neutral bg-cheese-bg font-bold text-cheese-dim'
-                        : 'border-neutral bg-muted text-text-muted')
-                    }
-                  >
-                    {o.word}
-                  </div>
-                  <div className="h-4 flex-1 overflow-hidden rounded-full border-2 border-neutral bg-surface">
-                    <div
-                      className={'h-full transition-[width] duration-150 ' + (isTop ? 'bg-cheese' : 'bg-tertiary')}
-                      style={{ width: `${o.pct}%` }}
-                    />
-                  </div>
-                  <div className="w-9 shrink-0 text-right text-xs text-text-muted">
-                    {Math.round(o.pct)}%
-                  </div>
+            {ranked.map((o) => (
+              <div key={o.word} className="flex items-center gap-2">
+                <div className="w-16 shrink-0 rounded border-2 border-neutral bg-muted px-1.5 py-1 text-center font-mono text-xs text-text">
+                  {o.word}
                 </div>
-              )
-            })}
+                <div className="h-4 flex-1 overflow-hidden rounded-full border-2 border-neutral bg-surface">
+                  <div
+                    className="h-full bg-cheese transition-[width] duration-300 ease-out motion-reduce:transition-none"
+                    style={{ width: `${o.pct}%` }}
+                  />
+                </div>
+                <div className="w-9 shrink-0 text-right text-xs text-text-muted">{Math.round(o.pct)}%</div>
+              </div>
+            ))}
           </div>
           <p className="mt-3 text-[13px] leading-snug text-text-muted">{zone.note}</p>
         </Panel>
-
-        {/* Re-roll stays inline as a secondary; the pinned bar carries the
-            forward action so it's always on screen. */}
-        {interacted && (
-          <GameActionButton variant="neutral" icon="casino" onClick={roll}>
-            Roll again
-          </GameActionButton>
-        )}
       </>
     )
 
     // Left: read-once orientation (what temperature is + Your role). Right: the
-    // live dial, the distribution and the roll — the part you actually touch.
+    // dial and the odds. "Next" appears once the dial has been moved.
     return (
       <>
         <GameStage
@@ -163,12 +142,8 @@ export default function TemperatureGame({ termId, onComplete }) {
           main={main}
           progress={{ part: 1, parts: 2 }}
         />
-        <GameActions>
-          {!interacted ? (
-            <GameActionButton variant="accent" icon="casino" onClick={roll}>
-              Roll the dice, let the bot pick
-            </GameActionButton>
-          ) : (
+        {moved && (
+          <GameActions>
             <GameActionButton
               variant="primary"
               icon="arrow_forward"
@@ -176,8 +151,8 @@ export default function TemperatureGame({ termId, onComplete }) {
             >
               Next: pick the right setting
             </GameActionButton>
-          )}
-        </GameActions>
+          </GameActions>
+        )}
       </>
     )
   }
@@ -281,24 +256,22 @@ export default function TemperatureGame({ termId, onComplete }) {
 }
 
 /**
- * Reshape the candidate distribution for a given temperature.
- * Standard temperature scaling: q_i is proportional to base_i^(1/T). At low T
- * the top word runs away with it; at high T the distribution flattens and the
- * long shots become viable. Returns each candidate with a `pct` (0-100).
+ * Reshape the candidate distribution for a given dial position.
+ * Standard temperature scaling: q_i is proportional to base_i^(1/T). Below 1.0
+ * the dial IS the temperature. Above 1.0 the dial is stretched (2.0 on the dial
+ * = T of 5) so the top of the dial is close to a coin flip between all four
+ * tokens: with only four candidates a plain T of 2 would still leave the
+ * favourite visibly ahead, and the point of "wild" is that the pick changes
+ * from roll to roll. Returns each candidate with a `pct` (0-100).
  */
 function reshape(list, temp) {
-  const exps = list.map((c) => Math.pow(c.base, 1 / temp))
+  const t = temp <= 1 ? temp : 1 + (temp - 1) * 4
+  const exps = list.map((c) => Math.pow(c.base, 1 / t))
   const sum = exps.reduce((a, b) => a + b, 0)
   return list.map((c, i) => ({ ...c, pct: (exps[i] / sum) * 100 }))
 }
 
-/** Draw one word from a reshaped distribution (percentages sum to 100). */
-function sampleWord(ranked, rng = Math.random) {
-  const r = rng() * 100
-  let acc = 0
-  for (const c of ranked) {
-    acc += c.pct
-    if (r <= acc) return c.word
-  }
-  return ranked[ranked.length - 1].word
+/** The zone a dial position falls in. */
+function zoneFor(temp) {
+  return zones.find((z) => temp <= z.max)
 }
