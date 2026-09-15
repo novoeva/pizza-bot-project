@@ -22,8 +22,8 @@ function bestOf(options) {
 /**
  * Token game, { termId, onComplete } interface.
  * Two beats that build the concept in order:
- *   1. Chop it up, a token is a chunk of text. Guess how many tokens
- *      "Pepperoni" is (four), then see the chunks and a whole order tokenized.
+ *   1. Chop it up, a token is a piece of text. Guess how many tokens
+ *      "pepperoni" is (two), then see the pieces and a whole order tokenized.
  *   2. Read your bot's mind, your bot writes one token at a time, predicting
  *      the next from a ranked list. Call the next token before it does, then
  *      see the ranking. You stay the owner watching your bot, never the model.
@@ -108,7 +108,7 @@ export default function TokenGame({ termId, onComplete }) {
           <>
             <div className="rounded-md border-[3px] border-neutral bg-muted p-3 shadow-pop">
               <div className="mb-2 flex items-center justify-between gap-2">
-                <p className="font-label text-[11px] text-text-muted">A whole order, chunked</p>
+                <p className="font-label text-[11px] text-text-muted">A whole order, split into tokens</p>
                 <span className="shrink-0 rounded-full border-2 border-neutral bg-accent-soft px-2 py-0.5 font-label text-[11px] font-bold text-tertiary">
                   {samplePhrase.tokens.length} tokens
                 </span>
@@ -263,6 +263,6 @@ export default function TokenGame({ termId, onComplete }) {
   // ---------- Reveal ----------
   const score = results.filter(Boolean).length
   return (
-    <TermReveal term={term} score={`You called your bot's next chunk on ${score} of ${predictionRounds.length}.`} onComplete={onComplete} />
+    <TermReveal term={term} score={`You called your bot's next token on ${score} of ${predictionRounds.length}.`} onComplete={onComplete} />
   )
 }
