@@ -62,7 +62,7 @@
   <h2>What changed (3 things)</h2>
   <ol class="changed">
     <li><b>Rolling is gone.</b> It was in the original game (FR-15 was a complaint about that "Roll again" button); it is now removed entirely. No roll button, no sampled sentence, no dice. Beat 1 is the sentence with a blank, the dial, and the four bars that reshape as you drag. "Next" appears once you have moved the dial.</li>
-    <li><b>Four short one-token words in a sentence where they read naturally.</b> "Your pizza will be ___" → <code>ready · hot · late · huge</code>. In GPT-style tokenizers each of these is a single token (" ready", " hot", " late", " huge"); so were classic/spicy/cheese/pickle, but these are shorter and read as atoms rather than menu names. Low dial: ready 85 %. High dial: 31 · 26 · 23 · 20 %.</li>
+    <li><b>Four short one-token words in a sentence where they read naturally.</b> "Your pizza will be ___" → <code>ready · hot · late · huge</code>. <b>Verified with a real tokenizer</b> (the gpt-tokenizer package, GPT-4o and GPT-4 encodings): " ready", " hot", " late", " huge" are one token each. So were classic/spicy/cheese/pickle, but these are shorter and read as atoms rather than menu names. Check any text yourself with <code>node scripts/tokens.mjs "your text"</code>. Low dial: ready 85 %. High dial: 31 · 26 · 23 · 20 %.</li>
     <li><b>The dial says "drag me".</b> Until you move it, the red knob nudges to the right every 1.6 s and a line under the track reads "Drag the knob to the right →". Both disappear after the first drag. Off under reduced-motion (the line still shows).</li>
   </ol>
 
@@ -96,7 +96,7 @@
   </div>
   <div class="q">
     <div class="n">Q3 · the four options</div>
-    <div class="ask">Do ready · hot · late · huge read as single tokens, so "token" and "word" don't fight?</div>
+    <div class="ask">Now that the four are verified single tokens, do they read that way on screen, so "token" and "word" don't fight?</div>
     <div class="how">Panel title "Chance of each next token · each option = one token"; sentence card: "Four tokens can fill the blank. The dial only changes their odds."</div>
     <div class="exp"><b>Expected</b> yes. If you want the options to look even more like tokens (e.g. shown as the same chips as in the Token game's chopped order), say so.</div>
   </div>
